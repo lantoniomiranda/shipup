@@ -118,3 +118,16 @@ people.fetch("ines").time_entries.find_or_create_by!(ended_at: nil) { |entry| en
 TimeOffRequest::KINDS.zip([ 22, 5, 3 ]).each do |kind, days|
   TimeOffAllowance.find_or_create_by!(user: people.fetch("ines"), kind: kind, year: today.year) { |a| a.days = days }
 end
+
+# Team time off for the month view and the approval queue.
+month = today.beginning_of_month
+[
+  [ "ananya", "vacation", 4, 8, "approved" ], [ "jonas", "sick", 11, 11, "approved" ], [ "daniel", "vacation", 18, 19, "approved" ],
+  [ "sofia", "vacation", 25, 27, "pending" ], [ "ines", "vacation", 21, 29, "approved" ]
+].each do |handle, kind, from, to, status|
+  request = TimeOffRequest.find_or_initialize_by(user: people.fetch(handle), kind: kind, starts_on: month + from, ends_on: month + to)
+  next if request.persisted?
+
+  request.assign_attributes(status: status, approver: people.fetch("priya"))
+  request.save!(validate: false)
+end

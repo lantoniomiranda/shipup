@@ -1,0 +1,73 @@
+/* Time off overview, team timeline and the request calendar. */
+.time-off { display: flex; flex: 1; gap: 8px; min-height: 0; padding: 0; }
+.time-off__side { display: flex; flex-direction: column; flex: 0 0 400px; gap: 8px; overflow: auto; }
+.panel-card { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 20px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--line); }
+.panel-card--accent { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.time-off__title { display: flex; align-items: center; justify-content: space-between; }
+.time-off__title h1 { font-size: 36px; }
+.time-off__approve-head { display: flex; align-items: center; justify-content: space-between; }
+
+.allowance { display: flex; flex-direction: column; gap: 6px; }
+.allowance__labels { display: flex; justify-content: space-between; }
+.allowance__labels span { color: var(--ink-soft); font-size: 13px; }
+.allowance__bar { height: 16px; --hue: var(--teal); }
+.allowance__bar--sick { --hue: var(--plum); }
+.allowance__bar--family { --hue: var(--blue); }
+
+.requests { display: flex; flex-direction: column; gap: 14px; }
+.requests li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.requests small { display: block; color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+.tag--request-approved { background: var(--teal-soft); }
+.tag--request-pending { background: var(--mustard-soft); }
+.tag--request-declined { background: var(--danger-soft); }
+
+.approval { display: flex; flex-direction: column; gap: 10px; padding: 12px; background: var(--paper); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.approval__who { display: flex; align-items: center; gap: 10px; }
+.approval__who small { display: block; color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+.approval__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.approval__actions .btn { width: 100%; }
+
+.timeline { display: flex; flex-direction: column; flex: 1; min-width: 0; padding: 20px 22px; overflow: auto; background: var(--surface); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--line); }
+.timeline__head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.timeline__head h2 { margin-right: 8px; font-size: 26px; }
+.legend { display: flex; gap: 16px; margin-left: auto; color: var(--ink-soft); font-size: 12px; }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.legend__swatch { width: 10px; height: 10px; }
+.legend__swatch--vacation { background: var(--teal); } .legend__swatch--sick { background: var(--plum); } .legend__swatch--waiting { background: var(--mustard); }
+
+.timeline__grid { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.timeline__row { display: grid; grid-template-columns: 150px 1fr; align-items: stretch; border-bottom: 1px solid var(--line); }
+.timeline__row--head { background: var(--sunken); }
+.timeline__person { display: flex; align-items: center; gap: 10px; padding: 14px 12px; font-size: 14px; font-weight: 600; }
+.timeline__days { display: grid; grid-template-columns: repeat(var(--days), minmax(0, 1fr)); }
+.timeline__row--head .timeline__days span { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; color: var(--ink-soft); font-size: 11px; font-weight: 600; }
+.timeline__days .weekend { background: var(--sunken-a55); }
+.timeline__days .today { color: var(--accent-ink); }
+.timeline__days--track { position: relative; grid-auto-rows: 52px; }
+.timeline__days--track i { grid-row: 1; }
+.timeline__bar { grid-row: 1; align-self: center; margin: 0 1px; padding: 6px 8px; overflow: hidden; background: var(--teal-soft); color: var(--ink); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.timeline__bar--sick { background: var(--plum-soft); }
+.timeline__bar--family { background: var(--blue-soft); }
+.timeline__bar--waiting { background: var(--mustard-soft); }
+.timeline__today { grid-row: 1; justify-self: start; width: 2px; background: var(--accent); }
+
+/* Request calendar. */
+.calendar__head { display: flex; align-items: center; gap: 10px; }
+.calendar__head h2 { margin-left: 6px; font-size: 28px; }
+.pager__button--box { width: 38px; height: 38px; background: var(--surface); box-shadow: var(--outline); border-radius: var(--radius-sm); }
+.calendar { display: grid; grid-template-columns: repeat(7, 1fr); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1.5px var(--ink); overflow: hidden; }
+.calendar__dow { padding: 8px 12px; background: var(--sunken); color: var(--ink-soft); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: inset 0 -1px 0 var(--line); }
+.calendar__day { position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: 6px; min-height: 100px; padding: 10px 12px; background: var(--surface); color: var(--ink); border: 0; border-radius: 0; box-shadow: inset -1px -1px 0 var(--line); font-size: 15px; font-weight: 700; text-align: left; }
+.calendar__day:disabled { color: var(--ink-soft); cursor: not-allowed; opacity: 0.55; }
+.calendar__day--blank { background: var(--sunken-a55); }
+.calendar__day--weekend { background: var(--sunken-a55); }
+.calendar__day--today .calendar__num { padding: 1px 6px; background: var(--ink); color: var(--paper); }
+.calendar__day--in-range { background: var(--accent-soft); }
+.calendar__day--edge { background: var(--accent); color: var(--on-accent); }
+.calendar__away { display: flex; align-items: center; gap: 6px; color: var(--ink-soft); font-size: 11px; font-weight: 500; }
+.summary { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; background: var(--paper); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.summary__top { display: flex; justify-content: space-between; font-size: 20px; }
+.summary__top span { font-size: 13px; font-weight: 700; }
+.summary p { color: var(--ink-soft); font-size: 13px; }
+
+@media (max-width: 1100px) { .time-off { flex-direction: column; overflow: auto; } .time-off__side { flex-basis: auto; } }

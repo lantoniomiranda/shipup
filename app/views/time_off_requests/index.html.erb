@@ -1,0 +1,93 @@
+<% breadcrumbs "Workspace", "Time off" %>
+<% content_for :content_class, "shell__content--bare" %>
+<% days = (@month.beginning_of_month..@month.end_of_month).to_a %>
+<% previous_month = (@month - 1.month).strftime("%Y-%m") %>
+<% next_month = (@month + 1.month).strftime("%Y-%m") %>
+
+<div class="time-off" data-controller="hotkey">
+  <aside class="time-off__side">
+    <section class="panel-card panel-card--accent">
+      <header class="time-off__title">
+        <h1>Time off</h1>
+        <%= link_to new_time_off_request_path, class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "r" } do %><%= icon "plus" %><span>Request</span><%= render "shared/key", label: "R" %><% end %>
+      </header>
+
+      <% { "vacation" => "Vacation", "sick" => "Sick leave", "family" => "Family" }.each do |kind, label| %>
+        <% balance = @balances.fetch(kind) %>
+        <div class="allowance">
+          <div class="allowance__labels"><strong><%= label %></strong><span><%= balance.left %> of <%= balance.allowance %> days left</span></div>
+          <div class="xp__bar allowance__bar allowance__bar--<%= kind %>">
+            <% balance.allowance.times do |index| %><span class="xp__segment <%= "xp__segment--on" if index < balance.used %>"></span><% end %>
+          </div>
+        </div>
+      <% end %>
+    </section>
+
+    <section class="panel-card">
+      <h3 class="eyebrow">My requests</h3>
+      <ul class="requests">
+        <% @mine.each do |request| %>
+          <li>
+            <div><strong><%= request.starts_on.strftime("%b %-d") %><%= " – #{request.ends_on.strftime(request.starts_on.month == request.ends_on.month ? "%-d" : "%b %-d")}" unless request.starts_on == request.ends_on %></strong>
+              <small><%= request.kind.capitalize %> · <%= pluralize(request.working_days, "working day") %></small></div>
+            <span class="tag tag--request-<%= request.status %>"><%= request.pending? ? "Waiting for #{request.approver&.short_name || "approval"}" : request.status.capitalize %></span>
+          </li>
+        <% end %>
+        <% if @mine.empty? %><li class="entries__empty">Nothing requested yet.</li><% end %>
+      </ul>
+    </section>
+
+    <% if @to_approve.any? %>
+      <section class="panel-card">
+        <header class="time-off__approve-head"><h3 class="eyebrow">To approve</h3><span class="tag tag--request-pending"><%= @to_approve.size %> waiting</span></header>
+        <% @to_approve.each do |request| %>
+          <% overlaps = TimeOffRequest.where(user: @people).where.not(id: request.id).where.not(status: "declined").overlapping(request.starts_on..request.ends_on).includes(:user).first %>
+          <div class="approval">
+            <div class="approval__who"><%= avatar(request.user, size: :md) %><div><strong><%= request.user.short_name %></strong><small><%= request.starts_on.strftime("%b %-d") %> – <%= request.ends_on.strftime("%-d") %> · <%= request.kind.capitalize %> · <%= pluralize(request.working_days, "working day") %></small></div></div>
+            <% if overlaps %><span class="tag tag--request-pending">Overlaps <%= overlaps.user.short_name %>, <%= overlaps.starts_on.strftime("%b %-d") %></span><% end %>
+            <div class="approval__actions">
+              <%= button_to time_off_request_path(request, decision: "decline"), method: :patch, class: "btn" do %><%= icon "x" %><span>Decline</span><% end %>
+              <%= button_to time_off_request_path(request, decision: "approve"), method: :patch, class: "btn btn--primary" do %><%= icon "check" %><span>Approve</span><% end %>
+            </div>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
+  </aside>
+
+  <section class="timeline">
+    <header class="timeline__head">
+      <h2><%= @month.strftime("%B %Y") %></h2>
+      <%= link_to icon("chevron-left"), time_off_requests_path(month: previous_month), class: "pager__button", aria: { label: "Previous month" } %>
+      <%= link_to icon("chevron-right"), time_off_requests_path(month: next_month), class: "pager__button", aria: { label: "Next month" } %>
+      <ul class="legend">
+        <li><i class="legend__swatch legend__swatch--vacation"></i>Vacation</li>
+        <li><i class="legend__swatch legend__swatch--sick"></i>Sick</li>
+        <li><i class="legend__swatch legend__swatch--waiting"></i>Waiting for approval</li>
+      </ul>
+    </header>
+
+    <div class="timeline__grid" style="--days: <%= days.size %>">
+      <div class="timeline__row timeline__row--head">
+        <span></span>
+        <div class="timeline__days">
+          <% days.each do |day| %><span class="<%= "weekend" if day.on_weekend? %> <%= "today" if day == Date.current %>"><small><%= day.strftime("%a")[0] %></small><%= day.day %></span><% end %>
+        </div>
+      </div>
+      <% @people.each do |person| %>
+        <div class="timeline__row">
+          <span class="timeline__person"><%= avatar(person, size: :sm) %><%= person.short_name %></span>
+          <div class="timeline__days timeline__days--track">
+            <% days.each do |day| %><i class="<%= "weekend" if day.on_weekend? %>"></i><% end %>
+            <% Array(@requests[person.id]).each do |request| %>
+              <% first = [ request.starts_on, days.first ].max %>
+              <% last = [ request.ends_on, days.last ].min %>
+              <span class="timeline__bar timeline__bar--<%= request.pending? ? "waiting" : request.kind %>" style="grid-column: <%= first.day %> / <%= last.day + 1 %>" title="<%= request.kind.capitalize %><%= " (waiting)" if request.pending? %>"><%= request.kind.capitalize %></span>
+            <% end %>
+            <% if days.include?(Date.current) %><b class="timeline__today" style="grid-column: <%= Date.current.day %>"></b><% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>

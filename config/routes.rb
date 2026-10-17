@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     get "callback", to: "integration_connections#callback", as: :integration_callback
   end
   patch "meeting_tool", to: "meeting_tools#update"
+  resources :time_off_requests, path: "time_off", only: %i[index new create update]
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]
   resources :github_repositories, only: %i[index create destroy], path: "integrations/github/repositories"

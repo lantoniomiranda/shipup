@@ -42,6 +42,8 @@
       </div>
     <% end %>
 
+    <%= link_to time_off_requests_path, class: "icon-button", aria: { label: "Time off" }, title: "Time off" do %><%= icon "calendar", size: 18 %><% end %>
+
     <button type="button" class="icon-button" aria-label="Notifications">
       <%= icon "bell", size: 18 %>
       <% if unread %><span class="icon-button__dot"></span><% end %>

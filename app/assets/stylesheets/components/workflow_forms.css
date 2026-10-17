@@ -120,3 +120,5 @@ form.split { margin: 0; }
 .tag__remove:hover { color: var(--danger); }
 .inline-form { display: inline-flex; }
 code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-sm); font-size: 0.9em; }
+
+.panel--form.panel--narrow { overflow: auto; }

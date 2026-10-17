@@ -70,6 +70,11 @@ class User < ApplicationRecord
     end
   end
 
+  # Admins and managers can approve other people's time off.
+  def can_approve_time_off_for?(other, workspace)
+    self != other && %w[admin manager].include?(role_in(workspace))
+  end
+
   def role_in(workspace)
     memberships.find_by(workspace: workspace)&.role
   end
