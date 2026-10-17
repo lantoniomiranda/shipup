@@ -53,18 +53,4 @@ class BacklogTest < ActionDispatch::IntegrationTest
     patch schedule_project_task_path(@project, @loose, to: "sprint")
     assert_match(/Plan a sprint first/, flash[:alert])
   end
-
-  test "plan sprint creates the next two-week sprint once" do
-    @next_sprint.destroy
-    assert_difference "@project.sprints.count", 1 do
-      post plan_sprint_project_backlog_path(@project)
-    end
-    sprint = @project.sprints.order(:number).last
-    assert_equal 15, sprint.number
-    assert_equal 13, (sprint.ends_on - sprint.starts_on).to_i
-
-    assert_no_difference "@project.sprints.count" do
-      post plan_sprint_project_backlog_path(@project)
-    end
-  end
 end

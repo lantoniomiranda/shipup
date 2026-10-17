@@ -1,5 +1,5 @@
 <%# One project on the home grid. `current` highlights the project you are working in. %>
-<% sprint = project.current_sprint %>
+<% sprint = project.active_sprint %>
 <% percent = sprint&.progress_percent.to_i %>
 <% lit = Project.xp_segments_lit(percent) %>
 

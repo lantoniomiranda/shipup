@@ -51,7 +51,7 @@ class Timeline
   private
 
   def default_start
-    project.current_sprint&.starts_on || today
+    project.active_sprint&.starts_on || today
   end
 
   # [title, [tasks]] — tasks of one topic form a feature; topic-less tasks stand alone.

@@ -1,5 +1,6 @@
 sprint_14:
   project: apollo
   number: 14
+  state: active
   starts_on: <%= Date.current - 11.days %>
   ends_on: <%= Date.current + 2.days %>

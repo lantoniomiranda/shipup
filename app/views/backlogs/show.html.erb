@@ -22,8 +22,11 @@
       <tbody>
         <% if sprint %>
           <tr class="table__group"><td colspan="8"><div class="table__group-inner">
-            <strong><%= sprint.name %></strong><span><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %> · starts in <%= pluralize(days_until, "day") %></span>
+            <strong><%= sprint.name %></strong><span><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %> · <%= days_until.positive? ? "starts in #{pluralize(days_until, "day")}" : "planned" %></span>
             <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.planned_days %> / <%= @backlog.capacity_days %> XP</span>
+            <% if @project.managed_by?(Current.user) %>
+              <%= button_to start_project_sprint_path(@project, sprint), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "play", size: 13 %><span>Start sprint</span><% end %>
+            <% end %>
           </div></td></tr>
           <%= render partial: "backlogs/row", collection: @backlog.planned_tasks, as: :task, locals: { project: @project, in_sprint: true } %>
         <% end %>
@@ -37,7 +40,7 @@
   </section>
 
   <aside class="side side--wide side--padded">
-    <h3 class="eyebrow"><%= sprint ? "#{sprint.name} capacity" : "Next sprint" %></h3>
+    <h3 class="eyebrow"><%= sprint ? "#{sprint.name} capacity" : "Next sprint" %><% if sprint&.goal.present? %> · <%= sprint.goal %><% end %></h3>
     <% if sprint %>
       <p class="capacity"><strong><%= @backlog.planned_days %></strong><span>/ <%= @backlog.capacity_days %> XP planned</span></p>
       <div class="xp__bar xp__bar--wide" style="--hue: var(--accent)">
@@ -59,9 +62,10 @@
       <p class="capacity__note">No sprint is planned yet. Create the next one to start moving tasks into it.</p>
     <% end %>
 
-    <%= button_to plan_sprint_project_backlog_path(@project), class: "btn btn--primary btn--block btn--plan", disabled: sprint.present?,
-                  data: { hotkey_target: "trigger", hotkey_key: "p" } do %>
-      <%= icon "flag" %><span><%= sprint ? "#{sprint.name} planned" : "Plan sprint" %></span><%= render "shared/key", label: "P" %>
+    <% if @project.managed_by?(Current.user) %>
+      <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { hotkey_target: "trigger", hotkey_key: "p" } do %>
+        <%= icon "flag" %><span>Plan sprint</span><%= render "shared/key", label: "P" %>
+      <% end %>
     <% end %>
   </aside>
 </div>

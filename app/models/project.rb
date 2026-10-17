@@ -38,8 +38,14 @@ class Project < ApplicationRecord
     key
   end
 
-  def current_sprint
-    sprints.find_by("starts_on <= :today AND ends_on >= :today", today: Date.current)
+  # Workspace admins and this project's managers may plan and run sprints.
+  def managed_by?(user)
+    user.role_in(workspace) == "admin" || project_memberships.manager.exists?(user_id: user.id)
+  end
+
+  # The one sprint being worked on; it is what the board shows.
+  def active_sprint
+    sprints.active.first
   end
 
   # Hands out the next task number (APO-1, APO-2…). The row lock keeps concurrent

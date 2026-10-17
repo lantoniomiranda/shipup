@@ -41,3 +41,5 @@
 
 /* button_to wraps the button in a form; let the button take part in the parent's layout. */
 .button_to { display: contents; }
+
+.btn--small { padding: 4px 10px; font-size: 12px; }

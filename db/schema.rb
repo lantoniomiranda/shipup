@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_180007) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -242,8 +242,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_180007) do
     t.date "ends_on", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "state", default: "planned", null: false
+    t.text "goal"
+    t.datetime "completed_at"
     t.index ["project_id", "number"], name: "index_sprints_on_project_id_and_number", unique: true
     t.index ["project_id"], name: "index_sprints_on_project_id"
+    t.index ["project_id"], name: "index_sprints_one_active_per_project", unique: true, where: "((state)::text = 'active'::text)"
   end
 
   create_table "task_labels", force: :cascade do |t|

@@ -14,9 +14,16 @@
           <span class="toolbar__points"><%= @board.done_points %>/<%= @board.total_points %> XP</span>
         </div>
       <% else %>
-        <h1>No sprint in flight</h1>
+        <h1>No active sprint</h1>
       <% end %>
     </div>
+    <% if @project.managed_by?(Current.user) %>
+      <% if sprint %>
+        <%= button_to complete_project_sprint_path(@project, sprint), method: :patch, class: "btn", form: { class: "inline-form" }, data: { turbo_confirm: "Complete #{sprint.name}? Unfinished tasks move to the next planned sprint." } do %><%= icon "check" %><span>Complete sprint</span><% end %>
+      <% else %>
+        <%= link_to new_project_sprint_path(@project), class: "btn btn--primary" do %><%= icon "flag" %><span>Start a sprint</span><% end %>
+      <% end %>
+    <% end %>
   </div>
 
   <div class="columns">

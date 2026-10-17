@@ -26,8 +26,12 @@ Rails.application.routes.draw do
   # Projects are addressed by their key (/projects/APO/topics).
   resources :projects, only: %i[show new create] do
     resource :board, only: :show
-    resource :backlog, only: :show do
-      post :plan_sprint
+    resource :backlog, only: :show
+    resources :sprints, only: %i[new create] do
+      member do
+        patch :start
+        patch :complete
+      end
     end
     resource :timeline, only: :show
     resource :analytics, only: :show

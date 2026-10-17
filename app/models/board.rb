@@ -7,7 +7,7 @@ class Board
 
   attr_reader :project, :sprint
 
-  def initialize(project:, sprint: project.current_sprint)
+  def initialize(project:, sprint: project.active_sprint)
     @project = project
     @sprint = sprint
   end

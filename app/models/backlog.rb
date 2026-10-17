@@ -9,7 +9,7 @@ class Backlog
   def initialize(project:, filter: nil, today: Date.current)
     @project = project
     @filter = filter.presence_in(FILTERS)
-    @sprint = project.sprints.where("starts_on > ?", today).order(:starts_on).first
+    @sprint = project.sprints.upcoming.first
   end
 
   def planned_tasks = filtered(tasks.select { |task| task.sprint_id == sprint&.id && sprint })

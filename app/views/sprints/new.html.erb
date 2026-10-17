@@ -1,0 +1,44 @@
+<% project_header @project, active: :backlog %>
+<% active = @project.active_sprint %>
+
+<%= form_with model: [ @project, @sprint ], class: "split", data: { controller: "hotkey" } do |form| %>
+  <section class="panel panel--form">
+    <header class="panel__bar">
+      <%= link_to project_backlog_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %><%= icon "arrow-left" %><span>Back to backlog</span><%= render "shared/key", label: "Esc" %><% end %>
+    </header>
+
+    <div class="form">
+      <header class="form__heading"><h1>New <%= @sprint.name.downcase %></h1><p>Two weeks is the usual length. Only one sprint is active at a time.</p></header>
+      <% if @sprint.errors.any? %><p class="flash flash--alert"><%= @sprint.errors.full_messages.to_sentence %></p><% end %>
+
+      <div class="field">
+        <%= form.label :goal, "Goal", class: "eyebrow" %>
+        <%= form.text_field :goal, class: "input input--title", placeholder: "What should be true when this sprint ends?", autofocus: true, autocomplete: "off" %>
+      </div>
+
+      <div class="field-row">
+        <div class="field"><%= form.label :starts_on, "Starts", class: "eyebrow" %><%= form.date_field :starts_on, class: "input", required: true %></div>
+        <div class="field"><%= form.label :ends_on, "Ends", class: "eyebrow" %><%= form.date_field :ends_on, class: "input", required: true %></div>
+      </div>
+
+      <label class="check-card">
+        <%= hidden_field_tag :start_now, "0", id: nil %>
+        <%= check_box_tag :start_now, "1", true, class: "check" %>
+        <span>Start it now and show it on the board<% if active %> (completes <%= active.name %>)<% end %></span>
+      </label>
+
+      <% if active %>
+        <label class="check-card">
+          <%= hidden_field_tag :carry_over, "0", id: nil %>
+          <%= check_box_tag :carry_over, "1", true, class: "check" %>
+          <span>Carry unfinished tasks from <%= active.name %> over to this sprint</span>
+        </label>
+      <% end %>
+    </div>
+
+    <footer class="panel__footer">
+      <%= link_to project_backlog_path(@project), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter"><%= icon "flag" %><span>Create <%= @sprint.name.downcase %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
+    </footer>
+  </section>
+<% end %>

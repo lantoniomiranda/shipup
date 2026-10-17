@@ -1,5 +1,5 @@
 <% breadcrumbs "Projects" %>
-<% sprints_in_flight = @projects.count { |project| project.current_sprint } %>
+<% sprints_in_flight = @projects.count { |project| project.active_sprint } %>
 
 <header class="page-header" data-controller="hotkey">
   <div class="page-header__heading">

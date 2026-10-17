@@ -29,13 +29,13 @@ projects = [
   project = Project.find_or_create_by!(workspace: workspace, key: key) do |p|
     p.assign_attributes(name: name, color: color, icon: icon, description: description, position: index, last_activity_at: (index + 1).hours.ago)
   end
-  project.sprints.find_or_create_by!(number: sprint) { |s| s.assign_attributes(starts_on: today + days_left - 14, ends_on: today + days_left - 1) }
+  project.sprints.find_or_create_by!(number: sprint) { |s| s.assign_attributes(starts_on: today + days_left - 14, ends_on: today + days_left - 1, state: "active") }
   people.each_value { |user| ProjectMembership.find_or_create_by!(project: project, user: user) }
   project
 end
 
 apollo = projects.first
-sprint = apollo.current_sprint
+sprint = apollo.active_sprint
 
 %w[Backend Frontend Infra Docs].zip(%w[orange blue teal mustard]).each do |name, color|
   apollo.labels.find_or_create_by!(name: name) { |l| l.color = color }
@@ -104,7 +104,7 @@ TaskPullRequest.find_or_create_by!(task: rate_limiting_task, pull_request: pull_
   project = projects.find { |p| p.key == key }
   [ [ "Shipped work", "done", percent ], [ "Remaining work", "todo", 100 - percent ] ].each do |title, status, minutes|
     project.tasks.find_or_create_by!(title: title) do |t|
-      t.assign_attributes(status: status, creator: people.fetch("ines"), sprint: project.current_sprint, estimate_minutes: minutes)
+      t.assign_attributes(status: status, creator: people.fetch("ines"), sprint: project.active_sprint, estimate_minutes: minutes)
     end
   end
 end

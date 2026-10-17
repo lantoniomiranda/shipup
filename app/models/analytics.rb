@@ -14,7 +14,7 @@ class Analytics
 
   def period
     @period ||= case range_key
-    when "sprint" then (project.current_sprint&.starts_on || @today - 13)..@today
+    when "sprint" then (project.active_sprint&.starts_on || @today - 13)..@today
     when "quarter" then @today.beginning_of_quarter..@today
     else (@today - 8.weeks + 1)..@today
     end

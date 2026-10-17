@@ -18,7 +18,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal first + 1, project.next_task_number!
   end
 
-  test "finds the sprint in flight" do
-    assert_equal sprints(:sprint_14), projects(:apollo).current_sprint
+  test "the active sprint is the one on the board" do
+    assert_equal sprints(:sprint_14), projects(:apollo).active_sprint
   end
 end

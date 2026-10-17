@@ -2,7 +2,7 @@ class TopicTasksController < ApplicationController
   include TopicScoped
 
   def new
-    @task = @project.tasks.build(title: @topic.title, description: @topic.body, topic: @topic, sprint: @project.current_sprint,
+    @task = @project.tasks.build(title: @topic.title, description: @topic.body, topic: @topic, sprint: @project.active_sprint,
                                  bug: @topic.issue?, client: @topic.client, assignee: Current.user)
   end
 

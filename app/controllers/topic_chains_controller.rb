@@ -2,7 +2,7 @@ class TopicChainsController < ApplicationController
   include TopicScoped
 
   def new
-    @chain = @project.chains.build(title: @topic.title, topic: @topic, sprint: @project.current_sprint)
+    @chain = @project.chains.build(title: @topic.title, topic: @topic, sprint: @project.active_sprint)
     @steps = [ {}, {}, {} ]
   end
 
