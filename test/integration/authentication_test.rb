@@ -55,4 +55,30 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_redirected_to sign_in_path
   end
+
+  test "someone nobody invited is turned away with an explanation" do
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:google_oauth2] = omniauth_hash("google_oauth2", uid: "new", email: "stranger@nowhere.io", name: "Stranger")
+
+    assert_no_difference "User.count" do
+      post "/auth/google_oauth2"
+      follow_redirect!
+    end
+    assert_redirected_to sign_in_path
+    follow_redirect!
+    assert_select ".sign-in__alert", /invite-only/
+  end
+
+  test "an invited person signs in for the first time and lands in their workspace" do
+    workspaces(:orbit).invitations.create!(email: "newbie@orbitlabs.dev", role: "manager")
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:google_oauth2] = omniauth_hash("google_oauth2", uid: "newbie", email: "newbie@orbitlabs.dev", name: "New Bie")
+
+    post "/auth/google_oauth2"
+    follow_redirect!
+    follow_redirect!
+
+    assert_response :success
+    assert_equal "manager", User.find_by!(email: "newbie@orbitlabs.dev").role_in(workspaces(:orbit))
+  end
 end

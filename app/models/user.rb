@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   AVATAR_ICONS = %w[cat bird rocket coffee flower-2 ghost moon fish leaf telescope].freeze
 
+  has_many :invitations_sent, class_name: "Invitation", foreign_key: :invited_by_id, inverse_of: :invited_by, dependent: :nullify
   has_many :identities, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :memberships, dependent: :destroy
@@ -73,6 +74,11 @@ class User < ApplicationRecord
   # Admins and managers can approve other people's time off.
   def can_approve_time_off_for?(other, workspace)
     self != other && %w[admin manager].include?(role_in(workspace))
+  end
+
+  # Platform staff (ShipUp itself, not a customer). Listed in PLATFORM_ADMIN_EMAILS.
+  def self.platform_admin_email?(email)
+    ENV["PLATFORM_ADMIN_EMAILS"].to_s.split(",").map { |address| address.strip.downcase }.include?(email.to_s.strip.downcase)
   end
 
   def role_in(workspace)

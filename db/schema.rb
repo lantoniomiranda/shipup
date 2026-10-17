@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -85,6 +85,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
     t.index ["connected_by_id"], name: "index_integration_connections_on_connected_by_id"
     t.index ["workspace_id", "provider"], name: "index_integration_connections_on_workspace_id_and_provider", unique: true
     t.index ["workspace_id"], name: "index_integration_connections_on_workspace_id"
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "workspace_id", null: false
+    t.bigint "invited_by_id"
+    t.citext "email", null: false
+    t.string "role", default: "member", null: false
+    t.string "token", null: false
+    t.datetime "accepted_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_invitations_on_email"
+    t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
+    t.index ["workspace_id", "email"], name: "index_invitations_one_pending_per_email", unique: true, where: "((accepted_at IS NULL) AND (revoked_at IS NULL))"
+    t.index ["workspace_id"], name: "index_invitations_on_workspace_id"
   end
 
   create_table "labels", force: :cascade do |t|
@@ -427,6 +444,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
     t.string "avatar_color", default: "orange", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "platform_admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
@@ -437,8 +455,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email_domain"
+    t.string "status", default: "active", null: false
+    t.string "plan", default: "trial", null: false
+    t.datetime "trial_ends_at"
+    t.integer "seats_limit"
+    t.datetime "suspended_at"
+    t.string "suspended_reason"
+    t.boolean "allow_domain_join", default: false, null: false
     t.index ["email_domain"], name: "index_workspaces_on_email_domain", unique: true
     t.index ["slug"], name: "index_workspaces_on_slug", unique: true
+    t.index ["status"], name: "index_workspaces_on_status"
   end
 
   add_foreign_key "chains", "projects"
@@ -451,6 +477,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
   add_foreign_key "identities", "users"
   add_foreign_key "integration_connections", "users", column: "connected_by_id"
   add_foreign_key "integration_connections", "workspaces"
+  add_foreign_key "invitations", "users", column: "invited_by_id"
+  add_foreign_key "invitations", "workspaces"
   add_foreign_key "labels", "projects"
   add_foreign_key "meeting_digests", "meetings"
   add_foreign_key "meeting_participants", "meetings"

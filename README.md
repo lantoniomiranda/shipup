@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- **Multi-tenant SaaS, part 1**: a workspace is a tenant with a status (active/suspended), plan (trial/starter/team/enterprise), trial end and seat limit. Sign-up is **invite-only**: unknown emails are refused unless they hold a pending `Invitation`, belong to a workspace that enabled company-domain joining, or are platform staff listed in `PLATFORM_ADMIN_EMAILS`. Signing in consumes invitations (a person can belong to several tenants). `Workspace.provision!` creates a tenant and invites its first admin.
 - **Task chat** (design's right-hand "Chat" on a task) with direct replies (quoted), editing (author only, shows "edited") and removal (author, workspace admins, project managers; soft delete so replies keep their quote). Topic threads got the same abilities through the shared `ChatMessage` concern and `messages/_message` partials.
 - **LLM adapter**: pick a provider with `LLM_ENABLED=claude|gemini|grok|gpt` and `LLM_API_KEY` (optional `LLM_MODEL`, `LLM_BASE_URL`). `Llm.client.complete(prompt, system:, json:)` is the only API the app uses, so switching provider is configuration. First feature: *Draft with AI* / *Try another draft* on the create task and create chain pages (`Llm::Drafts`). Unset = AI features hidden. Add a provider by subclassing `Llm::Base`.
 - Keyboard shortcuts rebuilt: one global handler (`hotkeys_controller.js`) driven by `data-hotkey` attributes and one registry, `config/keybindings.yml`, which also feeds the **?** help dialog. Navigation uses `g` chords (`g b` board, `g t` topics, `g h` projects…); primary actions use **Ctrl/Cmd+Enter**; no browser-owned combos (Ctrl+S, Space…). Project tabs now show the shortcuts of the *other* tabs, not the current one. `node script/check_keys.mjs` presses the real keys in a browser.
@@ -54,6 +55,7 @@ Google and Microsoft OAuth are the only ways in (no passwords). Workspace admins
 | Sign in with Microsoft | `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, `MICROSOFT_TENANT_ID` | `/auth/entra_id/callback` |
 | Zoom meetings | `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET` | `/integrations/zoom/callback` |
 | Google Meet links | reuses the Google client (add the Calendar scope) | `/integrations/google_meet/callback` |
+| Platform staff (backoffice) | `PLATFORM_ADMIN_EMAILS` (comma separated) | – |
 | AI drafts | `LLM_ENABLED` (`claude`/`gemini`/`grok`/`gpt`), `LLM_API_KEY`, optional `LLM_MODEL`, `LLM_BASE_URL` | – |
 | GitHub | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_WEBHOOK_SECRET` | `/integrations/github/callback` |
 

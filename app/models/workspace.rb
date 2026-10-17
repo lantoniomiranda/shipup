@@ -1,12 +1,21 @@
 # The tenant: a company's ShipUp. Everything else hangs off a workspace.
 class Workspace < ApplicationRecord
   MEETING_PROVIDERS = %w[zoom google_meet].freeze
+  STATUSES = %w[active suspended].freeze
+  PLANS = %w[trial starter team enterprise].freeze
+  TRIAL_DAYS = 14
 
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :projects, dependent: :destroy
   has_many :clients, dependent: :destroy
   has_many :integration_connections, dependent: :destroy
+  has_many :invitations, dependent: :destroy
+
+  enum :status, STATUSES.index_with(&:itself), default: "active", validate: true
+  enum :plan, PLANS.index_with(&:itself), default: "trial", validate: true, prefix: true
+
+  scope :search, ->(term) { where("workspaces.name ILIKE :q OR workspaces.slug ILIKE :q", q: "%#{sanitize_sql_like(term)}%") if term.present? }
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9-]+\z/ }
@@ -15,15 +24,33 @@ class Workspace < ApplicationRecord
 
   before_validation { self.slug = name.to_s.parameterize if slug.blank? }
 
-  # Free mail providers are never shared: each such person gets their own workspace.
-  PERSONAL_DOMAINS = %w[gmail.com googlemail.com outlook.com hotmail.com live.com yahoo.com icloud.com proton.me].freeze
+  # The active workspace whose company email domain lets this person join on their own, if any.
+  def self.joinable_for(email)
+    domain = email.to_s.split("@").last.to_s.downcase
+    active.find_by(email_domain: domain, allow_domain_join: true) if domain.present?
+  end
 
-  # The workspace a new sign-up with this email should join, creating it on first use.
-  def self.for_signup(email)
-    domain = email.split("@").last
-    return create!(name: "#{email.split("@").first.titleize}'s workspace", slug: SecureRandom.alphanumeric(8).downcase) if PERSONAL_DOMAINS.include?(domain)
+  # Creates a tenant and invites its first admin. Used by the backoffice.
+  def self.provision!(name:, admin_email:, plan: "trial", seats_limit: nil, invited_by: nil, trial_days: TRIAL_DAYS)
+    transaction do
+      workspace = create!(name: name, plan: plan, seats_limit: seats_limit, trial_ends_at: (Time.current + trial_days.days if plan == "trial"))
+      workspace.invitations.create!(email: admin_email, role: "admin", invited_by: invited_by)
+      workspace
+    end
+  end
 
-    create_with(name: "#{domain.split(".").first.titleize} workspace").find_or_create_by!(email_domain: domain)
+  def seats_used = memberships.count + invitations.pending.count
+  def seat_available? = seats_limit.nil? || seats_used < seats_limit
+  def seats_left = seats_limit && [ seats_limit - seats_used, 0 ].max
+
+  def trial_expired? = plan_trial? && trial_ends_at.present? && trial_ends_at < Time.current
+
+  def suspend!(reason = nil)
+    update!(status: "suspended", suspended_at: Time.current, suspended_reason: reason.presence)
+  end
+
+  def reactivate!
+    update!(status: "active", suspended_at: nil, suspended_reason: nil)
   end
 
   # Up to `limit` distinct teammate time zones, the current user's first, for the top-bar clocks.
