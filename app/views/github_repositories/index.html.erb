@@ -1,0 +1,36 @@
+<% breadcrumbs [ "Workspace", integrations_path ], "GitHub repositories" %>
+
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1>GitHub repositories</h1>
+    <p>Connected as <strong><%= @connection.external_account %></strong>. Pull requests that mention a task key (like <code>APO-97</code>) in their title, branch or description attach to that task.</p>
+  </div>
+</header>
+
+<ul class="repo-projects">
+  <% @projects.each do |project| %>
+    <li class="repo-project hue-<%= project.color %>">
+      <div class="repo-project__title">
+        <span class="project-mark"><%= icon project.icon, size: 16 %></span>
+        <div><strong><%= project.name %></strong><small><%= project.key %></small></div>
+      </div>
+
+      <div class="repo-project__linked">
+        <% project.github_repositories.each do |repository| %>
+          <span class="tag tag--repo"><%= icon "git-branch", size: 13 %><%= repository.full_name %>
+            <%= button_to github_repository_path(repository), method: :delete, class: "tag__remove", form: { class: "inline-form" }, aria: { label: "Unlink #{repository.full_name}" } do %><%= icon "x", size: 12 %><% end %>
+          </span>
+        <% end %>
+        <% if project.github_repositories.empty? %><span class="repo-project__empty">No repository linked</span><% end %>
+      </div>
+
+      <%= form_with url: github_repositories_path, class: "repo-project__form" do |form| %>
+        <%= hidden_field_tag :project_id, project.key %>
+        <% linked = project.github_repositories.map(&:external_id) %>
+        <%= select_tag :external_id, options_for_select(@repositories.reject { |repo| linked.include?(repo[:external_id]) }.map { |repo| [ repo[:full_name], repo[:external_id] ] }),
+                       prompt: "Choose a repository…", class: "select select--small select--wide" %>
+        <button type="submit" class="btn"><%= icon "plus" %><span>Link</span></button>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

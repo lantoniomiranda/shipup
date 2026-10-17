@@ -40,6 +40,13 @@
       <% tools.each do |tool| %>
         <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], selected: selected == tool[:key] %>
       <% end %>
+
+      <h3 class="eyebrow setup__section">Code</h3>
+      <%= render "integrations/tool", tool: { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: "Link repositories so pull requests show up on tasks." },
+                                      connection: @connections["github"], selected: false, selectable: false %>
+      <% if @connections["github"] %>
+        <p class="setup__hint"><%= link_to "Choose repositories for your projects", github_repositories_path, class: "link" %></p>
+      <% end %>
     </div>
 
     <footer class="setup__footer">

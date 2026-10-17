@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     get "callback", to: "integration_connections#callback", as: :integration_callback
   end
   patch "meeting_tool", to: "meeting_tools#update"
+  resources :github_repositories, only: %i[index create destroy], path: "integrations/github/repositories"
 
   post "webhooks/github", to: "webhooks/github#create"
 

@@ -104,3 +104,19 @@ form.split { margin: 0; }
 
 .form .flash { margin: 0; }
 .choice__option--optional:has(:checked) { background: var(--mustard); }
+
+/* GitHub repository linking. */
+.repo-projects { display: flex; flex-direction: column; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--line); }
+.repo-project { display: grid; grid-template-columns: 240px 1fr auto; align-items: center; gap: 20px; padding: 16px 20px; }
+.repo-project + .repo-project { border-top: 1px solid var(--line); }
+.repo-project__title { display: flex; align-items: center; gap: 12px; }
+.repo-project__title small { display: block; color: var(--ink-soft); font-size: 12px; font-weight: 600; }
+.repo-project__linked { display: flex; flex-wrap: wrap; gap: 8px; }
+.repo-project__empty { color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+.repo-project__form { display: flex; align-items: center; gap: 10px; }
+.select--wide { width: 260px; }
+.tag--repo { gap: 6px; padding-right: 4px; background: var(--surface); }
+.tag__remove { display: grid; place-items: center; width: 18px; height: 18px; padding: 0; background: transparent; color: var(--ink-soft); border: 0; }
+.tag__remove:hover { color: var(--danger); }
+.inline-form { display: inline-flex; }
+code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-sm); font-size: 0.9em; }

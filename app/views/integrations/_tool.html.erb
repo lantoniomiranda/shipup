@@ -2,9 +2,11 @@
 <% connected = connection.present? %>
 <% coming_soon = tool[:coming_soon] %>
 <div class="tool <%= "tool--selected" if selected %> <%= "tool--muted" if coming_soon %>">
-  <input type="radio" class="radio" name="provider" value="<%= tool[:key] %>" form="meeting-tool-form"
-         aria-label="Use <%= tool[:name] %>" <%= "checked" if selected %> <%= "disabled" if coming_soon || !connected %>>
-  <span class="radio__box" aria-hidden="true"><%= icon "check", size: 14 %></span>
+  <% unless local_assigns[:selectable] == false %>
+    <input type="radio" class="radio" name="provider" value="<%= tool[:key] %>" form="meeting-tool-form"
+           aria-label="Use <%= tool[:name] %>" <%= "checked" if selected %> <%= "disabled" if coming_soon || !connected %>>
+    <span class="radio__box" aria-hidden="true"><%= icon "check", size: 14 %></span>
+  <% end %>
 
   <span class="tool__logo tool__logo--<%= tool[:hue] %>"><%= tool[:letter] %></span>
 

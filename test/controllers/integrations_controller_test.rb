@@ -9,7 +9,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as users(:ines)
     get integrations_path
     assert_response :success
-    assert_select ".tool", 3
+    assert_select ".tool", 4 # three meeting tools plus GitHub
     assert_select ".tool__text strong", text: "Zoom"
   end
 
