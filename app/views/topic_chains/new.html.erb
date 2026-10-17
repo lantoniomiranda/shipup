@@ -1,9 +1,9 @@
 <% project_header @project, active: :topics %>
 
-<%= form_with scope: :chain, url: project_topic_chains_path(@project, @topic), class: "split", data: { controller: "hotkey steps" } do |form| %>
+<%= form_with scope: :chain, url: project_topic_chains_path(@project, @topic), class: "split", data: { controller: "steps" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
@@ -29,7 +29,7 @@
         <template data-steps-target="template">
           <%= render "topic_chains/step", step: {}, index: "NEW_INDEX", members: @project.members.order(:name) %>
         </template>
-        <button type="button" class="btn btn--add" data-action="steps#add" data-hotkey-target="trigger" data-hotkey-key="s">
+        <button type="button" class="btn btn--add" data-action="steps#add" data-hotkey="s">
           <%= icon "plus" %><span>Add step</span><%= render "shared/key", label: "S" %>
         </button>
       </div>
@@ -37,7 +37,7 @@
 
     <footer class="panel__footer">
       <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
         <%= icon "link" %><span>Create chain</span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>

@@ -44,13 +44,23 @@ module ApplicationHelper
   end
 
   PROJECT_TABS = [
-    { key: :topics, label: "Topics", icon: "messages-square", hotkey: "g d" },
-    { key: :backlog, label: "Backlog", icon: "list-todo", hotkey: "g l" },
-    { key: :board, label: "Board", icon: "kanban", hotkey: "g b" },
-    { key: :timeline, label: "Timeline", icon: "calendar-range", hotkey: "g t" },
-    { key: :clients, label: "Clients", icon: "building-2", hotkey: "g c" },
-    { key: :analytics, label: "Analytics", icon: "chart-column", hotkey: "g a" }
+    { key: :topics, label: "Topics", icon: "messages-square" },
+    { key: :backlog, label: "Backlog", icon: "list-todo" },
+    { key: :board, label: "Board", icon: "kanban" },
+    { key: :timeline, label: "Timeline", icon: "calendar-range" },
+    { key: :clients, label: "Clients", icon: "building-2" },
+    { key: :analytics, label: "Analytics", icon: "chart-column" }
   ].freeze
+
+  # `data: { hotkey: ... }` for a registered shortcut, e.g. link_to ..., data: hotkey_data(:board).
+  def hotkey_data(id, **extra)
+    { hotkey: Keybindings.keys(id) }.merge(extra)
+  end
+
+  # The little key cap for a registered shortcut.
+  def key_hint(id)
+    render "shared/key", label: Keybindings.label(id)
+  end
 
   # Renders the project header (name, sprint, tabs, members) above the content frame.
   def project_header(project, active:)

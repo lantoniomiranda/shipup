@@ -1,11 +1,11 @@
 <% project_header @project, active: :topics %>
 <% score_class = @vote&.value == 1 ? "votes__score--up" : "" %>
 
-<div class="split" data-controller="hotkey">
+<div class="split">
   <section class="panel panel--thread">
     <header class="thread__header">
       <div class="thread__back-row">
-        <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
           <%= icon "arrow-left" %><span>Topics</span><%= render "shared/key", label: "Esc" %>
         <% end %>
 

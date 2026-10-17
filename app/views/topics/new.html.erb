@@ -1,9 +1,9 @@
 <% project_header @project, active: :topics %>
 
-<div class="split" data-controller="hotkey">
+<div class="split">
   <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "similar-topics editor", similar_topics_url_value: similar_project_topics_path(@project) } do |form| %>
     <header class="panel__bar">
-      <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back to topics</span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
@@ -60,7 +60,7 @@
 
     <footer class="panel__footer">
       <%= link_to project_topics_path(@project), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
         <%= icon "send" %><span>Post topic</span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>

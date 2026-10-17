@@ -1,7 +1,7 @@
 <% breadcrumbs "Projects" %>
 <% sprints_in_flight = @projects.count { |project| project.active_sprint } %>
 
-<header class="page-header" data-controller="hotkey">
+<header class="page-header">
   <div class="page-header__heading">
     <h1><%= Current.user.greeting %></h1>
     <p>
@@ -21,7 +21,7 @@
     </div>
 
     <% if Current.user.role_in(Current.workspace) == "admin" %>
-      <%= link_to new_project_path, class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "n" } do %>
+      <%= link_to new_project_path, class: "btn btn--primary", data: { hotkey: "n" } do %>
         <%= icon "plus" %><span>New project</span><%= render "shared/key", label: "N" %>
       <% end %>
     <% end %>

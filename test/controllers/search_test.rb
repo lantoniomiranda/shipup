@@ -65,7 +65,7 @@ class SearchTest < ActionDispatch::IntegrationTest
 
   test "the app shell carries the palette" do
     get root_path
-    assert_select ".shell[data-controller=spotlight] .spotlight[data-spotlight-target=root]"
-    assert_select ".shell[data-controller=spotlight] button.hint--button"
+    assert_select ".shell[data-controller~=spotlight] .spotlight[data-spotlight-target=root]"
+    assert_select ".shell[data-controller~=spotlight] button.hint--button"
   end
 end

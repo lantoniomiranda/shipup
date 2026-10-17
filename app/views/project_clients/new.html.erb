@@ -1,9 +1,9 @@
 <% project_header @project, active: :clients %>
 
-<%= form_with url: project_clients_path(@project), class: "split", data: { controller: "hotkey" } do |form| %>
+<%= form_with url: project_clients_path(@project), class: "split" do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_clients_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to project_clients_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back to clients</span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
@@ -39,7 +39,7 @@
 
     <footer class="panel__footer">
       <%= link_to project_clients_path(@project), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
         <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>

@@ -3,7 +3,7 @@
 <% percent = sprint&.progress_percent.to_i %>
 <% lit = Project.xp_segments_lit(percent) %>
 
-<%= link_to project_topics_path(project), class: "project-card hue-#{project.color} #{"project-card--current" if current}", data: { hotkey_target: "trigger", hotkey_key: position.to_s } do %>
+<%= link_to project_topics_path(project), class: "project-card hue-#{project.color} #{"project-card--current" if current}", data: { hotkey: position.to_s } do %>
   <div class="project-card__banner">
     <span class="project-card__sun"></span>
     <span class="project-card__chip"><%= icon project.icon, size: 20 %></span>

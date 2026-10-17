@@ -3,7 +3,7 @@
 <% counts = @backlog.counts %>
 <% days_until = sprint ? (sprint.starts_on - Date.current).to_i : nil %>
 
-<div class="split" data-controller="hotkey">
+<div class="split">
   <section class="panel panel--table">
     <header class="panel__header">
       <div class="panel__title-row">
@@ -63,7 +63,7 @@
     <% end %>
 
     <% if @project.managed_by?(Current.user) %>
-      <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { hotkey_target: "trigger", hotkey_key: "p" } do %>
+      <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { hotkey: "p" } do %>
         <%= icon "flag" %><span>Plan sprint</span><%= render "shared/key", label: "P" %>
       <% end %>
     <% end %>

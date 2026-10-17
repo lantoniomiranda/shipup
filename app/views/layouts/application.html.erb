@@ -21,7 +21,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="hotkeys">
     <%= content_for?(:app_content) ? yield(:app_content) : yield %>
   </body>
 </html>

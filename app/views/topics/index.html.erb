@@ -1,10 +1,10 @@
 <% project_header @project, active: :topics %>
 
-<div class="panel" data-controller="hotkey">
+<div class="panel">
   <header class="panel__header">
     <div class="panel__title-row">
       <h1>Topics</h1>
-      <%= link_to new_project_topic_path(@project), class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "n" } do %>
+      <%= link_to new_project_topic_path(@project), class: "btn btn--primary", data: { hotkey: "n" } do %>
         <%= icon "plus" %><span>New topic</span><%= render "shared/key", label: "N" %>
       <% end %>
     </div>

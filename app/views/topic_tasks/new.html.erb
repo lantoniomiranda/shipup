@@ -1,9 +1,9 @@
 <% project_header @project, active: :topics %>
 
-<%= form_with model: @task, url: project_topic_tasks_path(@project, @topic), class: "split", data: { controller: "hotkey" } do |form| %>
+<%= form_with model: @task, url: project_topic_tasks_path(@project, @topic), class: "split" do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
@@ -36,7 +36,7 @@
 
     <footer class="panel__footer">
       <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
         <%= icon "square-check" %><span>Create task</span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>

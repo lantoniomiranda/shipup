@@ -8,7 +8,7 @@
   selected = @workspace.meeting_provider
 %>
 
-<main class="setup" data-controller="hotkey">
+<main class="setup">
   <aside class="setup__steps">
     <%= render "shared/logo", size: :small %>
 
@@ -50,13 +50,13 @@
     </div>
 
     <footer class="setup__footer">
-      <%= link_to root_path, class: "btn", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to root_path, class: "btn", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back</span><%= render "shared/key", label: "Esc" %>
       <% end %>
 
       <%= form_with url: meeting_tool_path, method: :patch, id: "meeting-tool-form" do %>
-        <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="enter">
-          <%= icon "arrow-right" %><span>Continue</span><%= render "shared/key", label: "Enter" %>
+        <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
+          <%= icon "arrow-right" %><span>Continue</span><%= render "shared/key", label: "Ctrl Enter" %>
         </button>
       <% end %>
     </footer>

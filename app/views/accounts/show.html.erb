@@ -2,14 +2,14 @@
 <% identity = @user.identities.first %>
 <% preference = @user.preference %>
 
-<%= form_with model: @user, url: account_path, method: :patch, class: "account", data: { controller: "dirty-form hotkey" } do |form| %>
+<%= form_with model: @user, url: account_path, method: :patch, class: "account", data: { controller: "dirty-form " } do |form| %>
   <header class="page-header">
     <div class="page-header__heading"><h1>Your account</h1></div>
     <div class="page-header__actions">
       <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %>Unsaved changes</span>
       <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span>Appearance</span><% end %>
-      <%= link_to account_path, class: "btn", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %><span>Discard</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+s"><%= icon "check" %><span>Save changes</span><%= render "shared/key", label: "Ctrl S" %></button>
+      <%= link_to account_path, class: "btn", data: { hotkey: "escape" } do %><span>Discard</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span>Save changes</span><%= render "shared/key", label: "Ctrl Enter" %></button>
     </div>
   </header>
 

@@ -3,7 +3,7 @@
 <% themes = { "paper" => [ "#FBF7EC", "#E9DDC4", "#2B211A" ], "mist" => [ "#F2F6FA", "#C9D6E2", "#16202A" ], "sage" => [ "#F3F6EC", "#D6DEC8", "#1C2519" ], "night" => [ "#1F2030", "#101118", "#E4E6F4" ] } %>
 <% accents = { "orange" => "#E8632B", "blue" => "#6F94D6", "teal" => "#4FA396", "plum" => "#C8628A", "mustard" => "#EBB43B" } %>
 
-<%= form_with model: @preference, url: appearance_path, method: :patch, scope: :preference, class: "split appearance", data: { controller: "theme-picker hotkey" } do |form| %>
+<%= form_with model: @preference, url: appearance_path, method: :patch, scope: :preference, class: "split appearance", data: { controller: "theme-picker " } do |form| %>
   <section class="panel panel--form panel--narrow">
     <div class="form">
       <header class="form__heading"><h1>Appearance</h1><p>Colors for the whole workspace.</p></header>
@@ -36,8 +36,8 @@
     </div>
 
     <footer class="panel__footer">
-      <button type="submit" name="reset" value="1" class="btn" formnovalidate><%= icon "rotate-ccw" %><span>Reset to default</span><%= render "shared/key", label: "R" %></button>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="enter"><%= icon "check" %><span>Done</span><%= render "shared/key", label: "Enter" %></button>
+      <button type="submit" name="reset" value="1" class="btn" formnovalidate data-hotkey="r"><%= icon "rotate-ccw" %><span>Reset to default</span><%= render "shared/key", label: "R" %></button>
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span>Done</span><%= render "shared/key", label: "Ctrl Enter" %></button>
     </footer>
   </section>
 

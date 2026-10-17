@@ -1,0 +1,38 @@
+# Single source of truth for keyboard shortcuts. The `data-hotkey` attributes in views must use
+# these key specs (a test enforces it) and the "?" help dialog is rendered from this file.
+#
+# Key spec: a single key ("n"), a chord ("g b": press g, then b), or a modified key
+# ("ctrl+enter", where ctrl also means Cmd on macOS). Shortcuts never use Ctrl+letter combos the
+# browser owns (save, print, find, new tab…) and are ignored while typing in a field.
+global:
+  search:      { keys: "/",          label: "Search topics, tasks and projects" }
+  help:        { keys: "?",          label: "Show keyboard shortcuts" }
+  projects:    { keys: "g h",        label: "Go to projects" }
+  time_off:    { keys: "g o",        label: "Go to time off" }
+  account:     { keys: "g u",        label: "Go to your account" }
+  back:        { keys: "escape",     label: "Go back or close" }
+  submit:      { keys: "ctrl+enter", label: "Submit the form" }
+
+project:
+  topics:      { keys: "g t",        label: "Topics" }
+  backlog:     { keys: "g l",        label: "Backlog" }
+  board:       { keys: "g b",        label: "Board" }
+  timeline:    { keys: "g m",        label: "Timeline" }
+  clients:     { keys: "g c",        label: "Clients" }
+  analytics:   { keys: "g a",        label: "Analytics" }
+
+page:
+  open_project:  { keys: "1",        label: "Open project 1–9 (projects page)" }
+  new:           { keys: "n",        label: "New topic (topics) · New project (projects)" }
+  reply:         { keys: "r",        label: "Reply (topic) · Request (time off) · Reset (appearance)" }
+  task:          { keys: "t",        label: "Create task (topic) · Today (timeline) · Start/stop timer (task)" }
+  chain:         { keys: "c",        label: "Create chain (topic)" }
+  meet:          { keys: "m",        label: "Meet about it (topic)" }
+  add:           { keys: "a",        label: "Add client (clients)" }
+  step:          { keys: "s",        label: "Add step (chain) · Add to calendar (timeline)" }
+  plan:          { keys: "p",        label: "Plan sprint (backlog)" }
+  sign_in:       { keys: "g",        label: "Continue with Google (sign in) — M for Microsoft" }
+  board_cards:   { keys: "j",        label: "Board: next card — K previous" }
+  board_columns: { keys: "l",        label: "Board: next column — H previous" }
+  board_advance: { keys: "shift+arrowright", label: "Board: advance the focused card's status" }
+  timeline_nav:  { keys: "arrowleft", label: "Timeline: earlier — Right arrow later" }

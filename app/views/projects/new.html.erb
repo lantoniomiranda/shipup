@@ -1,10 +1,10 @@
 <% breadcrumbs [ "Projects", root_path ], "New project" %>
 <% content_for :content_class, "shell__content--bare" %>
 
-<%= form_with model: @project, class: "split", data: { controller: "hotkey project-form" } do |form| %>
+<%= form_with model: @project, class: "split", data: { controller: "project-form" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to root_path, class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %><%= icon "arrow-left" %><span>Back to projects</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to root_path, class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span>Back to projects</span><%= render "shared/key", label: "Esc" %><% end %>
     </header>
 
     <div class="form">
@@ -48,7 +48,7 @@
 
     <footer class="panel__footer">
       <%= link_to root_path, class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter"><%= icon "plus" %><span>Create project</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "plus" %><span>Create project</span><%= render "shared/key", label: "Ctrl Enter" %></button>
     </footer>
   </section>
 <% end %>

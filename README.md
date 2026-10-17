@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- Keyboard shortcuts rebuilt: one global handler (`hotkeys_controller.js`) driven by `data-hotkey` attributes and one registry, `config/keybindings.yml`, which also feeds the **?** help dialog. Navigation uses `g` chords (`g b` board, `g t` topics, `g h` projects…); primary actions use **Ctrl/Cmd+Enter**; no browser-owned combos (Ctrl+S, Space…). Project tabs now show the shortcuts of the *other* tabs, not the current one. `node script/check_keys.mjs` presses the real keys in a browser.
 - Sprints have a state (planned, active, completed) with a unique-index guarantee of **one active sprint per project**. Create a sprint from the backlog (*Plan sprint*), start it (carrying unfinished tasks over if you like) and it shows on the board immediately; *Complete sprint* sits on the board. Workspace admins and project managers manage sprints.
 - Branded error pages (400, 403, 404, 406, 422, 500) rendered by `ErrorsController` via `config.exceptions_app`; static `public/*.html` fallbacks restyled. Forbidden actions render the 403 page.
 - Fix: project cards on the dashboard now open the project. Product renamed from Nook to **ShipUp**.
@@ -36,6 +37,7 @@ bin/rails test                            # unit + integration tests
 bin/rails test test/models/x_test.rb:12   # a single test
 bin/rubocop                               # lint
 bin/ci                                    # everything CI runs
+node script/check_keys.mjs                # browser smoke test of keyboard shortcuts (needs the server running)
 ```
 
 ## Sign-in and integrations

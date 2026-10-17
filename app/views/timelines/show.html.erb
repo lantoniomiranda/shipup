@@ -4,19 +4,19 @@
 <% column = ->(date) { (date - timeline.range.first).to_i + 1 } %>
 <% last_day = days.last %>
 
-<div class="timeline-page" data-controller="hotkey">
+<div class="timeline-page">
   <div class="toolbar toolbar--timeline">
     <div class="timeline-nav">
-      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: "Earlier" }, data: { hotkey_target: "trigger", hotkey_key: "arrowleft" } %>
+      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: "Earlier" }, data: { hotkey: "arrowleft" } %>
       <h1><%= timeline.range.first.strftime("%b %-d") %> – <%= (timeline.range.end - 1).strftime("%b %-d") %></h1>
-      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: "Later" }, data: { hotkey_target: "trigger", hotkey_key: "arrowright" } %>
-      <%= link_to project_timeline_path(@project), class: "btn", data: { hotkey_target: "trigger", hotkey_key: "t" } do %><span>Today</span><%= render "shared/key", label: "T" %><% end %>
+      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: "Later" }, data: { hotkey: "arrowright" } %>
+      <%= link_to project_timeline_path(@project), class: "btn", data: { hotkey: "t" } do %><span>Today</span><%= render "shared/key", label: "T" %><% end %>
     </div>
     <ul class="legend">
       <li><i class="legend__swatch legend__swatch--done"></i>Done</li><li><i class="legend__swatch legend__swatch--progress"></i>In progress</li>
       <li><i class="legend__swatch legend__swatch--planned"></i>Planned</li><li><i class="legend__swatch legend__swatch--risk"></i>At risk</li>
     </ul>
-    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { hotkey_target: "trigger", hotkey_key: "s" } do %><%= icon "calendar" %><span>Add to my calendar</span><%= render "shared/key", label: "S" %><% end %>
+    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { hotkey: "s" } do %><%= icon "calendar" %><span>Add to my calendar</span><%= render "shared/key", label: "S" %><% end %>
   </div>
 
   <section class="panel panel--gantt">

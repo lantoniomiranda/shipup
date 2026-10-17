@@ -1,5 +1,5 @@
 <%# Sidebar actions for a topic: turn it into work, or talk it through live. %>
-<section class="side__section" data-controller="hotkey menu">
+<section class="side__section" data-controller="menu">
   <h3 class="eyebrow">What next</h3>
 
   <div class="move-on">
@@ -9,12 +9,12 @@
 
     <div class="menu" data-menu-target="panel" hidden>
       <p class="eyebrow">Move this topic on as</p>
-      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { hotkey_target: "trigger", hotkey_key: "t" } do %>
+      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { hotkey: "t" } do %>
         <span class="menu__glyph"><%= icon "square-check" %></span>
         <span class="menu__text"><strong>Create task</strong><span>A single piece of work.</span></span>
         <%= render "shared/key", label: "T" %>
       <% end %>
-      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { hotkey_target: "trigger", hotkey_key: "c" } do %>
+      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { hotkey: "c" } do %>
         <span class="menu__glyph"><%= icon "link" %></span>
         <span class="menu__text"><strong>Create chain</strong><span>Steps that ship in order.</span></span>
         <%= render "shared/key", label: "C" %>
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { hotkey_target: "trigger", hotkey_key: "m" } do %>
+  <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { hotkey: "m" } do %>
     <%= icon "video" %><span>Meet about it</span><%= render "shared/key", label: "M" %>
   <% end %>
 </section>

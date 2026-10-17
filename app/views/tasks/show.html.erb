@@ -7,10 +7,10 @@
 <% estimate = @task.estimate_minutes.to_i %>
 <% percent = estimate.zero? ? 0 : [ (logged * 100.0 / estimate).round, 100 ].min %>
 
-<div class="split" data-controller="hotkey">
+<div class="split">
   <section class="panel panel--task">
     <header class="panel__bar panel__bar--split">
-      <%= link_to project_board_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+      <%= link_to project_board_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Board</span><%= render "shared/key", label: "Esc" %>
       <% end %>
       <% if position %>
@@ -68,9 +68,9 @@
       <p class="tracker__who"><%= Current.user.short_name %><% if running_here %> · since <%= @running_entry.started_at.in_time_zone(Current.user.time_zone).strftime("%H:%M") %> <%= Current.user.city %><% end %></p>
 
       <% if running_here %>
-        <%= button_to project_task_timer_path(@project, @task), method: :delete, class: "btn btn--block" do %><%= icon "square", size: 14 %><span>Stop</span><%= render "shared/key", label: "Shift S" %><% end %>
+        <%= button_to project_task_timer_path(@project, @task), method: :delete, class: "btn btn--block", data: { hotkey: "t" } do %><%= icon "square", size: 14 %><span>Stop</span><%= render "shared/key", label: "T" %><% end %>
       <% else %>
-        <%= button_to project_task_timer_path(@project, @task), class: "btn btn--primary btn--block" do %><%= icon "play", size: 14 %><span>Start timer</span><%= render "shared/key", label: "Space" %><% end %>
+        <%= button_to project_task_timer_path(@project, @task), class: "btn btn--primary btn--block", data: { hotkey: "t" } do %><%= icon "play", size: 14 %><span>Start timer</span><%= render "shared/key", label: "T" %><% end %>
       <% end %>
 
       <div class="xp">

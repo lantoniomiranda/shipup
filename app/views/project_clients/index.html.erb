@@ -1,6 +1,6 @@
 <% project_header @project, active: :clients %>
 
-<div class="split split--stack" data-controller="hotkey">
+<div class="split split--stack">
   <div class="toolbar toolbar--chips">
     <div class="segmented segmented--dark" role="tablist">
       <%= link_to "All #{@counts.values.sum}", project_clients_path(@project), class: "segmented__item #{"segmented__item--active" if @filter.nil?}" %>
@@ -8,7 +8,7 @@
       <%= link_to "Invite pending #{@counts.fetch("invite_pending", 0)}", project_clients_path(@project, filter: "invite_pending"), class: "segmented__item #{"segmented__item--active" if @filter == "invite_pending"}" %>
     </div>
 
-    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "a" } do %>
+    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey: "a" } do %>
       <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "A" %>
     <% end %>
   </div>
