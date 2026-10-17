@@ -1,0 +1,7 @@
+Join <%= @workspace.name %> on <%= Rails.configuration.x.product_name %>
+
+<%= @inviter ? "#{@inviter.name} has" : "You have been" %> invited you as <%= @invitation.role %> of <%= @workspace.name %>.
+
+There is no password to create: sign in with the Google or Microsoft account that uses <%= @invitation.email %> and you are in.
+
+<%= sign_in_url %>

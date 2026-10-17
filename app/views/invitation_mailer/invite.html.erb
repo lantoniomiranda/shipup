@@ -1,0 +1,4 @@
+<h1 style="font-size:24px;margin:0 0 12px">Join <%= @workspace.name %> on <%= Rails.configuration.x.product_name %></h1>
+<p><%= @inviter ? "#{@inviter.name} has" : "You have been" %> invited you as <strong><%= @invitation.role %></strong> of <strong><%= @workspace.name %></strong>.</p>
+<p>There is no password to create: sign in with the Google or Microsoft account that uses <strong><%= @invitation.email %></strong> and you are in.</p>
+<p><a href="<%= sign_in_url %>" style="display:inline-block;padding:12px 18px;background:#E8632B;color:#2B211A;font-weight:600;text-decoration:none;border-radius:2px">Sign in to <%= Rails.configuration.x.product_name %></a></p>

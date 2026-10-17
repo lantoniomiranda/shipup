@@ -168,3 +168,12 @@ if rate_limiting.messages.none?
   first = rate_limiting.messages.create!(author: people.fetch("jonas"), body: "Counters are merged. Dashboard is next, then QA.", created_at: 5.hours.ago)
   rate_limiting.messages.create!(author: people.fetch("ines"), body: "Northwind needs this before their Oct 26 launch. QA starts when the dashboard lands.", parent: first, created_at: 4.hours.ago)
 end
+
+# ShipUp staff: sign in locally with /dev/sign_in?email=staff@shipup.dev&to=/backoffice
+User.find_or_create_by!(email: "staff@shipup.dev") { |u| u.assign_attributes(name: "Sam Staff", platform_admin: true, avatar_color: "plum") }
+
+# A couple of extra tenants so the backoffice has something to list.
+unless Workspace.exists?(slug: "globex")
+  Workspace.provision!(name: "Globex Corp", slug: "globex", admin_email: "hank@globex.com", plan: "team", seats_limit: 25)
+  Workspace.provision!(name: "Initech", slug: "initech", admin_email: "bill@initech.io", plan: "trial", trial_days: 5)
+end

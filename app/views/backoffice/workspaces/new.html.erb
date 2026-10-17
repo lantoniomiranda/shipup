@@ -1,0 +1,3 @@
+<% content_for :title, "New tenant" %>
+<header class="page-header"><div class="page-header__heading"><h1>New tenant</h1><p>Creates the workspace and emails its first admin an invitation.</p></div></header>
+<%= render "form", workspace: @workspace, url: backoffice_tenants_path, method: :post, admin_email: @admin_email %>

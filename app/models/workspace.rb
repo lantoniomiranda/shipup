@@ -31,9 +31,10 @@ class Workspace < ApplicationRecord
   end
 
   # Creates a tenant and invites its first admin. Used by the backoffice.
-  def self.provision!(name:, admin_email:, plan: "trial", seats_limit: nil, invited_by: nil, trial_days: TRIAL_DAYS)
+  # Extra attributes (slug, email_domain, allow_domain_join) go straight onto the workspace.
+  def self.provision!(name:, admin_email:, plan: "trial", seats_limit: nil, invited_by: nil, trial_days: TRIAL_DAYS, **attributes)
     transaction do
-      workspace = create!(name: name, plan: plan, seats_limit: seats_limit, trial_ends_at: (Time.current + trial_days.days if plan == "trial"))
+      workspace = create!(name: name, plan: plan, seats_limit: seats_limit, trial_ends_at: (Time.current + trial_days.days if plan == "trial"), **attributes)
       workspace.invitations.create!(email: admin_email, role: "admin", invited_by: invited_by)
       workspace
     end

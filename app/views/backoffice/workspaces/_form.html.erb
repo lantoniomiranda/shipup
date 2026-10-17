@@ -1,0 +1,28 @@
+<%= form_with model: workspace, url: url, method: method, scope: :workspace, class: "bo-form" do |form| %>
+  <% if workspace.errors.any? %><p class="flash flash--alert"><%= workspace.errors.full_messages.to_sentence %></p><% end %>
+
+  <div class="field-row">
+    <div class="field field--grow-x"><%= form.label :name, "Company name", class: "eyebrow" %><%= form.text_field :name, class: "input", required: true, autofocus: true %></div>
+    <div class="field"><%= form.label :slug, "Slug", class: "eyebrow" %><%= form.text_field :slug, class: "input", placeholder: "auto from name" %></div>
+  </div>
+
+  <div class="field-row">
+    <div class="field"><%= form.label :plan, "Plan", class: "eyebrow" %><%= form.select :plan, Workspace::PLANS.map { |plan| [ plan.capitalize, plan ] }, {}, class: "select" %></div>
+    <div class="field"><%= form.label :seats_limit, "Seat limit", class: "eyebrow" %><%= form.number_field :seats_limit, min: 1, class: "input", placeholder: "Unlimited" %></div>
+    <% unless workspace.persisted? %><div class="field"><%= form.label :trial_days, "Trial days", class: "eyebrow" %><%= text_field_tag "workspace[trial_days]", Workspace::TRIAL_DAYS, class: "input", id: "workspace_trial_days" %></div><% end %>
+  </div>
+
+  <div class="field-row">
+    <div class="field"><%= form.label :email_domain, "Company email domain", class: "eyebrow" %><%= form.text_field :email_domain, class: "input", placeholder: "acme.com" %></div>
+    <label class="check-card bo-check"><%= hidden_field_tag "workspace[allow_domain_join]", "0", id: nil %><%= form.check_box :allow_domain_join, { class: "check" }, "1", "0" %><span>Let anyone with that email domain join as a member</span></label>
+  </div>
+
+  <% unless workspace.persisted? %>
+    <div class="field"><%= form.label :admin_email, "First admin's email", class: "eyebrow" %><%= text_field_tag "workspace[admin_email]", admin_email, class: "input", required: true, type: "email", id: "workspace_admin_email", placeholder: "they get an invitation to sign in" %></div>
+  <% end %>
+
+  <div class="bo-form__actions">
+    <%= link_to "Cancel", (workspace.persisted? ? backoffice_tenant_path(workspace) : backoffice_tenants_path), class: "btn" %>
+    <button type="submit" class="btn btn--primary"><%= icon "check" %><span><%= workspace.persisted? ? "Save changes" : "Create tenant and invite admin" %></span></button>
+  </div>
+<% end %>

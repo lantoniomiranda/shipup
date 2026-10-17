@@ -1,0 +1,71 @@
+<% content_for :title, @workspace.name %>
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1><%= @workspace.name %></h1>
+    <p><span class="tag tag--plan-<%= @workspace.plan %>"><%= @workspace.plan.capitalize %></span>
+       <span class="tag <%= @workspace.suspended? ? "tag--request-declined" : "tag--client-active" %>"><%= @workspace.status.capitalize %></span>
+       <%= @workspace.slug %> · created <%= @workspace.created_at.strftime("%b %-d, %Y") %><%= " · last sign-in #{time_ago_in_words(@last_seen)} ago" if @last_seen %></p>
+  </div>
+  <div class="page-header__actions">
+    <%= link_to edit_backoffice_tenant_path(@workspace), class: "btn" do %><%= icon "pencil" %><span>Edit</span><% end %>
+    <% if @workspace.suspended? %>
+      <%= button_to reactivate_backoffice_tenant_path(@workspace), method: :patch, class: "btn btn--primary", form: { class: "inline-form" } do %><%= icon "play" %><span>Reactivate</span><% end %>
+    <% end %>
+  </div>
+</header>
+
+<% if @workspace.suspended? %>
+  <p class="flash flash--alert bo-banner">Suspended <%= @workspace.suspended_at.strftime("%b %-d") %><%= ": #{@workspace.suspended_reason}" if @workspace.suspended_reason %>. Members see a "workspace suspended" page.</p>
+<% end %>
+
+<div class="kpis">
+  <% @usage.each do |label, value| %><section class="kpi"><h3 class="eyebrow"><%= label.to_s.capitalize %></h3><strong><%= value %></strong></section><% end %>
+</div>
+
+<div class="bo-columns">
+  <section class="chart-card">
+    <header><h3 class="eyebrow">Members · <%= @memberships.size %><%= " of #{@workspace.seats_limit} seats" if @workspace.seats_limit %></h3></header>
+    <ul class="closed bo-list">
+      <% @memberships.each do |membership| %>
+        <li><span><%= avatar(membership.user, size: :sm) %> <%= membership.user.name %> <small><%= membership.user.email %></small></span><span class="tag"><%= membership.role %></span><span></span><time><%= membership.created_at.strftime("%b %-d") %></time></li>
+      <% end %>
+      <% if @memberships.empty? %><li class="entries__empty">Nobody has joined yet.</li><% end %>
+    </ul>
+  </section>
+
+  <section class="chart-card">
+    <header><h3 class="eyebrow">Pending invitations · <%= @invitations.size %></h3></header>
+    <ul class="closed bo-list">
+      <% @invitations.each do |invitation| %>
+        <li><span><%= invitation.email %> <small>invited <%= invitation.invited_by&.short_name || "by ShipUp" %></small></span><span class="tag"><%= invitation.role %></span>
+          <span class="bo-actions">
+            <%= button_to resend_backoffice_tenant_invitation_path(@workspace, invitation), class: "btn btn--small", form: { class: "inline-form" } do %><span>Resend</span><% end %>
+            <%= button_to backoffice_tenant_invitation_path(@workspace, invitation), method: :delete, class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: "Revoke this invitation?" } } do %><span>Revoke</span><% end %>
+          </span><time><%= invitation.created_at.strftime("%b %-d") %></time></li>
+      <% end %>
+      <% if @invitations.empty? %><li class="entries__empty">No pending invitations.</li><% end %>
+    </ul>
+
+    <%= form_with url: backoffice_tenant_invitations_path(@workspace), scope: :invitation, class: "bo-invite" do |form| %>
+      <%= form.email_field :email, class: "input", placeholder: "Invite someone by email", required: true, "aria-label": "Email" %>
+      <%= form.select :role, Invitation.roles.keys.map { |role| [ role.capitalize, role ] }, {}, class: "select select--small" %>
+      <button type="submit" class="btn btn--primary btn--small">Invite</button>
+    <% end %>
+  </section>
+</div>
+
+<section class="chart-card bo-details">
+  <header><h3 class="eyebrow">Details</h3></header>
+  <dl>
+    <div><dt>Seats</dt><dd><%= @workspace.seats_used %> used<%= " of #{@workspace.seats_limit}" if @workspace.seats_limit %></dd></div>
+    <div><dt>Trial ends</dt><dd><%= @workspace.trial_ends_at ? @workspace.trial_ends_at.strftime("%b %-d, %Y") : "—" %><%= " (expired)" if @workspace.trial_expired? %></dd></div>
+    <div><dt>Company email domain</dt><dd><%= @workspace.email_domain || "—" %><%= " · members can join on their own" if @workspace.allow_domain_join? %></dd></div>
+    <div><dt>Meeting tool</dt><dd><%= @workspace.meeting_provider&.humanize || "Not chosen" %></dd></div>
+  </dl>
+  <% if @workspace.active? %>
+    <%= form_with url: suspend_backoffice_tenant_path(@workspace), method: :patch, class: "bo-suspend", data: { turbo_confirm: "Suspend #{@workspace.name}? Their members lose access immediately." } do %>
+      <%= text_field_tag :reason, nil, class: "input", placeholder: "Reason (shown to the tenant's members)" %>
+      <button type="submit" class="btn btn--danger"><%= icon "ban" %><span>Suspend tenant</span></button>
+    <% end %>
+  <% end %>
+</section>

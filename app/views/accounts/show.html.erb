@@ -46,6 +46,8 @@
         </div>
       </fieldset>
 
+      <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span>Sign out</span><% end %>
+
       <div class="signin-note">
         <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>
         <div><strong>Signed in with <%= (identity&.provider || "Google").capitalize %></strong><small><%= @user.email %> · no password to manage</small></div>

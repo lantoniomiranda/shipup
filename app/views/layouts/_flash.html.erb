@@ -1,0 +1,5 @@
+<% if notice || alert %>
+  <div class="toast toast--<%= notice ? "notice" : "alert" %>" role="status" data-controller="toast">
+    <%= icon notice ? "circle-check" : "circle-alert", size: 18 %><span><%= notice || alert %></span>
+  </div>
+<% end %>

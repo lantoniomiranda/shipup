@@ -126,3 +126,5 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 /* AI draft controls in the create task / chain header. */
 .ai-draft { display: flex; align-items: center; gap: 10px; }
 .tag--draft { background: var(--accent-soft); color: var(--accent-ink); }
+
+.block-form { display: block; width: 100%; }
