@@ -1,0 +1,116 @@
+# https://taskfile.dev — run `task` to list everything. Install: brew install go-task
+version: "3"
+
+vars:
+  PORT: '{{.PORT | default "3000"}}'
+  PID_FILE: tmp/pids/server.pid
+  LOG_FILE: log/server.out
+
+tasks:
+  default:
+    desc: List the available tasks
+    silent: true
+    cmds:
+      - task --list
+
+  start:
+    desc: Start Postgres and the Rails server in the background (http://localhost:3000)
+    cmds:
+      - task: db:up
+      - task: server:start
+      - echo "ShipUp is running at http://localhost:{{.PORT}}  (task logs · task stop)"
+
+  stop:
+    desc: Stop the Rails server and Postgres
+    cmds:
+      - task: server:stop
+      - task: db:down
+
+  restart:
+    desc: Restart the Rails server (keeps Postgres running)
+    cmds:
+      - task: server:stop
+      - task: server:start
+
+  status:
+    desc: Show whether the server and Postgres are running
+    silent: true
+    cmds:
+      - |
+        if [ -f {{.PID_FILE}} ] && ps -p "$(cat {{.PID_FILE}})" >/dev/null 2>&1; then
+          echo "server    running (pid $(cat {{.PID_FILE}})) on http://localhost:{{.PORT}}"
+        else
+          echo "server    stopped"
+        fi
+      - |
+        if docker ps --format '{{`{{.Names}}`}}' 2>/dev/null | grep -q postgres; then echo "postgres  running"; else echo "postgres  stopped"; fi
+
+  logs:
+    desc: Follow the server log (Ctrl+C to stop following)
+    cmds:
+      - tail -f log/development.log
+
+  server:start:
+    desc: Start only the Rails server in the background
+    cmds:
+      - |
+        if [ -f {{.PID_FILE}} ] && ps -p "$(cat {{.PID_FILE}})" >/dev/null 2>&1; then
+          echo "server already running (pid $(cat {{.PID_FILE}}))"; exit 0
+        fi
+        rm -f {{.PID_FILE}}
+        PIDFILE={{.PID_FILE}} nohup bin/rails server -p {{.PORT}} > {{.LOG_FILE}} 2>&1 &
+        for i in $(seq 1 30); do
+          curl -s -o /dev/null http://127.0.0.1:{{.PORT}}/up && break
+          sleep 1
+        done
+        curl -s -o /dev/null -w "server up (HTTP %{http_code})\n" http://127.0.0.1:{{.PORT}}/up
+
+  server:stop:
+    desc: Stop only the Rails server
+    cmds:
+      - |
+        if [ -f {{.PID_FILE}} ] && ps -p "$(cat {{.PID_FILE}})" >/dev/null 2>&1; then
+          /bin/kill "$(cat {{.PID_FILE}})" && echo "server stopped"
+        else
+          echo "server not running"
+        fi
+        rm -f {{.PID_FILE}}
+
+  db:up:
+    desc: Start Postgres (docker compose), starting Colima first if it isn't running
+    cmds:
+      - |
+        docker info >/dev/null 2>&1 || (command -v colima >/dev/null && colima start)
+        if docker compose version >/dev/null 2>&1; then docker compose up -d --wait postgres; else docker-compose up -d --wait postgres; fi
+
+  db:down:
+    desc: Stop Postgres (data is kept)
+    cmds:
+      - |
+        if docker compose version >/dev/null 2>&1; then docker compose stop postgres; else docker-compose stop postgres; fi
+
+  db:prepare:
+    desc: Create and migrate the development database
+    cmds:
+      - bin/rails db:prepare
+
+  db:seed:
+    desc: Load the demo data
+    cmds:
+      - bin/rails db:seed
+
+  console:
+    desc: Open a Rails console
+    interactive: true
+    cmds:
+      - bin/rails console
+
+  test:
+    desc: Run the test suite
+    cmds:
+      - bin/rails test
+
+  ci:
+    desc: Run everything CI runs (rubocop, audits, brakeman, tests)
+    cmds:
+      - bin/ci

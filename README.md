@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- `Taskfile.yml`: `task start | stop | restart | status | logs` manage the server and Postgres.
 - **Multi-tenant SaaS**: a workspace is a tenant with a status (active/suspended), plan (trial/starter/team/enterprise), trial end and seat limit. Sign-up is **invite-only**: unknown emails are refused unless they hold a pending `Invitation`, belong to a workspace that enabled company-domain joining, or are platform staff listed in `PLATFORM_ADMIN_EMAILS`. Signing in consumes invitations (a person can belong to several tenants). `Workspace.provision!` creates a tenant and invites its first admin.
 - **Tenant side of the SaaS**: workspace switcher in the top bar (session-based, only your own tenants), a *People* page for workspace admins (invite by email, change roles, remove people, resend/revoke invitations; the last admin can't be demoted or removed; seat limits enforced), a branded "workspace suspended" page, a "no workspace yet" page, and a trial banner for admins. `test/controllers/tenant_isolation_test.rb` pins that one tenant can never read or write another's data.
 - **Backoffice** (`/backoffice`, platform staff only; everyone else gets a 404): tenants overview, tenant list with search and status filter, onboarding (creates the workspace and emails its first admin), editing plan/seats/domain rules, suspend/reactivate with a reason, and invitation management (invite, resend, revoke). Invitation mail goes through `InvitationMailer` (set `SMTP_*`, `MAIL_FROM`, `APP_HOST` in production). Locally: `/dev/sign_in?email=staff@shipup.dev&to=/backoffice`.
@@ -35,6 +36,19 @@ Without OAuth credentials, sign in locally through `http://localhost:3000/dev/si
 (development only).
 
 ## Everyday commands
+
+With [go-task](https://taskfile.dev) (`brew install go-task`):
+
+```sh
+task start      # Postgres + Rails server in the background (http://localhost:3000)
+task stop       # stop the server and Postgres
+task restart    # restart only the server
+task status     # what is running
+task logs       # follow the Rails log
+task            # list everything (db:seed, console, test, ci…)
+```
+
+Or directly:
 
 ```sh
 bin/dev                                   # run the server
