@@ -1,0 +1,9 @@
+ines_orbit:
+  workspace: orbit
+  user: ines
+  role: admin
+
+jonas_orbit:
+  workspace: orbit
+  user: jonas
+  role: member

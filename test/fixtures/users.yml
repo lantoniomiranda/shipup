@@ -1,0 +1,11 @@
+ines:
+  email: ines@orbitlabs.dev
+  name: Inês Machado
+  time_zone: Europe/Lisbon
+  avatar_color: mustard
+
+jonas:
+  email: jonas@orbitlabs.dev
+  name: Jonas Keller
+  time_zone: Europe/Berlin
+  avatar_color: orange

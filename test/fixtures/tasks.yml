@@ -1,0 +1,18 @@
+rate_limiting:
+  project: apollo
+  sprint: sprint_14
+  creator: ines
+  assignee: jonas
+  number: 97
+  title: Per-key rate limiting
+  status: in_progress
+  estimate_minutes: 600
+
+spec_published:
+  project: apollo
+  sprint: sprint_14
+  creator: ines
+  number: 104
+  title: OpenAPI spec published
+  status: done
+  estimate_minutes: 300

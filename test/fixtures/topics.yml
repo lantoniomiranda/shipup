@@ -1,0 +1,6 @@
+refresh_tokens:
+  project: apollo
+  author: jonas
+  kind: issue
+  title: Refresh tokens expire silently after 24h
+  body: Partners report 401s exactly 24h after authorizing.
