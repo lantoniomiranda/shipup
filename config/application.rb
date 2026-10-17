@@ -21,7 +21,16 @@ module Shipup
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.x.product_name = "Nook"
+
+    # Users and meetings span time zones; store UTC and convert per user at the edge.
+    config.time_zone = "UTC"
+
+    # Keep generators lean: no helper/asset stubs, tests are written by hand.
+    config.generators do |g|
+      g.helper false
+      g.assets false
+      g.test_framework :test_unit, fixture: true
+    end
   end
 end

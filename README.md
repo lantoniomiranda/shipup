@@ -1,24 +1,33 @@
-# README
+# Shipup
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Rails 8 app (product name **Nook**): project management built around topics,
+chains, meetings and a sprint board. Design source: `design-draft-claude-1.pen`.
 
-Things you may want to cover:
+## Stack
 
-* Ruby version
+Rails 8.1, PostgreSQL, Hotwire (Turbo + Stimulus), importmap, Propshaft (plain
+CSS with design tokens), Solid Queue/Cache/Cable, Minitest.
 
-* System dependencies
+## Getting started
 
-* Configuration
+```sh
+bin/setup        # copies .env, starts Postgres via docker compose, prepares the DB, runs the server
+```
 
-* Database creation
+Postgres listens on `localhost:5433` (see `docker-compose.yml`, overridable in `.env`).
 
-* Database initialization
+## Everyday commands
 
-* How to run the test suite
+```sh
+bin/dev                              # run the server
+bin/rails test                       # unit + integration tests
+bin/rails test test/models/x_test.rb:12   # a single test
+bin/rubocop                          # lint
+bin/ci                               # everything CI runs
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Theming
 
-* Deployment instructions
-
-* ...
+`app/assets/stylesheets/tokens.css` holds the design tokens. Backgrounds
+(`paper`, `mist`, `sage`, `night`) and accents (`orange`, `blue`, `teal`,
+`plum`, `mustard`) are switched with `data-bg` / `data-accent` on `<html>`.

@@ -1,0 +1,30 @@
+---
+name: shipup
+description: Codebase guide for the shipup Rails 8.1 app. Use when working in this repository to build, lint, test, or understand the stack (Hotwire, importmap, PostgreSQL, Solid Queue/Cache/Cable, Kamal).
+---
+
+# shipup
+
+## Project state
+
+Rails 8.1 app (Ruby version in `.ruby-version`); the product is called **Nook** (`config.x.product_name`). The UI is replicated from `design-draft-claude-1.pen`. Check the code before assuming any feature exists.
+
+`design-draft-claude-1.pen` is an encrypted Pencil design file (untracked). Access it only through the `pencil` MCP tools, never Read/Grep.
+
+## Commands
+
+- `bin/setup` — copy `.env`, start Postgres (docker compose, host port 5433), prepare DB, start server (`--skip-server` to skip); `bin/dev` — run the dev server
+- `bin/rails test` — run unit/integration tests; single file: `bin/rails test test/models/foo_test.rb`; single test: `bin/rails test test/models/foo_test.rb:LINE`
+- `bin/rails test:system` — Capybara/Selenium system tests (run separately in CI)
+- `bin/rubocop` — lint (`rubocop-rails-omakase` style, configured in `.rubocop.yml`)
+- `bin/ci` — runs the full local CI defined in `config/ci.rb` (setup, rubocop, bundler-audit, importmap audit, brakeman with `--exit-on-warn`, tests, seed replant). `.github/workflows/ci.yml` mirrors these steps; keep both in sync.
+
+## Architecture
+
+Standard Rails "Solid" stack with no Node build step:
+
+- **Styling**: plain CSS in `app/assets/stylesheets`; design tokens in `tokens.css`, themed through `data-bg` / `data-accent` on `<html>`. Components read semantic variables only (`--ink`, `--accent`…), never raw hex.
+- **Frontend**: Propshaft + importmap-rails (`config/importmap.rb`), Turbo, and Stimulus. Controllers in `app/javascript/controllers` are auto-pinned via `pin_all_from`. Add JS dependencies with `bin/importmap pin`, not npm.
+- **Database**: PostgreSQL via `docker-compose.yml`. Production uses four databases (primary, cache, queue, cable) with their own migration paths (`db/cache_migrate`, `db/queue_migrate`, `db/cable_migrate`) and schema files (`db/*_schema.rb`).
+- **Background jobs / cache / websockets**: Solid Queue, Solid Cache, Solid Cable (configured in `config/queue.yml`, `cache.yml`, `cable.yml`, `recurring.yml`); `bin/jobs` runs the worker.
+- **Deployment**: Docker + Kamal (`config/deploy.yml`, `.kamal/`), served via Thruster/Puma.

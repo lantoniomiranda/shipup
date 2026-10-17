@@ -1,0 +1,140 @@
+/*
+ * Design tokens, ported from the Nook design file.
+ *
+ * Two independent theme axes are switched with data attributes on <html>:
+ *   data-bg      paper (default) | mist | sage | night
+ *   data-accent  orange (default) | blue | teal | plum | mustard
+ * Components only ever read the semantic variables (--paper, --ink, --accent…),
+ * never a raw hex, so every screen re-themes for free.
+ */
+
+:root {
+  /* Typography */
+  --font-display: "Exo 2", system-ui, sans-serif;
+  --font-body: "Exo 2", system-ui, sans-serif;
+  --font-mono: "Exo 2", ui-monospace, monospace;
+
+  /* Surfaces & text (bg axis) — defaults are "paper" */
+  --paper: #F3EAD8;
+  --surface: #FBF7EC;
+  --sunken: #E9DDC4;
+  --ink: #2B211A;
+  --ink-soft: #6A5A4A;
+  --line: #D6C7AA;
+  --ink-a22: #2B211A22;
+  --ink-a33: #2B211A33;
+  --ink-a55: #2B211A55;
+  --sunken-a99: #E9DDC499;
+  --sunken-a55: #E9DDC455;
+  --scrim: #E9DDC4E6;
+
+  /* Sidebar chrome — constant across themes */
+  --side: #2B211A;
+  --side-hover: #43342A;
+  --side-text: #F3EAD8;
+  --side-muted: #B3A28A;
+
+  /* Accent (accent axis) — defaults are "orange" */
+  --accent: #E8632B;
+  --accent-soft: #F8D3BC;
+  --accent-ink: #9A3A0C;
+  --accent-tint: #FAE8DA;
+  --accent-a55: #E8632B55;
+  --on-accent: #2B211A;
+
+  /* Fixed hues used for projects, tags and statuses */
+  --mustard: #EBB43B;
+  --mustard-soft: #F7E3A6;
+  --mustard-ink: #6F5000;
+  --teal: #2F8077;
+  --teal-soft: #CDE4DB;
+  --teal-ink: #1D5A52;
+  --plum: #A8476A;
+  --plum-soft: #EFCBD6;
+  --plum-ink: #7A2A4A;
+  --blue: #4468A3;
+  --blue-soft: #D3DDEE;
+  --blue-ink: #2C4A7C;
+  --danger: #B3382A;
+  --danger-soft: #F3CFC7;
+
+  /* Avatar fills */
+  --av-orange: #F08A57;
+  --av-mustard: #EBB43B;
+  --av-teal: #7DBFB1;
+  --av-plum: #D98AA5;
+  --av-blue: #8AA6D6;
+
+  /* Shape & rhythm */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --border: 1.5px solid var(--ink);
+  --border-soft: 1.5px solid var(--line);
+  --shadow-offset: 3px 3px 0 var(--ink);
+}
+
+[data-bg="mist"] {
+  --paper: #DCE5ED;
+  --surface: #F2F6FA;
+  --sunken: #C9D6E2;
+  --ink: #16202A;
+  --ink-soft: #52626F;
+  --line: #B1C2D1;
+  --ink-a22: #16202A22;
+  --ink-a33: #16202A33;
+  --ink-a55: #16202A55;
+  --sunken-a99: #DAE3EA99;
+  --sunken-a55: #DAE3EA55;
+  --scrim: #DAE3EAE6;
+}
+
+[data-bg="sage"] {
+  --paper: #E6EBDC;
+  --surface: #F3F6EC;
+  --sunken: #D6DEC8;
+  --ink: #1C2519;
+  --ink-soft: #556050;
+  --line: #BCC7AB;
+  --ink-a22: #1C251922;
+  --ink-a33: #1C251933;
+  --ink-a55: #1C251955;
+  --sunken-a99: #D6DEC899;
+  --sunken-a55: #D6DEC855;
+  --scrim: #D6DEC8E6;
+}
+
+[data-bg="night"] {
+  --paper: #16171F;
+  --surface: #1F2030;
+  --sunken: #101118;
+  --ink: #E4E6F4;
+  --ink-soft: #9A9FBF;
+  --line: #34364D;
+  --ink-a22: #E4E6F422;
+  --ink-a33: #E4E6F433;
+  --ink-a55: #E4E6F455;
+  --sunken-a99: #10111899;
+  --sunken-a55: #10111855;
+  --scrim: #0A0B10E6;
+  --mustard-soft: #3D3320;
+  --mustard-ink: #EBC76A;
+  --teal-soft: #1E3B3A;
+  --teal-ink: #7FD4C3;
+  --plum-soft: #3F2433;
+  --plum-ink: #E79BBB;
+  --blue-soft: #22304F;
+  --blue-ink: #9DB7F0;
+  --danger: #F0897B;
+  --danger-soft: #442321;
+}
+
+[data-accent="blue"]    { --accent: #6F94D6; --accent-soft: #D3DDEE; --accent-ink: #2C4A7C; --accent-tint: #E3EAF6; --accent-a55: #6F94D655; }
+[data-accent="teal"]    { --accent: #4FA396; --accent-soft: #CDE4DB; --accent-ink: #1D5A52; --accent-tint: #E1EFE9; --accent-a55: #4FA39655; }
+[data-accent="plum"]    { --accent: #C8628A; --accent-soft: #EFCBD6; --accent-ink: #7A2A4A; --accent-tint: #F5E2E9; --accent-a55: #C8628A55; }
+[data-accent="mustard"] { --accent: #EBB43B; --accent-soft: #F7E3A6; --accent-ink: #6F5000; --accent-tint: #FAF0CF; --accent-a55: #EBB43B55; }
+
+[data-bg="night"] { --accent-soft: #4A2A1C; --accent-ink: #F5A47C; --accent-tint: #2E2326; }
+[data-bg="night"][data-accent="blue"]    { --accent-soft: #22304F; --accent-ink: #9DB7F0; --accent-tint: #222B42; }
+[data-bg="night"][data-accent="teal"]    { --accent-soft: #1E3B3A; --accent-ink: #7FD4C3; --accent-tint: #1F3335; }
+[data-bg="night"][data-accent="plum"]    { --accent-soft: #3F2433; --accent-ink: #E79BBB; --accent-tint: #33232F; }
+[data-bg="night"][data-accent="mustard"] { --accent-soft: #3D3320; --accent-ink: #EBC76A; --accent-tint: #312D22; }
