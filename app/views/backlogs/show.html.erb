@@ -1,0 +1,67 @@
+<% project_header @project, active: :backlog %>
+<% sprint = @backlog.sprint %>
+<% counts = @backlog.counts %>
+<% days_until = sprint ? (sprint.starts_on - Date.current).to_i : nil %>
+
+<div class="split" data-controller="hotkey">
+  <section class="panel panel--table">
+    <header class="panel__header">
+      <div class="panel__title-row">
+        <h1>Sprint and backlog</h1>
+        <div class="segmented segmented--dark">
+          <%= link_to "All #{counts["all"]}", project_backlog_path(@project), class: "segmented__item #{"segmented__item--active" if @backlog.filter.nil?}" %>
+          <% Backlog::FILTERS.each do |filter| %>
+            <%= link_to "#{filter.capitalize} #{counts[filter]}", project_backlog_path(@project, filter: filter), class: "segmented__item #{"segmented__item--active" if @backlog.filter == filter}" %>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <table class="table table--backlog">
+      <thead><tr><th></th><th>ID</th><th>Topic and title</th><th>Kind</th><th>Estimate</th><th>Owner</th><th>Code</th><th></th></tr></thead>
+      <tbody>
+        <% if sprint %>
+          <tr class="table__group"><td colspan="8"><div class="table__group-inner">
+            <strong><%= sprint.name %></strong><span><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %> · starts in <%= pluralize(days_until, "day") %></span>
+            <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.planned_days %> / <%= @backlog.capacity_days %> XP</span>
+          </div></td></tr>
+          <%= render partial: "backlogs/row", collection: @backlog.planned_tasks, as: :task, locals: { project: @project, in_sprint: true } %>
+        <% end %>
+        <tr class="table__group"><td colspan="8"><div class="table__group-inner">
+          <strong>Backlog</strong><span><%= pluralize(@backlog.backlog_tasks.size, "task") %> · <%= @backlog.backlog_days %> days estimated</span>
+          <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.backlog_days %>d</span>
+        </div></td></tr>
+        <%= render partial: "backlogs/row", collection: @backlog.backlog_tasks, as: :task, locals: { project: @project, in_sprint: false } %>
+      </tbody>
+    </table>
+  </section>
+
+  <aside class="side side--wide side--padded">
+    <h3 class="eyebrow"><%= sprint ? "#{sprint.name} capacity" : "Next sprint" %></h3>
+    <% if sprint %>
+      <p class="capacity"><strong><%= @backlog.planned_days %></strong><span>/ <%= @backlog.capacity_days %> XP planned</span></p>
+      <div class="xp__bar xp__bar--wide" style="--hue: var(--accent)">
+        <% 30.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < (@backlog.planned_days * 30.0 / [ @backlog.capacity_days, 1 ].max).ceil %>"></span><% end %>
+      </div>
+      <p class="capacity__note"><%= @backlog.free_days %> XP free.</p>
+
+      <h3 class="eyebrow">Who has room</h3>
+      <ul class="load">
+        <% @backlog.load_by_person.each do |user, load| %>
+          <li class="<%= "load--full" if load >= Backlog::DAYS_PER_PERSON * 0.8 %>">
+            <%= avatar(user, size: :md) %>
+            <div><div class="load__labels"><strong><%= user.short_name %></strong><span><%= load %> / <%= Backlog::DAYS_PER_PERSON %> days</span></div>
+              <div class="xp__bar xp__bar--thin"><% Backlog::DAYS_PER_PERSON.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < load %>"></span><% end %></div></div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="capacity__note">No sprint is planned yet. Create the next one to start moving tasks into it.</p>
+    <% end %>
+
+    <%= button_to plan_sprint_project_backlog_path(@project), class: "btn btn--primary btn--block btn--plan", disabled: sprint.present?,
+                  data: { hotkey_target: "trigger", hotkey_key: "p" } do %>
+      <%= icon "flag" %><span><%= sprint ? "#{sprint.name} planned" : "Plan sprint" %></span><%= render "shared/key", label: "P" %>
+    <% end %>
+  </aside>
+</div>

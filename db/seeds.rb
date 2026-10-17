@@ -131,3 +131,34 @@ month = today.beginning_of_month
   request.assign_attributes(status: status, approver: people.fetch("priya"))
   request.save!(validate: false)
 end
+
+# Next sprint plus a backlog for sprint planning.
+next_sprint = apollo.sprints.find_or_create_by!(number: sprint.number + 1) { |s| s.assign_attributes(starts_on: sprint.ends_on + 1, ends_on: sprint.ends_on + 14) }
+[
+  [ "Webhook retries with backoff", next_sprint, "daniel", 5 ], [ "Add Retry-After header to 429s", next_sprint, "ananya", 2 ],
+  [ "Partner status page copy review", next_sprint, "sofia", 1 ],
+  [ "Audit log export", nil, nil, 8 ], [ "Sandbox usage dashboard", nil, "jonas", 4 ], [ "Rotate signing keys automatically", nil, "ines", nil ],
+  [ "Rate-limit headers in OpenAPI spec", nil, "sofia", 1 ], [ "Partner webhook logs viewer", nil, nil, 6 ]
+].each do |title, target, assignee, days|
+  apollo.tasks.find_or_create_by!(title: title) do |t|
+    t.assign_attributes(creator: people.fetch("ines"), sprint: target, assignee: assignee && people.fetch(assignee), estimate_days: days)
+  end
+end
+
+# History so analytics and the timeline have something to show: past time entries and meetings.
+if rate_limiting.time_entries.where.not(ended_at: nil).none?
+  (1..6).each do |weeks_ago|
+    started = weeks_ago.weeks.ago.beginning_of_week + 9.hours
+    people.values_at("jonas", "daniel", "ananya").each_with_index do |user, index|
+      rate_limiting.time_entries.create!(user: user, started_at: started + index.days, ended_at: started + index.days + (4 + weeks_ago).hours)
+    end
+  end
+end
+
+[ [ refresh_topic, 1.week.ago ], [ apollo.topics.find_by!(title: "Rate limiting per API key"), 3.days.from_now ] ].each do |topic, at|
+  next if topic.meetings.exists?
+
+  meeting = topic.meetings.create!(organizer: people.fetch("ines"), provider: "zoom", starts_at: at.change(hour: 14), duration_minutes: 30,
+                                   join_url: "https://zoom.us/j/#{topic.id}0000")
+  people.values_at("ines", "jonas", "sofia").each { |user| meeting.participants.create!(user: user) }
+end

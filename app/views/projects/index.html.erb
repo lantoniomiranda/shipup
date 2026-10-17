@@ -21,9 +21,9 @@
     </div>
 
     <% if Current.user.role_in(Current.workspace) == "admin" %>
-      <button type="button" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="n">
+      <%= link_to new_project_path, class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "n" } do %>
         <%= icon "plus" %><span>New project</span><%= render "shared/key", label: "N" %>
-      </button>
+      <% end %>
     <% end %>
   </div>
 </header>
@@ -35,10 +35,10 @@
   <% end %>
 
   <% if Current.user.role_in(Current.workspace) == "admin" %>
-    <div class="project-card project-card--new">
+    <%= link_to new_project_path, class: "project-card project-card--new" do %>
       <span class="project-card__plus"><%= icon "plus", size: 20 %></span>
       <strong>Start a new project</strong>
       <span>Admins only · invite managers afterwards</span>
-    </div>
+    <% end %>
   <% end %>
 </div>

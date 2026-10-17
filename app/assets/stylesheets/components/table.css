@@ -30,3 +30,35 @@
 .tag-input .tag button { display: grid; place-items: center; padding: 0; background: transparent; border: 0; color: var(--ink-soft); }
 .tag-input__entry { flex: 1; min-width: 180px; padding: 4px 0; background: transparent; color: var(--ink); border: 0; font: 500 14px var(--font-body); }
 .tag-input__entry:focus { outline: none; }
+
+/* Backlog */
+.table--backlog th:first-child, .table--backlog td:first-child { width: 36px; padding-right: 0; }
+.table__group td { padding: 14px 24px; background: var(--sunken); }
+.table__group strong { margin-right: 12px; font-size: 18px; }
+.table__group span:not(.tag) { color: var(--ink-soft); font-size: 14px; font-weight: 500; }
+.table__group-inner { display: flex; align-items: baseline; gap: 12px; }
+.table__group-inner strong { margin-right: 0; }
+.table__group .tag { margin-left: auto; background: var(--surface); }
+.table--backlog td { white-space: nowrap; }
+.table--backlog td:nth-child(3) { white-space: normal; }
+.table__grip { color: var(--ink-soft); }
+.table__id { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.table__title { font-size: 16px; font-weight: 700; }
+.table__title:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.table td small { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.table__code { color: var(--ink-soft); font-size: 13px; white-space: nowrap; }
+.table__code .icon { display: inline; margin-right: 6px; vertical-align: -2px; }
+.owner { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.icon-button--small { width: 28px; height: 28px; }
+.capacity { display: flex; align-items: baseline; gap: 8px; }
+.capacity strong { font-size: 64px; line-height: 1; }
+.capacity span, .capacity__note { color: var(--ink-soft); font-size: 14px; }
+.load { display: flex; flex-direction: column; gap: 14px; }
+.load li { display: flex; align-items: center; gap: 12px; }
+.load li > div { flex: 1; }
+.load__labels { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 14px; }
+.load__labels span { color: var(--ink-soft); font-size: 13px; }
+.load--full .load__labels span { color: var(--danger); font-weight: 700; }
+.load--full .xp__segment--on { background: var(--danger); }
+.xp__bar--thin { height: 12px; padding: 1px; gap: 2px; --hue: var(--teal); }
+.btn--plan { margin-top: auto; padding: 14px; font-size: 16px; }

@@ -1,0 +1,24 @@
+<tr>
+  <td class="table__grip"><%= icon "grip-vertical", size: 14 %></td>
+  <td class="table__id"><%= task.key %></td>
+  <td>
+    <%= link_to task.title, project_task_path(project, task), class: "table__title" %>
+    <% if task.topic %><small><%= icon "message-square", size: 12 %><%= task.topic.title %></small><% end %>
+  </td>
+  <td>
+    <% if task.chain && task.chain_size > 1 %>
+      <span class="tag tag--chain"><%= icon "link-2", size: 13 %>Chain · step <%= task.chain_position %> of <%= task.chain_size %></span>
+    <% else %>
+      <span class="tag tag--kind"><%= icon "circle-check", size: 13 %>Task</span>
+    <% end %>
+  </td>
+  <td><% if task.estimate_days %><span class="tag"><%= task.estimate_days.round(1).to_s.delete_suffix(".0") %>d</span><% else %><span class="tag tag--similar">No estimate</span><% end %></td>
+  <td><% if task.assignee %><span class="owner"><%= avatar(task.assignee, size: :sm) %><%= task.assignee.short_name %></span><% else %><span class="tag tag--plain">Unassigned</span><% end %></td>
+  <td class="table__code"><% if (pr = task.pull_requests.first) %><%= icon "git-branch", size: 13 %>#<%= pr.number %><% else %><%= icon "git-branch", size: 13 %>No branch<% end %></td>
+  <td>
+    <%= button_to schedule_project_task_path(project, task, to: (in_sprint ? "backlog" : "sprint")), method: :patch, class: "icon-button icon-button--small",
+                  title: (in_sprint ? "Move to backlog" : "Move to the next sprint"), aria: { label: (in_sprint ? "Move to backlog" : "Move to next sprint") } do %>
+      <%= icon(in_sprint ? "arrow-big-down" : "arrow-big-up", size: 14) %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,54 @@
+<% breadcrumbs [ "Projects", root_path ], "New project" %>
+<% content_for :content_class, "shell__content--bare" %>
+
+<%= form_with model: @project, class: "split", data: { controller: "hotkey project-form" } do |form| %>
+  <section class="panel panel--form">
+    <header class="panel__bar">
+      <%= link_to root_path, class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %><%= icon "arrow-left" %><span>Back to projects</span><%= render "shared/key", label: "Esc" %><% end %>
+    </header>
+
+    <div class="form">
+      <header class="form__heading"><h1>New project</h1><p>Topics, tasks and the board all live inside a project.</p></header>
+      <% if @project.errors.any? %><p class="flash flash--alert"><%= @project.errors.full_messages.to_sentence %></p><% end %>
+
+      <div class="field-row">
+        <div class="field field--grow-x">
+          <%= form.label :name, "Name", class: "eyebrow" %>
+          <%= form.text_field :name, class: "input input--title", required: true, autofocus: true, autocomplete: "off", data: { project_form_target: "name", action: "input->project-form#suggestKey" } %>
+        </div>
+        <div class="field">
+          <%= form.label :key, "Key (2–5 letters)", class: "eyebrow" %>
+          <%= form.text_field :key, class: "input input--title", maxlength: 5, autocomplete: "off", style: "text-transform: uppercase", data: { project_form_target: "key" } %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :description, "Description", class: "eyebrow" %>
+        <%= form.text_area :description, rows: 3, class: "input" %>
+      </div>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Color</legend>
+        <div class="swatches">
+          <% Hued::HUES.each do |hue| %>
+            <label class="swatch swatch--<%= hue %>"><%= form.radio_button :color, hue, class: "swatch__input" %><span><%= icon "check", size: 16 %></span></label>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Icon</legend>
+        <div class="avatar-grid">
+          <% Project::ICONS.each do |name| %>
+            <label class="avatar-option"><%= form.radio_button :icon, name, class: "avatar-option__input" %><span><%= icon name, size: 22 %></span></label>
+          <% end %>
+        </div>
+      </fieldset>
+    </div>
+
+    <footer class="panel__footer">
+      <%= link_to root_path, class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter"><%= icon "plus" %><span>Create project</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+    </footer>
+  </section>
+<% end %>

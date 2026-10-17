@@ -1,0 +1,70 @@
+<% project_header @project, active: :analytics %>
+<% a = @analytics %>
+<% duration = ->(minutes) { minutes >= 60 ? "#{minutes / 60}h #{format("%02d", minutes % 60)}m".sub(" 00m", "") : "#{minutes}m" } %>
+
+<div class="analytics">
+  <header class="toolbar">
+    <h1>Analytics</h1>
+    <div class="segmented segmented--dark">
+      <% Analytics::LABELS.each do |key, label| %>
+        <%= link_to label, project_analytics_path(@project, range: key), class: "segmented__item #{"segmented__item--active" if a.range_key == key}" %>
+      <% end %>
+    </div>
+  </header>
+
+  <div class="kpis">
+    <section class="kpi"><h3 class="eyebrow">Topics</h3><strong><%= a.topics_count %></strong><p><%= format("%+d", a.topics_delta) %> vs previous period</p></section>
+    <section class="kpi"><h3 class="eyebrow">Hours logged</h3><strong><%= a.hours_logged %>h</strong><p>Across <%= pluralize(a.deployed_items, "deployed item") %></p></section>
+    <section class="kpi"><h3 class="eyebrow">Meetings</h3><strong><%= a.meetings.size %></strong><p><%= duration.(a.meeting_minutes) %> · <%= a.decided_meetings %> of <%= a.meetings.size %> ended with a decision</p></section>
+    <section class="kpi"><h3 class="eyebrow">Average invited</h3><strong><%= a.average_invited %></strong><p>People per meeting</p></section>
+  </div>
+
+  <div class="charts">
+    <section class="chart-card">
+      <header><h3 class="eyebrow">Topics per week</h3>
+        <ul class="legend"><li><i class="legend__swatch legend__swatch--progress"></i>Opened</li><li><i class="legend__swatch legend__swatch--vacation"></i>Approved</li><li><i class="legend__swatch legend__swatch--canceled"></i>Canceled</li></ul></header>
+      <div class="chart chart--grouped">
+        <% a.weeks.each do |week| %>
+          <div class="chart__col">
+            <div class="chart__bars">
+              <% { "opened" => week.opened, "approved" => week.approved, "canceled" => week.canceled }.each do |kind, value| %>
+                <span class="chart__bar chart__bar--<%= kind %>" style="height: <%= value * 100.0 / a.max_topics %>%" title="<%= value %> <%= kind %>"></span>
+              <% end %>
+            </div>
+            <small><%= week.label %></small>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="chart-card">
+      <header><h3 class="eyebrow">Hours per week</h3><ul class="legend"><li><i class="legend__swatch legend__swatch--vacation"></i>Work</li></ul></header>
+      <div class="chart">
+        <% a.weeks.each do |week| %>
+          <div class="chart__col">
+            <div class="chart__bars"><span class="chart__bar chart__bar--work" style="height: <%= week.hours * 100.0 / a.max_hours %>%" title="<%= week.hours %>h"></span></div>
+            <small><%= week.label %></small>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  </div>
+
+  <section class="chart-card chart-card--table">
+    <header><h3 class="eyebrow">Closed topics · decided in this period</h3><strong><%= pluralize(a.closed_topics.size, "topic") %></strong></header>
+    <% if a.closed_topics.empty? %>
+      <p class="empty">Nothing was closed in this period.</p>
+    <% else %>
+      <ul class="closed">
+        <% a.closed_topics.each do |topic| %>
+          <li>
+            <%= link_to topic.title, project_topic_path(@project, topic) %>
+            <span class="tag <%= topic.approved? ? "tag--task" : "tag--quiet" %>">Closed as <%= topic.status %></span>
+            <span><%= pluralize(topic.messages_count, "reply") %></span>
+            <time><%= topic.created_at.strftime("%b %-d") %></time>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+</div>

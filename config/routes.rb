@@ -23,11 +23,17 @@ Rails.application.routes.draw do
   post "webhooks/github", to: "webhooks/github#create"
 
   # Projects are addressed by their key (/projects/APO/topics).
-  resources :projects, only: :show do
+  resources :projects, only: %i[show new create] do
     resource :board, only: :show
+    resource :backlog, only: :show do
+      post :plan_sprint
+    end
+    resource :timeline, only: :show
+    resource :analytics, only: :show
     resources :clients, only: %i[index new create], controller: "project_clients"
     resources :tasks, only: %i[show update] do
       post :advance, on: :member
+      patch :schedule, on: :member
       resource :timer, only: %i[create destroy], controller: "task_timers"
     end
     resources :topics, only: %i[index show new create] do

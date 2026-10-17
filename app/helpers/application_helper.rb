@@ -64,6 +64,9 @@ module ApplicationHelper
     case tab
     when :topics then project_topics_path(project)
     when :board then project_board_path(project)
+    when :backlog then project_backlog_path(project)
+    when :timeline then project_timeline_path(project)
+    when :analytics then project_analytics_path(project)
     when :clients then project_clients_path(project)
     end
   end

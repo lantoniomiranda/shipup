@@ -17,6 +17,15 @@ class TasksController < ApplicationController
     redirect_to project_board_path(@project), notice: "#{@task.key} moved to #{Board::LABELS.fetch(status)}", status: :see_other
   end
 
+  # Backlog: put the task into the next sprint, or send it back to the backlog.
+  def schedule
+    sprint = params[:to] == "sprint" ? Backlog.new(project: @project).sprint : nil
+    return redirect_to project_backlog_path(@project), alert: "Plan a sprint first.", status: :see_other if params[:to] == "sprint" && sprint.nil?
+
+    @task.update!(sprint: sprint)
+    redirect_to project_backlog_path(@project), notice: "#{@task.key} #{sprint ? "moved to #{sprint.name}" : "moved to the backlog"}.", status: :see_other
+  end
+
   # Finishes this step; if it was part of a chain the next step unlocks on the board.
   def advance
     @task.move_to!(@task.next_status || "done")

@@ -57,9 +57,10 @@ Production also needs `AR_ENCRYPTION_PRIMARY_KEY`, `AR_ENCRYPTION_DETERMINISTIC_
 
 ## What is built
 
-Sign in · workspace setup (meeting tool, GitHub) · projects home · topics (list, thread, new with
-similar-topic suggestions, voting) · Move on → create task / chain · meet about it (Zoom / Google Meet)
-· sprint board (drag and drop, keyboard) · task page with time tracker · clients · account ·
-appearance · time off.
-Not built yet from the design: backlog, timeline, analytics, "Super Space" search, new-project form,
-task chat and Microsoft Teams meetings.
+Sign in · workspace setup (meeting tool, GitHub) · projects home and new project · topics (list,
+thread, new with similar-topic suggestions, voting) · Move on → create task / chain · meet about it
+(Zoom / Google Meet) · backlog and sprint planning · sprint board (drag and drop, keyboard) · task
+page with time tracker · timeline (with `.ics` export) · clients · analytics · account · appearance ·
+time off.
+Not built yet from the design: "Super Space" search, task chat, rediscussion analytics, undo toast
+and Microsoft Teams meetings.
