@@ -37,6 +37,7 @@
   border-radius: var(--radius-sm);
   box-shadow: inset 0 0 0 1px var(--ink-soft);
   font: 600 11px/normal var(--font-body);
+  white-space: nowrap;
 }
 
 /* button_to wraps the button in a form; let the button take part in the parent's layout. */

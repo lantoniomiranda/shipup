@@ -32,3 +32,38 @@
 .participants { display: flex; flex-direction: column; gap: 14px; }
 .participants li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
 .participants em { margin-left: auto; color: var(--ink-soft); font-size: 12px; font-style: normal; font-weight: 500; }
+
+/* Chat extras: message actions, quoted replies, removed state, inline edit, reply banner. */
+.message { position: relative; }
+.message__actions { display: inline-flex; gap: 4px; margin-left: auto; opacity: 0; transition: opacity 0.1s; }
+.message:hover .message__actions, .message:focus-within .message__actions { opacity: 1; }
+.message__actions button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; background: transparent; color: var(--ink-soft); border: 0; border-radius: var(--radius-sm); cursor: pointer; }
+.message__actions button:hover { background: var(--sunken); color: var(--ink); }
+.message__remove:hover { color: var(--danger) !important; }
+.message__edited { color: var(--ink-soft); font-size: 11px; font-style: italic; }
+.message__quote { display: flex; align-items: center; gap: 6px; padding: 5px 10px; max-width: 100%; overflow: hidden; background: var(--sunken); color: var(--ink-soft); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); font-size: 12px; white-space: nowrap; }
+.message__quote strong { color: var(--ink); font-weight: 600; }
+.message__quote span { overflow: hidden; text-overflow: ellipsis; }
+.message__text--removed { color: var(--ink-soft); font-size: 13px; font-style: italic; }
+.message--removed { opacity: 0.7; }
+.message__edit { display: flex; flex-direction: column; gap: 8px; }
+.message__edit[hidden] { display: none; }
+.message__edit div { display: flex; gap: 8px; }
+.message:target { animation: message-flash 1.6s ease-out; }
+@keyframes message-flash { from { background: var(--accent-tint); } to { background: transparent; } }
+
+.composer { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
+.composer__row { display: flex; align-items: center; gap: 10px; padding: 0 10px 0 14px; }
+.composer__reply { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--accent-tint); color: var(--ink-soft); border-bottom: 1px solid var(--line); font-size: 12px; }
+.composer__reply[hidden] { display: none; }
+.composer__reply span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.composer__reply strong { color: var(--ink); }
+.composer__reply button { display: grid; place-items: center; padding: 0; background: transparent; color: var(--ink-soft); border: 0; cursor: pointer; }
+
+/* Task chat card on the task page. */
+.chat { gap: 12px; }
+.chat header { display: flex; align-items: baseline; justify-content: space-between; }
+.chat header h3 { font-size: 22px; }
+.chat__count { color: var(--ink-soft); font-size: 12px; }
+.chat__messages { display: flex; flex-direction: column; gap: 14px; max-height: 340px; overflow: auto; }
+.chat .composer { margin: 0; }

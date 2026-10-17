@@ -89,5 +89,14 @@
         <% if @entries.empty? %><li class="entries__empty">No time logged yet.</li><% end %>
       </ul>
     </section>
+
+    <section class="side__section chat">
+      <header><h3>Chat</h3><span class="chat__count"><%= pluralize(@messages.reject(&:deleted?).size, "message") %></span></header>
+      <div class="chat__messages">
+        <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @task, project: @project } %>
+        <% if @messages.empty? %><p class="entries__empty">Nobody has said anything about this task yet.</p><% end %>
+      </div>
+      <%= render "messages/composer", project: @project, thread: @task, placeholder: "Reply in this task…" %>
+    </section>
   </aside>
 </div>

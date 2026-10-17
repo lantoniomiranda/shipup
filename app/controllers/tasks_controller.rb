@@ -3,6 +3,7 @@ class TasksController < ApplicationController
   before_action :set_task
 
   def show
+    @messages = @task.messages.includes(:author, :parent).order(:created_at, :id)
     @entries = @task.time_entries.includes(:user).order(started_at: :desc).limit(5)
     @running_entry = Current.user.running_time_entry
     @siblings = @project.tasks.where(sprint: @task.sprint).unlocked.order(:position, :number).pluck(:number)

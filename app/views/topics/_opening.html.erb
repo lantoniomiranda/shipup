@@ -1,0 +1,8 @@
+<%# The topic's own text, shown as the first message of its thread (it cannot be edited or removed like a reply). %>
+<article class="message" id="topic-opening">
+  <%= avatar(topic.author, size: :md) %>
+  <div class="message__body">
+    <header><strong><%= topic.author.short_name %></strong><time><%= author_time(topic.created_at, topic.author) %></time></header>
+    <p class="message__text"><%= simple_format(h(topic.body), {}, wrapper_tag: "span") %></p>
+  </div>
+</article>

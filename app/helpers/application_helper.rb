@@ -110,6 +110,16 @@ module ApplicationHelper
     Hued::HUES[client.id % Hued::HUES.size]
   end
 
+  # URL of a chat message inside its thread (a topic or a task).
+  def chat_message_path(project, thread, message)
+    thread.is_a?(Task) ? project_task_message_path(project, thread, message) : project_topic_message_path(project, thread, message)
+  end
+
+  # URL for posting a new message to a thread.
+  def chat_messages_path(project, thread)
+    thread.is_a?(Task) ? project_task_messages_path(project, thread) : project_topic_messages_path(project, thread)
+  end
+
   # Home filter links keep the default (active) URL clean.
   def projects_path_for(status)
     status == "active" ? root_path : root_path(status: status)

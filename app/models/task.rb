@@ -11,6 +11,7 @@ class Task < ApplicationRecord
   belongs_to :creator, class_name: "User"
   has_many :task_labels, dependent: :destroy
   has_many :labels, through: :task_labels
+  has_many :messages, class_name: "TaskMessage", dependent: :destroy
   has_many :time_entries, dependent: :destroy
   has_many :task_pull_requests, dependent: :destroy
   has_many :pull_requests, through: :task_pull_requests

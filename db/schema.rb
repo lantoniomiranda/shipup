@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_200001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -260,6 +260,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
     t.index ["task_id"], name: "index_task_labels_on_task_id"
   end
 
+  create_table "task_messages", force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.bigint "author_id", null: false
+    t.bigint "parent_id"
+    t.text "body", default: "", null: false
+    t.datetime "edited_at"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_task_messages_on_author_id"
+    t.index ["parent_id"], name: "index_task_messages_on_parent_id"
+    t.index ["task_id", "created_at"], name: "index_task_messages_on_task_id_and_created_at"
+    t.index ["task_id"], name: "index_task_messages_on_task_id"
+  end
+
   create_table "task_pull_requests", force: :cascade do |t|
     t.bigint "task_id", null: false
     t.bigint "pull_request_id", null: false
@@ -346,10 +361,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
   create_table "topic_messages", force: :cascade do |t|
     t.bigint "topic_id", null: false
     t.bigint "author_id", null: false
-    t.text "body", null: false
+    t.text "body", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_id"
+    t.datetime "edited_at"
+    t.datetime "deleted_at"
     t.index ["author_id"], name: "index_topic_messages_on_author_id"
+    t.index ["parent_id"], name: "index_topic_messages_on_parent_id"
     t.index ["topic_id", "created_at"], name: "index_topic_messages_on_topic_id_and_created_at"
     t.index ["topic_id"], name: "index_topic_messages_on_topic_id"
   end
@@ -453,6 +472,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
   add_foreign_key "sprints", "projects"
   add_foreign_key "task_labels", "labels"
   add_foreign_key "task_labels", "tasks"
+  add_foreign_key "task_messages", "task_messages", column: "parent_id", on_delete: :nullify
+  add_foreign_key "task_messages", "tasks"
+  add_foreign_key "task_messages", "users", column: "author_id"
   add_foreign_key "task_pull_requests", "pull_requests"
   add_foreign_key "task_pull_requests", "tasks"
   add_foreign_key "tasks", "chains"
@@ -467,6 +489,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_190001) do
   add_foreign_key "time_off_allowances", "users"
   add_foreign_key "time_off_requests", "users"
   add_foreign_key "time_off_requests", "users", column: "approver_id"
+  add_foreign_key "topic_messages", "topic_messages", column: "parent_id", on_delete: :nullify
   add_foreign_key "topic_messages", "topics"
   add_foreign_key "topic_messages", "users", column: "author_id"
   add_foreign_key "topic_votes", "topics"

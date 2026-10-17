@@ -39,12 +39,13 @@ Rails.application.routes.draw do
     resources :tasks, only: %i[show update] do
       post :advance, on: :member
       patch :schedule, on: :member
+      resources :messages, only: %i[create update destroy], controller: "task_messages"
       resource :timer, only: %i[create destroy], controller: "task_timers"
     end
     resources :topics, only: %i[index show new create] do
       get :similar, on: :collection
       resource :vote, only: :create, controller: "topic_votes"
-      resources :messages, only: :create, controller: "topic_messages"
+      resources :messages, only: %i[create update destroy], controller: "topic_messages"
       resources :tasks, only: %i[new create], controller: "topic_tasks"
       resources :chains, only: %i[new create], controller: "topic_chains"
       resources :meetings, only: %i[new create], controller: "topic_meetings"

@@ -30,18 +30,11 @@
     </header>
 
     <div class="messages">
-      <%= render "topics/message", author: @topic.author, body: @topic.body, posted_at: @topic.created_at %>
-      <% @messages.each do |message| %>
-        <%= render "topics/message", author: message.author, body: message.body, posted_at: message.created_at, dom_id: "message-#{message.id}" %>
-      <% end %>
+      <%= render "topics/opening", topic: @topic %>
+      <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @topic, project: @project } %>
     </div>
 
-    <%= form_with model: [ @project, @topic, TopicMessage.new ], url: project_topic_messages_path(@project, @topic), class: "composer", data: { controller: "composer" } do |form| %>
-      <%= form.text_area :body, rows: 1, placeholder: "Reply to this topic…", class: "composer__input", required: true,
-                         data: { composer_target: "input", action: "keydown->composer#submitOnEnter" } %>
-      <%= render "shared/key", label: "R" %>
-      <button type="submit" class="composer__send" aria-label="Send reply"><%= icon "send", size: 16 %></button>
-    <% end %>
+    <%= render "messages/composer", project: @project, thread: @topic, placeholder: "Reply to this topic…" %>
   </section>
 
   <aside class="side">

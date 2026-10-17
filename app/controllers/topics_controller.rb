@@ -16,7 +16,7 @@ class TopicsController < ApplicationController
 
   def show
     @topic = @project.topics.includes(:author, :client).find(params[:id])
-    @messages = @topic.messages.includes(:author).order(:created_at, :id)
+    @messages = @topic.messages.includes(:author, :parent).order(:created_at, :id)
     @vote = @topic.vote_by(Current.user)
     @participants = participants_of(@topic, @messages)
   end

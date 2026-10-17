@@ -1,8 +1,0 @@
-<%# One chat bubble row. Used for the topic's opening text and each reply. %>
-<article class="message" <%= tag.attributes(id: local_assigns[:dom_id]) %>>
-  <%= avatar(author, size: :md) %>
-  <div class="message__body">
-    <header><strong><%= author.short_name %></strong><time><%= author_time(posted_at, author) %></time></header>
-    <p><%= simple_format(h(body), {}, wrapper_tag: "span") %></p>
-  </div>
-</article>

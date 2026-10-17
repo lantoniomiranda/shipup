@@ -162,3 +162,9 @@ end
                                    join_url: "https://zoom.us/j/#{topic.id}0000")
   people.values_at("ines", "jonas", "sofia").each { |user| meeting.participants.create!(user: user) }
 end
+
+# Task chat with a quoted reply.
+if rate_limiting.messages.none?
+  first = rate_limiting.messages.create!(author: people.fetch("jonas"), body: "Counters are merged. Dashboard is next, then QA.", created_at: 5.hours.ago)
+  rate_limiting.messages.create!(author: people.fetch("ines"), body: "Northwind needs this before their Oct 26 launch. QA starts when the dashboard lands.", parent: first, created_at: 4.hours.ago)
+end
