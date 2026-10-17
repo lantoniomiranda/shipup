@@ -1,0 +1,20 @@
+<%# Full-page message in the sign-in layout (logo + heading + actions, sunset on the right).
+    Usage: render layout: "shared/split_screen", locals: { eyebrow:, title:, detail: } do ... actions ... end %>
+<main class="sign-in error-page">
+  <section class="sign-in__form">
+    <%= render "shared/logo" %>
+
+    <div class="sign-in__welcome">
+      <header class="sign-in__heading">
+        <p class="eyebrow"><%= eyebrow %></p>
+        <h1><%= title %></h1>
+        <p><%= detail %></p>
+      </header>
+      <div class="sign-in__options error-page__actions"><%= yield %></div>
+    </div>
+
+    <div class="sign-in__spacer"></div>
+  </section>
+
+  <%= render "sessions/sunset" %>
+</main>

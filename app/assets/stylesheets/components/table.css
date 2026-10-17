@@ -93,3 +93,12 @@
 .bo-search .input { width: 240px; }
 .tag--plan-trial { background: var(--mustard-soft); } .tag--plan-starter { background: var(--blue-soft); } .tag--plan-team { background: var(--teal-soft); } .tag--plan-enterprise { background: var(--plum-soft); }
 @media (max-width: 1100px) { .bo-columns { grid-template-columns: 1fr; } }
+
+/* People */
+.invite-bar { display: flex; gap: 10px; align-items: center; max-width: 720px; }
+.invite-bar .input { flex: 1; }
+.panel--inline { flex: none; overflow: visible; }
+.panel--inline::after { box-shadow: inset 0 0 0 1px var(--line); }
+.section-title { margin-top: 8px; font-size: 20px; }
+.table__actions { display: flex; gap: 8px; justify-content: flex-end; }
+.role-form { margin: 0; }

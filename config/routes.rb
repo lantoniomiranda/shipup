@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   end
   patch "meeting_tool", to: "meeting_tools#update"
   resources :time_off_requests, path: "time_off", only: %i[index new create update]
+  post "workspaces/:id/switch", to: "workspace_switches#create", as: :switch_workspace
+  resources :memberships, path: "people", only: %i[index update destroy]
+  resources :invitations, only: %i[create destroy] do
+    post :resend, on: :member
+  end
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]

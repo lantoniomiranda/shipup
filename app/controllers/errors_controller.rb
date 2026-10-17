@@ -2,7 +2,7 @@
 # must work without a session and never raise.
 class ErrorsController < ApplicationController
   allow_unauthenticated_access
-  skip_before_action :set_current_workspace, raise: false
+  skip_before_action :set_current_workspace, :require_workspace_access, raise: false
   skip_forgery_protection
   before_action :resume_session_quietly
 

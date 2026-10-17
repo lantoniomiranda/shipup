@@ -1,0 +1,9 @@
+<%# Shown to workspace admins while the workspace is on a trial. %>
+<% workspace = Current.workspace %>
+<% if workspace&.plan_trial? && workspace.trial_ends_at && Current.user.role_in(workspace) == "admin" %>
+  <% days = ((workspace.trial_ends_at - Time.current) / 1.day).ceil %>
+  <p class="trial-banner <%= "trial-banner--over" if days <= 3 %>">
+    <%= icon "timer", size: 14 %>
+    <% if days <= 0 %>Your trial has ended. Contact ShipUp to pick a plan and keep your data.<% else %>Your trial ends in <%= pluralize(days, "day") %>. Contact ShipUp to pick a plan.<% end %>
+  </p>
+<% end %>

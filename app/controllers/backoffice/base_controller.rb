@@ -2,6 +2,7 @@
 # so the area's existence isn't advertised.
 class Backoffice::BaseController < ApplicationController
   layout "backoffice"
+  skip_before_action :require_workspace_access
   before_action :require_platform_admin
 
   private

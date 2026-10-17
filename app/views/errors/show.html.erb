@@ -11,29 +11,11 @@
 %>
 <% content_for :title, "#{code} · #{title}" %>
 
-<main class="sign-in error-page">
-  <section class="sign-in__form">
-    <%= render "shared/logo" %>
-
-    <div class="sign-in__welcome">
-      <header class="sign-in__heading">
-        <p class="eyebrow">Error <%= code %></p>
-        <h1><%= title %></h1>
-        <p><%= detail %></p>
-      </header>
-
-      <div class="sign-in__options error-page__actions">
-        <% if Current.user %>
-          <%= link_to root_path, class: "btn btn--primary btn--lg" do %><%= icon "arrow-left" %><span>Back to your projects</span><% end %>
-        <% else %>
-          <%= link_to "/sign_in", class: "btn btn--primary btn--lg" do %><span>Go to sign in</span><% end %>
-        <% end %>
-        <button type="button" class="btn btn--lg" onclick="history.back()"><%= icon "corner-down-right" %><span>Go back</span></button>
-      </div>
-    </div>
-
-    <div class="sign-in__spacer"></div>
-  </section>
-
-  <%= render "sessions/sunset" %>
-</main>
+<%= render layout: "shared/split_screen", locals: { eyebrow: "Error #{code}", title: title, detail: detail } do %>
+  <% if Current.user %>
+    <%= link_to root_path, class: "btn btn--primary btn--lg" do %><%= icon "arrow-left" %><span>Back to your projects</span><% end %>
+  <% else %>
+    <%= link_to "/sign_in", class: "btn btn--primary btn--lg" do %><span>Go to sign in</span><% end %>
+  <% end %>
+  <button type="button" class="btn btn--lg" onclick="history.back()"><%= icon "corner-down-right" %><span>Go back</span></button>
+<% end %>

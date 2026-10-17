@@ -11,7 +11,11 @@
 
     <nav class="workspaces" aria-label="Workspaces">
       <% user.workspaces.order(:id).each_with_index do |workspace, index| %>
-        <span class="workspaces__item <%= "workspaces__item--current" if workspace == Current.workspace %>" title="<%= workspace.name %>"><%= index + 1 %></span>
+        <% if workspace == Current.workspace %>
+          <span class="workspaces__item workspaces__item--current" title="<%= workspace.name %>"><%= index + 1 %></span>
+        <% else %>
+          <%= button_to (index + 1).to_s, switch_workspace_path(workspace), class: "workspaces__item", title: "Switch to #{workspace.name}", form: { class: "inline-form" } %>
+        <% end %>
       <% end %>
     </nav>
 
@@ -43,6 +47,9 @@
       </div>
     <% end %>
 
+    <% if user.role_in(Current.workspace) == "admin" %>
+      <%= link_to memberships_path, class: "icon-button", aria: { label: "People" }, title: "People (G E)", data: hotkey_data(:people) do %><%= icon "users", size: 18 %><% end %>
+    <% end %>
     <%= link_to time_off_requests_path, class: "icon-button", aria: { label: "Time off" }, title: "Time off (G O)", data: hotkey_data(:time_off) do %><%= icon "calendar", size: 18 %><% end %>
 
     <button type="button" class="icon-button" aria-label="Notifications">
