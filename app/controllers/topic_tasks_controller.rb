@@ -4,6 +4,7 @@ class TopicTasksController < ApplicationController
   def new
     @task = @project.tasks.build(title: @topic.title, description: @topic.body, topic: @topic, sprint: @project.active_sprint,
                                  bug: @topic.issue?, client: @topic.client, assignee: Current.user)
+    draft_with_ai if params[:draft] == "1"
   end
 
   def create
@@ -17,6 +18,16 @@ class TopicTasksController < ApplicationController
   end
 
   private
+
+  # Replaces the prefilled title/description with an AI draft built from the discussion.
+  def draft_with_ai
+    draft = Llm::Drafts.task(@topic)
+    @task.assign_attributes(title: draft.title, description: draft.description)
+    @drafted = true
+  rescue Llm::Error => error
+    Rails.logger.warn("AI task draft failed: #{error.message}")
+    flash.now[:alert] = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed. You can still write the task by hand."
+  end
 
   def task_params
     params.expect(task: [ :title, :description, :assignee_id, :estimate_days, :due_on, :sprint_id, :bug, :client_id, { label_ids: [] } ]).tap do |attrs|

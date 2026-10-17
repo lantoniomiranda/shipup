@@ -4,6 +4,7 @@ class TopicChainsController < ApplicationController
   def new
     @chain = @project.chains.build(title: @topic.title, topic: @topic, sprint: @project.active_sprint)
     @steps = [ {}, {}, {} ]
+    draft_with_ai if params[:draft] == "1"
   end
 
   def create
@@ -19,6 +20,16 @@ class TopicChainsController < ApplicationController
   end
 
   private
+
+  def draft_with_ai
+    draft = Llm::Drafts.chain(@topic)
+    @chain.title = draft.title
+    @steps = draft.steps.map { |step| { title: step[:title], description: step[:description], estimate_days: step[:days] } }
+    @drafted = true
+  rescue Llm::Error => error
+    Rails.logger.warn("AI chain draft failed: #{error.message}")
+    flash.now[:alert] = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed. You can still add the steps by hand."
+  end
 
   def chain_params
     params.expect(chain: %i[title sprint_id])

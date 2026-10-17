@@ -135,3 +135,71 @@ class TopicWorkflowTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_project_topic_meeting_path(@project, @topic)
   end
 end
+
+class TopicAiDraftTest < ActionDispatch::IntegrationTest
+  include LlmHelper
+  JSON_HEADERS = { "Content-Type" => "application/json" }.freeze
+
+  setup do
+    @project = projects(:apollo)
+    @topic = topics(:refresh_tokens)
+    ProjectMembership.create!(project: @project, user: users(:ines))
+    sign_in_as users(:ines)
+  end
+
+  def stub_gemini(json)
+    stub_request(:post, %r{generativelanguage.googleapis.com}).to_return(status: 200, headers: JSON_HEADERS,
+      body: { candidates: [ { content: { parts: [ { text: json.to_json } ] } } ] }.to_json)
+  end
+
+  test "without a provider the pages offer no AI button" do
+    get new_project_topic_task_path(@project, @topic)
+    assert_select ".ai-draft", count: 0
+  end
+
+  test "with a provider the task page offers a draft button" do
+    with_llm("gemini") do
+      get new_project_topic_task_path(@project, @topic)
+      assert_select ".ai-draft a", /Draft with AI/
+    end
+  end
+
+  test "drafting fills the task form and offers another draft" do
+    stub_gemini(title: "Fix silent refresh-token expiry", description: "What we agreed\n- Sliding window")
+    with_llm("gemini") do
+      get new_project_topic_task_path(@project, @topic, draft: 1)
+
+      assert_select "input[name='task[title]'][value=?]", "Fix silent refresh-token expiry"
+      assert_select "textarea", /Sliding window/
+      assert_select ".tag--draft", /Drafted from/
+      assert_select ".ai-draft a", /Try another draft/
+    end
+  end
+
+  test "drafting a chain fills the steps" do
+    stub_gemini(title: "Fix expiry", steps: [ { title: "Backend", description: "Limits", days: 3 }, { title: "QA", description: "Soak", days: 1 } ])
+    with_llm("gemini") do
+      get new_project_topic_chain_path(@project, @topic, draft: 1)
+
+      assert_select ".steps-editor .step-card", 2
+      assert_select "input[name='chain[steps][0][title]'][value=Backend]"
+      assert_select "input[name='chain[steps][1][estimate_days]'][value='1.0']"
+    end
+  end
+
+  test "a failing provider keeps the page usable with a message" do
+    stub_request(:post, %r{generativelanguage}).to_return(status: 500, body: "{}", headers: JSON_HEADERS)
+    with_llm("gemini") do
+      get new_project_topic_task_path(@project, @topic, draft: 1)
+      assert_response :success
+      assert_select "input[name='task[title]'][value=?]", @topic.title
+      assert_select ".toast--alert", /AI draft failed/
+    end
+  end
+
+  test "asking for a draft while AI is off explains how to enable it" do
+    get new_project_topic_task_path(@project, @topic, draft: 1)
+    assert_response :success
+    assert_select ".toast--alert", /LLM_ENABLED/
+  end
+end

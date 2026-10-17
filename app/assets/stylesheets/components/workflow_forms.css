@@ -122,3 +122,7 @@ form.split { margin: 0; }
 code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-sm); font-size: 0.9em; }
 
 .panel--form.panel--narrow { overflow: auto; }
+
+/* AI draft controls in the create task / chain header. */
+.ai-draft { display: flex; align-items: center; gap: 10px; }
+.tag--draft { background: var(--accent-soft); color: var(--accent-ink); }

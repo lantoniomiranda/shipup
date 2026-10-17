@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- **LLM adapter**: pick a provider with `LLM_ENABLED=claude|gemini|grok|gpt` and `LLM_API_KEY` (optional `LLM_MODEL`, `LLM_BASE_URL`). `Llm.client.complete(prompt, system:, json:)` is the only API the app uses, so switching provider is configuration. First feature: *Draft with AI* / *Try another draft* on the create task and create chain pages (`Llm::Drafts`). Unset = AI features hidden. Add a provider by subclassing `Llm::Base`.
 - Keyboard shortcuts rebuilt: one global handler (`hotkeys_controller.js`) driven by `data-hotkey` attributes and one registry, `config/keybindings.yml`, which also feeds the **?** help dialog. Navigation uses `g` chords (`g b` board, `g t` topics, `g h` projects…); primary actions use **Ctrl/Cmd+Enter**; no browser-owned combos (Ctrl+S, Space…). Project tabs now show the shortcuts of the *other* tabs, not the current one. `node script/check_keys.mjs` presses the real keys in a browser.
 - Sprints have a state (planned, active, completed) with a unique-index guarantee of **one active sprint per project**. Create a sprint from the backlog (*Plan sprint*), start it (carrying unfinished tasks over if you like) and it shows on the board immediately; *Complete sprint* sits on the board. Workspace admins and project managers manage sprints.
 - Branded error pages (400, 403, 404, 406, 422, 500) rendered by `ErrorsController` via `config.exceptions_app`; static `public/*.html` fallbacks restyled. Forbidden actions render the 403 page.
@@ -52,6 +53,7 @@ Google and Microsoft OAuth are the only ways in (no passwords). Workspace admins
 | Sign in with Microsoft | `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, `MICROSOFT_TENANT_ID` | `/auth/entra_id/callback` |
 | Zoom meetings | `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET` | `/integrations/zoom/callback` |
 | Google Meet links | reuses the Google client (add the Calendar scope) | `/integrations/google_meet/callback` |
+| AI drafts | `LLM_ENABLED` (`claude`/`gemini`/`grok`/`gpt`), `LLM_API_KEY`, optional `LLM_MODEL`, `LLM_BASE_URL` | – |
 | GitHub | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_WEBHOOK_SECRET` | `/integrations/github/callback` |
 
 GitHub pull requests that mention a task key (e.g. `APO-97`) in their title, branch or description

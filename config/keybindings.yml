@@ -24,7 +24,7 @@ project:
 page:
   open_project:  { keys: "1",        label: "Open project 1–9 (projects page)" }
   new:           { keys: "n",        label: "New topic (topics) · New project (projects)" }
-  reply:         { keys: "r",        label: "Reply (topic) · Request (time off) · Reset (appearance)" }
+  reply:         { keys: "r",        label: "Reply (topic) · Request (time off) · Reset (appearance) · Try another AI draft" }
   task:          { keys: "t",        label: "Create task (topic) · Today (timeline) · Start/stop timer (task)" }
   chain:         { keys: "c",        label: "Create chain (topic)" }
   meet:          { keys: "m",        label: "Meet about it (topic)" }

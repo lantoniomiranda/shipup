@@ -2,10 +2,11 @@
 
 <%= form_with model: @task, url: project_topic_tasks_path(@project, @topic), class: "split" do |form| %>
   <section class="panel panel--form">
-    <header class="panel__bar">
+    <header class="panel__bar panel__bar--split">
       <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
         <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
       <% end %>
+      <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, url: new_project_topic_task_path(@project, @topic, draft: 1) %>
     </header>
 
     <div class="form">

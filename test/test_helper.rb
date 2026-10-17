@@ -55,3 +55,18 @@ module IntegrationCredentials
     ENV_KEYS.each { |key| original.key?(key) ? ENV[key] = original[key] : ENV.delete(key) }
   end
 end
+
+# Switches a provider on for the block: with_llm("gemini") { ... }
+module LlmHelper
+  ENV_KEYS = %w[LLM_ENABLED LLM_API_KEY LLM_MODEL LLM_BASE_URL].freeze
+
+  def with_llm(provider, api_key: "test-key", **extra)
+    original = ENV.to_h.slice(*ENV_KEYS)
+    ENV["LLM_ENABLED"] = provider
+    ENV["LLM_API_KEY"] = api_key
+    extra.each { |name, value| ENV["LLM_#{name.to_s.upcase}"] = value }
+    yield
+  ensure
+    ENV_KEYS.each { |key| original.key?(key) ? ENV[key] = original[key] : ENV.delete(key) }
+  end
+end
