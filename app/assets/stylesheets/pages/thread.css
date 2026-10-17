@@ -1,0 +1,34 @@
+/* A single topic: header, messages, reply box and the people sidebar. */
+.panel--thread { overflow: hidden; }
+
+.thread__header { display: flex; flex-direction: column; gap: 10px; padding: 18px 24px 16px; border-bottom: 1px solid var(--line); }
+.thread__back-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.thread__back { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; }
+.thread__tags { display: flex; align-items: center; gap: 8px; }
+.thread__header h1 { font-size: 26px; line-height: 30px; }
+.thread__meta { color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+
+.vote-bar { display: flex; align-items: center; gap: 2px; padding: 3px 8px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--line); }
+.vote-bar__up, .vote-bar__down { display: flex; align-items: center; gap: 5px; padding: 0; background: transparent; color: var(--ink-soft); border: 0; }
+.vote-bar__down { padding-left: 6px; }
+.vote-bar__up--active { color: var(--accent-ink); }
+
+.messages { display: flex; flex-direction: column; flex: 1; gap: 18px; padding: 18px 24px; overflow: auto; }
+.message { display: flex; gap: 10px; }
+.message__body { display: flex; flex-direction: column; flex: 1; gap: 4px; min-width: 0; }
+.message__body header { display: flex; align-items: center; gap: 8px; }
+.message__body strong { font-size: 13px; font-weight: 600; }
+.message__body time { color: var(--ink-soft); font-size: 11px; font-weight: 500; }
+.message__body p { font-size: 14px; font-weight: 500; line-height: 20px; overflow-wrap: anywhere; }
+.message__body p span { display: block; }
+
+.composer { position: relative; display: flex; align-items: center; gap: 10px; margin: 0 16px 16px; padding: 0 10px 0 14px; background: var(--paper); border-radius: var(--radius-sm); box-shadow: var(--outline); }
+.composer__input { flex: 1; min-height: 50px; padding: 15px 0; resize: none; background: transparent; color: var(--ink); border: 0; font: 500 14px/20px var(--font-body); }
+.composer__input:focus { outline: none; }
+.composer__input::placeholder { color: var(--ink-soft); }
+.composer:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+.composer__send { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; background: var(--accent); color: var(--on-accent); border: 0; border-radius: var(--radius-sm); box-shadow: var(--outline); }
+
+.participants { display: flex; flex-direction: column; gap: 14px; }
+.participants li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+.participants em { margin-left: auto; color: var(--ink-soft); font-size: 12px; font-style: normal; font-weight: 500; }

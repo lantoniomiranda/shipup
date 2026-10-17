@@ -2,6 +2,7 @@
 <% content_for :app_content do %>
   <div class="shell">
     <%= render "layouts/top_bar" %>
+    <%= yield :project_header %>
     <div class="shell__frame">
       <div class="shell__content <%= yield(:content_class) %>">
         <%= yield %>

@@ -33,3 +33,14 @@ class TopicTest < ActiveSupport::TestCase
     assert_equal other, projects(:apollo).topics.top.first
   end
 end
+
+class TopicSimilarityTest < ActiveSupport::TestCase
+  test "ranks titles by trigram similarity with a percentage" do
+    projects(:apollo).topics.create!(author: users(:ines), title: "Webhook retries with backoff")
+    results = projects(:apollo).topics.similar_to("Refresh tokens expiring silently")
+
+    assert_equal topics(:refresh_tokens), results.first
+    assert_operator results.first.match_percent, :>, 30
+    assert_not_includes results.map(&:title), "Webhook retries with backoff"
+  end
+end

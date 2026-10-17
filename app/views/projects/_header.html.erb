@@ -1,0 +1,36 @@
+<%# Project title bar: mark, name, sprint, tabs and members. `active` is the current tab key. %>
+<% sprint = project.current_sprint %>
+<header class="project-header hue-<%= project.color %>" data-controller="hotkey">
+  <div class="project-header__title">
+    <span class="project-mark"><%= icon project.icon, size: 18 %></span>
+    <h2><%= project.name %></h2>
+    <% if sprint %>
+      <span class="sprint-badge">
+        <span class="sprint-badge__name"><%= icon "timer", size: 13 %><%= sprint.name %></span>
+        <span class="sprint-badge__left"><%= pluralize(sprint.days_left, "day") %> left</span>
+      </span>
+    <% end %>
+  </div>
+
+  <nav class="tabs" aria-label="Project sections">
+    <% ApplicationHelper::PROJECT_TABS.each do |tab| %>
+      <% path = project_tab_path(project, tab[:key]) %>
+      <% current = tab[:key] == active %>
+      <% body = capture do %>
+        <%= icon tab[:icon] %><span><%= tab[:label] %></span><%= render "shared/key", label: tab[:hotkey].upcase if current %>
+      <% end %>
+      <% if path %>
+        <%= link_to body, path, class: "tab #{"tab--active" if current}", aria: { current: ("page" if current) },
+                    data: { hotkey_target: "trigger", hotkey_key: tab[:hotkey] } %>
+      <% else %>
+        <span class="tab tab--soon" title="Coming soon"><%= body %></span>
+      <% end %>
+    <% end %>
+  </nav>
+
+  <div class="project-header__members">
+    <% project.members.first(4).each do |member| %><%= avatar(member, size: :md, class: "avatar--ringed") %><% end %>
+    <% extra = project.members.size - 4 %>
+    <% if extra.positive? %><span class="project-header__more">+<%= extra %></span><% end %>
+  </div>
+</header>

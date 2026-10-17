@@ -1,6 +1,11 @@
 class ProjectsController < ApplicationController
   layout "app"
 
+  def show
+    project = Current.workspace.projects.find_by!(key: params[:id].to_s.upcase)
+    redirect_to project_topics_path(project)
+  end
+
   def index
     @status = Project.statuses.key?(params[:status]) ? params[:status] : "active"
     @status_counts = Current.workspace.projects.group(:status).count

@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_180006) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_180007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "chains", force: :cascade do |t|
     t.bigint "project_id", null: false
@@ -378,6 +379,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_180006) do
     t.index ["project_id", "created_at"], name: "index_topics_on_project_id_and_created_at"
     t.index ["project_id", "status", "votes_score"], name: "index_topics_on_project_id_and_status_and_votes_score"
     t.index ["project_id"], name: "index_topics_on_project_id"
+    t.index ["title"], name: "index_topics_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
   end
 
   create_table "user_preferences", force: :cascade do |t|

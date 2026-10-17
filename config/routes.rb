@@ -18,6 +18,15 @@ Rails.application.routes.draw do
 
   post "webhooks/github", to: "webhooks/github#create"
 
+  # Projects are addressed by their key (/projects/APO/topics).
+  resources :projects, only: :show do
+    resources :topics, only: %i[index show new create] do
+      get :similar, on: :collection
+      resource :vote, only: :create, controller: "topic_votes"
+      resources :messages, only: :create, controller: "topic_messages"
+    end
+  end
+
   # Development shortcut: OAuth needs real client credentials, so skip it locally.
   get "dev/sign_in", to: "dev_sessions#create" if Rails.env.development?
 

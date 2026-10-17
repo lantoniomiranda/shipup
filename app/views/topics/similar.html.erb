@@ -1,0 +1,10 @@
+<%= turbo_frame_tag "similar_topics" do %>
+  <% @similar.each_with_index do |topic, index| %>
+    <%= link_to project_topic_path(@project, topic), class: "similar #{"similar--best" if index.zero?}", target: "_top" do %>
+      <div class="similar__head"><strong><%= topic.title %></strong><span><%= topic.match_percent %>%</span></div>
+      <div class="meter"><span style="width: <%= topic.match_percent %>%"></span></div>
+      <p><%= topic.status.capitalize %> · <%= pluralize(topic.messages_count, "reply") %></p>
+      <% if index.zero? %><span class="similar__read">Read it first <%= icon "arrow-up-right", size: 12 %></span><% end %>
+    <% end %>
+  <% end %>
+<% end %>

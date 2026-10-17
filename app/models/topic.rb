@@ -28,6 +28,14 @@ class Topic < ApplicationRecord
     SQL
   }
 
+  # Topics whose titles read like `text`, best match first. Each carries a 0-100 `match_percent`.
+  scope :similar_to, ->(text) {
+    score = sanitize_sql_array([ "similarity(topics.title, ?)", text ])
+    select("topics.*, ROUND(#{score} * 100)::int AS match_percent")
+      .where("#{score} > 0.15")
+      .order(Arel.sql("#{score} DESC"))
+  }
+
   def vote_by(user)
     votes.find_by(user: user)
   end

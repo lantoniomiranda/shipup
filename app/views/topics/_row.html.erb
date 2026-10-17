@@ -1,0 +1,26 @@
+<%# One topic in the list: votes, title/excerpt/meta and its outcome (task, chain, or status). %>
+<% vote = votes[topic.id] %>
+<% score_class = vote&.value == 1 ? "votes__score--up" : (topic.votes_score.negative? ? "votes__score--down" : "") %>
+<li class="topic-row <%= "topic-row--canceled" if topic.canceled? %>">
+  <div class="votes">
+    <%= button_to project_topic_vote_path(@project, topic, value: 1), class: "votes__button #{"votes__button--active" if vote&.value == 1}", aria: { label: "Upvote" } do %>
+      <%= icon "arrow-big-up", size: 16 %>
+    <% end %>
+    <span class="votes__score <%= score_class %>"><%= format("%+d", topic.votes_score) %></span>
+    <%= button_to project_topic_vote_path(@project, topic, value: -1), class: "votes__button #{"votes__button--active" if vote&.value == -1}", aria: { label: "Downvote" } do %>
+      <%= icon "arrow-big-down", size: 16 %>
+    <% end %>
+  </div>
+
+  <div class="topic-row__text">
+    <%= link_to topic.title, project_topic_path(@project, topic), class: "topic-row__title" %>
+    <p class="topic-row__excerpt"><%= truncate(topic.body, length: 120) %></p>
+    <div class="topic-row__meta">
+      <%= render "topics/kind_tag", topic: topic %>
+      <span><%= topic.author.short_name %> · <%= topic_age(topic.created_at) %> · <%= pluralize(topic.messages_count, "reply") %></span>
+      <% if topic.client %><span class="tag tag--client"><%= topic.client.name %></span><% end %>
+    </div>
+  </div>
+
+  <div class="topic-row__status"><%= render "topics/outcome_tag", topic: topic %></div>
+</li>

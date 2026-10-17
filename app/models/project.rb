@@ -33,6 +33,11 @@ class Project < ApplicationRecord
     (percent * XP_SEGMENTS / 100.0).ceil
   end
 
+  # URLs use the key (APO), not the numeric id.
+  def to_param
+    key
+  end
+
   def current_sprint
     sprints.find_by("starts_on <= :today AND ends_on >= :today", today: Date.current)
   end

@@ -1,0 +1,36 @@
+<% project_header @project, active: :topics %>
+
+<div class="panel" data-controller="hotkey">
+  <header class="panel__header">
+    <div class="panel__title-row">
+      <h1>Topics</h1>
+      <%= link_to new_project_topic_path(@project), class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "n" } do %>
+        <%= icon "plus" %><span>New topic</span><%= render "shared/key", label: "N" %>
+      <% end %>
+    </div>
+
+    <div class="panel__filter-row">
+      <div class="chips">
+        <% [ [ "issues", "circle-alert", "Issues" ], [ "features", "sparkles", "Features" ], [ "canceled", "ban", "Canceled" ], [ "approved", "circle-check", "Approved" ] ].each do |key, glyph, label| %>
+          <%= link_to project_topics_path(@project, filter: (key unless @filter == key), sort: @sort.presence_in(%w[new])),
+                      class: "chip #{"chip--active" if @filter == key}", aria: { pressed: @filter == key } do %>
+            <%= icon glyph, size: 14 %><%= label %> <%= @counts[key] %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="sort">
+        <%= link_to "Top voted", project_topics_path(@project, filter: @filter), class: "sort__option #{"sort__option--active" if @sort == "top"}" %>
+        <%= link_to "Newest", project_topics_path(@project, filter: @filter, sort: "new"), class: "sort__option #{"sort__option--active" if @sort == "new"}" %>
+      </div>
+    </div>
+  </header>
+
+  <% if @topics.empty? %>
+    <p class="empty">No topics match. <%= link_to "Start one", new_project_topic_path(@project) %>.</p>
+  <% else %>
+    <ul class="topic-list">
+      <%= render partial: "topics/row", collection: @topics, as: :topic, locals: { votes: @votes } %>
+    </ul>
+  <% end %>
+</div>

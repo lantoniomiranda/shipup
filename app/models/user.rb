@@ -31,6 +31,12 @@ class User < ApplicationRecord
     name.split.map { |part| part[0] }.first(2).join.upcase
   end
 
+  # "Sofia Reyes" -> "Sofia R."
+  def short_name
+    first, last = name.split
+    last ? "#{first} #{last[0]}." : first
+  end
+
   def first_name
     name.split.first
   end

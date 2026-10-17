@@ -88,3 +88,7 @@
 @media (max-width: 1100px) {
   .clocks, .hint { display: none; }
 }
+
+/* Project pages: no padding or frame, the panels inside carry their own. */
+.shell__frame:has(> .shell__content--bare)::after { display: none; }
+.shell__content--bare { padding: 0; gap: 8px; background: transparent; overflow: hidden; }

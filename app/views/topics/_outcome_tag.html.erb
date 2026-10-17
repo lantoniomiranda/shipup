@@ -1,0 +1,14 @@
+<%# What became of a topic: a task, a chain, or just its status. %>
+<% task = topic.tasks.min_by(&:number) %>
+<% chain = topic.chains.first %>
+<% if task %>
+  <span class="tag tag--task"><%= icon "circle-check", size: 13 %>Task <%= task.key %></span>
+<% elsif chain && chain.tasks.any? %>
+  <span class="tag tag--chain"><%= icon "link-2", size: 13 %>Chain <%= chain.tasks.first.key %></span>
+<% elsif topic.canceled? %>
+  <span class="tag tag--quiet"><%= icon "ban", size: 13 %>Canceled</span>
+<% elsif topic.approved? %>
+  <span class="tag tag--task"><%= icon "circle-check", size: 13 %>Approved</span>
+<% else %>
+  <span class="tag tag--plain">Open</span>
+<% end %>

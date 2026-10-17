@@ -37,6 +37,43 @@ module ApplicationHelper
     end
   end
 
+  PROJECT_TABS = [
+    { key: :topics, label: "Topics", icon: "messages-square", hotkey: "g d" },
+    { key: :backlog, label: "Backlog", icon: "list-todo", hotkey: "g l" },
+    { key: :board, label: "Board", icon: "kanban", hotkey: "g b" },
+    { key: :timeline, label: "Timeline", icon: "calendar-range", hotkey: "g t" },
+    { key: :clients, label: "Clients", icon: "building-2", hotkey: "g c" },
+    { key: :analytics, label: "Analytics", icon: "chart-column", hotkey: "g a" }
+  ].freeze
+
+  # Renders the project header (name, sprint, tabs, members) above the content frame.
+  def project_header(project, active:)
+    breadcrumbs [ "Projects", root_path ], project.name
+    content_for(:content_class, "shell__content--bare")
+    content_for(:project_header) { render("projects/header", project: project, active: active) }
+  end
+
+  # Where a project tab goes; tabs for screens that are not built yet return nil.
+  def project_tab_path(project, tab)
+    case tab
+    when :topics then project_topics_path(project)
+    end
+  end
+
+  # "2 days ago" inside the first week, then a plain "12 Sep".
+  def topic_age(time, now: Time.current)
+    days = (now.to_date - time.to_date).to_i
+    return "today" if days.zero?
+    return "#{days} #{"day".pluralize(days)} ago" if days < 7
+
+    time.strftime("%-d %b")
+  end
+
+  # "08:12 · Austin": the moment in the author's own time zone.
+  def author_time(time, user)
+    "#{time.in_time_zone(user.time_zone).strftime("%H:%M")} · #{user.city}"
+  end
+
   # Home filter links keep the default (active) URL clean.
   def projects_path_for(status)
     status == "active" ? root_path : root_path(status: status)

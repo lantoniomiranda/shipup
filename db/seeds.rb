@@ -48,16 +48,27 @@ fabrikam.contacts.find_or_create_by!(email: "tom.weber@fabrikam.com") { |c| c.na
 [ northwind, fabrikam ].each { |client| ProjectClient.find_or_create_by!(project: apollo, client: client) { |pc| pc.status = "active" } }
 
 [
-  [ "Rate limiting per API key", "feature", "Cap requests per key and return a clear error. Per-minute windows, with burst allowance.", "jonas", northwind, 27 ],
-  [ "Sandbox environment per partner", "feature", "One isolated sandbox per partner, built with Terraform, with a daily quota of 1,000 requests.", "ines", fabrikam, 21 ],
-  [ "Refresh tokens expire silently after 24h", "issue", "Partners report 401s exactly 24h after authorizing. The refresh never rotates and the failure is silent.", "sofia", northwind, 18 ],
-  [ "Latency spike on /v2/orders in EU", "issue", "p95 jumped from 180ms to 900ms right after the Envoy canary. Cache order lookups at the EU edge.", "jonas", nil, 15 ],
-  [ "Webhook retries with exponential backoff", "feature", "Retry failed webhook deliveries with growing delays and a dead-letter view for the ones that never land.", "daniel", nil, 9 ]
-].each do |title, kind, body, author, client, score|
+  [ "Rate limiting per API key", "feature", "Cap requests per key and return a clear error. Per-minute windows, with burst allowance.", "jonas", northwind, 27, 21.days, "open" ],
+  [ "Sandbox environment per partner", "feature", "One isolated sandbox per partner, built with Terraform, with a daily quota of 1,000 requests.", "ines", fabrikam, 21, 5.days.ago, "open" ],
+  [ "Refresh tokens expire silently after 24h", "issue", "Partners report 401s exactly 24h after authorizing. The refresh never rotates and the failure is silent.", "sofia", northwind, 18, 2.days.ago, "open" ],
+  [ "Latency spike on /v2/orders in EU", "issue", "p95 jumped from 180ms to 900ms right after the Envoy canary. Cache order lookups at the EU edge.", "jonas", nil, 15, 1.week.ago, "open" ],
+  [ "Webhook retries with exponential backoff", "feature", "Retry failed webhook deliveries with growing delays and a dead-letter view for the ones that never land.", "daniel", nil, 9, 3.days.ago, "open" ],
+  [ "Dark mode for the partner dashboard", "feature", "Nice to have, but outside this quarter's scope. Revisit when the dashboard redesign lands.", "priya", nil, -3, 14.days.ago, "canceled" ]
+].each do |title, kind, body, author, client, score, age, status|
+  age = age.is_a?(Numeric) ? age.days.ago : age
   topic = apollo.topics.find_or_create_by!(title: title) do |t|
-    t.assign_attributes(kind: kind, body: body, author: people.fetch(author), client: client, votes_score: score, last_activity_at: Time.current)
+    t.assign_attributes(kind: kind, body: body, author: people.fetch(author), client: client, votes_score: score, status: status, created_at: age, last_activity_at: age)
   end
-  topic.messages.find_or_create_by!(author: people.fetch(author), body: body)
+end
+
+refresh_thread = [
+  [ "jonas", "Reproduced on staging. TTL is hard-coded in auth/session.ts. Proposal: sliding window plus a token.expiring event." ],
+  [ "ines", "Backend fix first, then a dashboard banner so partners see it coming. @Daniel can you size both?" ],
+  [ "daniel", "Backend ~3d, banner ~1d. Happy to take both, backend before frontend." ]
+]
+refresh_topic = apollo.topics.find_by!(title: "Refresh tokens expire silently after 24h")
+refresh_thread.each_with_index do |(author, body), index|
+  refresh_topic.messages.find_or_create_by!(author: people.fetch(author), body: body) { |m| m.created_at = 2.days.ago + (index + 1).hours }
 end
 
 [
