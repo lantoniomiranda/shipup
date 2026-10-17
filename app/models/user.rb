@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Omniauth
+
   AVATAR_ICONS = %w[cat bird rocket coffee flower ghost moon fish leaf telescope].freeze
 
   has_many :identities, dependent: :destroy

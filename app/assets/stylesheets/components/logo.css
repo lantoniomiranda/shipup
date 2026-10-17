@@ -1,0 +1,21 @@
+.logo { display: flex; align-items: center; gap: 10px; }
+
+.logo__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  outline: 1.5px solid var(--ink);
+  outline-offset: -0.75px;
+}
+
+.logo__ring {
+  width: 22px;
+  height: 22px;
+  border: 5.5px solid var(--ink);
+  border-radius: 50%;
+}
+
+.logo__word { font-family: var(--font-display); font-size: 26px; font-weight: 700; }

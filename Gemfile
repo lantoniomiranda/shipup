@@ -22,6 +22,13 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# OAuth sign-in (the only way into the app) and the HTTP client for integrations
+gem "omniauth", "~> 2.1"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-google-oauth2"
+gem "omniauth-entra-id"
+gem "faraday", "~> 2.12"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -54,6 +61,7 @@ group :development do
 end
 
 group :test do
+  gem "webmock"
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"

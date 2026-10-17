@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # OAuth is the only way in. OmniAuth owns POST /auth/:provider (request phase).
+  get "sign_in", to: "sessions#new"
+  delete "sign_out", to: "sessions#destroy"
+  match "auth/:provider/callback", to: "omniauth_callbacks#create", via: %i[get post], as: :omniauth_callback
+  get "auth/failure", to: "omniauth_callbacks#failure"
+
+  root "projects#index"
 end

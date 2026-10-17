@@ -70,6 +70,8 @@
   --radius-md: 4px;
   --border: 1.5px solid var(--ink);
   --border-soft: 1.5px solid var(--line);
+  /* Box-shadow "outlines" render at true fractional widths; real outlines/borders snap to whole pixels. */
+  --outline: inset 0 0 0 1.5px var(--ink);
   --shadow-offset: 3px 3px 0 var(--ink);
 }
 

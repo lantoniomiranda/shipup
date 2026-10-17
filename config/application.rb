@@ -22,6 +22,7 @@ module Shipup
     # in config/environments, which are processed later.
     #
     config.x.product_name = "Nook"
+    config.active_storage.variant_processor = :disabled # no image variants used
 
     # Users and meetings span time zones; store UTC and convert per user at the edge.
     config.time_zone = "UTC"

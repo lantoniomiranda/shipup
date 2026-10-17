@@ -1,0 +1,20 @@
+<%# Decorative sunset scene, drawn in CSS so it stays crisp and themeable. %>
+<%
+  stars = [ [ 90, 70, 4 ], [ 210, 140, 3 ], [ 420, 60, 3 ], [ 640, 110, 5 ], [ 760, 60, 3 ], [ 130, 260, 3 ], [ 800, 250, 4 ], [ 560, 40, 3 ], [ 60, 180, 3 ] ]
+  grid_lines = [ 18, 28, 41, 59, 82, 112, 152, 205, 275, 367 ] # offsets below the horizon
+%>
+<aside class="sunset" aria-hidden="true">
+  <div class="sunset__stage">
+    <% stars.each do |left, top, size| %>
+      <span class="sunset__star" style="left: <%= left %>px; top: <%= top %>px; width: <%= size %>px; height: <%= size %>px"></span>
+    <% end %>
+    <span class="sunset__ring sunset__ring--outer"></span>
+    <span class="sunset__ring"></span>
+    <span class="sunset__sun"></span>
+  </div>
+  <div class="sunset__ground">
+    <% grid_lines.each do |offset| %>
+      <span class="sunset__grid-line" style="top: <%= offset %>px"></span>
+    <% end %>
+  </div>
+</aside>

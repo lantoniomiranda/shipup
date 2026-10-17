@@ -1,0 +1,36 @@
+<% content_for :title, "Sign in" %>
+
+<main class="sign-in">
+  <section class="sign-in__form">
+    <%= render "shared/logo" %>
+
+    <div class="sign-in__welcome">
+      <header class="sign-in__heading">
+        <h1>Welcome back.</h1>
+        <p>Sign in with your work account to continue.</p>
+      </header>
+
+      <% if alert %>
+        <p class="sign-in__alert" role="alert"><%= alert %></p>
+      <% end %>
+
+      <div class="sign-in__options" data-controller="hotkey">
+        <%= button_to "/auth/google_oauth2", class: "btn btn--wide", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "g" } do %>
+          <%= icon "google", size: 20 %>
+          <span class="btn__label">Continue with Google</span>
+          <%= render "shared/key", label: "G" %>
+        <% end %>
+
+        <%= button_to "/auth/entra_id", class: "btn btn--wide", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "m" } do %>
+          <%= icon "microsoft", size: 20 %>
+          <span class="btn__label">Continue with Microsoft</span>
+          <%= render "shared/key", label: "M" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="sign-in__spacer"></div>
+  </section>
+
+  <%= render "sessions/sunset" %>
+</main>
