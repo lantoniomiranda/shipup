@@ -16,7 +16,7 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
 
   test "signing in with Google lands on the projects home" do
     sign_in_as users(:ines)
-    assert_redirected_to root_url
+    assert_redirected_to root_path
     follow_redirect!
     assert_response :success
   end
