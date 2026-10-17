@@ -57,6 +57,7 @@ module ApplicationHelper
   def project_tab_path(project, tab)
     case tab
     when :topics then project_topics_path(project)
+    when :board then project_board_path(project)
     end
   end
 

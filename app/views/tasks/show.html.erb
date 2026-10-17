@@ -1,0 +1,93 @@
+<% project_header @project, active: :board %>
+<% position = @siblings.index(@task.number) %>
+<% previous_number = position&.positive? ? @siblings[position - 1] : nil %>
+<% next_number = position ? @siblings[position + 1] : nil %>
+<% running_here = @running_entry&.task_id == @task.id %>
+<% logged = @task.logged_minutes %>
+<% estimate = @task.estimate_minutes.to_i %>
+<% percent = estimate.zero? ? 0 : [ (logged * 100.0 / estimate).round, 100 ].min %>
+
+<div class="split" data-controller="hotkey">
+  <section class="panel panel--task">
+    <header class="panel__bar panel__bar--split">
+      <%= link_to project_board_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= icon "arrow-left" %><span>Board</span><%= render "shared/key", label: "Esc" %>
+      <% end %>
+      <% if position %>
+        <div class="pager">
+          <span><%= position + 1 %> of <%= @siblings.size %> in this sprint</span>
+          <% if previous_number %><%= link_to icon("chevron-left"), project_task_path(@project, previous_number), class: "pager__button", aria: { label: "Previous task" } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-left" %></span><% end %>
+          <% if next_number %><%= link_to icon("chevron-right"), project_task_path(@project, next_number), class: "pager__button", aria: { label: "Next task" } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-right" %></span><% end %>
+        </div>
+      <% end %>
+    </header>
+
+    <div class="task__head">
+      <div class="task__tags">
+        <span class="task__key"><%= @task.key %></span>
+        <span class="tag tag--task-status tag--status-<%= @task.status %>"><%= Board::LABELS.fetch(@task.status) %></span>
+        <% if @task.chain %><span class="tag tag--chain"><%= icon "link-2", size: 13 %>Chain · <%= pluralize(@task.chain_size, "step") %></span><% end %>
+      </div>
+      <div class="task__title-row">
+        <h1><%= @task.title %></h1>
+        <% if @task.bug? %><span class="bug-flag"><%= icon "bug", size: 16 %>Bug</span><% end %>
+      </div>
+      <% if @task.topic %>
+        <%= link_to project_topic_path(@project, @task.topic), class: "from-topic" do %>
+          <%= icon "message-square", size: 15 %><span>From topic · <%= @task.topic.title %> · <%= pluralize(@task.topic.messages_count, "reply") %></span>
+          <strong>Open topic <%= icon "arrow-up-right", size: 13 %></strong>
+        <% end %>
+      <% end %>
+    </div>
+
+    <dl class="facts">
+      <div><dt class="eyebrow">Assignee</dt><dd><% if @task.assignee %><%= avatar(@task.assignee, size: :sm) %><%= @task.assignee.short_name %><% else %>Unassigned<% end %></dd></div>
+      <div><dt class="eyebrow">Created by</dt><dd><%= @task.creator.short_name %></dd></div>
+      <div><dt class="eyebrow">Requested by</dt><dd><%= @task.client&.name || "Internal" %></dd></div>
+      <div><dt class="eyebrow">Sprint</dt><dd><%= @task.sprint&.name || "Backlog" %></dd></div>
+      <div><dt class="eyebrow">Estimate</dt><dd><%= @task.estimate_days ? pluralize(@task.estimate_days.round(1).to_s.delete_suffix(".0"), "day") : "—" %></dd></div>
+      <div><dt class="eyebrow">Due</dt><dd class="<%= "late" if @task.overdue? %>"><%= @task.due_on ? @task.due_on.strftime("%b %-d") : "—" %></dd></div>
+    </dl>
+
+    <div class="task__body">
+      <section>
+        <h3 class="eyebrow">Description</h3>
+        <div class="task__description"><%= simple_format(h(@task.description.presence || "No description yet.")) %></div>
+      </section>
+
+      <%= render "tasks/chain", task: @task, project: @project if @task.chain && @task.chain_size > 1 %>
+    </div>
+  </section>
+
+  <aside class="side side--wide side--tracker">
+    <section class="tracker">
+      <header><span class="eyebrow">Time tracker</span><% if running_here %><span class="tracker__live"><i></i>Running</span><% end %></header>
+      <p class="tracker__clock" <%= tag.attributes(data: (running_here ? { controller: "stopwatch", stopwatch_started_value: @running_entry.started_at.iso8601 } : {})) %>>
+        <%= Time.at(running_here ? @running_entry.seconds : 0).utc.strftime("%H:%M:%S") %>
+      </p>
+      <p class="tracker__who"><%= Current.user.short_name %><% if running_here %> · since <%= @running_entry.started_at.in_time_zone(Current.user.time_zone).strftime("%H:%M") %> <%= Current.user.city %><% end %></p>
+
+      <% if running_here %>
+        <%= button_to project_task_timer_path(@project, @task), method: :delete, class: "btn btn--block" do %><%= icon "square", size: 14 %><span>Stop</span><%= render "shared/key", label: "Shift S" %><% end %>
+      <% else %>
+        <%= button_to project_task_timer_path(@project, @task), class: "btn btn--primary btn--block" do %><%= icon "play", size: 14 %><span>Start timer</span><%= render "shared/key", label: "Space" %><% end %>
+      <% end %>
+
+      <div class="xp">
+        <div class="xp__labels"><span><%= logged / 60 %>H <%= logged % 60 %>M LOGGED</span><% if estimate.positive? %><span>OF <%= estimate / 60 %>H · <%= (logged * 100.0 / estimate).round %>%</span><% end %></div>
+        <div class="xp__bar xp__bar--wide"><% 20.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < (percent * 20 / 100.0).ceil %>"></span><% end %></div>
+      </div>
+    </section>
+
+    <section class="side__section">
+      <h3 class="eyebrow">Recent entries</h3>
+      <ul class="entries">
+        <% @entries.group_by { |entry| entry.started_at.to_date }.each do |day, entries| %>
+          <% minutes = entries.sum { |entry| entry.seconds / 60 } %>
+          <li><%= avatar(entries.first.user, size: :sm) %><span><%= day == Date.current ? "Today" : day.strftime("%a %-d") %></span><strong><%= minutes / 60 %>h <%= format("%02d", minutes % 60) %>m</strong></li>
+        <% end %>
+        <% if @entries.empty? %><li class="entries__empty">No time logged yet.</li><% end %>
+      </ul>
+    </section>
+  </aside>
+</div>

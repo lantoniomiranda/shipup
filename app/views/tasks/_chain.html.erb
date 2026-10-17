@@ -1,0 +1,39 @@
+<%# The ordered steps of a task's chain, with PRs, and the button that finishes the current step. %>
+<% steps = task.chain.tasks.to_a %>
+<% current = steps.find { |step| !step.done? } %>
+<section class="chain">
+  <header class="chain__header">
+    <h3 class="eyebrow">Chain · <%= steps.count(&:done?) %> of <%= steps.size %> done</h3>
+  </header>
+
+  <ol class="chain__steps">
+    <% steps.each do |step| %>
+      <% state = step.done? ? :done : (step == current ? :current : :locked) %>
+      <li class="chain-step chain-step--<%= state %> <%= "chain-step--here" if step == task %>">
+        <div class="chain-step__top">
+          <%= link_to step.title, project_task_path(project, step), class: "chain-step__title" %><% if step.estimate_days %><span> · <%= step.estimate_days.round(1).to_s.sub(/\.0\z/, "") %>d</span><% end %>
+          <% if step.assignee %><%= avatar(step.assignee, size: :sm) %><% end %>
+        </div>
+        <p class="chain-step__desc"><%= step.description %></p>
+        <p class="chain-step__state">
+          <% case state when :done %><%= icon "circle-check", size: 13 %>Done
+          <% when :current %><%= icon "eye", size: 13 %>Current step · visible on the board
+          <% else %><%= icon "lock", size: 13 %>Hidden until <%= current&.title || "earlier steps" %> is done
+          <% end %>
+        </p>
+        <% if (pull_request = step.pull_requests.first) %>
+          <p class="chain-step__pr"><%= icon "git-pull-request", size: 13 %>#<%= pull_request.number %> <%= pull_request.state %></p>
+        <% else %>
+          <p class="chain-step__pr chain-step__pr--none"><%= icon "git-pull-request", size: 13 %>No PR yet</p>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+
+  <% if current && current == task %>
+    <% following = task.next_in_chain %>
+    <%= button_to advance_project_task_path(project, task), class: "btn btn--primary" do %>
+      <%= icon "check" %><span>Complete <%= task.title %><%= ", unlock #{following.title}" if following %></span><%= render "shared/key", label: "Enter" %>
+    <% end %>
+  <% end %>
+</section>

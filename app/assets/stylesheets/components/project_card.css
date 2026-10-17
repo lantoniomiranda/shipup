@@ -1,9 +1,9 @@
 /* Hue helpers: set --hue (and a readable tint) from a project/label colour name. */
-.hue-orange { --hue: var(--orange); }
-.hue-mustard { --hue: var(--mustard); }
-.hue-teal { --hue: var(--teal); }
-.hue-plum { --hue: var(--plum); }
-.hue-blue { --hue: var(--blue); }
+.hue-orange { --hue: var(--orange); --hue-soft: var(--orange-soft); }
+.hue-mustard { --hue: var(--mustard); --hue-soft: var(--mustard-soft); }
+.hue-teal { --hue: var(--teal); --hue-soft: var(--teal-soft); }
+.hue-plum { --hue: var(--plum); --hue-soft: var(--plum-soft); }
+.hue-blue { --hue: var(--blue); --hue-soft: var(--blue-soft); }
 
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; }
 

@@ -1,0 +1,48 @@
+<% project_header @project, active: :board %>
+<% sprint = @board.sprint %>
+<% lit = (@board.progress_percent * 16 / 100.0).ceil %>
+
+<div class="board-page" data-controller="board hotkey" data-board-token-value="<%= form_authenticity_token %>">
+  <div class="toolbar">
+    <div class="toolbar__sprint">
+      <% if sprint %>
+        <h1><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %></h1>
+        <div class="xp xp--inline">
+          <div class="xp__bar xp__bar--small" role="progressbar" aria-valuenow="<%= @board.progress_percent %>" aria-valuemin="0" aria-valuemax="100">
+            <% 16.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < lit %> <%= "xp__segment--edge" if segment == lit - 1 %>"></span><% end %>
+          </div>
+          <span class="toolbar__points"><%= @board.done_points %>/<%= @board.total_points %> XP</span>
+        </div>
+      <% else %>
+        <h1>No sprint in flight</h1>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <% @board.columns.each do |column| %>
+      <section class="column <%= "column--focus" if column.status == "in_progress" %>" data-board-target="column" data-status="<%= column.status %>"
+               data-action="dragover->board#dragOver dragleave->board#dragLeave drop->board#drop">
+        <header class="column__header">
+          <span class="column__pip column__pip--<%= column.pip %>"></span>
+          <h2><%= column.label %></h2>
+          <span class="column__count"><%= column.tasks.size %></span>
+        </header>
+
+        <% visible = column.status == "done" ? column.tasks.first(3) : column.tasks %>
+        <% visible.each do |task| %>
+          <%= render "boards/card", task: task, project: @project, running: task.id == @running_task_id %>
+        <% end %>
+        <% hidden = column.tasks.size - visible.size %>
+        <% if hidden.positive? %><p class="column__more">+ <%= hidden %> more this sprint</p><% end %>
+      </section>
+    <% end %>
+  </div>
+
+  <footer class="shortcuts" aria-label="Keyboard shortcuts">
+    <span><kbd class="key">J</kbd><kbd class="key">K</kbd> move between cards</span>
+    <span><kbd class="key">H</kbd><kbd class="key">L</kbd> move between columns</span>
+    <span><kbd class="key">Enter</kbd> open task</span>
+    <span><kbd class="key">Shift</kbd><kbd class="key">Right</kbd> advance status</span>
+  </footer>
+</div>

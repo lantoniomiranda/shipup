@@ -20,6 +20,11 @@ Rails.application.routes.draw do
 
   # Projects are addressed by their key (/projects/APO/topics).
   resources :projects, only: :show do
+    resource :board, only: :show
+    resources :tasks, only: %i[show update] do
+      post :advance, on: :member
+      resource :timer, only: %i[create destroy], controller: "task_timers"
+    end
     resources :topics, only: %i[index show new create] do
       get :similar, on: :collection
       resource :vote, only: :create, controller: "topic_votes"

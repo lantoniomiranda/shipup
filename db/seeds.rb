@@ -84,6 +84,21 @@ end
   task.labels << apollo.labels.find_by!(name: label) unless task.labels.exists?
 end
 
+# A chain from the refresh-token topic: backend first, then dashboard, then QA.
+unless apollo.chains.exists?(title: "Fix silent refresh-token expiry")
+  Chain.create_with_steps!(project: apollo, creator: people.fetch("ines"), topic: refresh_topic, sprint: sprint, title: "Fix silent refresh-token expiry", steps: [
+    { title: "Backend", description: "Per-key counters and limit middleware", assignee_id: people.fetch("jonas").id, estimate_days: 3 },
+    { title: "Dashboard", description: "Usage dashboard and 429 banner", assignee_id: people.fetch("jonas").id, estimate_days: 2 },
+    { title: "QA", description: "Soak test with partner keys", assignee_id: people.fetch("ananya").id, estimate_days: 1 }
+  ])
+end
+
+# One connected GitHub repo with a pull request on the rate-limiting task.
+github = workspace.integration_connections.find_or_create_by!(provider: "github") { |c| c.assign_attributes(external_account: "orbitlabs", connected_by: people.fetch("ines")) }
+repository = apollo.github_repositories.find_or_create_by!(external_id: 1001) { |r| r.assign_attributes(integration_connection: github, full_name: "orbitlabs/gateway") }
+pull_request = repository.pull_requests.find_or_create_by!(number: 471) { |pr| pr.assign_attributes(title: "APO rate limiting", url: "https://github.com/orbitlabs/gateway/pull/471", state: "open") }
+TaskPullRequest.find_or_create_by!(task: rate_limiting_task, pull_request: pull_request) if defined?(rate_limiting_task)
+
 # Give every other project some finished work so its sprint shows XP progress.
 { "ATL" => 41, "DAT" => 83, "BIL" => 25, "DSG" => 57 }.each do |key, percent|
   project = projects.find { |p| p.key == key }
@@ -96,6 +111,8 @@ end
 
 # Inês has a timer running on the rate-limiting task, as in the design.
 rate_limiting = apollo.tasks.find_by!(title: "Per-key rate limiting")
+rate_limiting_task = rate_limiting
+TaskPullRequest.find_or_create_by!(task: rate_limiting, pull_request: pull_request)
 people.fetch("ines").time_entries.find_or_create_by!(ended_at: nil) { |entry| entry.assign_attributes(task: rate_limiting, started_at: 2.hours.ago - 14.minutes) }
 
 TimeOffRequest::KINDS.zip([ 22, 5, 3 ]).each do |kind, days|

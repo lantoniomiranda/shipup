@@ -44,6 +44,7 @@
 
   /* Fixed hues used for projects, tags and statuses */
   --orange: #E8632B;
+  --orange-soft: #F8D3BC;
   --mustard: #EBB43B;
   --mustard-soft: #F7E3A6;
   --mustard-ink: #6F5000;
@@ -120,6 +121,7 @@
   --sunken-a55: #10111855;
   --scrim: #0A0B10E6;
   --mustard-soft: #3D3320;
+  --orange-soft: #4A2A1C;
   --mustard-ink: #EBC76A;
   --teal-soft: #1E3B3A;
   --teal-ink: #7FD4C3;
