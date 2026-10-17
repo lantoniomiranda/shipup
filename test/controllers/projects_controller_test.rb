@@ -11,6 +11,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".project-card__stats", /1 open topic.*2 tasks/
   end
 
+  test "each project card opens that project's topics" do
+    get root_path
+    assert_select "a.project-card[href=?]", project_topics_path(projects(:apollo))
+  end
+
   test "shows sprint progress as a lit XP bar" do
     get root_path
     assert_select ".xp__labels strong", "33% XP"

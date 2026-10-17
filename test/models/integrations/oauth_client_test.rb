@@ -4,7 +4,7 @@ class Integrations::OauthClientTest < ActiveSupport::TestCase
   include IntegrationCredentials
 
   setup do
-    @redirect = "https://nook.test/integrations/zoom/callback"
+    @redirect = "https://shipup.test/integrations/zoom/callback"
   end
 
   test "builds an authorize URL with scopes, state and provider extras" do

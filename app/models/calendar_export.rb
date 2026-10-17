@@ -6,7 +6,7 @@ class CalendarExport
   end
 
   def to_ics
-    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Nook//#{@project.key}//EN", "CALSCALE:GREGORIAN" ]
+    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ShipUp//#{@project.key}//EN", "CALSCALE:GREGORIAN" ]
     due_tasks.each { |task| lines.concat(task_event(task)) }
     meetings.each { |meeting| lines.concat(meeting_event(meeting)) }
     lines << "END:VCALENDAR"
@@ -24,12 +24,12 @@ class CalendarExport
   end
 
   def task_event(task)
-    [ "BEGIN:VEVENT", "UID:task-#{task.id}@nook", "DTSTAMP:#{stamp(Time.current)}", "DTSTART;VALUE=DATE:#{task.due_on.strftime("%Y%m%d")}",
+    [ "BEGIN:VEVENT", "UID:task-#{task.id}@shipup", "DTSTAMP:#{stamp(Time.current)}", "DTSTART;VALUE=DATE:#{task.due_on.strftime("%Y%m%d")}",
       "SUMMARY:#{escape("Due: #{task.key} #{task.title}")}", "END:VEVENT" ]
   end
 
   def meeting_event(meeting)
-    event = [ "BEGIN:VEVENT", "UID:meeting-#{meeting.id}@nook", "DTSTAMP:#{stamp(Time.current)}", "DTSTART:#{stamp(meeting.starts_at)}", "DTEND:#{stamp(meeting.ends_at)}",
+    event = [ "BEGIN:VEVENT", "UID:meeting-#{meeting.id}@shipup", "DTSTAMP:#{stamp(Time.current)}", "DTSTART:#{stamp(meeting.starts_at)}", "DTEND:#{stamp(meeting.ends_at)}",
               "SUMMARY:#{escape(meeting.topic.title)}" ]
     event << "URL:#{meeting.join_url}" if meeting.join_url.present?
     event << "END:VEVENT"

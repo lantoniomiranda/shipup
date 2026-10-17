@@ -1,8 +1,14 @@
 # Shipup
 
-Rails 8 app (product name **Nook**): project management built around **topics** (conversations),
+Rails 8 app (product name **ShipUp**): project management built around **topics** (conversations),
 **tasks and chains** (the work), **meetings**, a sprint **board**, clients and team time off.
 The UI is replicated from `design-draft-claude-1.pen`.
+
+## Changelog
+
+Keep this section current: every change set adds a line here (newest first).
+
+- Fix: project cards on the dashboard now open the project. Product renamed from Nook to **ShipUp**.
 
 ## Stack
 

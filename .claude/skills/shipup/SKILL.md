@@ -7,7 +7,7 @@ description: Codebase guide for the shipup Rails 8.1 app. Use when working in th
 
 ## Project state
 
-Rails 8.1 app (Ruby version in `.ruby-version`); the product is called **Nook** (`config.x.product_name`). The UI is replicated from `design-draft-claude-1.pen`. Check the code before assuming any feature exists.
+Rails 8.1 app (Ruby version in `.ruby-version`); the product is called **ShipUp** (`config.x.product_name`). The UI is replicated from `design-draft-claude-1.pen`. Check the code before assuming any feature exists.
 
 `design-draft-claude-1.pen` is an encrypted Pencil design file (untracked). Access it only through the `pencil` MCP tools, never Read/Grep.
 

@@ -1,4 +1,4 @@
-# Demo workspace mirroring the Nook design. Safe to run repeatedly.
+# Demo workspace mirroring the ShipUp design. Safe to run repeatedly.
 today = Date.current
 
 workspace = Workspace.find_or_create_by!(slug: "orbit-labs") do |w|

@@ -1,4 +1,4 @@
-# The tenant: a company's Nook. Everything else hangs off a workspace.
+# The tenant: a company's ShipUp. Everything else hangs off a workspace.
 class Workspace < ApplicationRecord
   MEETING_PROVIDERS = %w[zoom google_meet].freeze
 
