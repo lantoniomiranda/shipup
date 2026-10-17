@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
   patch "meeting_tool", to: "meeting_tools#update"
   resources :time_off_requests, path: "time_off", only: %i[index new create update]
+  resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]
   resources :github_repositories, only: %i[index create destroy], path: "integrations/github/repositories"

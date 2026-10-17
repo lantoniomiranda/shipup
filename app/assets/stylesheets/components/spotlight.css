@@ -1,0 +1,25 @@
+/* Quick-search palette. */
+.spotlight { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 56px; background: var(--scrim); }
+.spotlight[hidden] { display: none; }
+.spotlight__panel { position: relative; display: flex; flex-direction: column; width: 680px; max-width: calc(100vw - 32px); max-height: calc(100vh - 112px); background: var(--surface); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink-a33); overflow: hidden; }
+.spotlight__panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--outline); pointer-events: none; }
+.spotlight__bar { display: flex; align-items: center; gap: 14px; padding: 16px 20px; color: var(--accent-ink); border-bottom: 1px solid var(--line); }
+.spotlight__input { flex: 1; padding: 0; background: transparent; color: var(--ink); border: 0; font: 600 20px var(--font-display); }
+.spotlight__input:focus { outline: none; }
+.spotlight__tabs { display: flex; gap: 8px; padding: 12px 20px; background: var(--paper); border-bottom: 1px solid var(--line); }
+.spotlight__tab { padding: 5px 12px; background: var(--sunken); color: var(--ink-soft); border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; }
+.spotlight__tab--active { background: var(--ink); color: var(--paper); }
+.spotlight__list { display: flex; flex-direction: column; min-height: 120px; overflow: auto; }
+.spotlight__list .eyebrow { padding: 14px 20px 8px; }
+.spotlight__hint { padding: 28px 20px; color: var(--ink-soft); font-size: 14px; font-weight: 500; }
+.spotlight__result { display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-left: 3px solid transparent; }
+.spotlight__result--active, .spotlight__result:hover { background: var(--accent-tint); border-left-color: var(--accent); }
+.spotlight__text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.spotlight__text strong { overflow: hidden; font-size: 16px; text-overflow: ellipsis; white-space: nowrap; }
+.spotlight__text small { color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+.spotlight__votes { color: var(--ink-soft); font-size: 13px; font-weight: 700; }
+.spotlight__footer { display: flex; gap: 16px; padding: 12px 20px; background: var(--paper); border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; }
+.spotlight__footer span { display: flex; align-items: center; gap: 6px; }
+.hint--button { padding: 0; background: transparent; border: 0; cursor: pointer; }
+
+.spotlight__input::-webkit-search-cancel-button { display: none; }

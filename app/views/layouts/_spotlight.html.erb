@@ -1,0 +1,14 @@
+<%# Quick-search palette. Opens with "/" or Ctrl/Cmd+Space; results stream into a turbo frame. %>
+<div class="spotlight" hidden data-spotlight-target="root" data-action="click->spotlight#backdrop">
+  <div class="spotlight__panel" role="dialog" aria-label="Search" aria-modal="true">
+    <div class="spotlight__bar">
+      <%= icon "search", size: 20 %>
+      <input type="search" class="spotlight__input" placeholder="Search topics, tasks and projects" autocomplete="off" data-spotlight-target="input" data-action="input->spotlight#search">
+      <kbd class="key">Esc</kbd>
+    </div>
+    <%= turbo_frame_tag "search_results", data: { spotlight_target: "frame" } %>
+    <footer class="spotlight__footer">
+      <span><kbd class="key">Enter</kbd> open</span><span><kbd class="key">Up Down</kbd> move</span><span><kbd class="key">Tab</kbd> switch filter</span>
+    </footer>
+  </div>
+</div>

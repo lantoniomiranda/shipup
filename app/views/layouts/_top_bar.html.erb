@@ -32,7 +32,7 @@
   </div>
 
   <div class="top-bar__right">
-    <span class="hint">Go to <%= render "shared/key", label: "Super Space" %></span>
+    <button type="button" class="hint hint--button" data-action="click->spotlight#openFromTopBar" aria-label="Search">Go to <%= render "shared/key", label: "Super Space" %></button>
 
     <% if running %>
       <div class="timer-pill">

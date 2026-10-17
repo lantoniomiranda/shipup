@@ -62,5 +62,6 @@ thread, new with similar-topic suggestions, voting) · Move on → create task /
 (Zoom / Google Meet) · backlog and sprint planning · sprint board (drag and drop, keyboard) · task
 page with time tracker · timeline (with `.ics` export) · clients · analytics · account · appearance ·
 time off.
-Not built yet from the design: "Super Space" search, task chat, rediscussion analytics, undo toast
+Quick search ("Super Space": `/` or Ctrl/Cmd+Space) covers topics, tasks and projects.
+Not built yet from the design: task chat, rediscussion analytics, undo toast
 and Microsoft Teams meetings.
