@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     get "callback", to: "integration_connections#callback", as: :integration_callback
   end
   patch "meeting_tool", to: "meeting_tools#update"
+  resource :account, only: %i[show update]
+  resource :appearance, only: %i[show update]
   resources :github_repositories, only: %i[index create destroy], path: "integrations/github/repositories"
 
   post "webhooks/github", to: "webhooks/github#create"
@@ -22,6 +24,7 @@ Rails.application.routes.draw do
   # Projects are addressed by their key (/projects/APO/topics).
   resources :projects, only: :show do
     resource :board, only: :show
+    resources :clients, only: %i[index new create], controller: "project_clients"
     resources :tasks, only: %i[show update] do
       post :advance, on: :member
       resource :timer, only: %i[create destroy], controller: "task_timers"

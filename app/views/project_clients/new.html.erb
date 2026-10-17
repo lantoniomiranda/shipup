@@ -1,0 +1,57 @@
+<% project_header @project, active: :clients %>
+
+<%= form_with url: project_clients_path(@project), class: "split", data: { controller: "hotkey" } do |form| %>
+  <section class="panel panel--form">
+    <header class="panel__bar">
+      <%= link_to project_clients_path(@project), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= icon "arrow-left" %><span>Back to clients</span><%= render "shared/key", label: "Esc" %>
+      <% end %>
+    </header>
+
+    <div class="form">
+      <header class="form__heading">
+        <h1>Add a client</h1>
+        <p>Someone from the client team who can be named as the requester on topics</p>
+      </header>
+
+      <div class="field-row">
+        <div class="field">
+          <%= label_tag :company, "Company", class: "eyebrow" %>
+          <%= text_field_tag :company, params[:company], class: "input", required: true, autofocus: true, autocomplete: "organization" %>
+        </div>
+        <div class="field">
+          <%= label_tag :contact_name, "Contact name", class: "eyebrow" %>
+          <%= text_field_tag :contact_name, params[:contact_name], class: "input", required: true, autocomplete: "name" %>
+        </div>
+      </div>
+
+      <div class="field" data-controller="tags">
+        <%= label_tag :email_entry, "Emails", class: "eyebrow" %>
+        <div class="tag-input" data-action="click->tags#focus">
+          <% Array(params[:emails]).each do |email| %>
+            <span class="tag" data-tags-target="item"><%= email %><input type="hidden" name="emails[]" value="<%= email %>"><button type="button" data-action="tags#remove" aria-label="Remove <%= email %>"><%= icon "x", size: 12 %></button></span>
+          <% end %>
+          <input type="email" id="email_entry" class="tag-input__entry" placeholder="Add another and press Enter" data-tags-target="entry" data-action="keydown->tags#keydown blur->tags#commit">
+        </div>
+        <template data-tags-target="template"><span class="tag" data-tags-target="item">EMAIL<input type="hidden" name="emails[]" value="EMAIL"><button type="button" data-action="tags#remove" aria-label="Remove EMAIL"><%= icon "x", size: 12 %></button></span></template>
+      </div>
+    </div>
+
+    <footer class="panel__footer">
+      <%= link_to project_clients_path(@project), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+        <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "Ctrl Enter" %>
+      </button>
+    </footer>
+  </section>
+
+  <aside class="side side--wide side--padded">
+    <h3 class="eyebrow">Clients in this project</h3>
+    <ul class="client-list">
+      <% @clients.each do |client| %>
+        <li><span class="client-tile client-tile--<%= client_hue(client) %>"><%= client.initials %></span><strong><%= client.name %></strong></li>
+      <% end %>
+      <% if @clients.empty? %><li class="entries__empty">None yet.</li><% end %>
+    </ul>
+  </aside>
+<% end %>

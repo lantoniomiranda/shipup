@@ -1,4 +1,10 @@
 module ApplicationHelper
+  # The signed-in user's chosen palette; visitors get the defaults.
+  def current_theme
+    preference = Current.user&.preference
+    { bg: preference&.theme_bg || "paper", accent: preference&.theme_accent || "orange" }
+  end
+
   # Sets the breadcrumb trail shown in the top bar; the last crumb is the current page.
   def breadcrumbs(*crumbs)
     content_for(:breadcrumbs) { safe_join(crumbs.each_with_index.map { |crumb, index| breadcrumb(crumb, last: index == crumbs.size - 1) }, icon("chevron-right")) }
@@ -58,6 +64,7 @@ module ApplicationHelper
     case tab
     when :topics then project_topics_path(project)
     when :board then project_board_path(project)
+    when :clients then project_clients_path(project)
     end
   end
 
@@ -83,6 +90,11 @@ module ApplicationHelper
     length = (pref.work_day_end.hour * 60 + pref.work_day_end.min) - (pref.work_day_start.hour * 60 + pref.work_day_start.min)
     spans = start + length <= 1440 ? [ [ start, length ] ] : [ [ start, 1440 - start ], [ 0, start + length - 1440 ] ]
     spans.map { |from, span| [ (from * 100.0 / 1440).round(2), (span * 100.0 / 1440).round(2) ] }
+  end
+
+  # Pastel tile colour for a client's initials, stable per client.
+  def client_hue(client)
+    Hued::HUES[client.id % Hued::HUES.size]
   end
 
   # Home filter links keep the default (active) URL clean.

@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   include Omniauth
 
-  AVATAR_ICONS = %w[cat bird rocket coffee flower ghost moon fish leaf telescope].freeze
+  AVATAR_ICONS = %w[cat bird rocket coffee flower-2 ghost moon fish leaf telescope].freeze
 
   has_many :identities, dependent: :destroy
   has_many :sessions, dependent: :destroy
@@ -55,6 +55,19 @@ class User < ApplicationRecord
     hour = now.in_time_zone(time_zone).hour
     period = hour < 12 ? "morning" : (hour < 18 ? "afternoon" : "evening")
     "Good #{period}, #{first_name}."
+  end
+
+  # Is this kind of notification switched on? Unset kinds fall back to NotificationSubscription::DEFAULTS.
+  def subscribed_to?(kind)
+    subscription = notification_subscriptions.find { |row| row.kind == kind }
+    subscription ? subscription.enabled : NotificationSubscription::DEFAULTS.fetch(kind)
+  end
+
+  # Takes { "mention_or_reply" => "1", ... } from the account form.
+  def update_notification_subscriptions(settings)
+    settings.slice(*NotificationSubscription::KINDS).each do |kind, value|
+      notification_subscriptions.find_or_initialize_by(kind: kind).update!(enabled: ActiveModel::Type::Boolean.new.cast(value))
+    end
   end
 
   def role_in(workspace)

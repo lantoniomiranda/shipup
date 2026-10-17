@@ -1,0 +1,61 @@
+<% breadcrumbs "Settings", "Appearance" %>
+<% themes = { "paper" => [ "#FBF7EC", "#E9DDC4", "#2B211A" ], "mist" => [ "#F2F6FA", "#C9D6E2", "#16202A" ], "sage" => [ "#F3F6EC", "#D6DEC8", "#1C2519" ], "night" => [ "#1F2030", "#101118", "#E4E6F4" ] } %>
+<% accents = { "orange" => "#E8632B", "blue" => "#6F94D6", "teal" => "#4FA396", "plum" => "#C8628A", "mustard" => "#EBB43B" } %>
+
+<%= form_with model: @preference, url: appearance_path, method: :patch, scope: :preference, class: "split appearance", data: { controller: "theme-picker hotkey" } do |form| %>
+  <section class="panel panel--form panel--narrow">
+    <div class="form">
+      <header class="form__heading"><h1>Appearance</h1><p>Colors for the whole workspace.</p></header>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Background</legend>
+        <div class="theme-grid">
+          <% themes.each do |name, (surface, sunken, ink)| %>
+            <label class="theme-option">
+              <%= form.radio_button :theme_bg, name, class: "theme-option__input", data: { action: "theme-picker#preview", theme_picker_target: "bg", attribute: "data-bg", value: name } %>
+              <span class="theme-option__swatch" style="--s: <%= surface %>; --d: <%= sunken %>; --i: <%= ink %>"><i></i><b></b></span>
+              <span class="theme-option__name"><%= name.capitalize %><%= icon "check", size: 14 %></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Accent and buttons</legend>
+        <div class="accent-row">
+          <% accents.each do |name, color| %>
+            <label class="accent-option">
+              <%= form.radio_button :theme_accent, name, class: "accent-option__input", data: { action: "theme-picker#preview", theme_picker_target: "accent", attribute: "data-accent", value: name } %>
+              <span class="accent-option__chip" style="background: <%= color %>"><%= icon "check", size: 18 %></span>
+              <span class="accent-option__name"><%= name.capitalize %></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+    </div>
+
+    <footer class="panel__footer">
+      <button type="submit" name="reset" value="1" class="btn" formnovalidate><%= icon "rotate-ccw" %><span>Reset to default</span><%= render "shared/key", label: "R" %></button>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="enter"><%= icon "check" %><span>Done</span><%= render "shared/key", label: "Enter" %></button>
+    </footer>
+  </section>
+
+  <section class="panel panel--preview">
+    <header class="panel__bar panel__bar--split"><span class="eyebrow">Live preview</span></header>
+    <div class="preview">
+      <h3 class="eyebrow">Buttons and labels</h3>
+      <div class="preview__row">
+        <span class="btn btn--primary"><%= icon "plus" %><span>New topic</span><%= render "shared/key", label: "K" %></span>
+        <span class="btn"><%= icon "video" %><span>Create meeting</span><%= render "shared/key", label: "K" %></span>
+      </div>
+      <div class="preview__row">
+        <span class="tag tag--task-status">In progress</span><span class="tag tag--client">Needs decision</span><span class="tag tag--issue">Bug</span><span class="tag tag--task">Deployed</span><span class="tag tag--similar">Sounds familiar</span>
+      </div>
+      <h3 class="eyebrow">Lists</h3>
+      <ul class="preview__list">
+        <li class="preview__list-item--active"><strong>Refresh tokens expire silently after 24h</strong><small>Sofia R. · 2 days ago</small></li>
+        <li><strong>Webhook retries with exponential backoff</strong><small>Daniel O. · 3 days ago</small></li>
+      </ul>
+    </div>
+  </section>
+<% end %>

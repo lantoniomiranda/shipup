@@ -1,0 +1,48 @@
+<% project_header @project, active: :clients %>
+
+<div class="split split--stack" data-controller="hotkey">
+  <div class="toolbar toolbar--chips">
+    <div class="segmented segmented--dark" role="tablist">
+      <%= link_to "All #{@counts.values.sum}", project_clients_path(@project), class: "segmented__item #{"segmented__item--active" if @filter.nil?}" %>
+      <%= link_to "Active #{@counts.fetch("active", 0)}", project_clients_path(@project, filter: "active"), class: "segmented__item #{"segmented__item--active" if @filter == "active"}" %>
+      <%= link_to "Invite pending #{@counts.fetch("invite_pending", 0)}", project_clients_path(@project, filter: "invite_pending"), class: "segmented__item #{"segmented__item--active" if @filter == "invite_pending"}" %>
+    </div>
+
+    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey_target: "trigger", hotkey_key: "a" } do %>
+      <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "A" %>
+    <% end %>
+  </div>
+
+  <section class="panel panel--table">
+    <% if @project_clients.empty? %>
+      <p class="empty">No clients here yet. <%= link_to "Add one", new_project_client_path(@project) %> so topics can say who asked for them.</p>
+    <% else %>
+      <table class="table">
+        <thead><tr><th>Client</th><th>Contacts</th><th>Topics</th><th>Last activity</th><th>Status</th></tr></thead>
+        <tbody>
+          <% @project_clients.each do |project_client| %>
+            <% client = project_client.client %>
+            <% contact = client.contacts.first %>
+            <tr>
+              <td>
+                <div class="client-cell">
+                  <span class="client-tile client-tile--<%= client_hue(client) %>"><%= client.initials %></span>
+                  <div><strong><%= client.name %></strong><small>Added <%= client.created_at.strftime("%b %-d") %></small></div>
+                </div>
+              </td>
+              <td>
+                <% if contact %>
+                  <div class="contact-cell"><div><strong><%= contact.name %></strong><small><%= contact.email %></small></div>
+                  <% if client.contacts.size > 1 %><span class="tag">+<%= client.contacts.size - 1 %> contact<%= "s" if client.contacts.size > 2 %></span><% end %></div>
+                <% end %>
+              </td>
+              <td class="table__strong"><%= pluralize(@topic_counts.fetch(client.id, 0), "topic") %></td>
+              <td><%= (last = @last_activity[client.id]) ? last.strftime("%b %-d") : "No topics yet" %></td>
+              <td><span class="tag tag--client-<%= project_client.status %>"><%= project_client.invite_pending? ? "Invite pending" : "Active" %></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+</div>
