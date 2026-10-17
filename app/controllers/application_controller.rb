@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def require_workspace_admin
+    head :forbidden unless Current.user&.role_in(Current.workspace) == "admin"
+  end
+
   def set_current_workspace
     Current.workspace ||= Current.user&.workspaces&.first
   end

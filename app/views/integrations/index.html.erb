@@ -1,0 +1,57 @@
+<% content_for :title, "Meeting tool" %>
+<%
+  tools = [
+    { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: "Links, cloud recording and transcripts by topic." },
+    { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: "Links through Microsoft 365 calendars.", coming_soon: true },
+    { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: "Links through Google Calendar." }
+  ]
+  selected = @workspace.meeting_provider
+%>
+
+<main class="setup" data-controller="hotkey">
+  <aside class="setup__steps">
+    <%= render "shared/logo", size: :small %>
+
+    <header class="setup__intro">
+      <h1>Set up your workspace</h1>
+      <span class="tag tag--admin">Admin only</span>
+    </header>
+
+    <ol class="steps">
+      <%= render "integrations/step", state: :done, label: "Workspace", caption: @workspace.name %>
+      <%= render "integrations/step", state: :current, number: 2, label: "Meeting tool", caption: "Pick once for everyone" %>
+      <%= render "integrations/step", state: :todo, number: 3, label: "Calendar", caption: "Working hours and availability" %>
+      <%= render "integrations/step", state: :todo, number: 4, label: "People", caption: "Invite admins and managers", last: true %>
+    </ol>
+  </aside>
+
+  <section class="setup__panel">
+    <header class="setup__header">
+      <p class="eyebrow">Step 2 of 4</p>
+      <h2>Choose your meeting tool</h2>
+      <p class="setup__subtitle">Everyone uses it for meeting links. You can change it later in Integrations.</p>
+    </header>
+
+    <% flash.each do |type, message| %>
+      <p class="flash flash--<%= type %>" role="status"><%= message %></p>
+    <% end %>
+
+    <div class="setup__body">
+      <% tools.each do |tool| %>
+        <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], selected: selected == tool[:key] %>
+      <% end %>
+    </div>
+
+    <footer class="setup__footer">
+      <%= link_to root_path, class: "btn", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= icon "arrow-left" %><span>Back</span><%= render "shared/key", label: "Esc" %>
+      <% end %>
+
+      <%= form_with url: meeting_tool_path, method: :patch, id: "meeting-tool-form" do %>
+        <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="enter">
+          <%= icon "arrow-right" %><span>Continue</span><%= render "shared/key", label: "Enter" %>
+        </button>
+      <% end %>
+    </footer>
+  </section>
+</main>

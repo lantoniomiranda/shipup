@@ -1,0 +1,26 @@
+<%# A selectable meeting tool. Radios live outside the connect forms and attach to #meeting-tool-form. %>
+<% connected = connection.present? %>
+<% coming_soon = tool[:coming_soon] %>
+<div class="tool <%= "tool--selected" if selected %> <%= "tool--muted" if coming_soon %>">
+  <input type="radio" class="radio" name="provider" value="<%= tool[:key] %>" form="meeting-tool-form"
+         aria-label="Use <%= tool[:name] %>" <%= "checked" if selected %> <%= "disabled" if coming_soon || !connected %>>
+  <span class="radio__box" aria-hidden="true"><%= icon "check", size: 14 %></span>
+
+  <span class="tool__logo tool__logo--<%= tool[:hue] %>"><%= tool[:letter] %></span>
+
+  <div class="tool__text">
+    <strong><%= tool[:name] %></strong>
+    <span><%= tool[:description] %></span>
+  </div>
+
+  <% if coming_soon %>
+    <span class="tool__status">Coming soon</span>
+  <% elsif connected %>
+    <span class="tool__status tool__status--connected">Connected as <%= connection.external_account %></span>
+  <% else %>
+    <span class="tool__status">Not connected</span>
+    <%= button_to connect_integration_path(provider: tool[:key]), class: "btn", data: { turbo: false } do %>
+      <%= icon "plug" %><span>Connect</span>
+    <% end %>
+  <% end %>
+</div>

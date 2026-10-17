@@ -42,3 +42,16 @@ class ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth.clear
   end
 end
+
+# Provides fake client credentials so OAuth providers count as "configured" in tests.
+module IntegrationCredentials
+  ENV_KEYS = %w[ZOOM_CLIENT_ID ZOOM_CLIENT_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GITHUB_CLIENT_ID GITHUB_CLIENT_SECRET].freeze
+
+  def with_integration_credentials
+    original = ENV.to_h.slice(*ENV_KEYS)
+    ENV_KEYS.each { |key| ENV[key] = "test-#{key.downcase}" }
+    yield
+  ensure
+    ENV_KEYS.each { |key| original.key?(key) ? ENV[key] = original[key] : ENV.delete(key) }
+  end
+end

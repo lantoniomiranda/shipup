@@ -7,7 +7,7 @@ html {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 14px;
-  line-height: 1.4;
+  line-height: normal;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

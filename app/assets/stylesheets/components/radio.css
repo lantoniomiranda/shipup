@@ -1,0 +1,20 @@
+/* Square radio: a visually hidden native input paired with a drawn box. */
+.radio { position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0; }
+
+.radio__box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background: var(--surface);
+  color: var(--on-accent);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--outline);
+}
+
+.radio__box .icon { visibility: hidden; }
+.radio:checked + .radio__box { background: var(--accent); }
+.radio:checked + .radio__box .icon { visibility: visible; }
+.radio:focus-visible + .radio__box { outline: 2px solid var(--accent); outline-offset: 2px; }
+.radio:disabled + .radio__box { opacity: 0.5; }

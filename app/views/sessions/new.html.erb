@@ -15,13 +15,13 @@
       <% end %>
 
       <div class="sign-in__options" data-controller="hotkey">
-        <%= button_to "/auth/google_oauth2", class: "btn btn--wide", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "g" } do %>
+        <%= button_to "/auth/google_oauth2", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "g" } do %>
           <%= icon "google", size: 20 %>
           <span class="btn__label">Continue with Google</span>
           <%= render "shared/key", label: "G" %>
         <% end %>
 
-        <%= button_to "/auth/entra_id", class: "btn btn--wide", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "m" } do %>
+        <%= button_to "/auth/entra_id", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey_target: "trigger", hotkey_key: "m" } do %>
           <%= icon "microsoft", size: 20 %>
           <span class="btn__label">Continue with Microsoft</span>
           <%= render "shared/key", label: "M" %>
