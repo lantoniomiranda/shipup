@@ -73,6 +73,20 @@ end
   task.labels << apollo.labels.find_by!(name: label) unless task.labels.exists?
 end
 
+# Give every other project some finished work so its sprint shows XP progress.
+{ "ATL" => 41, "DAT" => 83, "BIL" => 25, "DSG" => 57 }.each do |key, percent|
+  project = projects.find { |p| p.key == key }
+  [ [ "Shipped work", "done", percent ], [ "Remaining work", "todo", 100 - percent ] ].each do |title, status, minutes|
+    project.tasks.find_or_create_by!(title: title) do |t|
+      t.assign_attributes(status: status, creator: people.fetch("ines"), sprint: project.current_sprint, estimate_minutes: minutes)
+    end
+  end
+end
+
+# Inês has a timer running on the rate-limiting task, as in the design.
+rate_limiting = apollo.tasks.find_by!(title: "Per-key rate limiting")
+people.fetch("ines").time_entries.find_or_create_by!(ended_at: nil) { |entry| entry.assign_attributes(task: rate_limiting, started_at: 2.hours.ago - 14.minutes) }
+
 TimeOffRequest::KINDS.zip([ 22, 5, 3 ]).each do |kind, days|
   TimeOffAllowance.find_or_create_by!(user: people.fetch("ines"), kind: kind, year: today.year) { |a| a.days = days }
 end

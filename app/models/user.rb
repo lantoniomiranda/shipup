@@ -40,6 +40,12 @@ class User < ApplicationRecord
     time_zone.split("/").last.tr("_", " ")
   end
 
+  def greeting(now: Time.current)
+    hour = now.in_time_zone(time_zone).hour
+    period = hour < 12 ? "morning" : (hour < 18 ? "afternoon" : "evening")
+    "Good #{period}, #{first_name}."
+  end
+
   def role_in(workspace)
     memberships.find_by(workspace: workspace)&.role
   end

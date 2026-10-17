@@ -1,0 +1,56 @@
+<% user = Current.user %>
+<% running = user.running_time_entry %>
+<% unread = user.notifications.unread.exists? %>
+
+<header class="top-bar" data-controller="hotkey">
+  <div class="top-bar__left">
+    <%= link_to root_path, class: "brand" do %>
+      <span class="brand__mark" aria-hidden="true"><span class="brand__ring"></span></span>
+      <span class="brand__word"><%= Rails.configuration.x.product_name %></span>
+    <% end %>
+
+    <nav class="workspaces" aria-label="Workspaces">
+      <% user.workspaces.order(:id).each_with_index do |workspace, index| %>
+        <span class="workspaces__item <%= "workspaces__item--current" if workspace == Current.workspace %>" title="<%= workspace.name %>"><%= index + 1 %></span>
+      <% end %>
+    </nav>
+
+    <span class="top-bar__divider"></span>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <%= content_for?(:breadcrumbs) ? yield(:breadcrumbs) : tag.span("Projects", class: "crumb crumb--current") %>
+    </nav>
+  </div>
+
+  <div class="clocks" data-controller="clock">
+    <% Current.workspace.clock_zones(for_user: user).each do |zone| %>
+      <div class="clock" data-clock-target="zone" data-zone="<%= zone %>">
+        <%= icon daypart_icon(zone), size: 14 %>
+        <strong><%= zone.split("/").last.tr("_", " ") %></strong>
+        <span data-clock-target="time"><%= local_time(zone) %></span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="top-bar__right">
+    <span class="hint">Go to <%= render "shared/key", label: "Super Space" %></span>
+
+    <% if running %>
+      <div class="timer-pill">
+        <span class="timer-pill__dot"></span>
+        <span><%= running.task.key %> · <span data-controller="stopwatch" data-stopwatch-started-value="<%= running.started_at.iso8601 %>"><%= Time.at(running.seconds).utc.strftime("%H:%M:%S") %></span></span>
+        <kbd class="key key--dark">Shift P</kbd>
+      </div>
+    <% end %>
+
+    <button type="button" class="icon-button" aria-label="Notifications">
+      <%= icon "bell", size: 18 %>
+      <% if unread %><span class="icon-button__dot"></span><% end %>
+    </button>
+
+    <%= link_to avatar(user, size: :lg, class: "avatar--ringed"), root_path, aria: { label: "Account" } %>
+  </div>
+</header>
+
+<% if notice || alert %>
+  <p class="flash flash--<%= notice ? "notice" : "alert" %> flash--shell" role="status"><%= notice || alert %></p>
+<% end %>

@@ -26,6 +26,13 @@ class Project < ApplicationRecord
 
   scope :ordered, -> { order(:position, :name) }
 
+  # Share of the 20 XP-bar segments that are lit for a 0-100 progress value.
+  XP_SEGMENTS = 20
+
+  def self.xp_segments_lit(percent)
+    (percent * XP_SEGMENTS / 100.0).ceil
+  end
+
   def current_sprint
     sprints.find_by("starts_on <= :today AND ends_on >= :today", today: Date.current)
   end

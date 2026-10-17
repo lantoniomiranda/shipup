@@ -20,6 +20,14 @@ class Topic < ApplicationRecord
   scope :top, -> { order(votes_score: :desc, created_at: :desc) }
   scope :recent, -> { order(created_at: :desc) }
 
+  # Open topics the user took part in where someone else spoke last.
+  scope :awaiting_reply_from, ->(user) {
+    open.where(<<~SQL.squish, user_id: user.id)
+      (topics.author_id = :user_id OR EXISTS (SELECT 1 FROM topic_messages m WHERE m.topic_id = topics.id AND m.author_id = :user_id))
+      AND COALESCE((SELECT m.author_id FROM topic_messages m WHERE m.topic_id = topics.id ORDER BY m.created_at DESC, m.id DESC LIMIT 1), topics.author_id) <> :user_id
+    SQL
+  }
+
   def vote_by(user)
     votes.find_by(user: user)
   end

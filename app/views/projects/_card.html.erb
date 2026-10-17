@@ -1,0 +1,46 @@
+<%# One project on the home grid. `current` highlights the project you are working in. %>
+<% sprint = project.current_sprint %>
+<% percent = sprint&.progress_percent.to_i %>
+<% lit = Project.xp_segments_lit(percent) %>
+
+<%= link_to root_path, class: "project-card hue-#{project.color} #{"project-card--current" if current}", data: { hotkey_target: "trigger", hotkey_key: position.to_s } do %>
+  <div class="project-card__banner">
+    <span class="project-card__sun"></span>
+    <span class="project-card__chip"><%= icon project.icon, size: 20 %></span>
+  </div>
+
+  <div class="project-card__body">
+    <div class="project-card__title">
+      <h2><%= project.name %></h2>
+      <%= render "shared/key", label: position %>
+    </div>
+
+    <p class="project-card__description"><%= project.description %></p>
+
+    <div class="project-card__stats">
+      <span><%= icon "messages-square", size: 14 %><%= pluralize(open_topics, "open topic") %></span>
+      <span><%= icon "circle-check-big", size: 14 %><%= pluralize(tasks, "task") %></span>
+    </div>
+
+    <% if sprint %>
+      <div class="xp">
+        <div class="xp__labels">
+          <span><%= sprint.name.upcase %> · <%= pluralize(sprint.days_left, "day").upcase %> LEFT</span>
+          <strong><%= percent %>% XP</strong>
+        </div>
+        <div class="xp__bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100">
+          <% Project::XP_SEGMENTS.times do |segment| %>
+            <span class="xp__segment <%= "xp__segment--on" if segment < lit %> <%= "xp__segment--edge" if segment == lit - 1 %>"></span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="project-card__footer">
+      <div class="avatar-stack">
+        <% project.members.first(4).each do |member| %><%= avatar(member, size: :sm) %><% end %>
+      </div>
+      <span><%= time_ago_label(project.last_activity_at) %></span>
+    </div>
+  </div>
+<% end %>

@@ -26,6 +26,12 @@ class Workspace < ApplicationRecord
     create_with(name: "#{domain.split(".").first.titleize} workspace").find_or_create_by!(email_domain: domain)
   end
 
+  # Up to `limit` distinct teammate time zones, the current user's first, for the top-bar clocks.
+  def clock_zones(for_user:, limit: 4)
+    zones = users.distinct.pluck(:time_zone)
+    ([ for_user.time_zone ] + zones.sort).uniq.first(limit)
+  end
+
   def connection_for(provider)
     integration_connections.find_by(provider: provider)
   end

@@ -1,0 +1,87 @@
+/* Hue helpers: set --hue (and a readable tint) from a project/label colour name. */
+.hue-orange { --hue: var(--orange); }
+.hue-mustard { --hue: var(--mustard); }
+.hue-teal { --hue: var(--teal); }
+.hue-plum { --hue: var(--plum); }
+.hue-blue { --hue: var(--blue); }
+
+.project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; }
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* The project you are working in gets the heavy ink frame (drawn over the banner too). */
+.project-card--current { position: relative; }
+.project-card--current::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 2px var(--ink); pointer-events: none; }
+
+.project-card__banner { position: relative; height: 84px; background: var(--hue); }
+
+/* A setting sun: a surface-coloured disc cut by three bands of the banner colour. */
+.project-card__sun {
+  position: absolute;
+  top: 14px;
+  right: 118px;
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(180deg, var(--surface) 0 38px, var(--hue) 38px 41px, var(--surface) 41px 46px, var(--hue) 46px 49px, var(--surface) 49px 54px, var(--hue) 54px 57px, var(--surface) 57px);
+  border-radius: 50%;
+}
+
+.project-card__banner::before, .project-card__banner::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; }
+.project-card__banner::before { top: 74px; background: var(--ink-a33); }
+.project-card__banner::after { top: 80px; background: var(--ink-a22); }
+
+.project-card__chip {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--outline);
+}
+
+.project-card__body { display: flex; flex-direction: column; gap: 12px; padding: 16px 18px; }
+.project-card__title { display: flex; align-items: center; justify-content: space-between; }
+.project-card__title h2 { font-size: 21px; }
+.project-card__description { color: var(--ink-soft); font-size: 14px; font-weight: 500; line-height: 20px; }
+.project-card__stats { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 600; }
+.project-card__stats span { display: flex; align-items: center; gap: 6px; }
+.project-card__footer { display: flex; align-items: center; justify-content: space-between; color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+
+/* "Start a new project" tile. */
+.project-card--new {
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 284px;
+  background: var(--sunken);
+  text-align: center;
+}
+
+.project-card--new strong { font-size: 20px; }
+.project-card--new > span:last-child { color: var(--ink-soft); font-size: 13px; }
+
+.project-card__plus { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 8px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--outline); }
+
+/* XP bar: twenty segments inside a dark trough, the last lit one glows. */
+.xp { display: flex; flex-direction: column; gap: 6px; }
+.xp__labels { display: flex; justify-content: space-between; color: var(--ink-soft); font-size: 11px; font-weight: 500; }
+.xp__labels strong { color: var(--ink); font-weight: 600; }
+.xp__bar { display: flex; align-items: center; gap: 2px; height: 16px; padding: 2px; background: var(--ink); border-radius: var(--radius-sm); }
+.xp__segment { flex: 1; height: 100%; background: var(--line); border-radius: var(--radius-sm); }
+.xp__segment--on { background: var(--hue); }
+.xp__segment--edge { box-shadow: 0 0 8px var(--hue); }
+
+@media (max-width: 1100px) { .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .project-grid { grid-template-columns: 1fr; } .page-header { flex-direction: column; align-items: flex-start; } }

@@ -22,6 +22,6 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= content_for?(:app_content) ? yield(:app_content) : yield %>
   </body>
 </html>

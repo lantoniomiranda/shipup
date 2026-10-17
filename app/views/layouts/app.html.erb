@@ -1,0 +1,12 @@
+<%# The signed-in shell: top bar plus a framed content panel. Nested inside layouts/application. %>
+<% content_for :app_content do %>
+  <div class="shell">
+    <%= render "layouts/top_bar" %>
+    <div class="shell__frame">
+      <div class="shell__content <%= yield(:content_class) %>">
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<%= render template: "layouts/application" %>

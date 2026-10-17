@@ -1,0 +1,12 @@
+/* Two- or three-way toggle, e.g. Active / Completed. */
+.segmented { display: flex; gap: 2px; padding: 3px; background: var(--sunken); border-radius: var(--radius-sm); }
+
+.segmented__item {
+  padding: 6px 14px;
+  color: var(--ink-soft);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.segmented__item--active { background: var(--surface); color: var(--ink); box-shadow: var(--outline); }
