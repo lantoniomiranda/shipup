@@ -7,13 +7,13 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    return head :forbidden unless workspace_admin?
+    return render_error(403) unless workspace_admin?
 
     @project = Current.workspace.projects.build(color: "orange", icon: "rocket")
   end
 
   def create
-    return head :forbidden unless workspace_admin?
+    return render_error(403) unless workspace_admin?
 
     @project = Current.workspace.projects.build(params.expect(project: %i[name key description color icon]).merge(position: Current.workspace.projects.count))
     @project.key = @project.name.to_s.gsub(/[^A-Za-z]/, "")[0, 3] if @project.key.blank?

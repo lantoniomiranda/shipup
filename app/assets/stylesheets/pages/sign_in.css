@@ -64,3 +64,8 @@
   .sunset { display: none; }
   .sign-in__form { flex-basis: 100%; padding: 32px 24px; }
 }
+
+/* Error pages reuse the sign-in split screen. */
+.error-page .sign-in__heading h1 { font-size: 40px; line-height: 44px; }
+.error-page__actions { flex-direction: row; flex-wrap: wrap; }
+.error-page__actions .btn { width: auto; }

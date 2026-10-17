@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- Branded error pages (400, 403, 404, 406, 422, 500) rendered by `ErrorsController` via `config.exceptions_app`; static `public/*.html` fallbacks restyled. Forbidden actions render the 403 page.
 - Fix: project cards on the dashboard now open the project. Product renamed from Nook to **ShipUp**.
 
 ## Stack

@@ -12,7 +12,12 @@ class ApplicationController < ActionController::Base
   private
 
   def require_workspace_admin
-    head :forbidden unless Current.user&.role_in(Current.workspace) == "admin"
+    render_error(403) unless Current.user&.role_in(Current.workspace) == "admin"
+  end
+
+  # Branded error page with the right status (use instead of `head :forbidden`).
+  def render_error(code)
+    render "errors/show", locals: { code: code }, status: code, layout: "application"
   end
 
   def set_current_workspace

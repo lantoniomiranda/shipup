@@ -50,5 +50,8 @@ Rails.application.routes.draw do
   # Development shortcut: OAuth needs real client credentials, so skip it locally.
   get "dev/sign_in", to: "dev_sessions#create" if Rails.env.development?
 
+  # Error pages. Rails calls these paths itself (config.exceptions_app); they also work as plain URLs.
+  match "/:code", to: "errors#show", via: :all, constraints: { code: /400|403|404|406|422|500/ }
+
   root "projects#index"
 end

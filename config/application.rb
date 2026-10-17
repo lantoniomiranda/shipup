@@ -22,6 +22,9 @@ module Shipup
     # in config/environments, which are processed later.
     #
     config.x.product_name = "ShipUp"
+
+    # Render errors through ErrorsController (branded pages) instead of the static public/*.html files.
+    config.exceptions_app = routes
     config.active_storage.variant_processor = :disabled # no image variants used
 
     # Users and meetings span time zones; store UTC and convert per user at the edge.

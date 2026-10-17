@@ -1,0 +1,39 @@
+<%
+  messages = {
+    400 => [ "That request didn't make sense", "Something in the request was malformed. Go back and try again." ],
+    403 => [ "You don't have access to this", "Ask a workspace admin if you think you should." ],
+    404 => [ "We can't find that page", "It may have moved, been deleted, or never existed." ],
+    406 => [ "Your browser is too old", "ShipUp needs a recent version of Chrome, Edge, Firefox or Safari." ],
+    422 => [ "That change was rejected", "The page expired or the data wasn't valid. Reload and try again." ],
+    500 => [ "Something went wrong on our side", "We've been notified. Try again in a moment." ]
+  }
+  title, detail = messages.fetch(code, messages.fetch(500))
+%>
+<% content_for :title, "#{code} · #{title}" %>
+
+<main class="sign-in error-page">
+  <section class="sign-in__form">
+    <%= render "shared/logo" %>
+
+    <div class="sign-in__welcome">
+      <header class="sign-in__heading">
+        <p class="eyebrow">Error <%= code %></p>
+        <h1><%= title %></h1>
+        <p><%= detail %></p>
+      </header>
+
+      <div class="sign-in__options error-page__actions">
+        <% if Current.user %>
+          <%= link_to root_path, class: "btn btn--primary btn--lg" do %><%= icon "arrow-left" %><span>Back to your projects</span><% end %>
+        <% else %>
+          <%= link_to "/sign_in", class: "btn btn--primary btn--lg" do %><span>Go to sign in</span><% end %>
+        <% end %>
+        <button type="button" class="btn btn--lg" onclick="history.back()"><%= icon "corner-down-right" %><span>Go back</span></button>
+      </div>
+    </div>
+
+    <div class="sign-in__spacer"></div>
+  </section>
+
+  <%= render "sessions/sunset" %>
+</main>
