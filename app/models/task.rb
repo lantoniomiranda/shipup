@@ -19,10 +19,22 @@ class Task < ApplicationRecord
 
   validates :title, presence: true
   validates :number, uniqueness: { scope: :project_id }
+  validates :estimate_minutes, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :chain_position, presence: true, if: :chain_id?
 
   before_validation :assign_number, on: :create
   before_save :stamp_completion, if: :status_changed?
+
+  MINUTES_PER_DAY = 8 * 60
+
+  # Estimates are stored in minutes but entered in working days.
+  def estimate_days
+    estimate_minutes && estimate_minutes.to_f / MINUTES_PER_DAY
+  end
+
+  def estimate_days=(days)
+    self.estimate_minutes = days.present? ? (days.to_f * MINUTES_PER_DAY).round : nil
+  end
 
   # "APO-97"
   def key

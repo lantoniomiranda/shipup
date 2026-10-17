@@ -27,6 +27,11 @@ class User < ApplicationRecord
 
   after_create :build_default_preference
 
+  # Always usable, even before a preferences row has been saved.
+  def preference
+    super || build_preference
+  end
+
   def initials
     name.split.map { |part| part[0] }.first(2).join.upcase
   end

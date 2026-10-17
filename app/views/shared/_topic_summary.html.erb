@@ -1,0 +1,12 @@
+<%# "From topic" card on the side of the create-task / create-chain / meeting forms. %>
+<div class="topic-card">
+  <% if local_assigns[:heading] %><p class="eyebrow"><%= heading %></p><% end %>
+  <strong><%= topic.title %></strong>
+  <div class="topic-card__meta">
+    <%= render "topics/kind_tag", topic: topic %>
+    <span><%= format("%+d", topic.votes_score) %> votes · <%= pluralize(topic.messages_count, "reply") %></span>
+  </div>
+  <% if local_assigns[:link] %>
+    <%= link_to project_topic_path(topic.project, topic), class: "topic-card__link" do %>Open topic <%= icon "arrow-up-right", size: 12 %><% end %>
+  <% end %>
+</div>

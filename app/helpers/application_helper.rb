@@ -74,6 +74,16 @@ module ApplicationHelper
     "#{time.in_time_zone(user.time_zone).strftime("%H:%M")} · #{user.city}"
   end
 
+  # A user's working hours on a 24h UTC axis, as [left%, width%] segments (two when they wrap midnight).
+  def working_hour_segments(user)
+    pref = user.preference
+    offset = ActiveSupport::TimeZone[user.time_zone].now.utc_offset / 60
+    start = (pref.work_day_start.hour * 60 + pref.work_day_start.min - offset) % 1440
+    length = (pref.work_day_end.hour * 60 + pref.work_day_end.min) - (pref.work_day_start.hour * 60 + pref.work_day_start.min)
+    spans = start + length <= 1440 ? [ [ start, length ] ] : [ [ start, 1440 - start ], [ 0, start + length - 1440 ] ]
+    spans.map { |from, span| [ (from * 100.0 / 1440).round(2), (span * 100.0 / 1440).round(2) ] }
+  end
+
   # Home filter links keep the default (active) URL clean.
   def projects_path_for(status)
     status == "active" ? root_path : root_path(status: status)

@@ -1,0 +1,54 @@
+<% project_header @project, active: :topics %>
+
+<%= form_with scope: :chain, url: project_topic_chains_path(@project, @topic), class: "split", data: { controller: "hotkey steps" } do |form| %>
+  <section class="panel panel--form">
+    <header class="panel__bar">
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+      <% end %>
+    </header>
+
+    <div class="form">
+      <header class="form__heading">
+        <h1>Create chain</h1>
+        <p>From topic · <%= @topic.title %></p>
+      </header>
+
+      <div class="field">
+        <%= form.label :title, "Chain title", class: "eyebrow" %>
+        <%= form.text_field :title, value: @chain.title, class: "input input--title", required: true, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <p class="eyebrow">Steps · shipped in this order</p>
+        <ol class="steps-editor" data-steps-target="list">
+          <% @steps.each_with_index do |step, index| %>
+            <%= render "topic_chains/step", step: step, index: index, members: @project.members.order(:name) %>
+          <% end %>
+        </ol>
+        <template data-steps-target="template">
+          <%= render "topic_chains/step", step: {}, index: "NEW_INDEX", members: @project.members.order(:name) %>
+        </template>
+        <button type="button" class="btn btn--add" data-action="steps#add" data-hotkey-target="trigger" data-hotkey-key="s">
+          <%= icon "plus" %><span>Add step</span><%= render "shared/key", label: "S" %>
+        </button>
+      </div>
+    </div>
+
+    <footer class="panel__footer">
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+        <%= icon "link" %><span>Create chain</span><%= render "shared/key", label: "Ctrl Enter" %>
+      </button>
+    </footer>
+  </section>
+
+  <aside class="side side--wide side--padded">
+    <%= render "shared/topic_summary", topic: @topic, heading: "From topic", link: true %>
+
+    <div class="field">
+      <%= form.label :sprint_id, "Sprint", class: "eyebrow" %>
+      <%= form.collection_select :sprint_id, @project.sprints.order(number: :desc), :id, :name, { selected: @chain.sprint_id, include_blank: "Backlog (no sprint)" }, class: "select" %>
+    </div>
+  </aside>
+<% end %>

@@ -36,6 +36,11 @@ class Topic < ApplicationRecord
       .order(Arel.sql("#{score} DESC"))
   }
 
+  # A task or chain was created from this topic: it is no longer just open.
+  def approve!
+    approved! if open?
+  end
+
   def vote_by(user)
     votes.find_by(user: user)
   end

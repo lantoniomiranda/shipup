@@ -1,0 +1,85 @@
+<% project_header @project, active: :topics %>
+
+<%= form_with model: @task, url: project_topic_tasks_path(@project, @topic), class: "split", data: { controller: "hotkey" } do |form| %>
+  <section class="panel panel--form">
+    <header class="panel__bar">
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey_target: "trigger", hotkey_key: "escape" } do %>
+        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+      <% end %>
+    </header>
+
+    <div class="form">
+      <header class="form__heading">
+        <h1>Create task</h1>
+        <p>From topic · <%= @topic.title %></p>
+      </header>
+
+      <% if @task.errors.any? %><p class="flash flash--alert"><%= @task.errors.full_messages.to_sentence %></p><% end %>
+
+      <div class="field">
+        <%= form.label :title, "Title", class: "eyebrow" %>
+        <%= form.text_field :title, class: "input input--title", required: true, autocomplete: "off" %>
+      </div>
+
+      <div class="field field--grow">
+        <%= form.label :description, "Description", class: "eyebrow" %>
+        <div class="editor" data-controller="editor">
+          <div class="editor__toolbar" role="toolbar" aria-label="Formatting">
+            <% [ [ "bold", "bold", "**" ], [ "italic", "italic", "_" ], [ "list", "list", "- " ], [ "link", "link", "link" ], [ "at-sign", "mention", "@" ] ].each do |glyph, label, token| %>
+              <button type="button" aria-label="<%= label.capitalize %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
+            <% end %>
+          </div>
+          <%= form.text_area :description, class: "editor__input", data: { editor_target: "input" } %>
+        </div>
+      </div>
+    </div>
+
+    <footer class="panel__footer">
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey-target="trigger" data-hotkey-key="ctrl+enter">
+        <%= icon "square-check" %><span>Create task</span><%= render "shared/key", label: "Ctrl Enter" %>
+      </button>
+    </footer>
+  </section>
+
+  <aside class="side side--wide side--padded">
+    <%= render "shared/topic_summary", topic: @topic, heading: "From topic", link: true %>
+
+    <div class="field">
+      <%= form.label :assignee_id, "Assignee", class: "eyebrow" %>
+      <%= form.collection_select :assignee_id, @project.members.order(:name), :id, :name, { include_blank: "Unassigned" }, class: "select" %>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <%= form.label :estimate_days, "Estimate (days)", class: "eyebrow" %>
+        <%= form.number_field :estimate_days, min: 0, step: 0.5, class: "input" %>
+      </div>
+      <div class="field">
+        <%= form.label :due_on, "Due", class: "eyebrow" %>
+        <%= form.date_field :due_on, class: "input" %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= form.label :sprint_id, "Sprint", class: "eyebrow" %>
+      <%= form.collection_select :sprint_id, @project.sprints.order(number: :desc), :id, :name, { include_blank: "Backlog (no sprint)" }, class: "select" %>
+    </div>
+
+    <fieldset class="field">
+      <legend class="eyebrow">Tags</legend>
+      <div class="chips chips--wrap">
+        <%= form.collection_check_boxes :label_ids, @project.labels.order(:name), :id, :name do |box| %>
+          <label class="chip chip--toggle"><%= box.check_box(class: "chip__input") %><span><%= box.text %></span></label>
+        <% end %>
+      </div>
+    </fieldset>
+
+    <label class="switch-row">
+      <%= icon "bug", size: 16 %><span>This is a bug</span>
+      <%= form.check_box :bug, class: "switch" %>
+    </label>
+
+    <% if @topic.client %><p class="requested-by">Requested by <span class="tag tag--client"><%= @topic.client.name %></span></p><% end %>
+  </aside>
+<% end %>

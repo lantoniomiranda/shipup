@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       get :similar, on: :collection
       resource :vote, only: :create, controller: "topic_votes"
       resources :messages, only: :create, controller: "topic_messages"
+      resources :tasks, only: %i[new create], controller: "topic_tasks"
+      resources :chains, only: %i[new create], controller: "topic_chains"
+      resources :meetings, only: %i[new create], controller: "topic_meetings"
     end
   end
 
