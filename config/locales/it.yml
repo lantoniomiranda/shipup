@@ -519,6 +519,7 @@ it:
     no_branch: Nessun ramo
     move_backlog: Sposta nel backlog
     move_sprint: Sposta nel prossimo sprint
+    move_to_sprint: "Sposta in %{name}"
     days:
       one: "%{count} giorno"
       other: "%{count} giorni"

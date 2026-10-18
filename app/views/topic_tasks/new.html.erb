@@ -64,7 +64,7 @@
 
     <div class="field">
       <%= form.label :sprint_id, t("tasks.sprint"), class: "eyebrow" %>
-      <%= form.collection_select :sprint_id, @project.sprints.order(number: :desc), :id, :name, { include_blank: t("tasks.backlog_option") }, class: "select" %>
+      <%= form.collection_select :sprint_id, @project.sprints.where(state: %w[planned active]).order(number: :desc), :id, :name, { include_blank: t("tasks.backlog_option") }, class: "select" %>
     </div>
 
     <fieldset class="field">

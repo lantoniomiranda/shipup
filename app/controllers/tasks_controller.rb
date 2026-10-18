@@ -19,12 +19,20 @@ class TasksController < ApplicationController
     redirect_to project_board_path(@project), notice: t("tasks.moved_status", key: @task.key, status: Board.status_label(status)), status: :see_other
   end
 
-  # Backlog: put the task into the next sprint, or send it back to the backlog.
+  # Backlog: put the task (and the rest of its chain) into a planned sprint, or back into the backlog.
   def schedule
-    sprint = params[:to] == "sprint" ? Backlog.new(project: @project).sprint : nil
-    return redirect_to project_backlog_path(@project), alert: t("tasks.plan_first"), status: :see_other if params[:to] == "sprint" && sprint.nil?
+    sprint = nil
+    if params[:to] == "sprint"
+      planned = @project.sprints.upcoming
+      sprint = params[:sprint_id].present? ? planned.find_by(id: params[:sprint_id]) : planned.first
+      return redirect_to project_backlog_path(@project), alert: t("tasks.plan_first"), status: :see_other if sprint.nil?
+    end
 
-    @task.update!(sprint: sprint)
+    movable = @task.chain ? @task.chain.tasks.where.not(status: "done").to_a : [ @task ]
+    Task.transaction do
+      @task.chain&.update!(sprint: sprint)
+      movable.each { |task| task.update!(sprint: sprint) }
+    end
     notice = sprint ? t("tasks.moved_sprint", key: @task.key, sprint: sprint.name) : t("tasks.moved_backlog", key: @task.key)
     redirect_to project_backlog_path(@project), notice: notice, status: :see_other
   end
