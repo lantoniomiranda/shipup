@@ -34,9 +34,8 @@
   font-weight: 600;
 }
 
-/* Chord hints stay out of the way until the tab is hovered. */
-.tab .key { display: none; }
-.tab:hover .key { display: inline-flex; }
+/* Every tab but the current one shows its shortcut key cap. */
+.tab .key { flex: none; }
 
 .tab:hover { color: var(--ink); }
 .tab--active { color: var(--ink); border-bottom-color: var(--accent); }
@@ -44,7 +43,7 @@
 .tab--soon:hover { color: var(--ink-soft); }
 
 .project-header__members { display: flex; align-items: center; gap: 6px; }
-.project-header__members .avatar { width: 32px; height: 32px; font-size: 12px; box-shadow: inset 0 0 0 2px var(--paper); }
+.project-header__members .avatar { width: 32px; height: 32px; box-shadow: inset 0 0 0 2px var(--paper); }
 .project-header__more { color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 
 @media (max-width: 900px) { .tab span { display: none; } .project-header__members { display: none; } }

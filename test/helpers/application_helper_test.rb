@@ -1,6 +1,7 @@
 require "test_helper"
 
 class ApplicationHelperTest < ActionView::TestCase
+  include IconHelper
   NOW = Time.utc(2026, 10, 17, 12)
 
   test "time_ago_label uses compact wording" do
@@ -23,9 +24,10 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal root_path(status: "completed"), projects_path_for("completed")
   end
 
-  test "avatar renders initials with the user's colour" do
+  test "avatar renders the chosen icon on the user's colour, with initials as the label" do
     html = avatar(users(:ines), size: :sm)
-    assert_includes html, ">IM<"
+    assert_includes html, "<svg"
+    assert_includes html, "(IM)"
     assert_includes html, "avatar--mustard"
     assert_includes html, "avatar--sm"
   end
