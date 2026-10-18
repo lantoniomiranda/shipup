@@ -1,28 +1,46 @@
 <%# Sidebar actions for a topic: turn it into work, or talk it through live. %>
+<% can_change = topic.author == Current.user || project.managed_by?(Current.user) %>
 <section class="side__section" data-controller="menu">
-  <h3 class="eyebrow">What next</h3>
+  <h3 class="eyebrow"><%= t("topics.what_next") %></h3>
 
-  <div class="move-on">
-    <button type="button" class="btn btn--primary btn--block" data-action="menu#toggle" aria-haspopup="true" aria-expanded="false" data-menu-target="button">
-      <%= icon "corner-down-right" %><span>Move on</span><span class="btn__divider"></span><%= icon "chevron-down", size: 14 %>
-    </button>
+  <% if topic.canceled? %>
+    <p class="capacity__note"><%= t("topics.canceled_note") %></p>
+  <% else %>
+    <div class="move-on">
+      <button type="button" class="btn btn--primary btn--block" data-action="menu#toggle" aria-haspopup="true" aria-expanded="false" data-menu-target="button">
+        <%= icon "corner-down-right" %><span><%= t("topics.move_on") %></span><span class="btn__divider"></span><%= icon "chevron-down", size: 14 %>
+      </button>
 
-    <div class="menu" data-menu-target="panel" hidden>
-      <p class="eyebrow">Move this topic on as</p>
-      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { hotkey: "t" } do %>
-        <span class="menu__glyph"><%= icon "square-check" %></span>
-        <span class="menu__text"><strong>Create task</strong><span>A single piece of work.</span></span>
-        <%= render "shared/key", label: "T" %>
-      <% end %>
-      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { hotkey: "c" } do %>
-        <span class="menu__glyph"><%= icon "link" %></span>
-        <span class="menu__text"><strong>Create chain</strong><span>Steps that ship in order.</span></span>
-        <%= render "shared/key", label: "C" %>
-      <% end %>
+      <div class="menu" data-menu-target="panel" hidden>
+        <p class="eyebrow"><%= t("topics.move_as") %></p>
+        <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { hotkey: "t" } do %>
+          <span class="menu__glyph"><%= icon "square-check" %></span>
+          <span class="menu__text"><strong><%= t("topics.create_task") %></strong><span><%= t("topics.create_task_hint") %></span></span>
+          <%= render "shared/key", label: "T" %>
+        <% end %>
+        <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { hotkey: "c" } do %>
+          <span class="menu__glyph"><%= icon "link" %></span>
+          <span class="menu__text"><strong><%= t("topics.create_chain") %></strong><span><%= t("topics.create_chain_hint") %></span></span>
+          <%= render "shared/key", label: "C" %>
+        <% end %>
+      </div>
     </div>
-  </div>
 
-  <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { hotkey: "m" } do %>
-    <%= icon "video" %><span>Meet about it</span><%= render "shared/key", label: "M" %>
+    <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { hotkey: "m" } do %>
+      <%= icon "video" %><span><%= t("topics.meet") %></span><%= render "shared/key", label: "M" %>
+    <% end %>
+  <% end %>
+
+  <% if can_change %>
+    <% if topic.canceled? %>
+      <%= button_to reopen_project_topic_path(project, topic), method: :patch, class: "btn btn--block", form: { class: "inline-form block-form" } do %>
+        <%= icon "rotate-ccw" %><span><%= t("topics.reopen") %></span>
+      <% end %>
+    <% else %>
+      <%= form_with url: cancel_project_topic_path(project, topic), method: :patch, class: "cancel-form", data: { turbo_confirm: t("topics.confirm_cancel") } do %>
+        <%= text_field_tag :reason, nil, class: "input", placeholder: t("topics.reason"), "aria-label": t("topics.reason_label") %>
+        <button type="submit" class="btn btn--block btn--danger"><%= icon "ban" %><span><%= t("topics.cancel") %></span></button>
+      <% end %>
+    <% end %>
   <% end %>
 </section>

@@ -60,7 +60,7 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "example.com"), protocol: "https" }
 
-  # Outgoing mail (workspace invitations). Set SMTP_ADDRESS and friends to enable delivery.
+  # Outgoing mail (project invitations). Set SMTP_ADDRESS and friends to enable delivery.
   if ENV["SMTP_ADDRESS"].present?
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.smtp_settings = {

@@ -1,5 +1,4 @@
 apollo:
-  workspace: orbit
   name: Apollo Gateway
   key: APO
   color: orange

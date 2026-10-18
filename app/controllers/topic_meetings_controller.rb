@@ -7,7 +7,7 @@ class TopicMeetingsController < ApplicationController
   end
 
   def create
-    meeting = @topic.meetings.build(organizer: Current.user, provider: Current.workspace.meeting_provider.to_s,
+    meeting = @topic.meetings.build(organizer: Current.user, provider: Setting.meeting_provider.to_s,
                                     starts_at: Time.iso8601(params[:starts_at].to_s), duration_minutes: params[:duration_minutes].to_i,
                                     transcribe: params[:transcribe] == "1")
     Meeting.transaction do
@@ -15,12 +15,12 @@ class TopicMeetingsController < ApplicationController
       attendee_ids.each { |id, requirement| meeting.participants.create!(user_id: id, requirement: requirement) }
       meeting.provision!
     end
-    redirect_to project_topic_path(@project, @topic), notice: "Meeting link posted in the topic chat."
+    redirect_to project_topic_path(@project, @topic), notice: t("meetings.posted")
   rescue Integrations::NotConnected
-    redirect_to new_project_topic_meeting_path(@project, @topic), alert: "Your workspace admin needs to connect a meeting tool first."
+    redirect_to new_project_topic_meeting_path(@project, @topic), alert: t("meetings.need_tool")
   rescue Integrations::Error, ActiveRecord::RecordInvalid, ArgumentError => error
     Rails.logger.warn("Meeting creation failed: #{error.message}")
-    redirect_to new_project_topic_meeting_path(@project, @topic), alert: "We couldn't create that meeting. Check the time and try again."
+    redirect_to new_project_topic_meeting_path(@project, @topic), alert: t("meetings.failed")
   end
 
   private
@@ -29,7 +29,7 @@ class TopicMeetingsController < ApplicationController
   def invitable_people
     in_topic = ([ @topic.author ] + @topic.messages.includes(:author).map(&:author)).uniq
     others = @project.members.where.not(id: in_topic.map(&:id)).order(:name)
-    in_topic.map { |user| [ user, user == @topic.author ? "Opened the topic" : "Replied" ] } + others.map { |user| [ user, "Not in this topic" ] }
+    in_topic.map { |user| [ user, user == @topic.author ? t("meetings.opened") : t("meetings.replied") ] } + others.map { |user| [ user, t("meetings.not_in_topic") ] }
   end
 
   # { user_id => "required" | "optional" } for every ticked invitee that belongs to the project.

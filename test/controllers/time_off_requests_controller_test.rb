@@ -69,7 +69,7 @@ class TimeOffRequestsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".calendar__day[data-date]", 31
     assert_select ".calendar__away", /Away/
-    assert_select "select[name=approver_id] option", /Inês M\. · admin/
+    assert_select "select[name=approver_id] option", /Inês M\. · superadmin/
     assert_select "input[name='time_off_request[kind]']", 3
   end
 
@@ -98,7 +98,7 @@ class TimeOffRequestsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/3 family days/, flash[:alert])
   end
 
-  test "an approver other than the user can be chosen only from admins and managers" do
+  test "an approver other than the user can be chosen only from superadmins and project admins" do
     post time_off_requests_path, params: { time_off_request: { kind: "vacation", starts_on: "2026-11-02", ends_on: "2026-11-02" }, approver_id: users(:jonas).id }
     assert_nil users(:jonas).time_off_requests.last.approver
   end
@@ -122,9 +122,9 @@ class TimeOffBalanceTest < ActiveSupport::TestCase
     assert_equal 30, TimeOffRequest.balance_for(users(:ines), "vacation", year: 2026).allowance
   end
 
-  test "only admins and managers can approve other people's requests" do
-    assert users(:ines).can_approve_time_off_for?(users(:jonas), workspaces(:orbit))
-    assert_not users(:jonas).can_approve_time_off_for?(users(:ines), workspaces(:orbit))
-    assert_not users(:ines).can_approve_time_off_for?(users(:ines), workspaces(:orbit))
+  test "only superadmins and project admins can approve other people's requests" do
+    assert users(:ines).can_approve_time_off_for?(users(:jonas))
+    assert_not users(:jonas).can_approve_time_off_for?(users(:ines))
+    assert_not users(:ines).can_approve_time_off_for?(users(:ines))
   end
 end

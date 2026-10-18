@@ -16,7 +16,7 @@ module ChatMessages
     if message.save
       redirect_to chat_path(anchor: "message-#{message.id}"), status: :see_other
     else
-      redirect_to chat_path, alert: "Write something before sending.", status: :see_other
+      redirect_to chat_path, alert: t("messages.write_something"), status: :see_other
     end
   end
 
@@ -27,14 +27,14 @@ module ChatMessages
       redirect_to chat_path(anchor: "message-#{@message.id}"), status: :see_other
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to chat_path(anchor: "message-#{@message.id}"), alert: "A message can't be empty. Remove it instead.", status: :see_other
+    redirect_to chat_path(anchor: "message-#{@message.id}"), alert: t("messages.not_empty"), status: :see_other
   end
 
   def destroy
     return render_error(403) unless @message.removable_by?(Current.user, @project)
 
     @message.remove!
-    redirect_to chat_path(anchor: "message-#{@message.id}"), notice: "Message removed.", status: :see_other
+    redirect_to chat_path(anchor: "message-#{@message.id}"), notice: t("messages.removed_flash"), status: :see_other
   end
 
   private

@@ -1,4 +1,4 @@
-# Workspace-wide quick search across topics, tasks and projects (the "Super Space" palette).
+# Quick search across the topics, tasks and projects the user can see (the "Super Space" palette).
 class Search
   SCOPES = %w[everything topics tasks projects].freeze
   LIMIT = 6
@@ -9,8 +9,8 @@ class Search
 
   attr_reader :query, :scope
 
-  def initialize(workspace:, query:, scope: nil)
-    @workspace = workspace
+  def initialize(user:, query:, scope: nil)
+    @user = user
     @query = query.to_s.strip
     @scope = scope.presence_in(SCOPES) || "everything"
   end
@@ -27,7 +27,7 @@ class Search
 
   def include?(name) = scope == "everything" || scope == name
   def pattern = "%#{ActiveRecord::Base.sanitize_sql_like(query)}%"
-  def project_ids = @project_ids ||= @workspace.projects.ids
+  def project_ids = @project_ids ||= Project.visible_to(@user).ids
 
   def topics
     Topic.where(project_id: project_ids).where("topics.title ILIKE :q OR topics.body ILIKE :q", q: pattern)
@@ -42,6 +42,6 @@ class Search
   end
 
   def projects
-    @workspace.projects.where("name ILIKE :q OR key ILIKE :q", q: pattern).limit(LIMIT)
+    Project.visible_to(@user).where("name ILIKE :q OR key ILIKE :q", q: pattern).limit(LIMIT)
   end
 end

@@ -5,7 +5,7 @@ class Webhooks::GithubControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     ENV["GITHUB_WEBHOOK_SECRET"] = SECRET
-    connection = workspaces(:orbit).integration_connections.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines))
+    connection = IntegrationConnection.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines))
     projects(:apollo).github_repositories.create!(integration_connection: connection, external_id: 555, full_name: "orbitlabs/gateway")
     @body = { repository: { id: 555 }, pull_request: { number: 9, title: "APO-97 limit", html_url: "https://github.com/o/r/pull/9", state: "open", head: { ref: "x" } } }.to_json
   end

@@ -7,26 +7,33 @@
     <% if sprint %>
       <span class="sprint-badge">
         <span class="sprint-badge__name"><%= icon "timer", size: 13 %><%= sprint.name %></span>
-        <span class="sprint-badge__left"><%= pluralize(sprint.days_left, "day") %> left</span>
+        <span class="sprint-badge__left"><%= t("home.days_left", count: sprint.days_left) %></span>
       </span>
     <% end %>
   </div>
 
-  <nav class="tabs" aria-label="Project sections">
+  <nav class="tabs" aria-label="<%= t("nav.projects") %>">
     <% ApplicationHelper::PROJECT_TABS.each do |tab| %>
       <% path = project_tab_path(project, tab[:key]) %>
       <% current = tab[:key] == active %>
       <% body = capture do %>
-        <%= icon tab[:icon] %><span><%= tab[:label] %></span><%= key_hint(tab[:key]) unless current %>
+        <%= icon tab[:icon] %><span><%= t("nav.#{tab[:key]}") %></span><%= key_hint(tab[:key]) unless current %>
       <% end %>
       <% if path %>
         <%= link_to body, path, class: "tab #{"tab--active" if current}", aria: { current: ("page" if current) },
                     data: hotkey_data(tab[:key]) %>
       <% else %>
-        <span class="tab tab--soon" title="Coming soon"><%= body %></span>
+        <span class="tab tab--soon" title="<%= t("nav.coming_soon") %>"><%= body %></span>
       <% end %>
     <% end %>
   </nav>
+
+  <% if project.managed_by?(Current.user) %>
+    <%= button_to project_path(project), method: :patch, params: { project: { status: project.completed? ? "active" : "completed" } },
+                  class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: project.completed? ? nil : t("home.confirm_complete", name: project.name) } } do %>
+      <%= icon project.completed? ? "rotate-ccw" : "check", size: 13 %><span><%= project.completed? ? t("home.reopen") : t("home.complete") %></span>
+    <% end %>
+  <% end %>
 
   <div class="project-header__members">
     <% project.members.first(4).each do |member| %><%= avatar(member, size: :md, class: "avatar--ringed") %><% end %>

@@ -9,16 +9,15 @@ class AccountAndAppearanceTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h2", "Inês Machado"
-    assert_select ".tag--role", /Admin/
+    assert_select ".tag--role", /Superadmin/
     assert_select ".signin-note", /Signed in with Google/
     assert_select ".avatar-option", 10
     assert_select ".settings-list li", 6
   end
 
-  test "managers see the projects they manage next to their role" do
-    ProjectMembership.create!(project: projects(:apollo), user: users(:ines), role: "manager")
+  test "project admins see the projects they manage next to their role" do
     get account_path
-    assert_select ".tag--role", /Admin · apollo gateway/
+    assert_select ".tag--role", /Superadmin · apollo gateway/
   end
 
   test "notification defaults match the design until changed" do

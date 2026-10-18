@@ -68,13 +68,13 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "ignores a client that does not belong to the project" do
-    stranger = workspaces(:orbit).clients.create!(name: "Stranger")
+    stranger = Client.create!(name: "Stranger")
     post project_topics_path(@project), params: { topic: { kind: "feature", title: "Hello", client_id: stranger.id } }
     assert_nil @project.topics.find_by(title: "Hello").client
   end
 
   test "the new-topic form lists the project's clients" do
-    client = workspaces(:orbit).clients.create!(name: "Northwind")
+    client = Client.create!(name: "Northwind")
     @project.project_clients.create!(client: client)
     get new_project_topic_path(@project)
     assert_select ".choice__option", /Client: Northwind/
@@ -93,8 +93,10 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".similar", count: 0
   end
 
-  test "another workspace's project is a 404" do
-    other = Workspace.create!(name: "Other Co").projects.create!(name: "Secret", key: "SEC")
+  test "a project the user was not invited to is a 404" do
+    other = Project.create!(name: "Secret", key: "SEC")
+    sign_out
+    sign_in_as users(:jonas)
     get project_topics_path(other)
     assert_response :not_found
   end

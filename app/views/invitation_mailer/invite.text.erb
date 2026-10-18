@@ -1,7 +1,9 @@
-Join <%= @workspace.name %> on <%= Rails.configuration.x.product_name %>
+<% product = Rails.configuration.x.product_name %>
+<% role = t("roles.#{@invitation.role}") %>
+<%= t("mailer.join", project: @project.name, product: product) %>
 
-<%= @inviter ? "#{@inviter.name} has" : "You have been" %> invited you as <%= @invitation.role %> of <%= @workspace.name %>.
+<%= @inviter ? t("mailer.invited_by", name: @inviter.name, role: role, project: @project.name) : t("mailer.invited", role: role, project: @project.name) %>
 
-There is no password to create: sign in with the Google or Microsoft account that uses <%= @invitation.email %> and you are in.
+<%= t("mailer.no_password", email: @invitation.email) %>
 
 <%= sign_in_url %>

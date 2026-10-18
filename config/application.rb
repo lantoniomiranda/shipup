@@ -21,6 +21,10 @@ module Shipup
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    # Superadmins: emails (comma separated) that may sign in without an invitation, create projects, connect
+    # integrations and see every project. Kept in config, not the database, so removing an email revokes it.
+    config.x.superadmin_emails = ENV.fetch("SUPERADMIN_EMAILS", "").split(",").map { |email| email.strip.downcase }.reject(&:blank?)
+
     config.x.product_name = "ShipUp"
 
     # English is the default. People choose pt-PT, fr-FR, es-ES or it (Italy).

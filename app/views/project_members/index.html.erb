@@ -1,0 +1,74 @@
+<% project_header @project, active: :people %>
+<% content_for :title, "#{t("nav.people")} · #{@project.name}" %>
+<% manager = @project.managed_by?(Current.user) %>
+
+<div class="split split--stack">
+  <header class="page-header">
+    <div class="page-header__heading">
+      <h1><%= t("people.title", project: @project.name) %></h1>
+      <p><%= t("people.intro", count: @memberships.size) %></p>
+    </div>
+  </header>
+
+  <% if manager %>
+    <%= form_with url: project_invitations_path(@project), scope: :invitation, class: "invite-bar" do |form| %>
+      <%= form.email_field :email, class: "input", placeholder: "name@company.com", required: true, "aria-label": t("common.email") %>
+      <%= form.select :role, Invitation.roles.keys.map { |role| [ t("roles.#{role}"), role ] }, { selected: "member" }, class: "select select--small" %>
+      <button type="submit" class="btn btn--primary"><%= icon "user-plus" %><span><%= t("common.invite") %></span></button>
+    <% end %>
+  <% end %>
+
+  <section class="panel panel--table panel--inline">
+    <table class="table">
+      <thead><tr><th><%= t("people.person") %></th><th><%= t("people.role") %></th><th><%= t("people.last_sign_in") %></th><th><%= t("people.joined") %></th><th></th></tr></thead>
+      <tbody>
+        <% @memberships.each do |membership| %>
+          <% user = membership.user %>
+          <tr>
+            <td><div class="client-cell"><%= avatar(user, size: :md) %><div><strong><%= user.name %></strong><small><%= user.email %></small></div></div></td>
+            <td>
+              <% if manager %>
+                <%= form_with model: membership, url: project_member_path(@project, membership), method: :patch, scope: :project_membership, class: "role-form" do |form| %>
+                  <%= form.select :role, ProjectMembership.roles.keys.map { |role| [ t("roles.#{role}"), role ] }, {}, class: "select select--small", onchange: "this.form.requestSubmit()", "aria-label": t("people.role_of", name: user.name) %>
+                <% end %>
+              <% else %>
+                <span class="tag"><%= t("roles.#{membership.role}") %></span>
+              <% end %>
+              <% if user.superadmin? %><span class="tag tag--admin"><%= t("roles.admin") %></span><% end %>
+            </td>
+            <td><%= (seen = @last_seen[user.id]) ? t("people.ago", time: time_ago_in_words(seen)) : t("people.never") %></td>
+            <td><%= short_date_year(membership.created_at) %></td>
+            <td class="table__actions">
+              <% if manager && user != Current.user %>
+                <%= button_to project_member_path(@project, membership), method: :delete, class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: t("people.confirm_remove", name: user.name, project: @project.name) } } do %><%= icon "x", size: 13 %><span><%= t("people.remove") %></span><% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+
+  <% if manager && @invitations.any? %>
+    <h2 class="section-title"><%= t("people.pending") %></h2>
+    <section class="panel panel--table panel--inline">
+      <table class="table">
+        <thead><tr><th><%= t("people.email") %></th><th><%= t("people.role") %></th><th><%= t("people.invited_by") %></th><th><%= t("people.sent") %></th><th></th></tr></thead>
+        <tbody>
+          <% @invitations.each do |invitation| %>
+            <tr>
+              <td><strong><%= invitation.email %></strong></td>
+              <td><span class="tag"><%= t("roles.#{invitation.role}") %></span></td>
+              <td><%= invitation.invited_by&.short_name || t("people.product") %></td>
+              <td><%= short_date(invitation.created_at) %></td>
+              <td class="table__actions">
+                <%= button_to resend_project_invitation_path(@project, invitation), class: "btn btn--small", form: { class: "inline-form" } do %><span><%= t("people.resend") %></span><% end %>
+                <%= button_to project_invitation_path(@project, invitation), method: :delete, class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: t("people.confirm_revoke") } } do %><span><%= t("people.revoke") %></span><% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  <% end %>
+</div>

@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
   allow_unauthenticated_access only: :new
-  skip_before_action :require_workspace_access, only: :destroy
 
   def new
     redirect_to root_path if authenticated?

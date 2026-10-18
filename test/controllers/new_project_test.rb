@@ -1,23 +1,23 @@
 require "test_helper"
 
 class NewProjectTest < ActionDispatch::IntegrationTest
-  test "admins can create a project and become its manager" do
+  test "admins can create a project and become its project admin" do
     sign_in_as users(:ines)
 
-    assert_difference "workspaces(:orbit).projects.count", 1 do
+    assert_difference "Project.count", 1 do
       post projects_path, params: { project: { name: "Atlas Mobile", key: "atl", description: "Field app", color: "teal", icon: "smartphone" } }
     end
 
-    project = workspaces(:orbit).projects.find_by!(key: "ATL")
+    project = Project.find_by!(key: "ATL")
     assert_redirected_to project_topics_path(project)
     assert_equal "teal", project.color
-    assert_equal "manager", project.project_memberships.find_by!(user: users(:ines)).role
+    assert_equal "admin", project.project_memberships.find_by!(user: users(:ines)).role
   end
 
   test "a key is derived from the name when left blank" do
     sign_in_as users(:ines)
     post projects_path, params: { project: { name: "Billing Core", key: "", color: "blue", icon: "receipt" } }
-    assert workspaces(:orbit).projects.exists?(key: "BIL")
+    assert Project.exists?(key: "BIL")
   end
 
   test "invalid projects re-render the form" do

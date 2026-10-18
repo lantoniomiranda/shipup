@@ -9,7 +9,6 @@ global:
   help:        { keys: "?",          label: "Show keyboard shortcuts" }
   projects:    { keys: "g h",        label: "Go to projects" }
   time_off:    { keys: "g o",        label: "Go to time off" }
-  people:      { keys: "g e",        label: "Go to people (workspace admins)" }
   account:     { keys: "g u",        label: "Go to your account" }
   back:        { keys: "escape",     label: "Go back or close" }
   submit:      { keys: "ctrl+enter", label: "Submit the form" }
@@ -20,6 +19,7 @@ project:
   board:       { keys: "g b",        label: "Board" }
   timeline:    { keys: "g m",        label: "Timeline" }
   clients:     { keys: "g c",        label: "Clients" }
+  people:      { keys: "g e",        label: "People" }
   analytics:   { keys: "g a",        label: "Analytics" }
 
 page:

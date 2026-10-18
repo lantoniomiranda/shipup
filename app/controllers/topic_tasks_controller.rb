@@ -33,7 +33,7 @@ class TopicTasksController < ApplicationController
     params.expect(task: [ :title, :description, :assignee_id, :estimate_days, :due_on, :sprint_id, :bug, :client_id, { label_ids: [] } ]).tap do |attrs|
       attrs[:assignee_id] = @project.members.find_by(id: attrs[:assignee_id])&.id
       attrs[:sprint_id] = @project.sprints.find_by(id: attrs[:sprint_id])&.id
-      attrs[:client_id] = @project.clients.find_by(id: attrs[:client_id])&.id
+      attrs[:client_id] = @project.clients.active.find_by(id: attrs[:client_id])&.id
       attrs[:label_ids] = @project.labels.where(id: Array(attrs[:label_ids])).ids
     end
   end

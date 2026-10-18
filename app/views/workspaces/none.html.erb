@@ -1,5 +1,0 @@
-<% content_for :title, "No workspace" %>
-<%= render layout: "shared/split_screen", locals: { eyebrow: "No workspace", title: "You're not in a workspace yet",
-                                                    detail: "Ask your workspace admin to invite #{Current.user.email}. Once they do, sign in again." } do %>
-  <%= button_to sign_out_path, method: :delete, class: "btn btn--lg", form: { class: "inline-form" } do %><span>Sign out</span><% end %>
-<% end %>

@@ -18,7 +18,17 @@ class UserTest < ActiveSupport::TestCase
     assert_not User.new(name: "Dupe", email: "INES@orbitlabs.dev").valid?
   end
 
-  test "reports the role in a workspace" do
-    assert_equal "admin", users(:ines).role_in(workspaces(:orbit))
+  test "admins see every teammate, everyone else only the people on their projects" do
+    outsider = User.create!(name: "Out Sider", email: "out@elsewhere.io")
+    assert_includes users(:ines).teammates, outsider
+    assert_includes users(:jonas).teammates, users(:ines)
+    assert_not_includes users(:jonas).teammates, outsider
+  end
+
+  test "admins and project admins can approve time off" do
+    assert users(:ines).approver?
+    assert_not users(:jonas).approver?
+    projects(:apollo).project_memberships.find_by!(user: users(:jonas)).admin!
+    assert users(:jonas).approver?
   end
 end

@@ -4,8 +4,8 @@ class Project < ApplicationRecord
   ICONS = %w[rocket smartphone workflow receipt palette].freeze
   STATUSES = %w[active completed].freeze
 
-  belongs_to :workspace
   has_many :project_memberships, dependent: :destroy
+  has_many :invitations, dependent: :destroy
   has_many :members, through: :project_memberships, source: :user
   has_many :sprints, dependent: :destroy
   has_many :topics, dependent: :destroy
@@ -21,10 +21,13 @@ class Project < ApplicationRecord
   normalizes :key, with: ->(key) { key.strip.upcase }
 
   validates :name, presence: true
-  validates :key, presence: true, format: { with: /\A[A-Z]{2,5}\z/ }, uniqueness: { scope: :workspace_id }
+  validates :key, presence: true, format: { with: /\A[A-Z]{2,5}\z/ }, uniqueness: true
   validates :icon, inclusion: { in: ICONS }
 
   scope :ordered, -> { order(:position, :name) }
+
+  # Admins see every project, everyone else the ones they were invited to.
+  scope :visible_to, ->(user) { user.superadmin? ? all : where(id: user.project_memberships.select(:project_id)) }
 
   # Share of the 20 XP-bar segments that are lit for a 0-100 progress value.
   XP_SEGMENTS = 20
@@ -38,9 +41,9 @@ class Project < ApplicationRecord
     key
   end
 
-  # Workspace admins and this project's managers may plan and run sprints.
+  # Superadmins and this project's admins may plan sprints, invite people and archive things.
   def managed_by?(user)
-    user.role_in(workspace) == "admin" || project_memberships.manager.exists?(user_id: user.id)
+    user.superadmin? || project_memberships.admin.exists?(user_id: user.id)
   end
 
   # The one sprint being worked on; it is what the board shows.

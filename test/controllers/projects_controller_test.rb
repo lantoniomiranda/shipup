@@ -3,7 +3,7 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   setup { sign_in_as users(:ines) }
 
-  test "home greets the user and lists the workspace's active projects" do
+  test "home greets the user and lists the active projects" do
     get root_path
     assert_response :success
     assert_select "h1", /Inês/
@@ -40,11 +40,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".btn--primary", count: 0
   end
 
-  test "projects from other workspaces never leak" do
-    other = Workspace.create!(name: "Other Co")
-    other.projects.create!(name: "Secret", key: "SEC")
+  test "projects the user was not invited to never show up" do
+    Project.create!(name: "Secret", key: "SEC")
+    sign_out
+    sign_in_as users(:jonas)
     get root_path
     assert_select ".project-card h2", text: "Secret", count: 0
+    assert_select ".project-card h2", text: "Apollo Gateway"
   end
 
   test "the top bar shows the running timer for the signed-in user" do

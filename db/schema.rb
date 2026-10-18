@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_110001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -39,12 +39,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
   end
 
   create_table "clients", force: :cascade do |t|
-    t.bigint "workspace_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["workspace_id", "name"], name: "index_clients_on_workspace_id_and_name", unique: true
-    t.index ["workspace_id"], name: "index_clients_on_workspace_id"
+    t.datetime "archived_at"
+    t.index ["name"], name: "index_clients_on_name", unique: true
   end
 
   create_table "github_repositories", force: :cascade do |t|
@@ -72,7 +71,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
   end
 
   create_table "integration_connections", force: :cascade do |t|
-    t.bigint "workspace_id", null: false
     t.bigint "connected_by_id", null: false
     t.string "provider", null: false
     t.string "external_account", null: false
@@ -83,12 +81,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["connected_by_id"], name: "index_integration_connections_on_connected_by_id"
-    t.index ["workspace_id", "provider"], name: "index_integration_connections_on_workspace_id_and_provider", unique: true
-    t.index ["workspace_id"], name: "index_integration_connections_on_workspace_id"
+    t.index ["provider"], name: "index_integration_connections_on_provider", unique: true
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.bigint "workspace_id", null: false
+    t.bigint "project_id", null: false
     t.bigint "invited_by_id"
     t.citext "email", null: false
     t.string "role", default: "member", null: false
@@ -99,9 +96,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_invitations_on_email"
     t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["project_id", "email"], name: "index_invitations_one_pending_per_email", unique: true, where: "((accepted_at IS NULL) AND (revoked_at IS NULL))"
+    t.index ["project_id"], name: "index_invitations_on_project_id"
     t.index ["token"], name: "index_invitations_on_token", unique: true
-    t.index ["workspace_id", "email"], name: "index_invitations_one_pending_per_email", unique: true, where: "((accepted_at IS NULL) AND (revoked_at IS NULL))"
-    t.index ["workspace_id"], name: "index_invitations_on_workspace_id"
   end
 
   create_table "labels", force: :cascade do |t|
@@ -153,17 +150,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.index ["topic_id"], name: "index_meetings_on_topic_id"
   end
 
-  create_table "memberships", force: :cascade do |t|
-    t.bigint "workspace_id", null: false
-    t.bigint "user_id", null: false
-    t.string "role", default: "member", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_memberships_on_user_id"
-    t.index ["workspace_id", "user_id"], name: "index_memberships_on_workspace_id_and_user_id", unique: true
-    t.index ["workspace_id"], name: "index_memberships_on_workspace_id"
-  end
-
   create_table "notification_subscriptions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "kind", null: false
@@ -212,7 +198,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.bigint "workspace_id", null: false
     t.string "name", null: false
     t.string "key", null: false
     t.text "description"
@@ -224,9 +209,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.datetime "last_activity_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["workspace_id", "key"], name: "index_projects_on_workspace_id_and_key", unique: true
-    t.index ["workspace_id", "status", "position"], name: "index_projects_on_workspace_id_and_status_and_position"
-    t.index ["workspace_id"], name: "index_projects_on_workspace_id"
+    t.index ["key"], name: "index_projects_on_key", unique: true
+    t.index ["status", "position"], name: "index_projects_on_status_and_position"
   end
 
   create_table "pull_requests", force: :cascade do |t|
@@ -250,6 +234,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "meeting_provider"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -322,6 +312,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "archived_at"
     t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
     t.index ["chain_id", "chain_position"], name: "index_tasks_on_chain_id_and_chain_position", unique: true, where: "(chain_id IS NOT NULL)"
     t.index ["chain_id"], name: "index_tasks_on_chain_id"
@@ -444,49 +435,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
     t.string "avatar_color", default: "orange", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "platform_admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-  end
-
-  create_table "workspaces", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.string "meeting_provider"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "email_domain"
-    t.string "status", default: "active", null: false
-    t.string "plan", default: "trial", null: false
-    t.datetime "trial_ends_at"
-    t.integer "seats_limit"
-    t.datetime "suspended_at"
-    t.string "suspended_reason"
-    t.boolean "allow_domain_join", default: false, null: false
-    t.index ["email_domain"], name: "index_workspaces_on_email_domain", unique: true
-    t.index ["slug"], name: "index_workspaces_on_slug", unique: true
-    t.index ["status"], name: "index_workspaces_on_status"
   end
 
   add_foreign_key "chains", "projects"
   add_foreign_key "chains", "sprints"
   add_foreign_key "chains", "topics"
   add_foreign_key "client_contacts", "clients"
-  add_foreign_key "clients", "workspaces"
   add_foreign_key "github_repositories", "integration_connections"
   add_foreign_key "github_repositories", "projects"
   add_foreign_key "identities", "users"
   add_foreign_key "integration_connections", "users", column: "connected_by_id"
-  add_foreign_key "integration_connections", "workspaces"
+  add_foreign_key "invitations", "projects"
   add_foreign_key "invitations", "users", column: "invited_by_id"
-  add_foreign_key "invitations", "workspaces"
   add_foreign_key "labels", "projects"
   add_foreign_key "meeting_digests", "meetings"
   add_foreign_key "meeting_participants", "meetings"
   add_foreign_key "meeting_participants", "users"
   add_foreign_key "meetings", "topics"
   add_foreign_key "meetings", "users", column: "organizer_id"
-  add_foreign_key "memberships", "users"
-  add_foreign_key "memberships", "workspaces"
   add_foreign_key "notification_subscriptions", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "notifications", "users", column: "actor_id"
@@ -494,7 +461,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_210001) do
   add_foreign_key "project_clients", "projects"
   add_foreign_key "project_memberships", "projects"
   add_foreign_key "project_memberships", "users"
-  add_foreign_key "projects", "workspaces"
   add_foreign_key "pull_requests", "github_repositories"
   add_foreign_key "sessions", "users"
   add_foreign_key "sprints", "projects"

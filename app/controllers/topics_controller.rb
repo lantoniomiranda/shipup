@@ -1,5 +1,6 @@
 class TopicsController < ApplicationController
   include ProjectScoped
+  before_action :set_topic_for_status_change, only: %i[cancel reopen]
 
   FILTERS = { "issues" => { kind: "issue" }, "features" => { kind: "feature" }, "canceled" => { status: "canceled" }, "approved" => { status: "approved" } }.freeze
 
@@ -28,10 +29,29 @@ class TopicsController < ApplicationController
   def create
     @topic = @project.topics.build(topic_params.merge(author: Current.user, last_activity_at: Time.current))
     if @topic.save
-      redirect_to project_topic_path(@project, @topic), notice: "Topic posted."
+      redirect_to project_topic_path(@project, @topic), notice: t("topics.posted")
     else
       render :new, status: :unprocessable_content
     end
+  end
+
+  # Drops a topic nobody will act on. The reason (optional) is posted in its thread.
+  def cancel
+    Topic.transaction do
+      @topic.cancel!
+      reason = params[:reason].to_s.strip
+      body = reason.present? ? t("topics.cancel_with_reason", reason: reason) : t("topics.cancel_without_reason")
+      @topic.messages.create!(author: Current.user, body: body)
+    end
+    redirect_to project_topic_path(@project, @topic), notice: t("topics.canceled"), status: :see_other
+  end
+
+  def reopen
+    Topic.transaction do
+      @topic.reopen!
+      @topic.messages.create!(author: Current.user, body: "Reopened this topic.")
+    end
+    redirect_to project_topic_path(@project, @topic), notice: t("topics.reopened"), status: :see_other
   end
 
   # Titles that read like what the user is typing, for the "Similar topics" side panel.
@@ -43,15 +63,21 @@ class TopicsController < ApplicationController
 
   private
 
+  # The person who opened a topic and the project's admins may cancel or reopen it.
+  def set_topic_for_status_change
+    @topic = @project.topics.find(params[:id])
+    render_error(403) unless @topic.author == Current.user || @project.managed_by?(Current.user)
+  end
+
   def topic_params
     params.expect(topic: %i[kind title body client_id]).tap do |attrs|
-      attrs[:client_id] = @project.clients.find_by(id: attrs[:client_id])&.id
+      attrs[:client_id] = @project.clients.active.find_by(id: attrs[:client_id])&.id
     end
   end
 
   # The opener first, then everyone who replied, in order of first reply.
   def participants_of(topic, messages)
     repliers = messages.map(&:author).uniq - [ topic.author ]
-    [ [ topic.author, "Opened" ] ] + repliers.map { |user| [ user, "Replied" ] }
+    [ [ topic.author, t("topics.roles.opened") ] ] + repliers.map { |user| [ user, t("topics.roles.replied") ] }
   end
 end

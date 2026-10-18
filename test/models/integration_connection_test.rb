@@ -2,7 +2,7 @@ require "test_helper"
 
 class IntegrationConnectionTest < ActiveSupport::TestCase
   setup do
-    @connection = workspaces(:orbit).integration_connections.create!(
+    @connection = IntegrationConnection.create!(
       provider: "github", external_account: "orbitlabs", connected_by: users(:ines),
       access_token: "gho_secret", expires_at: 1.hour.from_now
     )
@@ -19,8 +19,8 @@ class IntegrationConnectionTest < ActiveSupport::TestCase
     assert @connection.expired?(now: 2.hours.from_now)
   end
 
-  test "one connection per provider per workspace" do
-    dupe = workspaces(:orbit).integration_connections.build(provider: "github", external_account: "x", connected_by: users(:ines))
+  test "one connection per provider" do
+    dupe = IntegrationConnection.new(provider: "github", external_account: "x", connected_by: users(:ines))
     assert_not dupe.valid?
   end
 end

@@ -1,14 +1,14 @@
-# Saves which connected tool the whole workspace uses for meeting links.
+# Saves which connected tool everyone uses for meeting links.
 class MeetingToolsController < ApplicationController
-  before_action :require_workspace_admin
+  before_action :require_superadmin
 
   def update
     provider = params[:provider].to_s
 
-    if Current.workspace.connection_for(provider) && Current.workspace.update(meeting_provider: provider)
-      redirect_to root_path, notice: "#{Integrations.provider(provider).label} is now your meeting tool."
+    if IntegrationConnection.for(provider) && Setting.current.update(meeting_provider: provider)
+      redirect_to root_path, notice: t("integrations.now_tool", provider: Integrations.provider(provider).label)
     else
-      redirect_to integrations_path, alert: "Connect a meeting tool first, then continue."
+      redirect_to integrations_path, alert: t("integrations.connect_first")
     end
   end
 end

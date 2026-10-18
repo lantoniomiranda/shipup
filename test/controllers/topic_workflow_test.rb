@@ -6,7 +6,6 @@ class TopicWorkflowTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:apollo)
     @topic = topics(:refresh_tokens)
-    [ users(:ines), users(:jonas) ].each { |user| ProjectMembership.create!(project: @project, user: user) }
     sign_in_as users(:ines)
   end
 
@@ -97,8 +96,8 @@ class TopicWorkflowTest < ActionDispatch::IntegrationTest
   end
 
   test "creating a meeting provisions the call, invites people and posts the link" do
-    workspaces(:orbit).update!(meeting_provider: "zoom")
-    workspaces(:orbit).integration_connections.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines),
+    Setting.current.update!(meeting_provider: "zoom")
+    IntegrationConnection.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines),
                                                        access_token: "tok", expires_at: 1.hour.from_now)
     stub_request(:post, "https://api.zoom.us/v2/users/me/meetings")
       .to_return(status: 201, body: { id: 42, join_url: "https://zoom.us/j/42" }.to_json, headers: JSON_HEADERS)
@@ -120,7 +119,7 @@ class TopicWorkflowTest < ActionDispatch::IntegrationTest
   end
 
   test "creating a meeting without a connected tool explains what to do" do
-    workspaces(:orbit).update!(meeting_provider: "zoom")
+    Setting.current.update!(meeting_provider: "zoom")
     assert_no_difference "Meeting.count" do
       post project_topic_meetings_path(@project, @topic), params: { starts_at: 2.days.from_now.utc.iso8601, duration_minutes: "30" }
     end
@@ -143,7 +142,6 @@ class TopicAiDraftTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:apollo)
     @topic = topics(:refresh_tokens)
-    ProjectMembership.create!(project: @project, user: users(:ines))
     sign_in_as users(:ines)
   end
 

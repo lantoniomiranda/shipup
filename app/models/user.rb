@@ -6,8 +6,6 @@ class User < ApplicationRecord
   has_many :invitations_sent, class_name: "Invitation", foreign_key: :invited_by_id, inverse_of: :invited_by, dependent: :nullify
   has_many :identities, dependent: :destroy
   has_many :sessions, dependent: :destroy
-  has_many :memberships, dependent: :destroy
-  has_many :workspaces, through: :memberships
   has_many :project_memberships, dependent: :destroy
   has_many :projects, through: :project_memberships
   has_many :assigned_tasks, class_name: "Task", foreign_key: :assignee_id, inverse_of: :assignee, dependent: :nullify
@@ -71,18 +69,31 @@ class User < ApplicationRecord
     end
   end
 
-  # Admins and managers can approve other people's time off.
-  def can_approve_time_off_for?(other, workspace)
-    self != other && %w[admin manager].include?(role_in(workspace))
+  # Superadmins and project admins can approve other people's time off.
+  def approver? = superadmin? || project_memberships.admin.exists?
+
+  def can_approve_time_off_for?(other)
+    self != other && approver?
   end
 
-  # Platform staff (ShipUp itself, not a customer). Listed in PLATFORM_ADMIN_EMAILS.
-  def self.platform_admin_email?(email)
-    ENV["PLATFORM_ADMIN_EMAILS"].to_s.split(",").map { |address| address.strip.downcase }.include?(email.to_s.strip.downcase)
+  # Superadmins are the emails in SUPERADMIN_EMAILS (config.x.superadmin_emails): nothing is stored, so
+  # taking an email out of the list revokes the access on the next request.
+  def self.superadmin_email?(email)
+    Rails.configuration.x.superadmin_emails.include?(email.to_s.strip.downcase)
   end
 
-  def role_in(workspace)
-    memberships.find_by(workspace: workspace)&.role
+  def superadmin? = self.class.superadmin_email?(email)
+
+  # Everyone this person works with: superadmins see the whole company, others the people on their projects.
+  def teammates
+    return User.all if superadmin?
+
+    User.where(id: ProjectMembership.where(project_id: project_memberships.select(:project_id)).select(:user_id)).or(User.where(id: id))
+  end
+
+  # Up to `limit` distinct teammate time zones, this user's own first, for the top-bar clocks.
+  def clock_zones(limit: 4)
+    ([ time_zone ] + teammates.distinct.pluck(:time_zone).sort).uniq.first(limit)
   end
 
   def running_time_entry

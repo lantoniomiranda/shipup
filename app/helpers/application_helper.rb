@@ -78,6 +78,7 @@ module ApplicationHelper
     { key: :board, label: "Board", icon: "kanban" },
     { key: :timeline, label: "Timeline", icon: "calendar-range" },
     { key: :clients, label: "Clients", icon: "building-2" },
+    { key: :people, label: "People", icon: "users" },
     { key: :analytics, label: "Analytics", icon: "chart-column" }
   ].freeze
 
@@ -107,6 +108,7 @@ module ApplicationHelper
     when :timeline then project_timeline_path(project)
     when :analytics then project_analytics_path(project)
     when :clients then project_clients_path(project)
+    when :people then project_members_path(project)
     end
   end
 

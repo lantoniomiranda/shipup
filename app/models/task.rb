@@ -18,6 +18,11 @@ class Task < ApplicationRecord
 
   enum :status, STATUSES.index_with(&:itself), default: "todo", validate: true
 
+  # Archived tasks are soft-deleted: invisible everywhere (boards, lists, counts, search) unless
+  # asked for with `Task.archived`.
+  default_scope { where(archived_at: nil) }
+  scope :archived, -> { unscope(where: :archived_at).where.not(archived_at: nil) }
+
   validates :title, presence: true
   validates :number, uniqueness: { scope: :project_id }
   validates :estimate_minutes, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
@@ -25,7 +30,7 @@ class Task < ApplicationRecord
 
   # Chain steps stay off the board until every earlier step is done.
   scope :unlocked, -> {
-    where("tasks.chain_id IS NULL OR NOT EXISTS (SELECT 1 FROM tasks earlier WHERE earlier.chain_id = tasks.chain_id AND earlier.chain_position < tasks.chain_position AND earlier.status <> 'done')")
+    where("tasks.chain_id IS NULL OR NOT EXISTS (SELECT 1 FROM tasks earlier WHERE earlier.chain_id = tasks.chain_id AND earlier.chain_position < tasks.chain_position AND earlier.archived_at IS NULL AND earlier.status <> 'done')")
   }
 
   # Adds a `logged_minutes_cache` column so lists can show logged time without an N+1.
@@ -74,6 +79,12 @@ class Task < ApplicationRecord
   def chain_size
     chain&.tasks&.size
   end
+
+  def archived? = archived_at.present?
+
+  def archive! = update!(archived_at: Time.current)
+
+  def restore! = update!(archived_at: nil)
 
   # Moves the card to another board column.
   def move_to!(new_status)

@@ -3,11 +3,11 @@ require "test_helper"
 class ProjectClientsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:apollo)
-    @northwind = workspaces(:orbit).clients.create!(name: "Northwind")
+    @northwind = Client.create!(name: "Northwind")
     @northwind.contacts.create!(name: "Priya Nair", email: "priya@northwind.io")
     @northwind.contacts.create!(name: "Tom", email: "tom@northwind.io")
     @project.project_clients.create!(client: @northwind, status: "active")
-    @hooli = workspaces(:orbit).clients.create!(name: "Hooli")
+    @hooli = Client.create!(name: "Hooli")
     @hooli.contacts.create!(name: "Dana Whitfield", email: "dana@hooli.dev")
     @project.project_clients.create!(client: @hooli)
     sign_in_as users(:ines)

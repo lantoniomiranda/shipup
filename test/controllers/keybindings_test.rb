@@ -18,7 +18,7 @@ class KeybindingsTest < ActionDispatch::IntegrationTest
 
   test "project navigation chords are all distinct" do
     chords = Keybindings.groups[:project].values.map { |entry| entry[:keys] }
-    assert_equal 6, chords.uniq.size
+    assert_equal 7, chords.uniq.size
     assert(chords.all? { |chord| chord.start_with?("g ") })
   end
 
@@ -42,7 +42,7 @@ class KeybindingsTest < ActionDispatch::IntegrationTest
     get project_board_path(projects(:apollo))
 
     assert_select ".tab--active .key", count: 0
-    assert_select ".tab:not(.tab--active) .key", 5
+    assert_select ".tab:not(.tab--active) .key", 6
     assert_select "a.tab[data-hotkey='g t'] .key", "G T"
     assert_select "a.tab[data-hotkey='g l']"
     assert_select "a.tab--active[data-hotkey='g b']"

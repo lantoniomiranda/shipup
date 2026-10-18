@@ -69,8 +69,8 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     assert_select ".sign-in__alert", /invite-only/
   end
 
-  test "an invited person signs in for the first time and lands in their workspace" do
-    workspaces(:orbit).invitations.create!(email: "newbie@orbitlabs.dev", role: "manager")
+  test "an invited person signs in for the first time and lands on their project" do
+    projects(:apollo).invitations.create!(email: "newbie@orbitlabs.dev", role: "admin")
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:google_oauth2] = omniauth_hash("google_oauth2", uid: "newbie", email: "newbie@orbitlabs.dev", name: "New Bie")
 
@@ -79,6 +79,8 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_response :success
-    assert_equal "manager", User.find_by!(email: "newbie@orbitlabs.dev").role_in(workspaces(:orbit))
+    newbie = User.find_by!(email: "newbie@orbitlabs.dev")
+    assert_equal "admin", projects(:apollo).project_memberships.find_by!(user: newbie).role
+    assert_select "a", /Apollo Gateway/
   end
 end

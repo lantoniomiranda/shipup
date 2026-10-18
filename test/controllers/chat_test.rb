@@ -89,7 +89,7 @@ class ChatTest < ActionDispatch::IntegrationTest
     assert_select "#message-#{message.id} .message__actions", count: 0
   end
 
-  test "a workspace admin can moderate other people's messages" do
+  test "an admin can moderate other people's messages" do
     message = @task.messages.create!(author: users(:jonas), body: "Off topic")
     sign_out
     sign_in_as users(:ines)
@@ -117,7 +117,7 @@ class ChatTest < ActionDispatch::IntegrationTest
   end
 
   test "messages of another project's task cannot be touched" do
-    other_project = workspaces(:orbit).projects.create!(name: "Other", key: "OTH")
+    other_project = Project.create!(name: "Other", key: "OTH")
     message = @task.messages.create!(author: users(:jonas), body: "Mine")
     delete project_task_message_path(other_project, @task, message)
     assert_response :not_found

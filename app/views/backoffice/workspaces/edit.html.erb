@@ -1,3 +1,0 @@
-<% content_for :title, "Edit #{@workspace.name}" %>
-<header class="page-header"><div class="page-header__heading"><h1>Edit <%= @workspace.name %></h1></div></header>
-<%= render "form", workspace: @workspace, url: backoffice_tenant_path(@workspace), method: :patch, admin_email: nil %>

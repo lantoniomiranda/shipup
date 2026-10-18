@@ -1,26 +1,35 @@
-<% breadcrumbs [ "Workspace", root_path ], [ "Time off", time_off_requests_path ], "Request" %>
+<% breadcrumbs [ t("nav.projects"), root_path ], [ t("time_off.crumb"), time_off_requests_path ], t("time_off.request") %>
 <% content_for :content_class, "shell__content--bare" %>
 <% first_day = @month.beginning_of_month %>
 <% leading = (first_day.wday - 1) % 7 %>
 <% balances = TimeOffRequest::KINDS.index_with { |kind| TimeOffRequest.balance_for(Current.user, kind) } %>
 
-<%= form_with model: @request, url: time_off_requests_path, class: "split", data: { controller: "range-calendar ", range_calendar_balances_value: balances.transform_values(&:left).to_json } do |form| %>
+<%= form_with model: @request, url: time_off_requests_path, class: "split", data: {
+      controller: "range-calendar",
+      range_calendar_balances_value: balances.transform_values(&:left).to_json,
+      range_calendar_kinds_value: TimeOffRequest::KINDS.index_with { |kind| t("enums.time_off_kind_inline.#{kind}") }.to_json,
+      range_calendar_plural_value: t("locale.plural_style"),
+      range_calendar_days_one_value: t("time_off.calendar.working_days.one"),
+      range_calendar_days_other_value: t("time_off.calendar.working_days.other"),
+      range_calendar_left_one_value: t("time_off.calendar.remaining.one"),
+      range_calendar_left_other_value: t("time_off.calendar.remaining.other")
+    } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to time_off_requests_path, class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span>Back to time off</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to time_off_requests_path, class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span><%= t("time_off.back") %></span><%= render "shared/key", label: "Esc" %><% end %>
     </header>
 
     <div class="form">
-      <header class="form__heading"><h1>Request time off</h1><p>Your approver gets an email and you hear back when they decide.</p></header>
+      <header class="form__heading"><h1><%= t("time_off.request_title") %></h1><p><%= t("time_off.intro") %></p></header>
 
       <div class="calendar__head">
-        <%= link_to icon("chevron-left"), new_time_off_request_path(month: (@month - 1.month).strftime("%Y-%m")), class: "pager__button pager__button--box", aria: { label: "Previous month" } %>
-        <%= link_to icon("chevron-right"), new_time_off_request_path(month: (@month + 1.month).strftime("%Y-%m")), class: "pager__button pager__button--box", aria: { label: "Next month" } %>
-        <h2><%= @month.strftime("%B %Y") %></h2>
+        <%= link_to icon("chevron-left"), new_time_off_request_path(month: (@month - 1.month).strftime("%Y-%m")), class: "pager__button pager__button--box", aria: { label: t("time_off.previous_month") } %>
+        <%= link_to icon("chevron-right"), new_time_off_request_path(month: (@month + 1.month).strftime("%Y-%m")), class: "pager__button pager__button--box", aria: { label: t("time_off.next_month") } %>
+        <h2><%= month_heading(@month) %></h2>
       </div>
 
       <div class="calendar" role="grid">
-        <% %w[Mon Tue Wed Thu Fri Sat Sun].each do |name| %><span class="calendar__dow"><%= name %></span><% end %>
+        <% weekday_headers.each do |name| %><span class="calendar__dow"><%= name %></span><% end %>
         <% leading.times do %><span class="calendar__day calendar__day--blank"></span><% end %>
         <% (first_day..first_day.end_of_month).each do |day| %>
           <% away = @away[day] %>
@@ -28,7 +37,7 @@
                   data-range-calendar-target="day" data-action="range-calendar#pick" <%= "disabled" if day < Date.current %>>
             <span class="calendar__num"><%= day.day %></span>
             <% away.first(2).each do |user, status| %>
-              <span class="calendar__away"><%= avatar(user, size: :sm) %><%= status == "pending" ? "Waiting" : "Away" %></span>
+              <span class="calendar__away"><%= avatar(user, size: :sm) %><%= status == "pending" ? t("common.waiting") : t("common.away") %></span>
             <% end %>
           </button>
         <% end %>
@@ -38,29 +47,29 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to time_off_requests_path, class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-range-calendar-target="submit" disabled data-hotkey="ctrl+enter"><%= icon "send" %><span>Send request</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to time_off_requests_path, class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-range-calendar-target="submit" disabled data-hotkey="ctrl+enter"><%= icon "send" %><span><%= t("time_off.send") %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
     </footer>
   </section>
 
   <aside class="side side--wide side--padded">
     <fieldset class="field">
-      <legend class="eyebrow">Type</legend>
+      <legend class="eyebrow"><%= t("common.type") %></legend>
       <div class="choice">
         <% TimeOffRequest::KINDS.each do |kind| %>
-          <label class="choice__option"><%= form.radio_button :kind, kind, class: "choice__input", data: { action: "range-calendar#update", range_calendar_target: "kind" } %><span><%= kind.capitalize %></span></label>
+          <label class="choice__option"><%= form.radio_button :kind, kind, class: "choice__input", data: { action: "range-calendar#update", range_calendar_target: "kind" } %><span><%= t("enums.time_off_kind_short.#{kind}") %></span></label>
         <% end %>
       </div>
     </fieldset>
 
     <div class="summary">
-      <div class="summary__top"><strong data-range-calendar-target="range">Pick your first day</strong><span data-range-calendar-target="days"></span></div>
-      <p data-range-calendar-target="left">Click a start date, then an end date.</p>
+      <div class="summary__top"><strong data-range-calendar-target="range"><%= t("time_off.pick") %></strong><span data-range-calendar-target="days"></span></div>
+      <p data-range-calendar-target="left"><%= t("time_off.pick_help") %></p>
     </div>
 
     <div class="field">
-      <%= label_tag :approver_id, "Approver", class: "eyebrow" %>
-      <%= select_tag :approver_id, options_for_select(@approvers.map { |user| [ "#{user.short_name} · #{user.role_in(Current.workspace)}", user.id ] }), class: "select", prompt: "Choose an approver" %>
+      <%= label_tag :approver_id, t("time_off.approver"), class: "eyebrow" %>
+      <%= select_tag :approver_id, options_for_select(@approvers.map { |user| [ "#{user.short_name} · #{user.superadmin? ? t("time_off.approver_superadmin") : t("time_off.approver_admin")}", user.id ] }), class: "select", prompt: t("time_off.choose_approver") %>
     </div>
   </aside>
 <% end %>

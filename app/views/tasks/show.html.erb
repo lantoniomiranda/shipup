@@ -11,48 +11,56 @@
   <section class="panel panel--task">
     <header class="panel__bar panel__bar--split">
       <%= link_to project_board_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Board</span><%= render "shared/key", label: "Esc" %>
+        <%= icon "arrow-left" %><span><%= t("tasks.back") %></span><%= render "shared/key", label: "Esc" %>
       <% end %>
       <% if position %>
         <div class="pager">
-          <span><%= position + 1 %> of <%= @siblings.size %> in this sprint</span>
-          <% if previous_number %><%= link_to icon("chevron-left"), project_task_path(@project, previous_number), class: "pager__button", aria: { label: "Previous task" } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-left" %></span><% end %>
-          <% if next_number %><%= link_to icon("chevron-right"), project_task_path(@project, next_number), class: "pager__button", aria: { label: "Next task" } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-right" %></span><% end %>
+          <span><%= t("tasks.position", current: position + 1, total: @siblings.size) %></span>
+          <% if previous_number %><%= link_to icon("chevron-left"), project_task_path(@project, previous_number), class: "pager__button", aria: { label: t("tasks.previous") } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-left" %></span><% end %>
+          <% if next_number %><%= link_to icon("chevron-right"), project_task_path(@project, next_number), class: "pager__button", aria: { label: t("tasks.next") } %><% else %><span class="pager__button" aria-hidden="true"><%= icon "chevron-right" %></span><% end %>
         </div>
       <% end %>
     </header>
 
+    <% if @project.managed_by?(Current.user) %>
+      <div class="task__manage">
+        <%= button_to archive_project_task_path(@project, @task), method: :patch, class: "btn btn--small btn--danger", form: { class: "inline-form", data: { turbo_confirm: t("tasks.confirm_archive", key: @task.key) } } do %>
+          <%= icon "ban", size: 13 %><span><%= t("tasks.archive") %></span>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="task__head">
       <div class="task__tags">
         <span class="task__key"><%= @task.key %></span>
-        <span class="tag tag--task-status tag--status-<%= @task.status %>"><%= Board::LABELS.fetch(@task.status) %></span>
-        <% if @task.chain %><span class="tag tag--chain"><%= icon "link-2", size: 13 %>Chain · <%= pluralize(@task.chain_size, "step") %></span><% end %>
+        <span class="tag tag--task-status tag--status-<%= @task.status %>"><%= Board.status_label(@task.status) %></span>
+        <% if @task.chain %><span class="tag tag--chain"><%= icon "link-2", size: 13 %><%= t("tasks.chain_steps", count: @task.chain_size) %></span><% end %>
       </div>
       <div class="task__title-row">
         <h1><%= @task.title %></h1>
-        <% if @task.bug? %><span class="bug-flag"><%= icon "bug", size: 16 %>Bug</span><% end %>
+        <% if @task.bug? %><span class="bug-flag"><%= icon "bug", size: 16 %><%= t("common.bug") %></span><% end %>
       </div>
       <% if @task.topic %>
         <%= link_to project_topic_path(@project, @task.topic), class: "from-topic" do %>
-          <%= icon "message-square", size: 15 %><span>From topic · <%= @task.topic.title %> · <%= pluralize(@task.topic.messages_count, "reply") %></span>
-          <strong>Open topic <%= icon "arrow-up-right", size: 13 %></strong>
+          <%= icon "message-square", size: 15 %><span><%= t("tasks.from_topic", title: @task.topic.title, replies: t("topics.replies", count: @task.topic.messages_count)) %></span>
+          <strong><%= t("tasks.open_topic") %> <%= icon "arrow-up-right", size: 13 %></strong>
         <% end %>
       <% end %>
     </div>
 
     <dl class="facts">
-      <div><dt class="eyebrow">Assignee</dt><dd><% if @task.assignee %><%= avatar(@task.assignee, size: :sm) %><%= @task.assignee.short_name %><% else %>Unassigned<% end %></dd></div>
-      <div><dt class="eyebrow">Created by</dt><dd><%= @task.creator.short_name %></dd></div>
-      <div><dt class="eyebrow">Requested by</dt><dd><%= @task.client&.name || "Internal" %></dd></div>
-      <div><dt class="eyebrow">Sprint</dt><dd><%= @task.sprint&.name || "Backlog" %></dd></div>
-      <div><dt class="eyebrow">Estimate</dt><dd><%= @task.estimate_days ? pluralize(@task.estimate_days.round(1).to_s.delete_suffix(".0"), "day") : "—" %></dd></div>
-      <div><dt class="eyebrow">Due</dt><dd class="<%= "late" if @task.overdue? %>"><%= @task.due_on ? @task.due_on.strftime("%b %-d") : "—" %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.assignee") %></dt><dd><% if @task.assignee %><%= avatar(@task.assignee, size: :sm) %><%= @task.assignee.short_name %><% else %><%= t("common.unassigned") %><% end %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.created_by") %></dt><dd><%= @task.creator.short_name %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.requested_by") %></dt><dd><%= @task.client&.name || t("common.internal") %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.sprint") %></dt><dd><%= @task.sprint&.name || t("nav.backlog") %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.estimate") %></dt><dd><% if @task.estimate_days %><% days = @task.estimate_days.round(1) %><%= t("tasks.days", count: days == days.to_i ? days.to_i : days) %><% else %>—<% end %></dd></div>
+      <div><dt class="eyebrow"><%= t("tasks.due") %></dt><dd class="<%= "late" if @task.overdue? %>"><%= @task.due_on ? short_date(@task.due_on) : "—" %></dd></div>
     </dl>
 
     <div class="task__body">
       <section>
-        <h3 class="eyebrow">Description</h3>
-        <div class="task__description"><%= simple_format(h(@task.description.presence || "No description yet.")) %></div>
+        <h3 class="eyebrow"><%= t("common.description") %></h3>
+        <div class="task__description"><%= simple_format(h(@task.description.presence || t("tasks.no_description"))) %></div>
       </section>
 
       <%= render "tasks/chain", task: @task, project: @project if @task.chain && @task.chain_size > 1 %>
@@ -61,42 +69,42 @@
 
   <aside class="side side--wide side--tracker">
     <section class="tracker">
-      <header><span class="eyebrow">Time tracker</span><% if running_here %><span class="tracker__live"><i></i>Running</span><% end %></header>
+      <header><span class="eyebrow"><%= t("tasks.tracker") %></span><% if running_here %><span class="tracker__live"><i></i><%= t("tasks.running") %></span><% end %></header>
       <p class="tracker__clock" <%= tag.attributes(data: (running_here ? { controller: "stopwatch", stopwatch_started_value: @running_entry.started_at.iso8601 } : {})) %>>
         <%= Time.at(running_here ? @running_entry.seconds : 0).utc.strftime("%H:%M:%S") %>
       </p>
-      <p class="tracker__who"><%= Current.user.short_name %><% if running_here %> · since <%= @running_entry.started_at.in_time_zone(Current.user.time_zone).strftime("%H:%M") %> <%= Current.user.city %><% end %></p>
+      <p class="tracker__who"><%= Current.user.short_name %><% if running_here %> · <%= t("tasks.since", time: @running_entry.started_at.in_time_zone(Current.user.time_zone).strftime("%H:%M"), city: Current.user.city) %><% end %></p>
 
       <% if running_here %>
-        <%= button_to project_task_timer_path(@project, @task), method: :delete, class: "btn btn--block", data: { hotkey: "t" } do %><%= icon "square", size: 14 %><span>Stop</span><%= render "shared/key", label: "T" %><% end %>
+        <%= button_to project_task_timer_path(@project, @task), method: :delete, class: "btn btn--block", data: { hotkey: "t" } do %><%= icon "square", size: 14 %><span><%= t("tasks.stop") %></span><%= render "shared/key", label: "T" %><% end %>
       <% else %>
-        <%= button_to project_task_timer_path(@project, @task), class: "btn btn--primary btn--block", data: { hotkey: "t" } do %><%= icon "play", size: 14 %><span>Start timer</span><%= render "shared/key", label: "T" %><% end %>
+        <%= button_to project_task_timer_path(@project, @task), class: "btn btn--primary btn--block", data: { hotkey: "t" } do %><%= icon "play", size: 14 %><span><%= t("tasks.start") %></span><%= render "shared/key", label: "T" %><% end %>
       <% end %>
 
       <div class="xp">
-        <div class="xp__labels"><span><%= logged / 60 %>H <%= logged % 60 %>M LOGGED</span><% if estimate.positive? %><span>OF <%= estimate / 60 %>H · <%= (logged * 100.0 / estimate).round %>%</span><% end %></div>
+        <div class="xp__labels"><span><%= t("tasks.logged", hours: logged / 60, minutes: logged % 60) %></span><% if estimate.positive? %><span><%= t("tasks.of_estimate", hours: estimate / 60, percent: (logged * 100.0 / estimate).round) %></span><% end %></div>
         <div class="xp__bar xp__bar--wide"><% 20.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < (percent * 20 / 100.0).ceil %>"></span><% end %></div>
       </div>
     </section>
 
     <section class="side__section">
-      <h3 class="eyebrow">Recent entries</h3>
+      <h3 class="eyebrow"><%= t("tasks.recent") %></h3>
       <ul class="entries">
         <% @entries.group_by { |entry| entry.started_at.to_date }.each do |day, entries| %>
           <% minutes = entries.sum { |entry| entry.seconds / 60 } %>
-          <li><%= avatar(entries.first.user, size: :sm) %><span><%= day == Date.current ? "Today" : day.strftime("%a %-d") %></span><strong><%= minutes / 60 %>h <%= format("%02d", minutes % 60) %>m</strong></li>
+          <li><%= avatar(entries.first.user, size: :sm) %><span><%= day == Date.current ? t("common.today") : weekday_date(day) %></span><strong><%= minutes / 60 %>h <%= format("%02d", minutes % 60) %>m</strong></li>
         <% end %>
-        <% if @entries.empty? %><li class="entries__empty">No time logged yet.</li><% end %>
+        <% if @entries.empty? %><li class="entries__empty"><%= t("tasks.none_logged") %></li><% end %>
       </ul>
     </section>
 
     <section class="side__section chat">
-      <header><h3>Chat</h3><span class="chat__count"><%= pluralize(@messages.reject(&:deleted?).size, "message") %></span></header>
+      <header><h3><%= t("tasks.chat") %></h3><span class="chat__count"><%= t("tasks.messages", count: @messages.reject(&:deleted?).size) %></span></header>
       <div class="chat__messages">
         <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @task, project: @project } %>
-        <% if @messages.empty? %><p class="entries__empty">Nobody has said anything about this task yet.</p><% end %>
+        <% if @messages.empty? %><p class="entries__empty"><%= t("tasks.nobody") %></p><% end %>
       </div>
-      <%= render "messages/composer", project: @project, thread: @task, placeholder: "Reply in this task…" %>
+      <%= render "messages/composer", project: @project, thread: @task, placeholder: t("tasks.reply_placeholder") %>
     </section>
   </aside>
 </div>

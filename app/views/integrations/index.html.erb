@@ -1,11 +1,11 @@
-<% content_for :title, "Meeting tool" %>
+<% content_for :title, t("integrations.title") %>
 <%
   tools = [
-    { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: "Links, cloud recording and transcripts by topic." },
-    { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: "Links through Microsoft 365 calendars.", coming_soon: true },
-    { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: "Links through Google Calendar." }
+    { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: t("integrations.zoom") },
+    { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: t("integrations.teams"), coming_soon: true },
+    { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: t("integrations.meet") }
   ]
-  selected = @workspace.meeting_provider
+  selected = @selected_tool
 %>
 
 <main class="setup">
@@ -13,23 +13,23 @@
     <%= render "shared/logo", size: :small %>
 
     <header class="setup__intro">
-      <h1>Set up your workspace</h1>
-      <span class="tag tag--admin">Admin only</span>
+      <h1><%= t("integrations.setup") %></h1>
+      <span class="tag tag--admin"><%= t("integrations.admin_only") %></span>
     </header>
 
     <ol class="steps">
-      <%= render "integrations/step", state: :done, label: "Workspace", caption: @workspace.name %>
-      <%= render "integrations/step", state: :current, number: 2, label: "Meeting tool", caption: "Pick once for everyone" %>
-      <%= render "integrations/step", state: :todo, number: 3, label: "Calendar", caption: "Working hours and availability" %>
-      <%= render "integrations/step", state: :todo, number: 4, label: "People", caption: "Invite admins and managers", last: true %>
+      <%= render "integrations/step", state: :done, label: t("integrations.company"), caption: Rails.configuration.x.product_name %>
+      <%= render "integrations/step", state: :current, number: 2, label: t("integrations.meeting_tool"), caption: t("integrations.meeting_caption") %>
+      <%= render "integrations/step", state: :todo, number: 3, label: t("integrations.calendar"), caption: t("integrations.calendar_caption") %>
+      <%= render "integrations/step", state: :todo, number: 4, label: t("integrations.people"), caption: t("integrations.people_caption"), last: true %>
     </ol>
   </aside>
 
   <section class="setup__panel">
     <header class="setup__header">
-      <p class="eyebrow">Step 2 of 4</p>
-      <h2>Choose your meeting tool</h2>
-      <p class="setup__subtitle">Everyone uses it for meeting links. You can change it later in Integrations.</p>
+      <p class="eyebrow"><%= t("integrations.step", current: 2, total: 4) %></p>
+      <h2><%= t("integrations.choose") %></h2>
+      <p class="setup__subtitle"><%= t("integrations.subtitle") %></p>
     </header>
 
     <% flash.each do |type, message| %>
@@ -41,22 +41,22 @@
         <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], selected: selected == tool[:key] %>
       <% end %>
 
-      <h3 class="eyebrow setup__section">Code</h3>
-      <%= render "integrations/tool", tool: { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: "Link repositories so pull requests show up on tasks." },
+      <h3 class="eyebrow setup__section"><%= t("integrations.code") %></h3>
+      <%= render "integrations/tool", tool: { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: t("integrations.github") },
                                       connection: @connections["github"], selected: false, selectable: false %>
       <% if @connections["github"] %>
-        <p class="setup__hint"><%= link_to "Choose repositories for your projects", github_repositories_path, class: "link" %></p>
+        <p class="setup__hint"><%= link_to t("integrations.choose_repos"), github_repositories_path, class: "link" %></p>
       <% end %>
     </div>
 
     <footer class="setup__footer">
       <%= link_to root_path, class: "btn", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back</span><%= render "shared/key", label: "Esc" %>
+        <%= icon "arrow-left" %><span><%= t("common.back") %></span><%= render "shared/key", label: "Esc" %>
       <% end %>
 
       <%= form_with url: meeting_tool_path, method: :patch, id: "meeting-tool-form" do %>
         <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-          <%= icon "arrow-right" %><span>Continue</span><%= render "shared/key", label: "Ctrl Enter" %>
+          <%= icon "arrow-right" %><span><%= t("common.continue") %></span><%= render "shared/key", label: "Ctrl Enter" %>
         </button>
       <% end %>
     </footer>

@@ -6,8 +6,6 @@ class BacklogTest < ActionDispatch::IntegrationTest
     @next_sprint = @project.sprints.create!(number: 15, starts_on: Date.current + 3, ends_on: Date.current + 16)
     @planned = @project.tasks.create!(title: "Fix expiry", creator: users(:ines), assignee: users(:jonas), sprint: @next_sprint, estimate_days: 3, topic: topics(:refresh_tokens))
     @loose = @project.tasks.create!(title: "Audit export", creator: users(:ines))
-    ProjectMembership.create!(project: @project, user: users(:ines))
-    ProjectMembership.create!(project: @project, user: users(:jonas))
     sign_in_as users(:ines)
   end
 

@@ -1,6 +1,5 @@
 # Sign-in from an OmniAuth auth hash. ShipUp is invite-only: an unknown email can only get in with
-# a pending invitation, through a workspace that allows joining by company email domain, or as
-# platform staff (PLATFORM_ADMIN_EMAILS).
+# a pending project invitation, or when it is a superadmin email (SUPERADMIN_EMAILS: how the first person gets in).
 module User::Omniauth
   extend ActiveSupport::Concern
 
@@ -15,7 +14,6 @@ module User::Omniauth
       transaction do
         user = Identity.find_by(provider: provider, uid: auth.uid)&.user || find_by(email: email) || sign_up!(auth, email)
         user.identities.find_or_create_by!(provider: provider, uid: auth.uid) { |identity| identity.email = email }
-        user.update!(platform_admin: true) if platform_admin_email?(email) && !user.platform_admin?
         Invitation.accept_all_for(user)
         user
       end
@@ -24,14 +22,9 @@ module User::Omniauth
     private
 
     def sign_up!(auth, email)
-      invited = Invitation.pending.exists?(email: email)
-      domain_workspace = Workspace.joinable_for(email) unless invited
-      domain_workspace = nil if domain_workspace && !domain_workspace.seat_available?
-      raise NotInvited, "#{email} has no invitation" unless invited || domain_workspace || platform_admin_email?(email)
+      raise NotInvited, "#{email} has no invitation" unless Invitation.pending.exists?(email: email) || superadmin_email?(email)
 
-      create!(name: auth.info.name.presence || email.split("@").first.titleize, email: email).tap do |user|
-        domain_workspace&.memberships&.create!(user: user, role: "member")
-      end
+      create!(name: auth.info.name.presence || email.split("@").first.titleize, email: email)
     end
   end
 end

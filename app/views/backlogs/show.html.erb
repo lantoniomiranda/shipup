@@ -7,64 +7,78 @@
   <section class="panel panel--table">
     <header class="panel__header">
       <div class="panel__title-row">
-        <h1>Sprint and backlog</h1>
+        <h1><%= t("backlog.title") %></h1>
         <div class="segmented segmented--dark">
-          <%= link_to "All #{counts["all"]}", project_backlog_path(@project), class: "segmented__item #{"segmented__item--active" if @backlog.filter.nil?}" %>
+          <%= link_to "#{t("common.all")} #{counts["all"]}", project_backlog_path(@project), class: "segmented__item #{"segmented__item--active" if @backlog.filter.nil?}" %>
           <% Backlog::FILTERS.each do |filter| %>
-            <%= link_to "#{filter.capitalize} #{counts[filter]}", project_backlog_path(@project, filter: filter), class: "segmented__item #{"segmented__item--active" if @backlog.filter == filter}" %>
+            <%= link_to "#{t("enums.backlog_filter.#{filter}")} #{counts[filter]}", project_backlog_path(@project, filter: filter), class: "segmented__item #{"segmented__item--active" if @backlog.filter == filter}" %>
           <% end %>
         </div>
       </div>
     </header>
 
     <table class="table table--backlog">
-      <thead><tr><th></th><th>ID</th><th>Topic and title</th><th>Kind</th><th>Estimate</th><th>Owner</th><th>Code</th><th></th></tr></thead>
+      <thead><tr><th></th><th><%= t("backlog.id") %></th><th><%= t("backlog.topic_title") %></th><th><%= t("backlog.kind") %></th><th><%= t("tasks.estimate") %></th><th><%= t("backlog.owner") %></th><th><%= t("backlog.code") %></th><th></th></tr></thead>
       <tbody>
         <% if sprint %>
           <tr class="table__group"><td colspan="8"><div class="table__group-inner">
-            <strong><%= sprint.name %></strong><span><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %> · <%= days_until.positive? ? "starts in #{pluralize(days_until, "day")}" : "planned" %></span>
+            <strong><%= sprint.name %></strong><span><%= short_date(sprint.starts_on) %> – <%= short_date(sprint.ends_on) %> · <%= days_until.positive? ? t("backlog.starts_in", count: days_until) : t("backlog.planned") %></span>
             <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.planned_days %> / <%= @backlog.capacity_days %> XP</span>
             <% if @project.managed_by?(Current.user) %>
-              <%= button_to start_project_sprint_path(@project, sprint), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "play", size: 13 %><span>Start sprint</span><% end %>
+              <%= button_to start_project_sprint_path(@project, sprint), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "play", size: 13 %><span><%= t("backlog.start") %></span><% end %>
             <% end %>
           </div></td></tr>
           <%= render partial: "backlogs/row", collection: @backlog.planned_tasks, as: :task, locals: { project: @project, in_sprint: true } %>
         <% end %>
         <tr class="table__group"><td colspan="8"><div class="table__group-inner">
-          <strong>Backlog</strong><span><%= pluralize(@backlog.backlog_tasks.size, "task") %> · <%= @backlog.backlog_days %> days estimated</span>
+          <strong><%= t("backlog.group") %></strong><span><%= t("backlog.tasks_estimated", count: @backlog.backlog_tasks.size, days: @backlog.backlog_days) %></span>
           <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.backlog_days %>d</span>
         </div></td></tr>
         <%= render partial: "backlogs/row", collection: @backlog.backlog_tasks, as: :task, locals: { project: @project, in_sprint: false } %>
       </tbody>
     </table>
+
+    <% if @archived_tasks.any? %>
+      <details class="archived">
+        <summary><%= icon "ban", size: 14 %><span><%= t("backlog.archived", count: @archived_tasks.size) %></span></summary>
+        <ul>
+          <% @archived_tasks.each do |task| %>
+            <li>
+              <span class="task__key"><%= task.key %></span><span><%= task.title %></span>
+              <%= button_to restore_project_task_path(@project, task), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "rotate-ccw", size: 13 %><span><%= t("common.restore") %></span><% end %>
+            </li>
+          <% end %>
+        </ul>
+      </details>
+    <% end %>
   </section>
 
   <aside class="side side--wide side--padded">
-    <h3 class="eyebrow"><%= sprint ? "#{sprint.name} capacity" : "Next sprint" %><% if sprint&.goal.present? %> · <%= sprint.goal %><% end %></h3>
+    <h3 class="eyebrow"><%= sprint ? t("backlog.capacity", name: sprint.name) : t("backlog.next") %><% if sprint&.goal.present? %> · <%= sprint.goal %><% end %></h3>
     <% if sprint %>
-      <p class="capacity"><strong><%= @backlog.planned_days %></strong><span>/ <%= @backlog.capacity_days %> XP planned</span></p>
+      <p class="capacity"><strong><%= @backlog.planned_days %></strong><span><%= t("backlog.planned_xp", count: @backlog.capacity_days) %></span></p>
       <div class="xp__bar xp__bar--wide" style="--hue: var(--accent)">
         <% 30.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < (@backlog.planned_days * 30.0 / [ @backlog.capacity_days, 1 ].max).ceil %>"></span><% end %>
       </div>
-      <p class="capacity__note"><%= @backlog.free_days %> XP free.</p>
+      <p class="capacity__note"><%= t("backlog.free", count: @backlog.free_days) %></p>
 
-      <h3 class="eyebrow">Who has room</h3>
+      <h3 class="eyebrow"><%= t("backlog.room") %></h3>
       <ul class="load">
         <% @backlog.load_by_person.each do |user, load| %>
           <li class="<%= "load--full" if load >= Backlog::DAYS_PER_PERSON * 0.8 %>">
             <%= avatar(user, size: :md) %>
-            <div><div class="load__labels"><strong><%= user.short_name %></strong><span><%= load %> / <%= Backlog::DAYS_PER_PERSON %> days</span></div>
+            <div><div class="load__labels"><strong><%= user.short_name %></strong><span><%= t("backlog.load", load: load, capacity: Backlog::DAYS_PER_PERSON) %></span></div>
               <div class="xp__bar xp__bar--thin"><% Backlog::DAYS_PER_PERSON.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < load %>"></span><% end %></div></div>
           </li>
         <% end %>
       </ul>
     <% else %>
-      <p class="capacity__note">No sprint is planned yet. Create the next one to start moving tasks into it.</p>
+      <p class="capacity__note"><%= t("backlog.empty_sprint") %></p>
     <% end %>
 
     <% if @project.managed_by?(Current.user) %>
       <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { hotkey: "p" } do %>
-        <%= icon "flag" %><span>Plan sprint</span><%= render "shared/key", label: "P" %>
+        <%= icon "flag" %><span><%= t("backlog.plan") %></span><%= render "shared/key", label: "P" %>
       <% end %>
     <% end %>
   </aside>

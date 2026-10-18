@@ -41,6 +41,16 @@ class Topic < ApplicationRecord
     approved! if open?
   end
 
+  # The topic is dropped (not planned, duplicate, out of scope). It stays readable and can be reopened.
+  def cancel!
+    canceled!
+  end
+
+  # Back to the discussion; topics that already produced work go back to approved.
+  def reopen!
+    update!(status: tasks.exists? || chains.exists? ? "approved" : "open")
+  end
+
   def vote_by(user)
     votes.find_by(user: user)
   end

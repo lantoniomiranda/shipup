@@ -1,61 +1,61 @@
 <% project_header @project, active: :topics %>
-<% provider = Current.workspace.meeting_provider %>
+<% provider = Setting.meeting_provider %>
 
 <%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
       <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
 
     <div class="form">
       <header class="form__heading">
-        <h1>Discuss this topic live</h1>
-        <p><%= @topic.title %>. The link is posted in the topic chat.</p>
+        <h1><%= t("meetings.title") %></h1>
+        <p><%= t("meetings.link_note", title: @topic.title) %></p>
       </header>
 
       <% unless provider %>
-        <p class="flash flash--alert">No meeting tool is connected yet. <%= link_to "Set one up", integrations_path, class: "link" %> (workspace admins only).</p>
+        <p class="flash flash--alert"><%= t("meetings.none_html", link: link_to(t("meetings.set_up"), integrations_path, class: "link")) %></p>
       <% end %>
 
       <div class="field-row field-row--wide">
         <div class="field field--grow-x">
-          <%= label_tag :starts_at, "When", class: "eyebrow" %>
+          <%= label_tag :starts_at, t("meetings.when"), class: "eyebrow" %>
           <select name="starts_at" id="starts_at" class="select select--icon" data-meeting-form-target="when" data-action="meeting-form#recenter">
             <% @slots.each do |slot| %>
-              <option value="<%= slot.starts_at.iso8601 %>"><%= slot.label(30) %> (<%= slot.covered %>/<%= slot.total %> in working hours)</option>
+              <option value="<%= slot.starts_at.iso8601 %>"><%= slot.label(30) %> <%= t("meetings.covered", covered: slot.covered, total: slot.total) %></option>
             <% end %>
           </select>
         </div>
         <div class="field">
-          <%= label_tag :duration_minutes, "Length", class: "eyebrow" %>
-          <%= select_tag :duration_minutes, options_for_select([ [ "30 min", 30 ], [ "45 min", 45 ], [ "60 min", 60 ] ]), class: "select" %>
+          <%= label_tag :duration_minutes, t("meetings.length"), class: "eyebrow" %>
+          <%= select_tag :duration_minutes, options_for_select([ 30, 45, 60 ].map { |minutes| [ t("meetings.minutes", count: minutes), minutes ] }), class: "select" %>
         </div>
         <div class="field">
-          <p class="eyebrow">Recording</p>
+          <p class="eyebrow"><%= t("meetings.recording") %></p>
           <label class="check-card">
             <%= hidden_field_tag :transcribe, "0" %>
             <%= check_box_tag :transcribe, "1", true, class: "check" %>
-            <span>Transcribe and add a digest to the topic</span>
+            <span><%= t("meetings.transcribe") %></span>
           </label>
         </div>
       </div>
 
       <div class="field">
-        <p class="eyebrow"><%= "Invite · #{pluralize(@invitees.size, "person")}" %></p>
+        <p class="eyebrow"><%= t("meetings.invite", count: @invitees.size) %></p>
         <ul class="invitees">
           <% @invitees.each do |user, reason| %>
-            <% in_topic = reason != "Not in this topic" %>
+            <% in_topic = reason != t("meetings.not_in_topic") %>
             <li class="invitee <%= "invitee--off" unless in_topic %>">
               <%= hidden_field_tag "attendees[#{user.id}][invite]", "0" %>
-              <%= check_box_tag "attendees[#{user.id}][invite]", "1", in_topic, class: "check", "aria-label": "Invite #{user.name}" %>
+              <%= check_box_tag "attendees[#{user.id}][invite]", "1", in_topic, class: "check", "aria-label": t("meetings.invite_person", name: user.name) %>
               <%= avatar(user, size: :md) %>
               <span class="invitee__name"><strong><%= user.short_name %></strong><small><%= reason %></small></span>
               <span class="invitee__time"><%= icon daypart_icon(user.time_zone), size: 13 %><%= local_time(user.time_zone) %> <%= user.city %></span>
               <span class="choice choice--small">
-                <label class="choice__option"><%= radio_button_tag "attendees[#{user.id}][requirement]", "required", true, class: "choice__input" %><span>Required</span></label>
-                <label class="choice__option choice__option--optional"><%= radio_button_tag "attendees[#{user.id}][requirement]", "optional", false, class: "choice__input" %><span>Optional</span></label>
+                <label class="choice__option"><%= radio_button_tag "attendees[#{user.id}][requirement]", "required", true, class: "choice__input" %><span><%= t("common.required") %></span></label>
+                <label class="choice__option choice__option--optional"><%= radio_button_tag "attendees[#{user.id}][requirement]", "optional", false, class: "choice__input" %><span><%= t("common.optional") %></span></label>
               </span>
             </li>
           <% end %>
@@ -64,18 +64,18 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
       <button type="submit" class="btn btn--primary" <%= "disabled" unless provider %> data-hotkey="ctrl+enter">
-        <%= icon "video" %><span>Create and post link</span><%= render "shared/key", label: "Ctrl Enter" %>
+        <%= icon "video" %><span><%= t("meetings.create") %></span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>
   </section>
 
   <aside class="side side--wide side--padded">
-    <%= render "shared/topic_summary", topic: @topic, heading: "Topic" %>
+    <%= render "shared/topic_summary", topic: @topic, heading: t("meetings.topic") %>
 
     <div class="field">
-      <p class="eyebrow">Working hours · 24h in UTC</p>
+      <p class="eyebrow"><%= t("meetings.hours") %></p>
       <ul class="hours" data-meeting-form-target="hours">
         <% @invitees.first(4).each do |user, _reason| %>
           <li>

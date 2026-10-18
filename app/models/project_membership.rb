@@ -1,6 +1,6 @@
 class ProjectMembership < ApplicationRecord
   include RoleBased
-  role_based %w[manager member]
+  role_based %w[admin member]
 
   belongs_to :project
   belongs_to :user

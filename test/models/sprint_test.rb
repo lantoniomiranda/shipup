@@ -61,7 +61,7 @@ class SprintLifecycleTest < ActiveSupport::TestCase
   end
 
   test "other projects are unaffected" do
-    other = workspaces(:orbit).projects.create!(name: "Other", key: "OTH")
+    other = Project.create!(name: "Other", key: "OTH")
     theirs = other.sprints.create!(number: 1, starts_on: Date.current, ends_on: Date.current + 13)
     theirs.start!
     @next.start!

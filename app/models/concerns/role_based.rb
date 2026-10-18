@@ -1,5 +1,5 @@
 # Membership-style records whose `role` is one of ROLES. Pass the allowed
-# roles, ordered from most to least privileged: `role_based %w[admin manager member]`.
+# roles, ordered from most to least privileged: `role_based %w[admin member]`.
 module RoleBased
   extend ActiveSupport::Concern
 

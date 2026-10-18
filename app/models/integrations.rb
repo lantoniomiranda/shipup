@@ -1,11 +1,11 @@
-# Third-party providers a workspace can connect. Each is an OAuth2 authorization-code app
+# Third-party providers this deploy can connect. Each is an OAuth2 authorization-code app
 # configured from the environment (see .env.example).
 module Integrations
   Provider = Data.define(:key, :label, :authorize_url, :token_url, :scopes, :client_id_env, :client_secret_env, :extra_authorize_params, :client_auth) do
     def client_id = ENV[client_id_env]
     def client_secret = ENV[client_secret_env]
     def configured? = client_id.present? && client_secret.present?
-    def meeting_tool? = Workspace::MEETING_PROVIDERS.include?(key)
+    def meeting_tool? = Setting::MEETING_PROVIDERS.include?(key)
   end
 
   PROVIDERS = {

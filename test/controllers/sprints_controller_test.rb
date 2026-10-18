@@ -3,7 +3,7 @@ require "test_helper"
 class SprintsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:apollo)
-    sign_in_as users(:ines) # workspace admin
+    sign_in_as users(:ines) # superadmin
   end
 
   test "the form proposes the next sprint" do
@@ -86,9 +86,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "a project manager who is not a workspace admin can" do
+  test "a project admin who is not an admin can" do
     sign_out
-    ProjectMembership.create!(project: @project, user: users(:jonas), role: "manager")
+    @project.project_memberships.find_by!(user: users(:jonas)).admin!
     sign_in_as users(:jonas)
     get new_project_sprint_path(@project)
     assert_response :success

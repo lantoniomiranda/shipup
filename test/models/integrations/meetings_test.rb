@@ -4,15 +4,14 @@ class Integrations::MeetingsTest < ActiveSupport::TestCase
   JSON_HEADERS = { "Content-Type" => "application/json" }.freeze
 
   setup do
-    @workspace = workspaces(:orbit)
     @topic = topics(:refresh_tokens)
     @meeting = @topic.meetings.create!(organizer: users(:ines), provider: "zoom", starts_at: Time.utc(2026, 10, 22, 14), duration_minutes: 30)
     @meeting.participants.create!(user: users(:jonas), requirement: "optional")
   end
 
   def connect(provider, **attrs)
-    @workspace.integration_connections.create!(provider: provider, external_account: "ops@orbitlabs.dev", connected_by: users(:ines),
-                                               access_token: "tok", expires_at: 1.hour.from_now, **attrs)
+    IntegrationConnection.create!(provider: provider, external_account: "ops@orbitlabs.dev", connected_by: users(:ines),
+                                  access_token: "tok", expires_at: 1.hour.from_now, **attrs)
   end
 
   test "provisions a Zoom meeting and posts the link in the topic chat" do
@@ -43,7 +42,7 @@ class Integrations::MeetingsTest < ActiveSupport::TestCase
     assert_equal "https://meet.google.com/abc-defg-hij", @meeting.reload.join_url
   end
 
-  test "fails clearly when the workspace has not connected the provider" do
+  test "fails clearly when the provider is not connected the provider" do
     assert_raises(Integrations::NotConnected) { @meeting.provision! }
   end
 

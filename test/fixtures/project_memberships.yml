@@ -1,0 +1,9 @@
+ines_apollo:
+  project: apollo
+  user: ines
+  role: admin
+
+jonas_apollo:
+  project: apollo
+  user: jonas
+  role: member

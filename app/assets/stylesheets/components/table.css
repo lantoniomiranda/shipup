@@ -63,36 +63,7 @@
 .xp__bar--thin { height: 12px; padding: 1px; gap: 2px; --hue: var(--teal); }
 .btn--plan { margin-top: auto; padding: 14px; font-size: 16px; }
 
-/* Backoffice */
-.shell--backoffice .top-bar { background: var(--side); color: var(--side-text); box-shadow: none; }
-.shell--backoffice .brand__word { color: var(--side-text); }
-.tag--staff { background: var(--accent); color: var(--on-accent); }
-.bo-nav { display: flex; gap: 4px; margin-left: 8px; }
-.bo-nav__item { padding: 8px 14px; color: var(--side-muted); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; }
-.bo-nav__item:hover { color: var(--side-text); }
-.bo-nav__item--active { background: var(--side-hover); color: var(--side-text); }
-.shell--backoffice .btn--small { background: transparent; color: var(--side-text); box-shadow: inset 0 0 0 1px var(--side-muted); }
-.bo-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.bo-list li { grid-template-columns: 1fr auto 1fr 70px; }
-.bo-list small { margin-left: 6px; color: var(--ink-soft); font-size: 12px; font-weight: 500; }
-.bo-actions { display: flex; gap: 6px; justify-content: flex-end; }
-.bo-actions .btn--small, .bo-invite .btn--small, .bo-suspend .btn { background: var(--surface); color: var(--ink); box-shadow: var(--outline); }
-.bo-invite { display: flex; gap: 8px; margin-top: 12px; }
-.bo-invite .input { flex: 1; }
-.bo-suspend { display: flex; gap: 10px; margin-top: 16px; }
-.bo-suspend .input { flex: 1; }
 .btn--danger { color: var(--danger); }
-.bo-details dl { margin: 0; }
-.bo-details dl > div { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.bo-details dt { color: var(--ink-soft); }
-.bo-details dd { margin: 0; font-weight: 600; }
-.bo-banner { margin: 0; }
-.bo-form { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
-.bo-form__actions { display: flex; gap: 10px; justify-content: flex-end; }
-.bo-check { align-self: end; flex: 2; }
-.bo-search .input { width: 240px; }
-.tag--plan-trial { background: var(--mustard-soft); } .tag--plan-starter { background: var(--blue-soft); } .tag--plan-team { background: var(--teal-soft); } .tag--plan-enterprise { background: var(--plum-soft); }
-@media (max-width: 1100px) { .bo-columns { grid-template-columns: 1fr; } }
 
 /* People */
 .invite-bar { display: flex; gap: 10px; align-items: center; max-width: 720px; }

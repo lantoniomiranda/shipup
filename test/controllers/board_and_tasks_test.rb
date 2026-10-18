@@ -95,7 +95,7 @@ class BoardAndTasksTest < ActionDispatch::IntegrationTest
   end
 
   test "tasks from other projects are a 404" do
-    other = projects(:apollo).workspace.projects.create!(name: "Other", key: "OTH")
+    other = Project.create!(name: "Other", key: "OTH")
     get project_task_path(other, tasks(:rate_limiting))
     assert_response :not_found
   end

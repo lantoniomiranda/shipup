@@ -1,4 +1,4 @@
-# Thin GitHub REST client bound to a workspace's connection.
+# Thin GitHub REST client bound to the GitHub connection.
 class Integrations::Github::Client
   API = "https://api.github.com".freeze
 

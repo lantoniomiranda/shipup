@@ -2,7 +2,7 @@ require "test_helper"
 
 class Integrations::GithubPullRequestSyncTest < ActiveSupport::TestCase
   setup do
-    connection = workspaces(:orbit).integration_connections.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines))
+    connection = IntegrationConnection.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines))
     @repository = projects(:apollo).github_repositories.create!(integration_connection: connection, external_id: 555, full_name: "orbitlabs/gateway")
   end
 

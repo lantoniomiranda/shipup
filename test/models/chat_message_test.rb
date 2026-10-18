@@ -42,10 +42,9 @@ class ChatMessageTest < ActiveSupport::TestCase
     assert_raises(ActiveRecord::RecordInvalid) { @first.edit!("  ") }
   end
 
-  test "authors and project managers can remove, other members cannot" do
+  test "authors and project admins can remove, other members cannot" do
     assert @first.removable_by?(users(:jonas), @project)
-    assert @first.removable_by?(users(:ines), @project) # workspace admin
-    ProjectMembership.create!(project: @project, user: users(:jonas), role: "member")
+    assert @first.removable_by?(users(:ines), @project) # superadmin
     stranger = User.create!(name: "Stranger", email: "s@x.io")
     assert_not @first.removable_by?(stranger, @project)
   end

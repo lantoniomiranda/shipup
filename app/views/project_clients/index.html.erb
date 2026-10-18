@@ -3,22 +3,27 @@
 <div class="split split--stack">
   <div class="toolbar toolbar--chips">
     <div class="segmented segmented--dark" role="tablist">
-      <%= link_to "All #{@counts.values.sum}", project_clients_path(@project), class: "segmented__item #{"segmented__item--active" if @filter.nil?}" %>
-      <%= link_to "Active #{@counts.fetch("active", 0)}", project_clients_path(@project, filter: "active"), class: "segmented__item #{"segmented__item--active" if @filter == "active"}" %>
-      <%= link_to "Invite pending #{@counts.fetch("invite_pending", 0)}", project_clients_path(@project, filter: "invite_pending"), class: "segmented__item #{"segmented__item--active" if @filter == "invite_pending"}" %>
+      <%= link_to t("clients.all", count: @counts.values.sum), project_clients_path(@project), class: "segmented__item #{"segmented__item--active" if @filter.nil?}" %>
+      <%= link_to t("clients.active", count: @counts.fetch("active", 0)), project_clients_path(@project, filter: "active"), class: "segmented__item #{"segmented__item--active" if @filter == "active"}" %>
+      <%= link_to t("clients.pending", count: @counts.fetch("invite_pending", 0)), project_clients_path(@project, filter: "invite_pending"), class: "segmented__item #{"segmented__item--active" if @filter == "invite_pending"}" %>
+      <%= link_to t("clients.archived", count: @archived_count), project_clients_path(@project, filter: "archived"), class: "segmented__item #{"segmented__item--active" if @filter == "archived"}" %>
     </div>
 
     <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey: "a" } do %>
-      <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "A" %>
+      <%= icon "user-plus" %><span><%= t("clients.add") %></span><%= render "shared/key", label: "A" %>
     <% end %>
   </div>
 
   <section class="panel panel--table">
     <% if @project_clients.empty? %>
-      <p class="empty">No clients here yet. <%= link_to "Add one", new_project_client_path(@project) %> so topics can say who asked for them.</p>
+      <% if @filter == "archived" %>
+        <p class="empty"><%= t("clients.none_archived") %></p>
+      <% else %>
+        <p class="empty"><%= t("clients.empty_html", link: link_to(t("clients.add_one"), new_project_client_path(@project))) %></p>
+      <% end %>
     <% else %>
       <table class="table">
-        <thead><tr><th>Client</th><th>Contacts</th><th>Topics</th><th>Last activity</th><th>Status</th></tr></thead>
+        <thead><tr><th><%= t("clients.client") %></th><th><%= t("clients.contacts") %></th><th><%= t("clients.topics") %></th><th><%= t("clients.last_activity") %></th><th><%= t("clients.status") %></th><th></th></tr></thead>
         <tbody>
           <% @project_clients.each do |project_client| %>
             <% client = project_client.client %>
@@ -27,18 +32,27 @@
               <td>
                 <div class="client-cell">
                   <span class="client-tile client-tile--<%= client_hue(client) %>"><%= client.initials %></span>
-                  <div><strong><%= client.name %></strong><small>Added <%= client.created_at.strftime("%b %-d") %></small></div>
+                  <div><strong><%= client.name %></strong><small><%= t("clients.added", date: short_date(client.created_at)) %></small></div>
                 </div>
               </td>
               <td>
                 <% if contact %>
                   <div class="contact-cell"><div><strong><%= contact.name %></strong><small><%= contact.email %></small></div>
-                  <% if client.contacts.size > 1 %><span class="tag">+<%= client.contacts.size - 1 %> contact<%= "s" if client.contacts.size > 2 %></span><% end %></div>
+                  <% if client.contacts.size > 1 %><span class="tag"><%= t("clients.extra_contacts", count: client.contacts.size - 1) %></span><% end %></div>
                 <% end %>
               </td>
-              <td class="table__strong"><%= pluralize(@topic_counts.fetch(client.id, 0), "topic") %></td>
-              <td><%= (last = @last_activity[client.id]) ? last.strftime("%b %-d") : "No topics yet" %></td>
-              <td><span class="tag tag--client-<%= project_client.status %>"><%= project_client.invite_pending? ? "Invite pending" : "Active" %></span></td>
+              <td class="table__strong"><%= t("clients.topic_count", count: @topic_counts.fetch(client.id, 0)) %></td>
+              <td><%= (last = @last_activity[client.id]) ? short_date(last) : t("clients.no_topics") %></td>
+              <td><span class="tag tag--client-<%= project_client.status %>"><%= t("enums.client_status.#{client.archived? ? "archived" : project_client.status}") %></span></td>
+              <td class="table__actions">
+                <% if @project.managed_by?(Current.user) %>
+                  <% if client.archived? %>
+                    <%= button_to restore_project_client_path(@project, client), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "rotate-ccw", size: 13 %><span><%= t("common.restore") %></span><% end %>
+                  <% else %>
+                    <%= button_to project_client_path(@project, client), method: :delete, class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: t("clients.confirm_archive", name: client.name) } } do %><%= icon "x", size: 13 %><span><%= t("common.archive") %></span><% end %>
+                  <% end %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>

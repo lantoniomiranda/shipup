@@ -9,8 +9,3 @@ jonas:
   name: Jonas Keller
   time_zone: Europe/Berlin
   avatar_color: orange
-
-staff:
-  email: staff@shipup.dev
-  name: Sam Staff
-  platform_admin: true

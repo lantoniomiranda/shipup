@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   match "auth/:provider/callback", to: "omniauth_callbacks#create", via: %i[get post], as: :omniauth_callback
   get "auth/failure", to: "omniauth_callbacks#failure"
 
-  # Workspace integrations (admin only): connect Zoom / Google Meet / GitHub and pick the meeting tool.
+  # Integrations (admins only): connect Zoom / Google Meet / GitHub and pick the meeting tool.
   get "integrations", to: "integrations#index"
   scope "integrations/:provider", constraints: { provider: /zoom|google_meet|github/ } do
     post "connection", to: "integration_connections#create", as: :connect_integration
@@ -17,11 +17,6 @@ Rails.application.routes.draw do
   end
   patch "meeting_tool", to: "meeting_tools#update"
   resources :time_off_requests, path: "time_off", only: %i[index new create update]
-  post "workspaces/:id/switch", to: "workspace_switches#create", as: :switch_workspace
-  resources :memberships, path: "people", only: %i[index update destroy]
-  resources :invitations, only: %i[create destroy] do
-    post :resend, on: :member
-  end
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]
@@ -30,7 +25,7 @@ Rails.application.routes.draw do
   post "webhooks/github", to: "webhooks/github#create"
 
   # Projects are addressed by their key (/projects/APO/topics).
-  resources :projects, only: %i[show new create] do
+  resources :projects, only: %i[show new create update] do
     resource :board, only: :show
     resource :backlog, only: :show
     resources :sprints, only: %i[new create] do
@@ -41,34 +36,30 @@ Rails.application.routes.draw do
     end
     resource :timeline, only: :show
     resource :analytics, only: :show
-    resources :clients, only: %i[index new create], controller: "project_clients"
+    resources :clients, only: %i[index new create destroy], controller: "project_clients" do
+      patch :restore, on: :member
+    end
+    resources :members, only: %i[index update destroy], controller: "project_members"
+    resources :invitations, only: %i[create destroy] do
+      post :resend, on: :member
+    end
     resources :tasks, only: %i[show update] do
       post :advance, on: :member
       patch :schedule, on: :member
+      patch :archive, on: :member
+      patch :restore, on: :member
       resources :messages, only: %i[create update destroy], controller: "task_messages"
       resource :timer, only: %i[create destroy], controller: "task_timers"
     end
     resources :topics, only: %i[index show new create] do
       get :similar, on: :collection
+      patch :cancel, on: :member
+      patch :reopen, on: :member
       resource :vote, only: :create, controller: "topic_votes"
       resources :messages, only: %i[create update destroy], controller: "topic_messages"
       resources :tasks, only: %i[new create], controller: "topic_tasks"
       resources :chains, only: %i[new create], controller: "topic_chains"
       resources :meetings, only: %i[new create], controller: "topic_meetings"
-    end
-  end
-
-  # ShipUp staff only: manage customers (tenants).
-  namespace :backoffice do
-    root "dashboards#show"
-    resources :tenants, controller: "workspaces", only: %i[index show new create edit update] do
-      member do
-        patch :suspend
-        patch :reactivate
-      end
-      resources :invitations, only: %i[create destroy] do
-        post :resend, on: :member
-      end
     end
   end
 

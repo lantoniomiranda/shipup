@@ -5,7 +5,7 @@ class GithubRepositoriesControllerTest < ActionDispatch::IntegrationTest
   REPOS = [ { id: 555, full_name: "orbitlabs/gateway" }, { id: 556, full_name: "orbitlabs/mobile" } ].freeze
 
   setup do
-    @connection = workspaces(:orbit).integration_connections.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines), access_token: "gho_x")
+    @connection = IntegrationConnection.create!(provider: "github", external_account: "orbitlabs", connected_by: users(:ines), access_token: "gho_x")
     stub_request(:get, %r{https://api.github.com/user/repos}).to_return(status: 200, body: REPOS.to_json, headers: JSON_HEADERS)
     ENV["GITHUB_WEBHOOK_SECRET"] = "whsec"
     sign_in_as users(:ines)

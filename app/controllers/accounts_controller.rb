@@ -25,8 +25,8 @@ class AccountsController < ApplicationController
 
   # "Manager · Apollo gateway, mobile atlas"
   def role_summary(user)
-    role = user.role_in(Current.workspace).to_s.capitalize
-    managed = user.project_memberships.manager.includes(:project).map { |membership| membership.project.name.downcase }
+    managed = user.project_memberships.admin.includes(:project).map { |membership| membership.project.name.downcase }
+    role = user.superadmin? ? t("roles.superadmin") : (managed.any? ? t("roles.admin") : t("roles.member"))
     managed.any? ? "#{role} · #{managed.to_sentence(two_words_connector: ", ", last_word_connector: ", ")}" : role
   end
 end

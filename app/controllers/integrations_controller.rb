@@ -1,9 +1,9 @@
-# "Set up your workspace" — choose and connect the meeting tool. Admin only.
+# "Set up ShipUp" — choose and connect the meeting tool. Admin only.
 class IntegrationsController < ApplicationController
-  before_action :require_workspace_admin
+  before_action :require_superadmin
 
   def index
-    @workspace = Current.workspace
-    @connections = @workspace.integration_connections.index_by(&:provider)
+    @selected_tool = Setting.meeting_provider
+    @connections = IntegrationConnection.all.index_by(&:provider)
   end
 end

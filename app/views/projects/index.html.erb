@@ -1,12 +1,14 @@
-<% breadcrumbs "Projects" %>
+<% breadcrumbs t("nav.projects") %>
 <% sprints_in_flight = @projects.count { |project| project.active_sprint } %>
 
 <header class="page-header">
   <div class="page-header__heading">
     <h1><%= Current.user.greeting %></h1>
     <p>
-      <%= pluralize(@status_counts.values.sum, "project") %>, <%= pluralize(sprints_in_flight, "sprint") %> in flight.
-      <%= pluralize(@waiting_count, "topic") %> <%= @waiting_count == 1 ? "is" : "are" %> waiting for your reply.
+      <%= t("home.summary",
+            projects: t("home.projects", count: @status_counts.values.sum),
+            sprints: t("home.sprints", count: sprints_in_flight),
+            waiting: t("home.waiting", count: @waiting_count)) %>
     </p>
   </div>
 
@@ -15,18 +17,22 @@
       <% Project::STATUSES.each do |status| %>
         <%= link_to projects_path_for(status), class: "segmented__item #{"segmented__item--active" if status == @status}", role: "tab",
                     aria: { selected: status == @status } do %>
-          <%= status.capitalize %> <%= @status_counts.fetch(status, 0) %>
+          <%= t("enums.project_status.#{status}") %> <%= @status_counts.fetch(status, 0) %>
         <% end %>
       <% end %>
     </div>
 
-    <% if Current.user.role_in(Current.workspace) == "admin" %>
+    <% if Current.user.superadmin? %>
       <%= link_to new_project_path, class: "btn btn--primary", data: { hotkey: "n" } do %>
-        <%= icon "plus" %><span>New project</span><%= render "shared/key", label: "N" %>
+        <%= icon "plus" %><span><%= t("home.new_project") %></span><%= render "shared/key", label: "N" %>
       <% end %>
     <% end %>
   </div>
 </header>
+
+<% if @projects.empty? && !Current.user.superadmin? && @status_counts.empty? %>
+  <p class="empty"><%= t("home.empty_html", email: Current.user.email) %></p>
+<% end %>
 
 <div class="project-grid">
   <% @projects.each_with_index do |project, index| %>
@@ -34,11 +40,11 @@
                open_topics: @open_topic_counts.fetch(project.id, 0), tasks: @task_counts.fetch(project.id, 0) %>
   <% end %>
 
-  <% if Current.user.role_in(Current.workspace) == "admin" %>
+  <% if Current.user.superadmin? %>
     <%= link_to new_project_path, class: "project-card project-card--new" do %>
       <span class="project-card__plus"><%= icon "plus", size: 20 %></span>
-      <strong>Start a new project</strong>
-      <span>Admins only · invite managers afterwards</span>
+      <strong><%= t("home.start_project") %></strong>
+      <span><%= t("home.start_hint") %></span>
     <% end %>
   <% end %>
 </div>

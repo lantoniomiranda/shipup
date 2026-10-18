@@ -37,7 +37,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/isn't configured/, flash[:alert])
   end
 
-  test "the callback stores an encrypted connection for the workspace" do
+  test "the callback stores an encrypted connection" do
     with_integration_credentials do
       sign_in_as users(:ines)
       post connect_integration_path(provider: "zoom")
@@ -47,12 +47,12 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
         .to_return(status: 200, body: { access_token: "at", refresh_token: "rt", expires_in: 3600 }.to_json, headers: JSON_HEADERS)
       stub_request(:get, "https://api.zoom.us/v2/users/me").to_return(status: 200, body: { email: "ops@orbitlabs.dev" }.to_json, headers: JSON_HEADERS)
 
-      assert_difference -> { workspaces(:orbit).integration_connections.count }, 1 do
+      assert_difference -> { IntegrationConnection.count }, 1 do
         get integration_callback_path(provider: "zoom", code: "abc", state: state)
       end
 
       assert_redirected_to integrations_path
-      connection = workspaces(:orbit).connection_for("zoom")
+      connection = IntegrationConnection.for("zoom")
       assert_equal "ops@orbitlabs.dev", connection.external_account
       assert_equal "at", connection.access_token
       assert_equal users(:ines), connection.connected_by
@@ -78,20 +78,20 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "choosing a connected meeting tool saves it for the workspace" do
-    workspaces(:orbit).integration_connections.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines))
+  test "choosing a connected meeting tool saves it for everyone" do
+    IntegrationConnection.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines))
     sign_in_as users(:ines)
 
     patch meeting_tool_path, params: { provider: "zoom" }
 
     assert_redirected_to root_path
-    assert_equal "zoom", workspaces(:orbit).reload.meeting_provider
+    assert_equal "zoom", Setting.current.meeting_provider
   end
 
   test "choosing a tool that is not connected is refused" do
     sign_in_as users(:ines)
     patch meeting_tool_path, params: { provider: "google_meet" }
     assert_redirected_to integrations_path
-    assert_nil workspaces(:orbit).reload.meeting_provider
+    assert_nil Setting.current.meeting_provider
   end
 end

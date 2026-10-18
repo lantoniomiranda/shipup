@@ -2,14 +2,14 @@ require "test_helper"
 
 class ProjectTest < ActiveSupport::TestCase
   test "upcases the key and validates its shape" do
-    project = Project.new(workspace: workspaces(:orbit), name: "Atlas", key: " atl ")
+    project = Project.new(name: "Atlas", key: " atl ")
     assert project.valid?
     assert_equal "ATL", project.key
-    assert_not Project.new(workspace: workspaces(:orbit), name: "X", key: "A1").valid?
+    assert_not Project.new(name: "X", key: "A1").valid?
   end
 
-  test "keys are unique per workspace" do
-    assert_not Project.new(workspace: workspaces(:orbit), name: "Dup", key: "APO").valid?
+  test "keys are unique" do
+    assert_not Project.new(name: "Dup", key: "APO").valid?
   end
 
   test "hands out sequential task numbers" do

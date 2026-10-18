@@ -1,9 +1,0 @@
-<% content_for :title, "Workspace suspended" %>
-<% others = Current.user.workspaces.active.where.not(id: Current.workspace.id) %>
-<%= render layout: "shared/split_screen", locals: { eyebrow: "Workspace suspended", title: "#{Current.workspace.name} is on hold",
-                                                    detail: Current.workspace.suspended_reason.presence || "Access has been paused. Contact your workspace admin or ShipUp support to get it restored." } do %>
-  <% others.each do |workspace| %>
-    <%= button_to switch_workspace_path(workspace), class: "btn btn--primary btn--lg", form: { class: "inline-form" } do %><%= icon "arrow-right" %><span>Open <%= workspace.name %></span><% end %>
-  <% end %>
-  <%= button_to sign_out_path, method: :delete, class: "btn btn--lg", form: { class: "inline-form" } do %><span>Sign out</span><% end %>
-<% end %>

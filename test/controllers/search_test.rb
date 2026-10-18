@@ -49,9 +49,11 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select ".spotlight__result", count: 0
   end
 
-  test "results never include other workspaces" do
-    other = Workspace.create!(name: "Other Co").projects.create!(name: "Refresh Secret", key: "SEC")
+  test "results never include projects the user was not invited to" do
+    other = Project.create!(name: "Refresh Secret", key: "SEC")
     other.topics.create!(author: users(:jonas), title: "Refresh the secret plans")
+    sign_out
+    sign_in_as users(:jonas)
     get search_path(q: "refresh")
     assert_select ".spotlight__result strong", text: "Refresh Secret", count: 0
     assert_select ".spotlight__result strong", text: "Refresh the secret plans", count: 0

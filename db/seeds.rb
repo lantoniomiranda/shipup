@@ -1,21 +1,17 @@
-# Demo workspace mirroring the ShipUp design. Safe to run repeatedly.
+# Demo data mirroring the ShipUp design (Orbit Labs). Safe to run repeatedly.
 today = Date.current
 
-workspace = Workspace.find_or_create_by!(slug: "orbit-labs") do |w|
-  w.name = "Orbit Labs"
-  w.email_domain = "orbitlabs.dev"
-end
-
+roles = {} # user id => role on every demo project (Inês is also the dev superadmin, see config/environments/development.rb)
 people = [
   [ "Inês Machado", "ines", "Europe/Lisbon", "teal", "admin" ],
-  [ "Jonas Keller", "jonas", "Europe/Berlin", "mustard", "manager" ],
+  [ "Jonas Keller", "jonas", "Europe/Berlin", "mustard", "admin" ],
   [ "Sofia Reyes", "sofia", "America/Chicago", "plum", "member" ],
   [ "Daniel Okafor", "daniel", "Asia/Tokyo", "blue", "member" ],
   [ "Ananya Lal", "ananya", "Europe/Lisbon", "orange", "member" ],
-  [ "Priya Varma", "priya", "Asia/Kolkata", "teal", "manager" ]
+  [ "Priya Varma", "priya", "Asia/Kolkata", "teal", "admin" ]
 ].to_h do |name, handle, zone, color, role|
   user = User.find_or_create_by!(email: "#{handle}@orbitlabs.dev") { |u| u.assign_attributes(name: name, time_zone: zone, avatar_color: color) }
-  Membership.find_or_create_by!(workspace: workspace, user: user) { |m| m.role = role }
+  roles[user.id] = role
   [ handle, user ]
 end
 
@@ -26,11 +22,11 @@ projects = [
   [ "Billing Core", "BIL", "blue", "receipt", "Invoicing, usage metering and regional tax rules.", 5, 9, 25 ],
   [ "Design System", "DSG", "mustard", "palette", "Tokens, components and docs shared across every product.", 3, 4, 57 ]
 ].each_with_index.map do |(name, key, color, icon, description, sprint, days_left, _progress), index|
-  project = Project.find_or_create_by!(workspace: workspace, key: key) do |p|
+  project = Project.find_or_create_by!(key: key) do |p|
     p.assign_attributes(name: name, color: color, icon: icon, description: description, position: index, last_activity_at: (index + 1).hours.ago)
   end
   project.sprints.find_or_create_by!(number: sprint) { |s| s.assign_attributes(starts_on: today + days_left - 14, ends_on: today + days_left - 1, state: "active") }
-  people.each_value { |user| ProjectMembership.find_or_create_by!(project: project, user: user) }
+  people.each_value { |user| ProjectMembership.find_or_create_by!(project: project, user: user) { |membership| membership.role = roles.fetch(user.id) } }
   project
 end
 
@@ -41,8 +37,8 @@ sprint = apollo.active_sprint
   apollo.labels.find_or_create_by!(name: name) { |l| l.color = color }
 end
 
-northwind = workspace.clients.find_or_create_by!(name: "Northwind")
-fabrikam = workspace.clients.find_or_create_by!(name: "Fabrikam")
+northwind = Client.find_or_create_by!(name: "Northwind")
+fabrikam = Client.find_or_create_by!(name: "Fabrikam")
 northwind.contacts.find_or_create_by!(email: "priya@northwind.io") { |c| c.name = "Priya Nair" }
 fabrikam.contacts.find_or_create_by!(email: "tom.weber@fabrikam.com") { |c| c.name = "Tom Weber" }
 [ northwind, fabrikam ].each { |client| ProjectClient.find_or_create_by!(project: apollo, client: client) { |pc| pc.status = "active" } }
@@ -94,7 +90,7 @@ unless apollo.chains.exists?(title: "Fix silent refresh-token expiry")
 end
 
 # One connected GitHub repo with a pull request on the rate-limiting task.
-github = workspace.integration_connections.find_or_create_by!(provider: "github") { |c| c.assign_attributes(external_account: "orbitlabs", connected_by: people.fetch("ines")) }
+github = IntegrationConnection.find_or_create_by!(provider: "github") { |c| c.assign_attributes(external_account: "orbitlabs", connected_by: people.fetch("ines")) }
 repository = apollo.github_repositories.find_or_create_by!(external_id: 1001) { |r| r.assign_attributes(integration_connection: github, full_name: "orbitlabs/gateway") }
 pull_request = repository.pull_requests.find_or_create_by!(number: 471) { |pr| pr.assign_attributes(title: "APO rate limiting", url: "https://github.com/orbitlabs/gateway/pull/471", state: "open") }
 TaskPullRequest.find_or_create_by!(task: rate_limiting_task, pull_request: pull_request) if defined?(rate_limiting_task)
@@ -167,13 +163,4 @@ end
 if rate_limiting.messages.none?
   first = rate_limiting.messages.create!(author: people.fetch("jonas"), body: "Counters are merged. Dashboard is next, then QA.", created_at: 5.hours.ago)
   rate_limiting.messages.create!(author: people.fetch("ines"), body: "Northwind needs this before their Oct 26 launch. QA starts when the dashboard lands.", parent: first, created_at: 4.hours.ago)
-end
-
-# ShipUp staff: sign in locally with /dev/sign_in?email=staff@shipup.dev&to=/backoffice
-User.find_or_create_by!(email: "staff@shipup.dev") { |u| u.assign_attributes(name: "Sam Staff", platform_admin: true, avatar_color: "plum") }
-
-# A couple of extra tenants so the backoffice has something to list.
-unless Workspace.exists?(slug: "globex")
-  Workspace.provision!(name: "Globex Corp", slug: "globex", admin_email: "hank@globex.com", plan: "team", seats_limit: 25)
-  Workspace.provision!(name: "Initech", slug: "initech", admin_email: "bill@initech.io", plan: "trial", trial_days: 5)
 end
