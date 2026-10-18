@@ -656,6 +656,12 @@ fr-FR:
     meetings_count:
       one : "%{count} réunion"
       other : "%{count} réunions"
+    due: "Échéance %{date}"
+    nothing_here: "Rien de planifié sur ces semaines. Utilisez Aujourd'hui ou les flèches pour regarder ailleurs."
+    empty: "Aucune tâche n'est encore dans un sprint. Planifiez-en depuis le backlog et elles apparaîtront ici."
+    more:
+      one: "+ %{count} fonctionnalité non affichée"
+      other: "+ %{count} fonctionnalités non affichées"
     row_subtitle:
       one : "%{key} · %{done} sur %{count} tâche"
       other : "%{key} · %{done} sur %{count} tâches"

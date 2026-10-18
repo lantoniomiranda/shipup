@@ -12,7 +12,8 @@ class TimelinesController < ApplicationController
   private
 
   def parse_date(value)
-    Date.iso8601(value.to_s)
+    date = Date.iso8601(value.to_s)
+    date if (Date.current - 10.years..Date.current + 10.years).cover?(date)
   rescue ArgumentError
     nil
   end

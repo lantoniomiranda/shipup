@@ -656,6 +656,12 @@ en:
     meetings_count:
       one: "%{count} meeting"
       other: "%{count} meetings"
+    due: "Due %{date}"
+    nothing_here: "Nothing is scheduled in these weeks. Use Today or the arrows to look elsewhere."
+    empty: "No tasks are in a sprint yet. Plan some from the backlog and they will show up here."
+    more:
+      one: "+ %{count} more feature not shown"
+      other: "+ %{count} more features not shown"
     row_subtitle:
       one: "%{key} · %{done} of %{count} task"
       other: "%{key} · %{done} of %{count} tasks"

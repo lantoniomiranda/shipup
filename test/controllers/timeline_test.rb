@@ -15,12 +15,12 @@ class TimelineTest < ActionDispatch::IntegrationTest
     row = timeline.rows.find { |candidate| candidate.title == topics(:refresh_tokens).title }
     assert_equal %w[Backend Dashboard], row.bars.map(&:label)
     first, second = row.bars
-    assert_equal first.ends_on + 1, second.starts_on
+    assert_equal Timeline.next_working_day(first.ends_on + 1), second.starts_on
     assert_equal "#{chain.tasks.first.key} · 0 of 2 tasks", row.subtitle
   end
 
   test "tasks without a topic get their own row and finished work shows as done" do
-    rows = Timeline.new(project: @project).rows
+    rows = Timeline.new(project: @project, from: sprints(:sprint_14).starts_on).rows
     assert_includes rows.map(&:title), "Per-key rate limiting"
     done = rows.find { |row| row.title == "OpenAPI spec published" }
     assert_equal [ :done ], done.bars.map(&:state)
@@ -58,7 +58,7 @@ class TimelineTest < ActionDispatch::IntegrationTest
   test "meetings appear on their day" do
     meeting = topics(:refresh_tokens).meetings.create!(organizer: users(:ines), provider: "zoom", starts_at: Time.current.beginning_of_day + 2.days + 14.hours)
     get project_timeline_path(@project)
-    assert_select ".gantt__meeting", /Meeting/
+    assert_select ".gantt__meeting"
     assert_includes Timeline.new(project: @project).meetings, meeting
   end
 

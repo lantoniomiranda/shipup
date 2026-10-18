@@ -656,6 +656,12 @@ it:
     meetings_count:
       one: "%{count} riunione"
       other: "%{count} riunioni"
+    due: "Scadenza %{date}"
+    nothing_here: "Niente di pianificato in queste settimane. Usa Oggi o le frecce per guardare altrove."
+    empty: "Non ci sono ancora attività in uno sprint. Pianificane alcune dal backlog e compariranno qui."
+    more:
+      one: "+ %{count} funzionalità non mostrata"
+      other: "+ %{count} funzionalità non mostrate"
     row_subtitle:
       one: "%{key} · %{done} di %{count} attività"
       other: "%{key} · %{done} di %{count} attività"

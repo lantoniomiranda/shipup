@@ -656,6 +656,12 @@ es-ES:
     meetings_count:
       one: "%{count} reunión"
       other: "%{count} reuniones"
+    due: "Entrega %{date}"
+    nothing_here: "No hay nada programado en estas semanas. Usa Hoy o las flechas para mirar otro periodo."
+    empty: "Aún no hay tareas en un sprint. Planifica algunas desde el backlog y aparecerán aquí."
+    more:
+      one: "+ %{count} funcionalidad no mostrada"
+      other: "+ %{count} funcionalidades no mostradas"
     row_subtitle:
       one: "%{key} · %{done} de %{count} tarea"
       other: "%{key} · %{done} de %{count} tareas"

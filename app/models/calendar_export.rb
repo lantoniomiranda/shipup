@@ -6,7 +6,7 @@ class CalendarExport
   end
 
   def to_ics
-    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ohship//#{@project.key}//EN", "CALSCALE:GREGORIAN" ]
+    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ohship//#{@project.key}//EN", "CALSCALE:GREGORIAN", "X-WR-CALNAME:#{escape("ohship · #{@project.name}")}" ]
     due_tasks.each { |task| lines.concat(task_event(task)) }
     meetings.each { |meeting| lines.concat(meeting_event(meeting)) }
     lines << "END:VCALENDAR"
@@ -37,5 +37,5 @@ class CalendarExport
 
   def stamp(time) = time.utc.strftime("%Y%m%dT%H%M%SZ")
 
-  def escape(text) = text.to_s.gsub(/[\;,]/) { |char| "\\#{char}" }.gsub("\n", "\\n")
+  def escape(text) = text.to_s.gsub(/[\\;,]/) { |char| "\\#{char}" }.gsub("\n", "\\n")
 end
