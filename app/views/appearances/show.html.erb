@@ -36,8 +36,8 @@
     </div>
 
     <footer class="panel__footer">
-      <button type="submit" name="reset" value="1" class="btn" formnovalidate data-hotkey="r"><%= icon "rotate-ccw" %><span>Reset to default</span><%= render "shared/key", label: "R" %></button>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span>Done</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <button type="submit" name="reset" value="1" class="btn" formnovalidate data-hotkey="<%= Keybindings.keys(:reset_appearance) %>"><%= icon "rotate-ccw" %><span>Reset to default</span><%= key_hint(:reset_appearance) %></button>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span>Done</span><%= key_hint(:submit) %></button>
     </footer>
   </section>
 

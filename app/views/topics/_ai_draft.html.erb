@@ -2,6 +2,6 @@
 <% if Llm.enabled? %>
   <div class="ai-draft">
     <% if drafted %><span class="tag tag--draft"><%= icon "sparkles", size: 13 %>Drafted from <%= pluralize(topic.messages_count, "reply") %></span><% end %>
-    <%= link_to url, class: "btn btn--small", data: { hotkey: "r" } do %><%= icon "rotate-ccw", size: 13 %><span><%= drafted ? "Try another draft" : "Draft with AI" %></span><%= render "shared/key", label: "R" %><% end %>
+    <%= link_to url, class: "btn btn--small", data: { **hotkey_data(:try_draft) } do %><%= icon "rotate-ccw", size: 13 %><span><%= drafted ? "Try another draft" : "Draft with AI" %></span><%= key_hint(:try_draft) %><% end %>
   </div>
 <% end %>

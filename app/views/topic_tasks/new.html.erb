@@ -3,8 +3,8 @@
 <%= form_with model: @task, url: project_topic_tasks_path(@project, @topic), class: "split" do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar panel__bar--split">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
+        <%= icon "arrow-left" %><span>Back to topic</span><%= key_hint(:back) %>
       <% end %>
       <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, url: new_project_topic_task_path(@project, @topic, draft: 1) %>
     </header>
@@ -36,9 +36,9 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-        <%= icon "square-check" %><span>Create task</span><%= render "shared/key", label: "Ctrl Enter" %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>">
+        <%= icon "square-check" %><span>Create task</span><%= key_hint(:submit) %>
       </button>
     </footer>
   </section>

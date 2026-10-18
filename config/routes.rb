@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   resources :notifications, only: %i[index show] do
     post :read_all, on: :collection
   end
+  get "settings/keyboard", to: "keyboard_settings#show", as: :keyboard_settings
+  patch "settings/keyboard", to: "keyboard_settings#update"
+  delete "settings/keyboard", to: "keyboard_settings#destroy"
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]

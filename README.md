@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- **Customizable keyboard shortcuts** (Account → Shortcuts, or "Customize" in the `?` dialog): click a shortcut, press the new keys, save. Only combinations that work in every browser are accepted (a letter, digit, `/` or `?`, or a two-key chord; Ctrl/Cmd/Alt combos belong to the browser), conflicts are detected per context (two shortcuts may share a key only if they are never active together), and `Esc`/`Ctrl+Enter` are fixed. Remaps are per person (`user_preferences.keybindings`). Views no longer hard-code keys: they use `hotkey_data(:id)` / `key_hint(:id)`; `config/keybindings.yml` holds the registry with contexts.
 - **Notifications** are real now: the bell links to an inbox (`g n`) with an unread dot. They are created for replies and @mentions in topic/task chat, task assignments, unlocked chain steps, new topics (opt-in) and meeting invites, always honouring each person's notification settings and never notifying you about your own actions (`Notification.notify`). Email delivery of these is not built yet.
 - **Time zones**: a person's zone now follows their browser (a `browser_time_zone` cookie set by `timezone_controller.js`) until they pick one under Account → Time zone; the top-bar clocks start with their own city and every page renders dates in their zone (`Time.use_zone` around each request, storage stays UTC).
 - Public **landing page** at `/` for visitors (hero with a live-component preview, how it works, features, sign-in call to action); signed-in people still get the dashboard at the same address (`VisitorConstraint` in `config/routes.rb`, `LandingController`).
@@ -60,7 +61,7 @@ bin/rails test                            # unit + integration tests
 bin/rails test test/models/x_test.rb:12   # a single test
 bin/rubocop                               # lint
 bin/ci                                    # everything CI runs
-node script/check_keys.mjs                # browser smoke test of keyboard shortcuts (needs the server running)
+node script/check_keys.mjs                # browser smoke test of keyboard shortcuts incl. remapping (server running; CHROMIUM_BIN, BASE optional)
 ```
 
 ## Sign-in and integrations

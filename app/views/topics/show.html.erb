@@ -5,8 +5,8 @@
   <section class="panel panel--thread">
     <header class="thread__header">
       <div class="thread__back-row">
-        <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
-          <%= icon "arrow-left" %><span>Topics</span><%= render "shared/key", label: "Esc" %>
+        <%= link_to project_topics_path(@project), class: "thread__back", data: { **hotkey_data(:back) } do %>
+          <%= icon "arrow-left" %><span>Topics</span><%= key_hint(:back) %>
         <% end %>
 
         <div class="vote-bar">

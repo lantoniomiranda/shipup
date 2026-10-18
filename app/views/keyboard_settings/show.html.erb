@@ -1,0 +1,47 @@
+<% breadcrumbs [ "Workspace", root_path ], [ "Account", account_path ], "Keyboard shortcuts" %>
+<% content_for :title, "Keyboard shortcuts" %>
+
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1>Keyboard shortcuts</h1>
+    <p>Click a shortcut, then press the keys you want. Only combinations that work in every browser are accepted: a letter, a digit, <kbd class="key">/</kbd> or <kbd class="key">?</kbd>, or a two-key chord like <kbd class="key">G</kbd> <kbd class="key">X</kbd>. Ctrl, Cmd and Alt combinations belong to the browser.</p>
+  </div>
+  <div class="page-header__actions">
+    <%= button_to keyboard_settings_path, method: :delete, class: "btn", form: { class: "inline-form", data: { turbo_confirm: "Reset every shortcut to its default?" } } do %><%= icon "rotate-ccw" %><span>Reset all</span><% end %>
+  </div>
+</header>
+
+<% if @problems.present? %>
+  <ul class="flash flash--alert key-problems" role="alert"><% @problems.each do |problem| %><li><%= problem %></li><% end %></ul>
+<% end %>
+
+<%= form_with url: keyboard_settings_path, method: :patch, class: "key-settings", data: { controller: "key-settings" } do %>
+  <% Keybindings.by_context.except(:sign_in).each do |context, entries| %>
+    <section class="card-panel">
+      <h2><%= Keybindings::CONTEXTS.dig(context, :title) %></h2>
+      <ul class="key-rows">
+        <% entries.each do |entry| %>
+          <% id = entry[:id] %>
+          <% current = @overrides[id.to_s].presence || entry[:keys] %>
+          <li class="key-row <%= "key-row--changed" if current != entry[:keys] %>">
+            <span class="key-row__label"><%= entry[:label] %></span>
+            <% if entry[:fixed] %>
+              <kbd class="key key--fixed" title="This one can't be changed"><%= Keybindings.label(entry[:keys]) %></kbd>
+            <% else %>
+              <%= hidden_field_tag "keybindings[#{id}]", current, id: "keybinding_#{id}", data: { key_settings_target: "field", default: entry[:keys] } %>
+              <button type="button" class="key-capture" data-key-settings-target="button" data-action="key-settings#record"
+                      data-id="<%= id %>" data-single-key="<%= entry[:single_key].present? %>" data-shift-arrow="<%= entry[:shift_arrow].present? %>"
+                      aria-label="Change shortcut for <%= entry[:label] %>"><kbd class="key"><%= Keybindings.label(current) %></kbd></button>
+              <button type="button" class="key-row__reset" data-action="key-settings#reset" data-id="<%= id %>" aria-label="Reset <%= entry[:label] %>" title="Reset to <%= Keybindings.label(entry[:keys]) %>"><%= icon "rotate-ccw", size: 14 %></button>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <div class="key-settings__bar">
+    <p class="key-settings__hint" data-key-settings-target="hint" role="status">Press the keys for the shortcut you picked, or Esc to cancel.</p>
+    <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span>Save shortcuts</span><%= key_hint(:submit) %></button>
+  </div>
+<% end %>

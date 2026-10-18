@@ -63,8 +63,8 @@
     <% end %>
 
     <% if @project.managed_by?(Current.user) %>
-      <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { hotkey: "p" } do %>
-        <%= icon "flag" %><span>Plan sprint</span><%= render "shared/key", label: "P" %>
+      <%= link_to new_project_sprint_path(@project), class: "btn btn--primary btn--block btn--plan", data: { **hotkey_data(:plan_sprint) } do %>
+        <%= icon "flag" %><span>Plan sprint</span><%= key_hint(:plan_sprint) %>
       <% end %>
     <% end %>
   </aside>

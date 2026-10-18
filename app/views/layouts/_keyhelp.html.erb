@@ -1,14 +1,18 @@
-<%# Keyboard shortcut cheat sheet, rendered from config/keybindings.yml. Open with "?". %>
+<%# Keyboard shortcut cheat sheet from config/keybindings.yml, showing the signed-in person's own keys. Open with "?". %>
 <div class="keyhelp" hidden data-shortcuts-target="root" data-action="click->shortcuts#backdrop">
   <div class="keyhelp__panel" role="dialog" aria-label="Keyboard shortcuts" aria-modal="true">
-    <header><h2>Keyboard shortcuts</h2><button type="button" class="icon-button icon-button--small" data-action="shortcuts#close" aria-label="Close"><%= icon "x", size: 16 %></button></header>
+    <header>
+      <h2>Keyboard shortcuts</h2>
+      <span><%= link_to "Customize", keyboard_settings_path, class: "btn btn--small" %>
+      <button type="button" class="icon-button icon-button--small" data-action="shortcuts#close" aria-label="Close"><%= icon "x", size: 16 %></button></span>
+    </header>
     <div class="keyhelp__groups">
-      <% { global: "Everywhere", project: "Inside a project", page: "On specific pages" }.each do |group, title| %>
+      <% Keybindings.by_context.except(:sign_in).each do |context, entries| %>
         <section>
-          <h3 class="eyebrow"><%= title %></h3>
+          <h3 class="eyebrow"><%= Keybindings::CONTEXTS.dig(context, :title) %></h3>
           <dl>
-            <% Keybindings.groups.fetch(group).each_value do |entry| %>
-              <div><dt><%= entry[:label] %></dt><dd><kbd class="key"><%= Keybindings.label(entry[:keys]) %></kbd></dd></div>
+            <% entries.each do |entry| %>
+              <div><dt><%= entry[:label] %></dt><dd><kbd class="key"><%= Keybindings.label(entry[:id]) %></kbd></dd></div>
             <% end %>
           </dl>
         </section>

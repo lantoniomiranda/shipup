@@ -7,7 +7,7 @@
 <%= form_with model: @request, url: time_off_requests_path, class: "split", data: { controller: "range-calendar ", range_calendar_balances_value: balances.transform_values(&:left).to_json } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to time_off_requests_path, class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span>Back to time off</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to time_off_requests_path, class: "thread__back", data: { **hotkey_data(:back) } do %><%= icon "arrow-left" %><span>Back to time off</span><%= key_hint(:back) %><% end %>
     </header>
 
     <div class="form">
@@ -38,8 +38,8 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to time_off_requests_path, class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-range-calendar-target="submit" disabled data-hotkey="ctrl+enter"><%= icon "send" %><span>Send request</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to time_off_requests_path, class: "btn" do %><span>Cancel</span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-range-calendar-target="submit" disabled data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "send" %><span>Send request</span><%= key_hint(:submit) %></button>
     </footer>
   </section>
 

@@ -52,12 +52,12 @@ module ApplicationHelper
     { key: :analytics, label: "Analytics", icon: "chart-column" }
   ].freeze
 
-  # `data: { hotkey: ... }` for a registered shortcut, e.g. link_to ..., data: hotkey_data(:board).
+  # `data: { hotkey: ... }` for a registered shortcut, honouring the person's remapping.
   def hotkey_data(id, **extra)
     { hotkey: Keybindings.keys(id) }.merge(extra)
   end
 
-  # The little key cap for a registered shortcut.
+  # The little key cap for a registered shortcut (shows the person's own key).
   def key_hint(id)
     render "shared/key", label: Keybindings.label(id)
   end
@@ -118,6 +118,12 @@ module ApplicationHelper
   # URL for posting a new message to a thread.
   def chat_messages_path(project, thread)
     thread.is_a?(Task) ? project_task_messages_path(project, thread) : project_topic_messages_path(project, thread)
+  end
+
+  # The board's own keys (handled in board_controller.js rather than through data-hotkey).
+  def board_keys
+    { next_card: :board_next_card, prev_card: :board_prev_card, next_column: :board_next_column, prev_column: :board_prev_column, advance: :board_advance }
+      .transform_values { |id| Keybindings.keys(id) }
   end
 
   # Home filter links keep the default (active) URL clean.

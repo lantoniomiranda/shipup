@@ -9,20 +9,20 @@
 
     <div class="menu" data-menu-target="panel" hidden>
       <p class="eyebrow">Move this topic on as</p>
-      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { hotkey: "t" } do %>
+      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { **hotkey_data(:create_task) } do %>
         <span class="menu__glyph"><%= icon "square-check" %></span>
         <span class="menu__text"><strong>Create task</strong><span>A single piece of work.</span></span>
-        <%= render "shared/key", label: "T" %>
+        <%= key_hint(:create_task) %>
       <% end %>
-      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { hotkey: "c" } do %>
+      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { **hotkey_data(:create_chain) } do %>
         <span class="menu__glyph"><%= icon "link" %></span>
         <span class="menu__text"><strong>Create chain</strong><span>Steps that ship in order.</span></span>
-        <%= render "shared/key", label: "C" %>
+        <%= key_hint(:create_chain) %>
       <% end %>
     </div>
   </div>
 
-  <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { hotkey: "m" } do %>
-    <%= icon "video" %><span>Meet about it</span><%= render "shared/key", label: "M" %>
+  <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { **hotkey_data(:meet) } do %>
+    <%= icon "video" %><span>Meet about it</span><%= key_hint(:meet) %>
   <% end %>
 </section>

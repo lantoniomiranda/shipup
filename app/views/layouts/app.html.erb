@@ -1,6 +1,6 @@
 <%# The signed-in shell: top bar plus a framed content panel. Nested inside layouts/application. %>
 <% content_for :app_content do %>
-  <div class="shell" data-controller="spotlight shortcuts" data-spotlight-url-value="<%= search_path %>" data-action="keydown@window->spotlight#keydown">
+  <div class="shell" data-controller="spotlight shortcuts" data-spotlight-url-value="<%= search_path %>" data-spotlight-key-value="<%= Keybindings.keys(:search) %>" data-action="keydown@window->spotlight#keydown">
     <%= render "layouts/top_bar" %>
     <%= render "layouts/spotlight" %>
     <%= render "layouts/keyhelp" %>

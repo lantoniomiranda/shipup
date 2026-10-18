@@ -8,8 +8,9 @@
     <div class="page-header__actions">
       <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %>Unsaved changes</span>
       <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span>Appearance</span><% end %>
-      <%= link_to account_path, class: "btn", data: { hotkey: "escape" } do %><span>Discard</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span>Save changes</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to keyboard_settings_path, class: "btn" do %><%= icon "keyboard" %><span>Shortcuts</span><% end %>
+      <%= link_to account_path, class: "btn", data: { **hotkey_data(:back) } do %><span>Discard</span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span>Save changes</span><%= key_hint(:submit) %></button>
     </div>
   </header>
 

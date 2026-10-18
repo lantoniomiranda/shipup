@@ -8,8 +8,8 @@
       <%= link_to "Invite pending #{@counts.fetch("invite_pending", 0)}", project_clients_path(@project, filter: "invite_pending"), class: "segmented__item #{"segmented__item--active" if @filter == "invite_pending"}" %>
     </div>
 
-    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey: "a" } do %>
-      <%= icon "user-plus" %><span>Add client</span><%= render "shared/key", label: "A" %>
+    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { **hotkey_data(:add_client) } do %>
+      <%= icon "user-plus" %><span>Add client</span><%= key_hint(:add_client) %>
     <% end %>
   </div>
 

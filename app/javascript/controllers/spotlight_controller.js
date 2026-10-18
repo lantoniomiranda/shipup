@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 // Up/Down to move, Enter to open, Tab to cycle the filter tabs, Esc to close.
 export default class extends Controller {
   static targets = ["root", "input", "frame", "result", "tab"]
-  static values = { url: String }
+  static values = { url: String, key: { type: String, default: "/" } }
 
   // The controller sits on the whole shell so the top-bar hint can open it too.
   openFromTopBar() {
@@ -14,7 +14,7 @@ export default class extends Controller {
   keydown(event) {
     const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName) || event.target.isContentEditable
     if (this.rootTarget.hidden) {
-      if ((event.key === "/" && !typing && !event.metaKey && !event.ctrlKey) || (event.key === " " && (event.ctrlKey || event.metaKey))) {
+      if ((event.key === this.keyValue && !typing && !event.metaKey && !event.ctrlKey) || (event.key === " " && (event.ctrlKey || event.metaKey))) {
         event.preventDefault()
         this.open()
       }

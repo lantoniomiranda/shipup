@@ -9,7 +9,7 @@
     <section class="panel-card panel-card--accent">
       <header class="time-off__title">
         <h1>Time off</h1>
-        <%= link_to new_time_off_request_path, class: "btn btn--primary", data: { hotkey: "r" } do %><%= icon "plus" %><span>Request</span><%= render "shared/key", label: "R" %><% end %>
+        <%= link_to new_time_off_request_path, class: "btn btn--primary", data: { **hotkey_data(:request_time_off) } do %><%= icon "plus" %><span>Request</span><%= key_hint(:request_time_off) %><% end %>
       </header>
 
       <% { "vacation" => "Vacation", "sick" => "Sick leave", "family" => "Family" }.each do |kind, label| %>

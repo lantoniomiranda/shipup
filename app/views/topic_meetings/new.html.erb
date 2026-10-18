@@ -4,8 +4,8 @@
 <%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
+        <%= icon "arrow-left" %><span>Back to topic</span><%= key_hint(:back) %>
       <% end %>
     </header>
 
@@ -64,9 +64,9 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" <%= "disabled" unless provider %> data-hotkey="ctrl+enter">
-        <%= icon "video" %><span>Create and post link</span><%= render "shared/key", label: "Ctrl Enter" %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" <%= "disabled" unless provider %> data-hotkey="<%= Keybindings.keys(:submit) %>">
+        <%= icon "video" %><span>Create and post link</span><%= key_hint(:submit) %>
       </button>
     </footer>
   </section>

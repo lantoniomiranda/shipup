@@ -2,7 +2,7 @@
 <% sprint = @board.sprint %>
 <% lit = (@board.progress_percent * 16 / 100.0).ceil %>
 
-<div class="board-page" data-controller="board " data-board-token-value="<%= form_authenticity_token %>">
+<div class="board-page" data-controller="board " data-board-token-value="<%= form_authenticity_token %>" data-board-keys-value="<%= board_keys.to_json %>">
   <div class="toolbar">
     <div class="toolbar__sprint">
       <% if sprint %>
