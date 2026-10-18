@@ -202,10 +202,17 @@ class TenantManagementTest < ActionDispatch::IntegrationTest
     assert_select "h1", "You're not in a workspace yet"
   end
 
-  test "platform staff without a workspace are sent to the backoffice" do
-    sign_in_as users(:staff)
+  test "superadmins always belong to the built-in workspace and land on the dashboard" do
+    ENV["PLATFORM_ADMIN_EMAILS"] = "staff@shipup.dev"
+    ENV["PLATFORM_ADMIN_EMAILS"] = "staff@shipup.dev"
+    auth = OmniAuth::AuthHash.new(provider: "google_oauth2", uid: "boss-1", info: { email: "staff@shipup.dev", name: "Sam Staff" })
+    user = User.from_omniauth(auth)
+    assert_equal "admin", Workspace.instance.memberships.find_by!(user: user).role
+    sign_in_as user
     get root_path
-    assert_redirected_to backoffice_root_path
+    assert_response :success
+  ensure
+    ENV.delete("PLATFORM_ADMIN_EMAILS")
   end
 end
 

@@ -97,4 +97,3 @@ button.workspaces__item:hover { color: var(--ink); }
 
 .trial-banner { display: flex; align-items: center; gap: 8px; margin: 0; padding: 8px 32px; background: var(--mustard-soft); color: var(--mustard-ink); border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; }
 .trial-banner--over { background: var(--danger-soft); color: var(--danger); }
-.shell--backoffice .brand { color: var(--side-text); }

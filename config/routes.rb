@@ -65,20 +65,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # ohship staff only: manage customers (tenants).
-  namespace :backoffice do
-    root "dashboards#show"
-    resources :tenants, controller: "workspaces", only: %i[index show new create edit update] do
-      member do
-        patch :suspend
-        patch :reactivate
-      end
-      resources :invitations, only: %i[create destroy] do
-        post :resend, on: :member
-      end
-    end
-  end
-
   # Development shortcut: OAuth needs real client credentials, so skip it locally.
   get "dev/sign_in", to: "dev_sessions#create" if Rails.env.development?
 

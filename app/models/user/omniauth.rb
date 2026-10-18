@@ -15,13 +15,19 @@ module User::Omniauth
       transaction do
         user = Identity.find_by(provider: provider, uid: auth.uid)&.user || find_by(email: email) || sign_up!(auth, email)
         user.identities.find_or_create_by!(provider: provider, uid: auth.uid) { |identity| identity.email = email }
-        user.update!(platform_admin: true) if platform_admin_email?(email) && !user.platform_admin?
+        join_instance!(user) if platform_admin_email?(email)
         Invitation.accept_all_for(user)
         user
       end
     end
 
     private
+
+    # Superadmins always belong to the deployment's own workspace, so sign-in lands on the dashboard.
+    def join_instance!(user)
+      user.update!(platform_admin: true) unless user.platform_admin?
+      Workspace.instance.memberships.find_or_create_by!(user: user) { |membership| membership.role = "admin" }
+    end
 
     def sign_up!(auth, email)
       invited = Invitation.pending.exists?(email: email)

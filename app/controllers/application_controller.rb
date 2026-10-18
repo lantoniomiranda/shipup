@@ -46,13 +46,13 @@ class ApplicationController < ActionController::Base
     Current.workspace ||= workspaces.find_by(id: session[:workspace_id]) || workspaces.active.order(:id).first || workspaces.order(:id).first
   end
 
-  # Signed-in people need a usable workspace: staff without one go to the backoffice, suspended
-  # tenants see why, and people who belong to nothing are told so.
+  # Signed-in people need a usable workspace: suspended tenants see why, and people who belong to
+  # nothing are told so.
   def require_workspace_access
     return unless Current.user
 
     if Current.workspace.nil?
-      Current.user.platform_admin? ? redirect_to(backoffice_root_path) : render("workspaces/none", status: :forbidden, layout: "application")
+      render "workspaces/none", status: :forbidden, layout: "application"
     elsif Current.workspace.suspended?
       render "workspaces/suspended", status: :forbidden, layout: "application"
     end

@@ -1,4 +1,4 @@
-# Workspace admins invite their own people (platform staff do the same from the backoffice).
+# Workspace admins invite their own people.
 class InvitationsController < ApplicationController
   before_action :require_workspace_admin
   before_action :set_invitation, only: %i[destroy resend]

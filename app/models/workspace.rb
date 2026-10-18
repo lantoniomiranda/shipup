@@ -30,7 +30,10 @@ class Workspace < ApplicationRecord
     active.find_by(email_domain: domain, allow_domain_join: true) if domain.present?
   end
 
-  # Creates a tenant and invites its first admin. Used by the backoffice.
+  # The built-in workspace of this deployment; superadmins are its admins.
+  def self.instance = find_or_create_by!(slug: "ohship") { |workspace| workspace.name = "ohship" }
+
+  # Creates a tenant and invites its first admin.
   # Extra attributes (slug, email_domain, allow_domain_join) go straight onto the workspace.
   def self.provision!(name:, admin_email:, plan: "trial", seats_limit: nil, invited_by: nil, trial_days: TRIAL_DAYS, **attributes)
     transaction do

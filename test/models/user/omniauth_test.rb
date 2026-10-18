@@ -44,11 +44,11 @@ class User::OmniauthTest < ActiveSupport::TestCase
     assert_raises(User::Omniauth::NotInvited) { User.from_omniauth(auth) }
   end
 
-  test "platform admins from the environment can sign up without a workspace" do
+  test "platform admins from the environment sign up into the built-in workspace" do
     ENV["PLATFORM_ADMIN_EMAILS"] = "boss@shipup.dev, other@shipup.dev"
     user = User.from_omniauth(auth(uid: "p-1", email: "boss@shipup.dev", name: "Boss"))
     assert user.platform_admin?
-    assert_empty user.workspaces
+    assert_equal [ Workspace.instance ], user.workspaces.to_a
   ensure
     ENV.delete("PLATFORM_ADMIN_EMAILS")
   end

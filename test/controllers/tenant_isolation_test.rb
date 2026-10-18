@@ -103,11 +103,6 @@ class TenantIsolationTest < ActionDispatch::IntegrationTest
     assert foreign.reload.pending?
   end
 
-  test "the backoffice is invisible to tenant admins" do
-    get backoffice_tenants_path
-    assert_response :not_found
-  end
-
   test "workspace switching only offers one's own tenants" do
     get root_path
     assert_select "button.workspaces__item", count: 0
