@@ -134,7 +134,12 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 .archived li { display: flex; align-items: center; gap: 10px; }
 .archived li span:nth-child(2) { flex: 1; }
 .task__manage { display: flex; justify-content: flex-end; padding: 0 24px; }
-.cancel-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.modal { width: 420px; max-width: calc(100vw - 32px); padding: 0; background: var(--surface); color: var(--ink); border: 0; border-radius: var(--radius-sm); box-shadow: var(--lift-shadow-lg), var(--outline); }
+.modal::backdrop { background: var(--scrim); }
+.modal__form { display: flex; flex-direction: column; gap: 12px; padding: 22px 24px; }
+.modal__form h2 { font-size: 22px; }
+.modal__form p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+.modal__actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 
 .check-line { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
 

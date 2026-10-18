@@ -459,6 +459,7 @@ fr-FR:
     cancel: Annuler le sujet
     reason: Motif (facultatif)
     reason_label: Motif de l’annulation
+    keep: "Garder le sujet"
     confirm_cancel : "Annuler ce sujet ? Vous pourrez le rouvrir plus tard."
     cancel_with_reason : "Ce sujet a été annulé : %{reason}"
     cancel_without_reason: Ce sujet a été annulé.

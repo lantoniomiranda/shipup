@@ -460,6 +460,7 @@ es-ES:
     reason: Motivo (opcional)
     reason_label: Motivo de la cancelación
     confirm_cancel: "¿Cancelar este tema? Puedes reabrirlo más tarde."
+    keep: "Mantener tema"
     cancel_with_reason: "Tema cancelado: %{reason}"
     cancel_without_reason: Tema cancelado.
     posted: Tema publicado.

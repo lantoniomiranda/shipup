@@ -39,7 +39,7 @@
 
 .top-bar > * { white-space: nowrap; }
 .top-bar__left { display: flex; align-items: center; gap: 12px; flex: 1 1 0; min-width: 0; }
-.top-bar__right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: none; }
+.top-bar__right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 1 1 0; min-width: max-content; }
 .top-bar__divider { width: 1px; height: 22px; background: var(--line); }
 
 .brand { display: flex; align-items: center; gap: 8px; }
@@ -54,8 +54,6 @@
 .clock { display: flex; align-items: center; gap: 7px; padding: 7px 12px; font-size: 12px; }
 .clock + .clock { border-left: 1px solid var(--line); }
 .clock strong { font-weight: 700; }
-.clock--you { background: var(--accent-tint, var(--paper)); }
-.clock__offset { color: var(--ink-soft); font-weight: 600; }
 .clock span { color: var(--ink-soft); font-weight: 500; }
 .clock .icon { color: var(--accent); }
 
@@ -71,7 +69,7 @@
 .flash--shell { margin: 0; }
 
 @media (max-width: 1100px) {
-  .clocks .clock:not(.clock--you) { display: none; }
+  .clocks { display: none; }
   .hint { display: none; }
 }
 

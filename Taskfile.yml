@@ -108,10 +108,16 @@ tasks:
     cmds:
       - bin/rails db:prepare
 
-  db:seed:
-    desc: Load the demo data
+  db:demo:
+    desc: Load sample projects and people (Orbit Labs) for demos; never part of setup
     cmds:
-      - bin/rails db:seed
+      - bin/rails runner db/demo.rb
+
+  db:fresh:
+    desc: Wipe the development database and migrate it again, empty (stops the server first)
+    cmds:
+      - task: server:stop
+      - bin/rails db:drop db:create db:migrate
 
   console:
     desc: Open a Rails console

@@ -460,6 +460,7 @@ it:
     reason: Motivo (opzionale)
     reason_label: Motivo dell'annullamento
     confirm_cancel: Annullare questo argomento? Puoi riaprirlo dopo.
+    keep: "Mantieni l’argomento"
     cancel_with_reason: "Annullato questo argomento: %{reason}"
     cancel_without_reason: Annullato questo argomento.
     posted: Argomento pubblicato.

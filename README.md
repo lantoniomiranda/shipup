@@ -20,7 +20,7 @@ Keep this section current: every change set adds a line here (newest first).
 - **Time zones**: a person's zone now follows their browser (a `browser_time_zone` cookie set by `timezone_controller.js`) until they pick one under Account → Time zone; the top-bar clocks start with their own city and every page renders dates in their zone (`Time.use_zone` around each request, storage stays UTC).
 - Renamed the product to **ohship** and added the rocket logo (CSS-masked so it follows the theme colours) and a new favicon.
 - `Taskfile.yml`: `task start | stop | restart | status | logs` manage the server and Postgres.
-- **Single-tenant, project-based access** (replaces the multi-tenant SaaS, workspaces and backoffice): every customer gets their own deploy, so there is no workspace, plan, seat limit or platform staff. Two levels of admin: **superadmins** are the emails in `SUPERADMIN_EMAILS` (read into `config.x.superadmin_emails`, never stored, so removing an email revokes it; in development `ines@orbitlabs.dev` is the default) and may sign in without an invitation, create projects, connect integrations and see every project. **Project admins** (role `admin` on a project, the old "manager") invite people, change roles, plan sprints and archive things on that project; the other role is `member`. Sign-up is **invite-only per project**: an unknown email is refused unless a project admin or superadmin invited it from the project's *People* tab. Signing in consumes pending invitations; inviting someone who already has an account adds them at once. Everyone else sees only the projects they are on (`Project.visible_to(user)`, a 404 otherwise, pinned by `test/controllers/project_access_test.rb`).
+- **Single-tenant, project-based access** (replaces the multi-tenant SaaS, workspaces and backoffice): every customer gets their own deploy, so there is no workspace, plan, seat limit or platform staff. Two levels of admin: **superadmins** are the emails in `SUPERADMIN_EMAILS` (read into `config.x.superadmin_emails`, never stored, so removing an email revokes it; there is no default, set it in `.env`) and may sign in without an invitation, create projects, connect integrations and see every project. **Project admins** (role `admin` on a project, the old "manager") invite people, change roles, plan sprints and archive things on that project; the other role is `member`. Sign-up is **invite-only per project**: an unknown email is refused unless a project admin or superadmin invited it from the project's *People* tab. Signing in consumes pending invitations; inviting someone who already has an account adds them at once. Everyone else sees only the projects they are on (`Project.visible_to(user)`, a 404 otherwise, pinned by `test/controllers/project_access_test.rb`).
 - **Core clean-up actions**: clients can be archived (soft delete) and restored (*Clients → Archived*); topics can be canceled with an optional reason and reopened; tasks can be archived from the task page and restored from the backlog; projects can be completed and reopened from the project header. Archived tasks are hidden by `Task`'s default scope (`Task.archived` finds them).
 - **Task chat** (design's right-hand "Chat" on a task) with direct replies (quoted), editing (author only, shows "edited") and removal (author, superadmins, project admins; soft delete so replies keep their quote). Topic threads got the same abilities through the shared `ChatMessage` concern and `messages/_message` partials.
 - **LLM adapter**: pick a provider with `LLM_ENABLED=claude|gemini|grok|gpt` and `LLM_API_KEY` (optional `LLM_MODEL`, `LLM_BASE_URL`). `Llm.client.complete(prompt, system:, json:)` is the only API the app uses, so switching provider is configuration. First feature: *Draft with AI* / *Try another draft* on the create task and create chain pages (`Llm::Drafts`). Unset = AI features hidden. Add a provider by subclassing `Llm::Base`.
@@ -38,12 +38,16 @@ tokens) · Solid Queue/Cache/Cable · Minitest + WebMock · Kamal.
 
 ```sh
 bin/setup        # copies .env, starts Postgres (docker compose), prepares the DB, runs the server
-bin/rails db:seed  # demo data from the design (Orbit Labs, Apollo Gateway, …)
+task setup       # same, with go-task: starts Postgres, migrates and runs the server
 ```
 
+A fresh install is empty: no demo users and no projects. Put your email in `SUPERADMIN_EMAILS` (`.env`), sign in with
+Google or Microsoft, then create projects and invite people. `task db:demo` loads optional sample data (Orbit Labs)
+and `task db:fresh` wipes the development database back to empty.
+
 Postgres listens on `localhost:5433` (see `docker-compose.yml`, overridable in `.env`).
-Without OAuth credentials, sign in locally through `http://localhost:3000/dev/sign_in?email=ines@orbitlabs.dev`
-(development only).
+Without OAuth credentials, an existing user can sign in locally through `http://localhost:3000/dev/sign_in?email=<their email>`
+(development only; load `task db:demo` first to have users).
 
 ## Everyday commands
 
@@ -55,7 +59,7 @@ task stop       # stop the server and Postgres
 task restart    # restart only the server
 task status     # what is running
 task logs       # follow the Rails log
-task            # list everything (db:seed, console, test, ci…)
+task            # list everything (setup, db:demo, db:fresh, console, test, ci…)
 ```
 
 Or directly:

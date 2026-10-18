@@ -460,6 +460,7 @@ en:
     reason: Reason (optional)
     reason_label: Reason for canceling
     confirm_cancel: Cancel this topic? You can reopen it later.
+    keep: "Keep topic"
     cancel_with_reason: "Canceled this topic: %{reason}"
     cancel_without_reason: Canceled this topic.
     posted: Topic posted.

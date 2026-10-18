@@ -460,6 +460,7 @@ pt-PT:
     reason: Motivo (opcional)
     reason_label: Motivo do cancelamento
     confirm_cancel: Cancelar este tópico? Pode reabri-lo mais tarde.
+    keep: "Manter tópico"
     cancel_with_reason: "Tópico cancelado: %{reason}"
     cancel_without_reason: Tópico cancelado.
     posted: Tópico publicado.

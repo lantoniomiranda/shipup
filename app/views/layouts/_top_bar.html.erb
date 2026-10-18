@@ -17,11 +17,9 @@
 
   <div class="clocks" data-controller="clock">
     <% user.clock_zones.each do |zone| %>
-      <% you = zone == user.time_zone %>
-      <div class="clock <%= "clock--you" if you %>" data-clock-target="zone" data-zone="<%= zone %>" title="<%= you ? t("nav.your_zone") : zone %>">
+      <div class="clock" data-clock-target="zone" data-zone="<%= zone %>" title="<%= zone %>">
         <%= icon daypart_icon(zone), size: 14 %>
-        <strong><%= you ? "You" : zone.split("/").last.tr("_", " ") %></strong>
-        <% if you %><span class="clock__offset"><%= utc_offset_label(zone) %></span><% end %>
+        <strong><%= zone.split("/").last.tr("_", " ") %></strong>
         <span data-clock-target="time"><%= local_time(zone) %></span>
       </div>
     <% end %>
@@ -39,9 +37,6 @@
       </div>
     <% end %>
 
-    <% if user.superadmin? %>
-      <%= link_to integrations_path, class: "icon-button", aria: { label: t("nav.integrations") }, title: t("nav.integrations_shortcut") do %><%= icon "plug", size: 18 %><% end %>
-    <% end %>
     <%= link_to time_off_requests_path, class: "icon-button", aria: { label: t("nav.time_off") }, title: "#{t("nav.time_off")} (#{Keybindings.label(:time_off)})", data: hotkey_data(:time_off) do %><%= icon "calendar", size: 18 %><% end %>
 
     <%= link_to notifications_path, class: "icon-button", aria: { label: "#{t("nav.notifications")}#{" (#{t("nav.unread")})" if unread}" }, title: "#{t("nav.notifications")} (#{Keybindings.label(:notifications)})", data: hotkey_data(:notifications) do %>

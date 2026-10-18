@@ -36,10 +36,20 @@
         <%= icon "rotate-ccw" %><span><%= t("topics.reopen") %></span>
       <% end %>
     <% else %>
-      <%= form_with url: cancel_project_topic_path(project, topic), method: :patch, class: "cancel-form", data: { turbo_confirm: t("topics.confirm_cancel") } do %>
-        <%= text_field_tag :reason, nil, class: "input", placeholder: t("topics.reason"), "aria-label": t("topics.reason_label") %>
-        <button type="submit" class="btn btn--block btn--danger"><%= icon "ban" %><span><%= t("topics.cancel") %></span></button>
-      <% end %>
+      <div data-controller="dialog">
+        <button type="button" class="btn btn--block" data-action="dialog#open"><%= icon "ban" %><span><%= t("topics.cancel") %></span></button>
+        <dialog class="modal" data-dialog-target="dialog" data-action="click->dialog#backdrop">
+          <%= form_with url: cancel_project_topic_path(project, topic), method: :patch, class: "modal__form" do %>
+            <h2><%= t("topics.cancel") %></h2>
+            <p><%= t("topics.confirm_cancel") %></p>
+            <%= text_field_tag :reason, nil, class: "input", placeholder: t("topics.reason"), "aria-label": t("topics.reason_label"), data: { dialog_target: "focus" } %>
+            <div class="modal__actions">
+              <button type="button" class="btn" data-action="dialog#close"><span><%= t("topics.keep") %></span></button>
+              <button type="submit" class="btn btn--primary"><%= icon "ban" %><span><%= t("topics.cancel") %></span></button>
+            </div>
+          <% end %>
+        </dialog>
+      </div>
     <% end %>
   <% end %>
 </section>
