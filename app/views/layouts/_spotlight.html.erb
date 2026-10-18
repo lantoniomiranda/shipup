@@ -3,7 +3,7 @@
   <div class="spotlight__panel" role="dialog" aria-label="Search" aria-modal="true">
     <div class="spotlight__bar">
       <%= icon "search", size: 20 %>
-      <input type="search" class="spotlight__input" placeholder="Search topics, tasks and projects" autocomplete="off" data-spotlight-target="input" data-action="input->spotlight#search">
+      <input type="search" class="spotlight__input" placeholder="Search or jump to a page, topic, task or project" autocomplete="off" data-spotlight-target="input" data-action="input->spotlight#search">
       <kbd class="key">Esc</kbd>
     </div>
     <%= turbo_frame_tag "search_results", data: { spotlight_target: "frame" } %>

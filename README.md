@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- **Search jumps to pages**: the palette (`/`) has a new *Pages* group that filters from the first keystroke: Account, Appearance, Keyboard shortcuts, Notifications, Time off, Connectors and People (admins), plus every project area ("Apollo Gateway · Board"). An empty palette lists the pages. Backed by `Search::Pages`.
 - **Calmer top bar and project header**: nothing wraps any more (breadcrumbs, timer pill, tabs), icon buttons are 36px, tab chord hints only show on hover, the workspace switcher hides when you only have one, and the first clock is labelled "You" with your UTC offset (e.g. `You UTC+1 11:58`).
 - **Test databases**: parallel test workers are capped at 4 (was one per CPU core, which left a dozen `shipup_test_N` databases behind); `task db:clean-test` drops them.
 - **Backoffice removed**: ohship is self-deployed, so there is no platform backoffice. Superadmin emails get admin membership of a built-in `ohship` workspace (`Workspace.instance`) on sign-in and land straight on the dashboard.

@@ -12,14 +12,16 @@ class TimeZoneTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_equal "Europe/Lisbon", @user.reload.time_zone
-    assert_select ".clock strong", "Lisbon"
+    assert_select ".clock--you[data-zone='Europe/Lisbon'] strong", "You"
+    assert_select ".clock--you .clock__offset", /\AUTC[+-]\d/
   end
 
-  test "the clocks in the top bar start with the person's own city" do
+  test "the first clock is the person's own, labelled with their UTC offset" do
     sign_in_as @user
     cookies[:browser_time_zone] = "Asia/Tokyo"
     get root_path
-    assert_equal "Tokyo", css_select(".clock strong").first.text
+    assert_select ".clock:first-child.clock--you[data-zone='Asia/Tokyo']"
+    assert_select ".clock--you .clock__offset", "UTC+9"
   end
 
   test "an explicit choice is never overwritten by the browser" do

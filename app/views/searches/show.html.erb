@@ -1,16 +1,26 @@
 <%= turbo_frame_tag "search_results" do %>
   <% results = @search.results %>
   <nav class="spotlight__tabs" aria-label="Search scope">
-    <% [ [ "everything", "Everything", nil ], [ "topics", "Topics", @counts["topics"] ], [ "tasks", "Tasks", @counts["tasks"] ], [ "projects", "Projects", @counts["projects"] ] ].each do |key, label, count| %>
-      <%= link_to search_path(q: @search.query, scope: key), class: "spotlight__tab #{"spotlight__tab--active" if @search.scope == key}", data: { spotlight_target: "tab", turbo_frame: "search_results" } do %><%= label %><%= " #{count}" if count && @search.query.length >= 2 %><% end %>
+    <% [ [ "everything", "Everything", nil ], [ "pages", "Pages", @counts["pages"] ], [ "topics", "Topics", @counts["topics"] ], [ "tasks", "Tasks", @counts["tasks"] ], [ "projects", "Projects", @counts["projects"] ] ].each do |key, label, count| %>
+      <%= link_to search_path(q: @search.query, scope: key), class: "spotlight__tab #{"spotlight__tab--active" if @search.scope == key}", data: { spotlight_target: "tab", turbo_frame: "search_results" } do %><%= label %><%= " #{count}" if count && @search.query.present? %><% end %>
     <% end %>
   </nav>
 
   <div class="spotlight__list">
-    <% if @search.query.length < 2 %>
-      <p class="spotlight__hint">Type at least two letters, or a task key like <code>APO-97</code>.</p>
+    <% if @search.query.blank? %>
+      <p class="spotlight__hint">Jump to a page, or type two letters to search topics, tasks and projects. Try <code>APO-97</code>.</p>
     <% elsif results.empty? %>
       <p class="spotlight__hint">Nothing matches “<%= @search.query %>”.</p>
+    <% end %>
+
+    <% if results.pages.any? %>
+      <h4 class="eyebrow">Pages</h4>
+      <% results.pages.each do |page| %>
+        <%= link_to page.path, class: "spotlight__result", data: { spotlight_target: "result", turbo_frame: "_top" } do %>
+          <%= icon page.icon, size: 18 %>
+          <span class="spotlight__text"><strong><%= page.title %></strong><small><%= page.hint %></small></span>
+        <% end %>
+      <% end %>
     <% end %>
 
     <% if results.topics.any? %>
