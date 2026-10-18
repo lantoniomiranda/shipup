@@ -25,7 +25,7 @@ module Shipup
     # integrations and see every project. Kept in config, not the database, so removing an email revokes it.
     config.x.superadmin_emails = ENV.fetch("SUPERADMIN_EMAILS", "").split(",").map { |email| email.strip.downcase }.reject(&:blank?)
 
-    config.x.product_name = "ShipUp"
+    config.x.product_name = "ohship"
 
     # English is the default. People choose pt-PT, fr-FR, es-ES or it (Italy).
     # :pt stays available only so rails-i18n's European Portuguese dates and error

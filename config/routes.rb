@@ -13,10 +13,19 @@ Rails.application.routes.draw do
   get "integrations", to: "integrations#index"
   scope "integrations/:provider", constraints: { provider: /zoom|google_meet|github/ } do
     post "connection", to: "integration_connections#create", as: :connect_integration
+    delete "connection", to: "integration_connections#destroy"
     get "callback", to: "integration_connections#callback", as: :integration_callback
   end
   patch "meeting_tool", to: "meeting_tools#update"
   resources :time_off_requests, path: "time_off", only: %i[index new create update]
+  resources :notifications, only: %i[index show] do
+    post :read_all, on: :collection
+  end
+  get "settings/keyboard", to: "keyboard_settings#show", as: :keyboard_settings
+  patch "settings/keyboard", to: "keyboard_settings#update"
+  delete "settings/keyboard", to: "keyboard_settings#destroy"
+  patch "preferences/project_tabs", to: "project_tab_orders#update", as: :project_tab_order
+  delete "preferences/project_tabs", to: "project_tab_orders#destroy"
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]

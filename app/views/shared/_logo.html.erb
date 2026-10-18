@@ -1,5 +1,5 @@
-<%# The ShipUp mark and wordmark. size: :small for the compact variant. %>
+<%# The ohship mark and wordmark. size: :small for the compact variant. %>
 <div class="logo <%= "logo--small" if local_assigns[:size] == :small %>">
-  <span class="logo__mark" aria-hidden="true"><span class="logo__ring"></span></span>
+  <%= render "shared/logo_mark" %>
   <span class="logo__word"><%= Rails.configuration.x.product_name %></span>
 </div>

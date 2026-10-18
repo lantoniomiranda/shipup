@@ -4,7 +4,7 @@
 <%= form_with model: [ @project, @sprint ], class: "split" do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_backlog_path(@project), class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span><%= t("sprints.back") %></span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to project_backlog_path(@project), class: "thread__back", data: { **hotkey_data(:back) } do %><%= icon "arrow-left" %><span><%= t("sprints.back") %></span><%= key_hint(:back) %><% end %>
     </header>
 
     <div class="form">
@@ -37,8 +37,8 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_backlog_path(@project), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "flag" %><span><%= t("sprints.create", name: @sprint.name) %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to project_backlog_path(@project), class: "btn" do %><span><%= t("common.cancel") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "flag" %><span><%= t("sprints.create", name: @sprint.name) %></span><%= key_hint(:submit) %></button>
     </footer>
   </section>
 <% end %>

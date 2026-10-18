@@ -1,39 +1,71 @@
-# Single source of truth for keyboard shortcuts. The `data-hotkey` attributes in views must use
-# these key specs (a test enforces it) and the "?" help dialog is rendered from this file.
+# Single source of truth for keyboard shortcuts. Views never hard-code a key: they ask for an id
+# (`hotkey_data(:board)`, `key_hint(:board)`), so people can remap any shortcut in Settings.
 #
-# Key spec: a single key ("n"), a chord ("g b": press g, then b), or a modified key
-# ("ctrl+enter", where ctrl also means Cmd on macOS). Shortcuts never use Ctrl+letter combos the
-# browser owns (save, print, find, new tab…) and are ignored while typing in a field.
-global:
-  search:      { keys: "/",          label: "Search topics, tasks and projects" }
-  help:        { keys: "?",          label: "Show keyboard shortcuts" }
-  projects:    { keys: "g h",        label: "Go to projects" }
-  time_off:    { keys: "g o",        label: "Go to time off" }
-  account:     { keys: "g u",        label: "Go to your account" }
-  back:        { keys: "escape",     label: "Go back or close" }
-  submit:      { keys: "ctrl+enter", label: "Submit the form" }
+# Key spec: a single key ("n"), a chord ("g b": press g, then b), "ctrl+enter" (Ctrl or Cmd) or
+# "shift+<arrow>". Only combinations that work in every browser are allowed (see Keybindings.valid_spec?).
+#
+# Each entry has a `context`: where it is active. `global` works everywhere, `project` on every
+# project page, anything else on that one page. Two shortcuts may share a key only when they can
+# never be active at the same time (e.g. `n` for "new topic" and "new project"). `fixed: true`
+# entries cannot be remapped. `single_key: true` entries are handled by dedicated JavaScript and
+# cannot be chords; `shift_arrow: true` ones must be Shift+arrow.
+contexts:
+  global:     { title: "Everywhere" }
+  project:    { title: "Inside a project" }
+  projects:   { title: "Projects page" }
+  topics:     { title: "Topics list", in_project: true }
+  topic:      { title: "A topic", in_project: true }
+  draft:      { title: "Create task / chain", in_project: true }
+  chain_form: { title: "Create chain", in_project: true }
+  task:       { title: "A task", in_project: true }
+  board:      { title: "Board", in_project: true }
+  backlog:    { title: "Backlog", in_project: true }
+  timeline:   { title: "Timeline", in_project: true }
+  clients:    { title: "Clients", in_project: true }
+  time_off:   { title: "Time off" }
+  appearance: { title: "Appearance" }
+  sign_in:    { title: "Sign in" }
 
-project:
-  topics:      { keys: "g t",        label: "Topics" }
-  backlog:     { keys: "g l",        label: "Backlog" }
-  board:       { keys: "g b",        label: "Board" }
-  timeline:    { keys: "g m",        label: "Timeline" }
-  clients:     { keys: "g c",        label: "Clients" }
-  people:      { keys: "g e",        label: "People" }
-  analytics:   { keys: "g a",        label: "Analytics" }
+shortcuts:
+  search:        { context: global,     keys: "/",          label: "Search topics, tasks and projects", single_key: true }
+  help:          { context: global,     keys: "?",          label: "Show keyboard shortcuts" }
+  projects:      { context: global,     keys: "g h",        label: "Go to projects" }
+  notifications: { context: global,     keys: "g n",        label: "Go to notifications" }
+  time_off:      { context: global,     keys: "g o",        label: "Go to time off" }
+  account:       { context: global,     keys: "g u",        label: "Go to your account" }
+  back:          { context: global,     keys: "escape",     label: "Go back or close", fixed: true }
+  submit:        { context: global,     keys: "ctrl+enter", label: "Submit the form", fixed: true }
 
-page:
-  open_project:  { keys: "1",        label: "Open project 1–9 (projects page)" }
-  new:           { keys: "n",        label: "New topic (topics) · New project (projects)" }
-  reply:         { keys: "r",        label: "Reply (topic) · Request (time off) · Reset (appearance) · Try another AI draft" }
-  task:          { keys: "t",        label: "Create task (topic) · Today (timeline) · Start/stop timer (task)" }
-  chain:         { keys: "c",        label: "Create chain (topic)" }
-  meet:          { keys: "m",        label: "Meet about it (topic)" }
-  add:           { keys: "a",        label: "Add client (clients)" }
-  step:          { keys: "s",        label: "Add step (chain) · Add to calendar (timeline)" }
-  plan:          { keys: "p",        label: "Plan sprint (backlog)" }
-  sign_in:       { keys: "g",        label: "Continue with Google (sign in) — M for Microsoft" }
-  board_cards:   { keys: "j",        label: "Board: next card — K previous" }
-  board_columns: { keys: "l",        label: "Board: next column — H previous" }
-  board_advance: { keys: "shift+arrowright", label: "Board: advance the focused card's status" }
-  timeline_nav:  { keys: "arrowleft", label: "Timeline: earlier — Right arrow later" }
+  topics:        { context: project,    keys: "g t",        label: "Topics" }
+  backlog:       { context: project,    keys: "g l",        label: "Backlog" }
+  board:         { context: project,    keys: "g b",        label: "Board" }
+  timeline:      { context: project,    keys: "g m",        label: "Timeline" }
+  clients:       { context: project,    keys: "g c",        label: "Clients" }
+  people:        { context: project,    keys: "g e",        label: "People" }
+  analytics:     { context: project,    keys: "g a",        label: "Analytics" }
+
+  open_project:  { context: projects,   keys: "1",          label: "Open project 1–9", fixed: true }
+  new_project:   { context: projects,   keys: "n",          label: "New project" }
+  new_topic:     { context: topics,     keys: "n",          label: "New topic" }
+  reply:         { context: topic,      keys: "r",          label: "Reply", single_key: true }
+  create_task:   { context: topic,      keys: "t",          label: "Create task" }
+  create_chain:  { context: topic,      keys: "c",          label: "Create chain" }
+  meet:          { context: topic,      keys: "m",          label: "Meet about it" }
+  try_draft:     { context: draft,      keys: "r",          label: "Try another AI draft" }
+  add_step:      { context: chain_form, keys: "s",          label: "Add a chain step" }
+  toggle_timer:  { context: task,       keys: "t",          label: "Start / stop the timer" }
+  board_next_card:    { context: board, keys: "j",          label: "Next card", single_key: true }
+  board_prev_card:    { context: board, keys: "k",          label: "Previous card", single_key: true }
+  board_next_column:  { context: board, keys: "l",          label: "Next column", single_key: true }
+  board_prev_column:  { context: board, keys: "h",          label: "Previous column", single_key: true }
+  board_advance:      { context: board, keys: "shift+arrowright", label: "Advance the card's status", shift_arrow: true }
+  plan_sprint:   { context: backlog,    keys: "p",          label: "Plan sprint" }
+  timeline_prev: { context: timeline,   keys: "arrowleft",  label: "Earlier" }
+  timeline_next: { context: timeline,   keys: "arrowright", label: "Later" }
+  timeline_today:    { context: timeline, keys: "t",        label: "Today" }
+  timeline_calendar: { context: timeline, keys: "s",        label: "Add to my calendar" }
+  add_client:    { context: clients,    keys: "a",          label: "Add client" }
+  request_time_off: { context: time_off, keys: "r",         label: "Request time off" }
+  reset_appearance: { context: appearance, keys: "r",       label: "Reset to default" }
+  sign_in_google:    { context: sign_in, keys: "g",         label: "Continue with Google" }
+  sign_in_microsoft: { context: sign_in, keys: "m",         label: "Continue with Microsoft" }

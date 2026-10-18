@@ -33,7 +33,7 @@
   <% if current && current == task %>
     <% following = task.next_in_chain %>
     <%= button_to advance_project_task_path(project, task), class: "btn btn--primary" do %>
-      <%= icon "check" %><span><%= following ? t("tasks.complete_unlock", title: task.title, next: following.title) : t("tasks.complete_step", title: task.title) %></span><%= render "shared/key", label: "Enter" %>
+      <%= icon "check" %><span><%= following ? t("tasks.complete_unlock", title: task.title, next: following.title) : t("tasks.complete_step", title: task.title) %></span>
     <% end %>
   <% end %>
 </section>

@@ -1,12 +1,12 @@
 /* Keyboard shortcut cheat sheet. */
 .keyhelp { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 56px; background: var(--scrim); }
 .keyhelp[hidden] { display: none; }
-.keyhelp__panel { position: relative; width: 760px; max-width: calc(100vw - 32px); max-height: calc(100vh - 112px); overflow: auto; background: var(--surface); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink-a33); }
+.keyhelp__panel { position: relative; width: 760px; max-width: calc(100vw - 32px); max-height: calc(var(--vh) - 112px); overflow: auto; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--lift-shadow-lg); }
 .keyhelp__panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--outline); pointer-events: none; }
 .keyhelp__panel header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--line); }
 .keyhelp__panel h2 { font-size: 22px; }
 .keyhelp__groups { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 32px; padding: 20px 24px; }
-.keyhelp__groups section:last-child { grid-column: 1 / -1; }
+.keyhelp header > span { display: flex; align-items: center; gap: 10px; }
 .keyhelp__groups h3 { margin-bottom: 10px; }
 .keyhelp__groups dl { margin: 0; }
 .keyhelp__groups dl > div { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 500; }

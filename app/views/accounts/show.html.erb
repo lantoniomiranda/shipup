@@ -8,8 +8,9 @@
     <div class="page-header__actions">
       <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
       <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span><%= t("account.appearance") %></span><% end %>
-      <%= link_to account_path, class: "btn", data: { hotkey: "escape" } do %><span><%= t("common.discard") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to keyboard_settings_path, class: "btn" do %><%= icon "keyboard" %><span><%= t("account.shortcuts", default: "Shortcuts") %></span><% end %>
+      <%= link_to account_path, class: "btn", data: { **hotkey_data(:back) } do %><span><%= t("common.discard") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= key_hint(:submit) %></button>
     </div>
   </header>
 
@@ -52,6 +53,16 @@
       </div>
 
       <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span><%= t("common.sign_out") %></span><% end %>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Time zone</legend>
+        <%= form.select :time_zone, User.time_zone_options, {}, class: "select" %>
+        <label class="check-line">
+          <%= hidden_field_tag "user[time_zone_auto]", "0", id: nil %>
+          <%= check_box_tag "user[time_zone_auto]", "1", @user.time_zone_auto?, class: "check" %>
+          <span>Follow my browser's time zone automatically</span>
+        </label>
+      </fieldset>
 
       <div class="signin-note">
         <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>

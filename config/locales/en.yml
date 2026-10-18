@@ -69,6 +69,9 @@ en:
     account_shortcut: "Account (G U)"
     keyboard_shortcut: "Keyboard shortcuts (?)"
     integrations_shortcut: Integrations (admins)
+    your_zone: Your time zone (change it in Account)
+    unread: unread
+    reorder_tabs: Drag a tab to reorder your menu
 
   common:
     cancel: Cancel
@@ -289,7 +292,7 @@ en:
     crumb: Appearance
     title: Appearance
     settings: Settings
-    intro: Colors for your ShipUp.
+    intro: Make ohship look the way you like. Changes preview instantly; Done saves them.
     background: Background
     accent: Accent and buttons
     reset: Reset to default
@@ -316,7 +319,7 @@ en:
     intro: Sign in with your work account to continue.
     google: Continue with Google
     microsoft: Continue with Microsoft
-    invite_only: ShipUp is invite-only. Ask a project admin to invite this email address.
+    invite_only: ohship is invite-only. Ask a project admin to invite this email address.
     failed: We couldn't sign you in with that account.
     cancelled: Sign-in was cancelled or failed. Please try again.
 
@@ -335,7 +338,7 @@ en:
       detail: It may have moved, been deleted, or never existed.
     406:
       title: Your browser is too old
-      detail: ShipUp needs a recent version of Chrome, Edge, Firefox or Safari.
+      detail: ohship needs a recent version of Chrome, Edge, Firefox or Safari.
     422:
       title: That change was rejected
       detail: The page expired or the data wasn't valid. Reload and try again.
@@ -345,7 +348,7 @@ en:
 
   search:
     label: Search
-    placeholder: Search topics, tasks and projects
+    placeholder: Search or jump to a page, topic, task or project
     open: open
     move: move
     switch_filter: switch filter
@@ -354,7 +357,8 @@ en:
     topics: Topics
     tasks: Tasks
     projects: Projects
-    hint_html: "Type at least two letters, or a task key like <code>%{example}</code>."
+    pages: Pages
+    hint_html: "Jump to a page, or type two letters to search topics, tasks and projects. Try <code>%{example}</code>."
     empty: "Nothing matches “%{query}”."
     chain_step: "Chain %{key} · step %{position} of %{size}"
     task_key: "Task %{key}"
@@ -723,7 +727,7 @@ en:
     resend: Resend
     revoke: Revoke
     confirm_revoke: Revoke this invitation?
-    product: ShipUp
+    product: ohship
     now_role: "%{name} is now %{role}."
     bad_role: That role isn't available.
     not_self: You can't remove yourself.
@@ -807,8 +811,8 @@ en:
     failed: We couldn't create that meeting. Check the time and try again.
 
   integrations:
-    title: Meeting tool
-    setup: Set up ShipUp
+    title: Connectors
+    setup: Set up ohship
     admin_only: Admin only
     company: Company
     meeting_tool: Meeting tool
@@ -850,6 +854,19 @@ en:
     link_failed: Couldn't link that repository. Check your GitHub permissions and try again.
     unlinked: "%{repo} unlinked."
     connect_github: Connect GitHub first.
+    connectors_intro: Connect the tools your team already uses. Everyone on this deploy shares these connections.
+    group_meetings: Meetings
+    group_ai: AI
+    ai_drafting: AI drafting
+    ai_enabled: "Enabled · %{provider}"
+    ai_not_configured: Not configured
+    ai_text_html: "Drafts tasks and chains from a topic. Set by the server operator: <code>LLM_ENABLED</code> (claude, gemini, grok or gpt) and <code>LLM_API_KEY</code>."
+    default: Default
+    use_for_meetings: Use for meetings
+    repositories: Repositories
+    disconnect: Disconnect
+    disconnect_confirm: "Disconnect %{name}?"
+    disconnected: "%{provider} disconnected."
 
   model_errors:
     ends_on_after_start: must be on or after the start date

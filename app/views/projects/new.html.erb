@@ -4,7 +4,7 @@
 <%= form_with model: @project, class: "split", data: { controller: "project-form" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to root_path, class: "thread__back", data: { hotkey: "escape" } do %><%= icon "arrow-left" %><span><%= t("home.back_to_projects") %></span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to root_path, class: "thread__back", data: { **hotkey_data(:back) } do %><%= icon "arrow-left" %><span><%= t("home.back_to_projects") %></span><%= key_hint(:back) %><% end %>
     </header>
 
     <div class="form">
@@ -47,8 +47,8 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to root_path, class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "plus" %><span><%= t("home.create_project") %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <%= link_to root_path, class: "btn" do %><span><%= t("common.cancel") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "plus" %><span><%= t("home.create_project") %></span><%= key_hint(:submit) %></button>
     </footer>
   </section>
 <% end %>

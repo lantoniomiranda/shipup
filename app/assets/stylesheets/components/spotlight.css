@@ -1,7 +1,7 @@
 /* Quick-search palette. */
 .spotlight { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 56px; background: var(--scrim); }
 .spotlight[hidden] { display: none; }
-.spotlight__panel { position: relative; display: flex; flex-direction: column; width: 680px; max-width: calc(100vw - 32px); max-height: calc(100vh - 112px); background: var(--surface); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink-a33); overflow: hidden; }
+.spotlight__panel { position: relative; display: flex; flex-direction: column; width: 680px; max-width: calc(100vw - 32px); max-height: calc(var(--vh) - 112px); background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--lift-shadow-lg); overflow: hidden; }
 .spotlight__panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--outline); pointer-events: none; }
 .spotlight__bar { display: flex; align-items: center; gap: 14px; padding: 16px 20px; color: var(--accent-ink); border-bottom: 1px solid var(--line); }
 .spotlight__input { flex: 1; padding: 0; background: transparent; color: var(--ink); border: 0; font: 600 20px var(--font-display); }

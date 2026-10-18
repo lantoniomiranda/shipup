@@ -89,7 +89,7 @@
 /* "Move on" dropdown in the topic sidebar. */
 .move-on { position: relative; }
 .btn__divider { align-self: stretch; width: 1.5px; margin: -4px 2px; background: var(--ink); opacity: 0.5; }
-.menu { position: absolute; z-index: 10; top: 100%; left: 0; right: 0; margin-top: 8px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--outline), 3px 3px 0 var(--ink-a33); overflow: hidden; }
+.menu { position: absolute; z-index: 10; top: 100%; left: 0; right: 0; margin-top: 8px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--outline), var(--lift-shadow); overflow: hidden; }
 .menu[hidden] { display: none; }
 .menu > .eyebrow { padding: 12px 16px 8px; }
 .menu__item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; }
@@ -135,3 +135,10 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 .archived li span:nth-child(2) { flex: 1; }
 .task__manage { display: flex; justify-content: flex-end; padding: 0 24px; }
 .cancel-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+.check-line { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+/* Meeting scheduler. */
+.meeting-when { margin-top: 10px; color: var(--ink-soft); font-size: 13px; font-weight: 600; }
+.invitee--outside .invitee__time { color: var(--danger); }
+.invitee__time b { font-weight: 600; }

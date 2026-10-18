@@ -1,64 +1,56 @@
+<% breadcrumbs [ t("nav.projects"), root_path ], t("integrations.title") %>
 <% content_for :title, t("integrations.title") %>
 <%
-  tools = [
-    { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: t("integrations.zoom") },
-    { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: t("integrations.teams"), coming_soon: true },
-    { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: t("integrations.meet") }
-  ]
-  selected = @selected_tool
+  groups = {
+    t("integrations.group_meetings") => [
+      { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: t("integrations.zoom"), meeting: true },
+      { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: t("integrations.meet"), meeting: true },
+      { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: t("integrations.teams"), coming_soon: true }
+    ],
+    t("integrations.code") => [
+      { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: t("integrations.github"), repositories: true }
+    ]
+  }
+  default_tool = @default_tool
 %>
 
-<main class="setup">
-  <aside class="setup__steps">
-    <%= render "shared/logo", size: :small %>
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1><%= t("integrations.title") %></h1>
+    <p><%= t("integrations.connectors_intro") %></p>
+  </div>
+  <div class="page-header__actions"><span class="tag tag--admin"><%= t("integrations.admin_only") %></span></div>
+</header>
 
-    <header class="setup__intro">
-      <h1><%= t("integrations.setup") %></h1>
-      <span class="tag tag--admin"><%= t("integrations.admin_only") %></span>
-    </header>
+<div class="connectors">
+  <% groups.each do |group, tools| %>
+    <section class="connectors__group">
+      <h2 class="eyebrow"><%= group %></h2>
+      <div class="connectors__grid">
+        <% tools.each do |tool| %>
+          <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], default: default_tool == tool[:key] %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 
-    <ol class="steps">
-      <%= render "integrations/step", state: :done, label: t("integrations.company"), caption: Rails.configuration.x.product_name %>
-      <%= render "integrations/step", state: :current, number: 2, label: t("integrations.meeting_tool"), caption: t("integrations.meeting_caption") %>
-      <%= render "integrations/step", state: :todo, number: 3, label: t("integrations.calendar"), caption: t("integrations.calendar_caption") %>
-      <%= render "integrations/step", state: :todo, number: 4, label: t("integrations.people"), caption: t("integrations.people_caption"), last: true %>
-    </ol>
-  </aside>
-
-  <section class="setup__panel">
-    <header class="setup__header">
-      <p class="eyebrow"><%= t("integrations.step", current: 2, total: 4) %></p>
-      <h2><%= t("integrations.choose") %></h2>
-      <p class="setup__subtitle"><%= t("integrations.subtitle") %></p>
-    </header>
-
-    <% flash.each do |type, message| %>
-      <p class="flash flash--<%= type %>" role="status"><%= message %></p>
-    <% end %>
-
-    <div class="setup__body">
-      <% tools.each do |tool| %>
-        <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], selected: selected == tool[:key] %>
-      <% end %>
-
-      <h3 class="eyebrow setup__section"><%= t("integrations.code") %></h3>
-      <%= render "integrations/tool", tool: { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: t("integrations.github") },
-                                      connection: @connections["github"], selected: false, selectable: false %>
-      <% if @connections["github"] %>
-        <p class="setup__hint"><%= link_to t("integrations.choose_repos"), github_repositories_path, class: "link" %></p>
-      <% end %>
+  <section class="connectors__group">
+    <h2 class="eyebrow"><%= t("integrations.group_ai") %></h2>
+    <div class="connectors__grid">
+      <div class="connector">
+        <div class="connector__head">
+          <span class="connector__logo connector__logo--mustard"><%= icon "sparkles", size: 20 %></span>
+          <div class="connector__title">
+            <strong><%= t("integrations.ai_drafting") %></strong>
+            <% if Llm.enabled? %>
+              <span class="connector__status connector__status--on"><%= t("integrations.ai_enabled", provider: Llm.provider) %></span>
+            <% else %>
+              <span class="connector__status"><%= t("integrations.ai_not_configured") %></span>
+            <% end %>
+          </div>
+        </div>
+        <p class="connector__text"><%= t("integrations.ai_text_html") %></p>
+      </div>
     </div>
-
-    <footer class="setup__footer">
-      <%= link_to root_path, class: "btn", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span><%= t("common.back") %></span><%= render "shared/key", label: "Esc" %>
-      <% end %>
-
-      <%= form_with url: meeting_tool_path, method: :patch, id: "meeting-tool-form" do %>
-        <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-          <%= icon "arrow-right" %><span><%= t("common.continue") %></span><%= render "shared/key", label: "Ctrl Enter" %>
-        </button>
-      <% end %>
-    </footer>
   </section>
-</main>
+</div>

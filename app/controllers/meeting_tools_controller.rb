@@ -6,7 +6,7 @@ class MeetingToolsController < ApplicationController
     provider = params[:provider].to_s
 
     if IntegrationConnection.for(provider) && Setting.current.update(meeting_provider: provider)
-      redirect_to root_path, notice: t("integrations.now_tool", provider: Integrations.provider(provider).label)
+      redirect_to integrations_path, notice: t("integrations.now_tool", provider: Integrations.provider(provider).label)
     else
       redirect_to integrations_path, alert: t("integrations.connect_first")
     end

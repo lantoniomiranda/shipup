@@ -69,6 +69,9 @@ pt-PT:
     account_shortcut: "Conta (G U)"
     keyboard_shortcut: "Atalhos de teclado (?)"
     integrations_shortcut: Integrações (administradores)
+    your_zone: "O seu fuso horário (altere em Conta)"
+    unread: "por ler"
+    reorder_tabs: "Arraste um separador para reordenar o menu"
 
   common:
     cancel: Cancelar
@@ -289,7 +292,7 @@ pt-PT:
     crumb: Aspeto
     title: Aspeto
     settings: Definições
-    intro: Cores para o seu ShipUp.
+    intro: Cores para o seu ohship.
     background: Fundo
     accent: Destaque e botões
     reset: Repor predefinição
@@ -316,7 +319,7 @@ pt-PT:
     intro: Inicie sessão com a sua conta profissional para continuar.
     google: Continuar com o Google
     microsoft: Continuar com a Microsoft
-    invite_only: O ShipUp é só por convite. Peça a um administrador do projeto para convidar este endereço de e-mail.
+    invite_only: O ohship é só por convite. Peça a um administrador do projeto para convidar este endereço de e-mail.
     failed: Não foi possível iniciar sessão com essa conta.
     cancelled: O início de sessão foi cancelado ou falhou. Tente outra vez.
 
@@ -335,7 +338,7 @@ pt-PT:
       detail: Pode ter mudado de sítio, ter sido eliminada ou nunca ter existido.
     406:
       title: O seu navegador é demasiado antigo
-      detail: O ShipUp precisa de uma versão recente do Chrome, Edge, Firefox ou Safari.
+      detail: O ohship precisa de uma versão recente do Chrome, Edge, Firefox ou Safari.
     422:
       title: Essa alteração foi rejeitada
       detail: A página expirou ou os dados não eram válidos. Recarregue e tente outra vez.
@@ -354,6 +357,7 @@ pt-PT:
     topics: Tópicos
     tasks: Tarefas
     projects: Projetos
+    pages: Páginas
     hint_html: "Escreva pelo menos duas letras, ou uma chave de tarefa como <code>%{example}</code>."
     empty: "Nada corresponde a «%{query}»."
     chain_step: "Sequência %{key} · passo %{position} de %{size}"
@@ -723,7 +727,7 @@ pt-PT:
     resend: Reenviar
     revoke: Revogar
     confirm_revoke: Revogar este convite?
-    product: ShipUp
+    product: ohship
     now_role: "%{name} é agora %{role}."
     bad_role: Essa função não está disponível.
     not_self: Não pode remover-se.
@@ -808,7 +812,7 @@ pt-PT:
 
   integrations:
     title: Ferramenta de reuniões
-    setup: Configurar o ShipUp
+    setup: Configurar o ohship
     admin_only: Só administradores
     company: Empresa
     meeting_tool: Ferramenta de reuniões
@@ -850,6 +854,19 @@ pt-PT:
     link_failed: Não foi possível associar esse repositório. Verifique as permissões do GitHub e tente outra vez.
     unlinked: "%{repo} desassociado."
     connect_github: Ligue primeiro o GitHub.
+    connectors_intro: "Ligue as ferramentas que a sua equipa já usa. Todos nesta instalação partilham estas ligações."
+    group_meetings: Reuniões
+    group_ai: IA
+    ai_drafting: "Rascunhos com IA"
+    ai_enabled: "Ativa · %{provider}"
+    ai_not_configured: "Não configurada"
+    ai_text_html: "Cria rascunhos de tarefas e cadeias a partir de um tópico. Definida pelo operador do servidor: <code>LLM_ENABLED</code> (claude, gemini, grok ou gpt) e <code>LLM_API_KEY</code>."
+    default: "Predefinida"
+    use_for_meetings: "Usar para reuniões"
+    repositories: "Repositórios"
+    disconnect: "Desligar"
+    disconnect_confirm: "Desligar %{name}?"
+    disconnected: "%{provider} desligado."
 
   model_errors:
     ends_on_after_start: tem de ser igual ou posterior à data de início

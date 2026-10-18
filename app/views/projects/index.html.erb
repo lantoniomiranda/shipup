@@ -23,8 +23,8 @@
     </div>
 
     <% if Current.user.superadmin? %>
-      <%= link_to new_project_path, class: "btn btn--primary", data: { hotkey: "n" } do %>
-        <%= icon "plus" %><span><%= t("home.new_project") %></span><%= render "shared/key", label: "N" %>
+      <%= link_to new_project_path, class: "btn btn--primary", data: { **hotkey_data(:new_project) } do %>
+        <%= icon "plus" %><span><%= t("home.new_project") %></span><%= key_hint(:new_project) %>
       <% end %>
     <% end %>
   </div>

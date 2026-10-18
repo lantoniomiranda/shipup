@@ -33,10 +33,38 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select ".spotlight__tab--active", /Tasks 1/
   end
 
-  test "very short queries show a hint instead of results" do
-    get search_path(q: "r")
-    assert_select ".spotlight__hint", /at least two letters/
+  test "a blank query lists the pages to jump to" do
+    get search_path
+    assert_select ".spotlight__hint", /Jump to a page/
+    assert_select "h4", "Pages"
+    assert_select ".spotlight__result strong", "Account"
+    assert_select "h4", text: "Topics", count: 0
+  end
+
+  test "pages filter as you type, from the first letter" do
+    get search_path(q: "acc")
+    assert_select ".spotlight__result[href='#{account_path}']"
+    assert_select ".spotlight__result[href='#{appearance_path}']", count: 0
+    assert_select "h4", text: "Topics", count: 0
+  end
+
+  test "pages match keywords and project areas" do
+    get search_path(q: "zoom")
+    assert_select ".spotlight__result strong", "Connectors"
+    get search_path(q: "apo board")
+    assert_select ".spotlight__result[href='#{project_board_path(@project)}'] strong", "Apollo Gateway · Board"
+  end
+
+  test "admin-only pages stay hidden from members" do
+    sign_in_as users(:jonas)
+    get search_path(q: "connectors")
+    assert_select ".spotlight__result[href='#{integrations_path}']", count: 0
+  end
+
+  test "pages can be the only scope" do
+    get search_path(q: "rate", scope: "pages")
     assert_select ".spotlight__result", count: 0
+    assert_select ".spotlight__tab--active", /Pages/
   end
 
   test "no matches says so" do

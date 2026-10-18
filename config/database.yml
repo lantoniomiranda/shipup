@@ -12,11 +12,11 @@ default: &default
 
 development:
   <<: *default
-  database: shipup_development
+  database: shipup_development<%= ENV["DB_SUFFIX"] %>
 
 test:
   <<: *default
-  database: shipup_test<%= ENV["TEST_ENV_NUMBER"] %>
+  database: shipup_test<%= ENV["DB_SUFFIX"] %><%= ENV["TEST_ENV_NUMBER"] %>
 
 # Production keeps Solid Cache/Queue/Cable in their own databases so a noisy
 # queue can never starve the primary connection pool.

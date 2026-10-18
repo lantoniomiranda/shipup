@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_110001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_130001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -424,6 +424,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_110001) do
     t.time "work_day_end", default: "2000-01-01 17:00:00", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "keybindings", default: {}, null: false
+    t.string "project_tab_order", default: [], null: false, array: true
+    t.string "font", default: "exo", null: false
+    t.string "density", default: "comfortable", null: false
+    t.string "text_size", default: "default", null: false
+    t.string "corners", default: "square", null: false
+    t.string "custom_accent"
+    t.boolean "hard_shadows", default: true, null: false
+    t.boolean "high_contrast", default: false, null: false
+    t.boolean "reduce_motion", default: false, null: false
     t.index ["user_id"], name: "index_user_preferences_on_user_id", unique: true
   end
 
@@ -435,6 +445,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_110001) do
     t.string "avatar_color", default: "orange", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "time_zone_set_by_user", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

@@ -23,7 +23,7 @@ class Llm::DraftsTest < ActiveSupport::TestCase
     assert_includes prompt, @topic.title
     assert_includes prompt, "Jonas K.: Reproduced on staging."
     assert options[:json]
-    assert_includes options[:system], "ShipUp"
+    assert_includes options[:system], "ohship"
   end
 
   test "task draft falls back to the topic title when the model omits one" do

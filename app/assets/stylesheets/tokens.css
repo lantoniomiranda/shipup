@@ -1,5 +1,5 @@
 /*
- * Design tokens, ported from the ShipUp design file.
+ * Design tokens, ported from the ohship design file.
  *
  * Two independent theme axes are switched with data attributes on <html>:
  *   data-bg      paper (default) | mist | sage | night
@@ -143,3 +143,68 @@
 [data-bg="night"][data-accent="teal"]    { --accent-soft: #1E3B3A; --accent-ink: #7FD4C3; --accent-tint: #1F3335; }
 [data-bg="night"][data-accent="plum"]    { --accent-soft: #3F2433; --accent-ink: #E79BBB; --accent-tint: #33232F; }
 [data-bg="night"][data-accent="mustard"] { --accent-soft: #3D3320; --accent-ink: #EBC76A; --accent-tint: #312D22; }
+
+/* ---- "system" background: light by default, night when the OS prefers dark ---- */
+@media (prefers-color-scheme: dark) {
+:root[data-bg="system"] {
+  --paper: #16171F;
+  --surface: #1F2030;
+  --sunken: #101118;
+  --ink: #E4E6F4;
+  --ink-soft: #9A9FBF;
+  --line: #34364D;
+  --ink-a22: #E4E6F422;
+  --ink-a33: #E4E6F433;
+  --ink-a55: #E4E6F455;
+  --sunken-a99: #10111899;
+  --sunken-a55: #10111855;
+  --scrim: #0A0B10E6;
+  --mustard-soft: #3D3320;
+  --orange-soft: #4A2A1C;
+  --mustard-ink: #EBC76A;
+  --teal-soft: #1E3B3A;
+  --teal-ink: #7FD4C3;
+  --plum-soft: #3F2433;
+  --plum-ink: #E79BBB;
+  --blue-soft: #22304F;
+  --blue-ink: #9DB7F0;
+  --danger: #F0897B;
+  --danger-soft: #442321;
+}
+:root[data-bg="system"] { --accent-soft: #4A2A1C; --accent-ink: #F5A47C; --accent-tint: #2E2326; }
+:root[data-bg="system"][data-accent="blue"]    { --accent-soft: #22304F; --accent-ink: #9DB7F0; --accent-tint: #222B42; }
+:root[data-bg="system"][data-accent="teal"]    { --accent-soft: #1E3B3A; --accent-ink: #7FD4C3; --accent-tint: #1F3335; }
+:root[data-bg="system"][data-accent="plum"]    { --accent-soft: #3F2433; --accent-ink: #E79BBB; --accent-tint: #33232F; }
+:root[data-bg="system"][data-accent="mustard"] { --accent-soft: #3D3320; --accent-ink: #EBC76A; --accent-tint: #312D22; }
+}
+
+/* ---- Appearance settings (see the Appearance model): the person's choices land on <html> ---- */
+:root {
+  --zoom: 1;
+  --vh: calc(100vh / var(--zoom)); /* viewport height in zoomed pixels */
+  --btn-shadow: 2px 2px 0 var(--ink);
+  --lift-shadow: var(--lift-shadow);
+  --lift-shadow-lg: var(--lift-shadow-lg);
+  --card-lift: 3px 3px 0 var(--ink);
+}
+
+html { zoom: var(--zoom); } /* density x text size */
+
+[data-font="inter"]    { --font-display: Inter, system-ui, sans-serif; --font-body: Inter, system-ui, sans-serif; }
+[data-font="atkinson"] { --font-display: "Atkinson Hyperlegible", system-ui, sans-serif; --font-body: "Atkinson Hyperlegible", system-ui, sans-serif; }
+[data-font="serif"]    { --font-display: "Source Serif 4", Georgia, serif; --font-body: "Source Serif 4", Georgia, serif; }
+[data-font="mono"]     { --font-display: "JetBrains Mono", ui-monospace, monospace; --font-body: "JetBrains Mono", ui-monospace, monospace; }
+[data-font="system"]   { --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif; }
+
+[data-corners="soft"]  { --radius-sm: 6px;  --radius-md: 8px; }
+[data-corners="round"] { --radius-sm: 12px; --radius-md: 14px; }
+
+[data-shadows="flat"] { --btn-shadow: 0 0 0 transparent; --lift-shadow: 0 0 0 transparent; --lift-shadow-lg: 0 0 0 transparent; --card-lift: 0 0 0 transparent; }
+
+[data-contrast="high"] {
+  --ink-soft: color-mix(in srgb, var(--ink) 82%, var(--paper));
+  --line: color-mix(in srgb, var(--ink) 38%, var(--paper));
+}
+
+[data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }

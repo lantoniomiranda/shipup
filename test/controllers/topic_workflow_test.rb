@@ -85,12 +85,30 @@ class TopicWorkflowTest < ActionDispatch::IntegrationTest
     assert_match(/at least one step/i, flash[:alert])
   end
 
+  test "the meeting form has a calendar date, a time and suggested times" do
+    get new_project_topic_meeting_path(@project, @topic)
+
+    assert_select "input[type=date][name=date][min=?]", Date.current.iso8601
+    assert_select "input[type=time][name=time][step='300']"
+    assert_select ".chips .chip", 5
+    assert_select ".chip[data-meeting-form-date-param][data-meeting-form-time-param]"
+    assert_select "[data-meeting-form-zone-value=?]", users(:ines).time_zone
+    assert_select ".meeting-when", /Europe\/Lisbon/
+    assert_select "select[name=starts_at]", count: 0
+  end
+
+  test "the default date and time are the best suggested slot in the organizer's zone" do
+    get new_project_topic_meeting_path(@project, @topic)
+    first_chip = css_select(".chips .chip").first
+    assert_equal first_chip["data-meeting-form-date-param"], css_select("input[name=date]").first["value"]
+    assert_equal first_chip["data-meeting-form-time-param"], css_select("input[name=time]").first["value"]
+  end
+
   test "the meeting form suggests slots and lists the people in the topic first" do
     @topic.messages.create!(author: users(:jonas), body: "Reproduced")
     get new_project_topic_meeting_path(@project, @topic)
 
     assert_response :success
-    assert_select "select[name=starts_at] option", 5
     assert_select ".invitee", 2
     assert_select ".hours__bar", 2
   end
@@ -199,5 +217,83 @@ class TopicAiDraftTest < ActionDispatch::IntegrationTest
     get new_project_topic_task_path(@project, @topic, draft: 1)
     assert_response :success
     assert_select ".toast--alert", /LLM_ENABLED/
+  end
+end
+
+class MeetingSchedulingTest < ActionDispatch::IntegrationTest
+  JSON_HEADERS = { "Content-Type" => "application/json" }.freeze
+
+  setup do
+    @project = projects(:apollo)
+    @topic = topics(:refresh_tokens)
+    Setting.current.update!(meeting_provider: "zoom")
+    IntegrationConnection.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines), access_token: "tok", expires_at: 1.hour.from_now)
+    @zoom = stub_request(:post, "https://api.zoom.us/v2/users/me/meetings").to_return(status: 201, body: { id: 7, join_url: "https://zoom.us/j/7" }.to_json, headers: JSON_HEADERS)
+    sign_in_as users(:ines) # Europe/Lisbon
+    travel_to Time.utc(2026, 10, 20, 9)
+  end
+
+  teardown { travel_back }
+
+  def schedule(**params)
+    post project_topic_meetings_path(@project, @topic), params: { duration_minutes: "30", transcribe: "1" }.merge(params)
+  end
+
+  test "any date and time can be picked and are read in the organizer's own zone" do
+    assert_difference "@topic.meetings.count", 1 do
+      schedule(date: "2026-10-22", time: "14:30")
+    end
+
+    assert_redirected_to project_topic_path(@project, @topic)
+    # Lisbon is UTC+1 on 22 Oct 2026 (summer time), so 14:30 there is 13:30 UTC.
+    assert_equal Time.utc(2026, 10, 22, 13, 30), @topic.meetings.last.starts_at
+    assert_requested @zoom
+  end
+
+  test "winter dates use winter offsets" do
+    schedule(date: "2026-12-10", time: "09:00")
+    assert_equal Time.utc(2026, 12, 10, 9, 0), @topic.meetings.last.starts_at # Lisbon is UTC+0 in December
+  end
+
+  test "someone in another zone schedules in theirs" do
+    users(:ines).update!(time_zone: "Asia/Tokyo", time_zone_set_by_user: true)
+    schedule(date: "2026-10-22", time: "14:30")
+    assert_equal Time.utc(2026, 10, 22, 5, 30), @topic.meetings.last.starts_at
+  end
+
+  test "a time in the past is refused with a clear message" do
+    assert_no_difference "Meeting.count" do
+      schedule(date: "2026-10-19", time: "10:00")
+    end
+    assert_redirected_to new_project_topic_meeting_path(@project, @topic)
+    assert_match(/in the future/, flash[:alert])
+    assert_not_requested @zoom
+  end
+
+  test "an unreadable date is refused" do
+    assert_no_difference "Meeting.count" do
+      schedule(date: "not-a-date", time: "xx")
+    end
+    assert_match(/Check the time/, flash[:alert])
+  end
+
+  test "a missing time defaults to the start of the working day instead of failing" do
+    schedule(date: "2026-10-22", time: "")
+    assert_equal Time.utc(2026, 10, 22, 8, 0), @topic.meetings.last.starts_at # 09:00 Lisbon
+  end
+
+  test "the ISO8601 form still works for scripts" do
+    schedule(starts_at: "2026-10-22T13:30:00Z")
+    assert_equal Time.utc(2026, 10, 22, 13, 30), @topic.meetings.last.starts_at
+  end
+
+  test "the invitee rows carry the data the browser needs to flag working hours" do
+    users(:jonas).preference.update!(work_day_start: "08:00", work_day_end: "16:00")
+    get new_project_topic_meeting_path(@project, @topic)
+
+    row = css_select(".invitee").find { |li| li.text.include?("Jonas K.") }
+    assert_equal "Europe/Berlin", row["data-zone"]
+    assert_equal "480", row["data-work-start"]
+    assert_equal "960", row["data-work-end"]
   end
 end

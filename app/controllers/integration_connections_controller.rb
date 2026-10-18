@@ -1,4 +1,4 @@
-# OAuth round-trip that links this deploy to Zoom, Google Meet or GitHub.
+# OAuth round-trip that links this deploy to Zoom, Google Meet or GitHub, and the way back out.
 class IntegrationConnectionsController < ApplicationController
   before_action :require_superadmin
   before_action :set_provider
@@ -21,6 +21,12 @@ class IntegrationConnectionsController < ApplicationController
   rescue Integrations::Error => error
     Rails.logger.warn("Integration connect failed: #{error.message}")
     redirect_to integrations_path, alert: t("integrations.could_not", provider: @provider.label)
+  end
+
+  def destroy
+    IntegrationConnection.for(@provider.key)&.destroy
+    Setting.current.update!(meeting_provider: nil) if Setting.meeting_provider == @provider.key
+    redirect_to integrations_path, notice: t("integrations.disconnected", provider: @provider.label)
   end
 
   private

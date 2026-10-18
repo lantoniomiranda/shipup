@@ -1,0 +1,33 @@
+/* Connectors: a card grid per group (meetings, code, AI). */
+.connectors { display: flex; flex-direction: column; gap: 28px; }
+.connectors__group { display: flex; flex-direction: column; gap: 12px; }
+.connectors__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+
+.connector {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.connector--default { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent-tint); }
+.connector--muted { opacity: 0.65; }
+
+.connector__head { display: flex; align-items: center; gap: 12px; }
+.connector__logo { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800; }
+.connector__logo--blue { background: var(--blue-soft); color: var(--blue-ink); }
+.connector__logo--plum { background: var(--plum-soft); color: var(--plum-ink); }
+.connector__logo--teal { background: var(--teal-soft); color: var(--teal-ink); }
+.connector__logo--mustard { background: var(--mustard-soft); color: var(--mustard-ink); }
+.connector__title { display: flex; flex-direction: column; min-width: 0; }
+.connector__title strong { font-size: 17px; }
+.connector__status { overflow: hidden; color: var(--ink-soft); font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.connector__status--on { color: var(--teal-ink); }
+.connector__badge { margin-left: auto; }
+.connector__text { flex: 1; color: var(--ink-soft); font-size: 14px; font-weight: 500; }
+.connector__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.connector__actions .inline-form { display: contents; }
+.connector code { font-size: 12px; }

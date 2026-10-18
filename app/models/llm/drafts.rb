@@ -1,7 +1,7 @@
 # AI drafts built from a topic's discussion: a task, or a chain of ordered steps.
 module Llm::Drafts
   MAX_CONTEXT = 12_000
-  SYSTEM = "You are ShipUp's planning assistant. You turn a product/engineering discussion into concrete, " \
+  SYSTEM = "You are ohship's planning assistant. You turn a product/engineering discussion into concrete, " \
            "small work items. Be specific, use the discussion's own wording, never invent facts. " \
            "Estimates are in working days (0.5 to 5).".freeze
 

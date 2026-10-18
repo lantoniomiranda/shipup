@@ -69,6 +69,9 @@ it:
     account_shortcut: "Account (G U)"
     keyboard_shortcut: "Scorciatoie da tastiera (?)"
     integrations_shortcut: Integrazioni (amministratori)
+    your_zone: "Il tuo fuso orario (cambialo in Account)"
+    unread: "da leggere"
+    reorder_tabs: "Trascina una scheda per riordinare il menu"
 
   common:
     cancel: Annulla
@@ -289,7 +292,7 @@ it:
     crumb: Aspetto
     title: Aspetto
     settings: Impostazioni
-    intro: I colori del tuo ShipUp.
+    intro: I colori del tuo ohship.
     background: Sfondo
     accent: Accento e pulsanti
     reset: Ripristina predefinito
@@ -316,7 +319,7 @@ it:
     intro: Accedi con il tuo account di lavoro per continuare.
     google: Continua con Google
     microsoft: Continua con Microsoft
-    invite_only: ShipUp è solo su invito. Chiedi a un amministratore del progetto di invitare questo indirizzo e-mail.
+    invite_only: ohship è solo su invito. Chiedi a un amministratore del progetto di invitare questo indirizzo e-mail.
     failed: Non siamo riusciti a farti accedere con quell'account.
     cancelled: L'accesso è stato annullato o non è riuscito. Riprova.
 
@@ -335,7 +338,7 @@ it:
       detail: Può essere stata spostata, eliminata o non essere mai esistita.
     406:
       title: Il tuo browser è troppo vecchio
-      detail: ShipUp ha bisogno di una versione recente di Chrome, Edge, Firefox o Safari.
+      detail: ohship ha bisogno di una versione recente di Chrome, Edge, Firefox o Safari.
     422:
       title: Quella modifica è stata rifiutata
       detail: La pagina è scaduta o i dati non erano validi. Ricarica e riprova.
@@ -354,6 +357,7 @@ it:
     topics: Argomenti
     tasks: Attività
     projects: Progetti
+    pages: Pagine
     hint_html: "Scrivi almeno due lettere, o una sigla attività come <code>%{example}</code>."
     empty: "Niente corrisponde a «%{query}»."
     chain_step: "Sequenza %{key} · passo %{position} di %{size}"
@@ -723,7 +727,7 @@ it:
     resend: Reinvia
     revoke: Revoca
     confirm_revoke: Revocare questo invito?
-    product: ShipUp
+    product: ohship
     now_role: "%{name} ora è %{role}."
     bad_role: Quel ruolo non è disponibile.
     not_self: Non puoi rimuoverti.
@@ -808,7 +812,7 @@ it:
 
   integrations:
     title: Strumento per le riunioni
-    setup: Configura ShipUp
+    setup: Configura ohship
     admin_only: Solo amministratori
     company: Azienda
     meeting_tool: Strumento per le riunioni
@@ -850,6 +854,19 @@ it:
     link_failed: Non siamo riusciti a collegare quel repository. Controlla i permessi su GitHub e riprova.
     unlinked: "%{repo} scollegato."
     connect_github: Prima collega GitHub.
+    connectors_intro: "Collega gli strumenti che il tuo team già usa. Tutti su questa installazione condividono queste connessioni."
+    group_meetings: Riunioni
+    group_ai: IA
+    ai_drafting: "Bozze con IA"
+    ai_enabled: "Attiva · %{provider}"
+    ai_not_configured: "Non configurata"
+    ai_text_html: "Prepara bozze di attività e catene da un argomento. Impostata dall’operatore del server: <code>LLM_ENABLED</code> (claude, gemini, grok o gpt) e <code>LLM_API_KEY</code>."
+    default: "Predefinito"
+    use_for_meetings: "Usa per le riunioni"
+    repositories: "Repository"
+    disconnect: "Scollega"
+    disconnect_confirm: "Scollegare %{name}?"
+    disconnected: "%{provider} scollegato."
 
   model_errors:
     ends_on_after_start: deve essere il giorno di inizio o successivo

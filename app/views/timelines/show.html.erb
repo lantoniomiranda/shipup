@@ -7,16 +7,16 @@
 <div class="timeline-page">
   <div class="toolbar toolbar--timeline">
     <div class="timeline-nav">
-      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.earlier") }, data: { hotkey: "arrowleft" } %>
+      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.earlier") }, data: { **hotkey_data(:timeline_prev) } %>
       <h1><%= short_date(timeline.range.first) %> – <%= short_date(timeline.range.end - 1) %></h1>
-      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.later") }, data: { hotkey: "arrowright" } %>
-      <%= link_to project_timeline_path(@project), class: "btn", data: { hotkey: "t" } do %><span><%= t("timeline.today") %></span><%= render "shared/key", label: "T" %><% end %>
+      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.later") }, data: { **hotkey_data(:timeline_next) } %>
+      <%= link_to project_timeline_path(@project), class: "btn", data: { **hotkey_data(:timeline_today) } do %><span><%= t("timeline.today") %></span><%= key_hint(:timeline_today) %><% end %>
     </div>
     <ul class="legend">
       <li><i class="legend__swatch legend__swatch--done"></i><%= t("enums.gantt.done") %></li><li><i class="legend__swatch legend__swatch--progress"></i><%= t("enums.gantt.in_progress") %></li>
       <li><i class="legend__swatch legend__swatch--planned"></i><%= t("enums.gantt.planned") %></li><li><i class="legend__swatch legend__swatch--risk"></i><%= t("enums.gantt.risk") %></li>
     </ul>
-    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { hotkey: "s" } do %><%= icon "calendar" %><span><%= t("timeline.calendar") %></span><%= render "shared/key", label: "S" %><% end %>
+    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { **hotkey_data(:timeline_calendar) } do %><%= icon "calendar" %><span><%= t("timeline.calendar") %></span><%= key_hint(:timeline_calendar) %><% end %>
   </div>
 
   <section class="panel panel--gantt">

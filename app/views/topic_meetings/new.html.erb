@@ -1,11 +1,11 @@
 <% project_header @project, active: :topics %>
 <% provider = Setting.meeting_provider %>
 
-<%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form" } do |form| %>
+<%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form", meeting_form_zone_value: Current.user.time_zone } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= render "shared/key", label: "Esc" %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
+        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= key_hint(:back) %>
       <% end %>
     </header>
 
@@ -20,13 +20,15 @@
       <% end %>
 
       <div class="field-row field-row--wide">
-        <div class="field field--grow-x">
-          <%= label_tag :starts_at, t("meetings.when"), class: "eyebrow" %>
-          <select name="starts_at" id="starts_at" class="select select--icon" data-meeting-form-target="when" data-action="meeting-form#recenter">
-            <% @slots.each do |slot| %>
-              <option value="<%= slot.starts_at.iso8601 %>"><%= slot.label(30) %> <%= t("meetings.covered", covered: slot.covered, total: slot.total) %></option>
-            <% end %>
-          </select>
+        <div class="field">
+          <%= label_tag :date, "Date", class: "eyebrow" %>
+          <%= date_field_tag :date, @default_start.to_date, min: Date.current, required: true, class: "input",
+                             data: { meeting_form_target: "date", action: "input->meeting-form#recompute" } %>
+        </div>
+        <div class="field">
+          <%= label_tag :time, "Time", class: "eyebrow" %>
+          <%= time_field_tag :time, @default_start.strftime("%H:%M"), step: 300, required: true, class: "input",
+                             data: { meeting_form_target: "time", action: "input->meeting-form#recompute" } %>
         </div>
         <div class="field">
           <%= label_tag :duration_minutes, t("meetings.length"), class: "eyebrow" %>
@@ -43,16 +45,31 @@
       </div>
 
       <div class="field">
-        <p class="eyebrow"><%= t("meetings.invite", count: @invitees.size) %></p>
+        <p class="eyebrow">Suggested times · best overlap of working hours</p>
+        <div class="chips chips--wrap">
+          <% @slots.each do |slot| %>
+            <% local = slot.starts_at.in_time_zone %>
+            <button type="button" class="chip" data-action="meeting-form#pick" data-meeting-form-date-param="<%= local.to_date.iso8601 %>" data-meeting-form-time-param="<%= local.strftime("%H:%M") %>">
+              <%= local.strftime("%a %-d %b · %H:%M") %> · <%= slot.covered %>/<%= slot.total %> available
+            </button>
+          <% end %>
+        </div>
+        <p class="meeting-when" data-meeting-form-target="summary" role="status">Times are in your time zone, <%= Current.user.time_zone.tr("_", " ") %> (UTC<%= Time.zone.now.formatted_offset %>).</p>
+      </div>
+
+      <div class="field">
+        <p class="eyebrow"><%= "Invite · #{pluralize(@invitees.size, "person")}" %></p>
         <ul class="invitees">
           <% @invitees.each do |user, reason| %>
-            <% in_topic = reason != t("meetings.not_in_topic") %>
-            <li class="invitee <%= "invitee--off" unless in_topic %>">
+            <% in_topic = reason != "Not in this topic" %>
+            <% prefs = user.preference %>
+            <li class="invitee <%= "invitee--off" unless in_topic %>" data-meeting-form-target="invitee" data-zone="<%= user.time_zone %>"
+                data-work-start="<%= prefs.work_day_start.hour * 60 + prefs.work_day_start.min %>" data-work-end="<%= prefs.work_day_end.hour * 60 + prefs.work_day_end.min %>">
               <%= hidden_field_tag "attendees[#{user.id}][invite]", "0" %>
               <%= check_box_tag "attendees[#{user.id}][invite]", "1", in_topic, class: "check", "aria-label": t("meetings.invite_person", name: user.name) %>
               <%= avatar(user, size: :md) %>
               <span class="invitee__name"><strong><%= user.short_name %></strong><small><%= reason %></small></span>
-              <span class="invitee__time"><%= icon daypart_icon(user.time_zone), size: 13 %><%= local_time(user.time_zone) %> <%= user.city %></span>
+              <span class="invitee__time"><%= icon daypart_icon(user.time_zone), size: 13 %><b data-clock><%= local_time(user.time_zone) %></b> <%= user.city %></span>
               <span class="choice choice--small">
                 <label class="choice__option"><%= radio_button_tag "attendees[#{user.id}][requirement]", "required", true, class: "choice__input" %><span><%= t("common.required") %></span></label>
                 <label class="choice__option choice__option--optional"><%= radio_button_tag "attendees[#{user.id}][requirement]", "optional", false, class: "choice__input" %><span><%= t("common.optional") %></span></label>
@@ -64,9 +81,9 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" <%= "disabled" unless provider %> data-hotkey="ctrl+enter">
-        <%= icon "video" %><span><%= t("meetings.create") %></span><%= render "shared/key", label: "Ctrl Enter" %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" <%= "disabled" unless provider %> data-hotkey="<%= Keybindings.keys(:submit) %>">
+        <%= icon "video" %><span><%= t("meetings.create") %></span><%= key_hint(:submit) %>
       </button>
     </footer>
   </section>

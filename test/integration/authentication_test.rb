@@ -6,6 +6,17 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     assert_redirected_to sign_in_path
   end
 
+  test "signed-in people get the dashboard at the root" do
+    sign_in_as users(:ines)
+    get root_path
+    assert_select ".project-card h2", "Apollo Gateway"
+  end
+
+  test "protected pages still send visitors to sign in" do
+    get account_path
+    assert_redirected_to sign_in_path
+  end
+
   test "sign-in page offers Google and Microsoft only" do
     get sign_in_path
     assert_response :success
@@ -28,9 +39,9 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
   end
 
   test "returns the user to the page they originally asked for" do
-    get "/?from=link"
+    get "/account?from=link"
     sign_in_as users(:ines)
-    assert_redirected_to "http://www.example.com/?from=link"
+    assert_redirected_to "http://www.example.com/account?from=link"
   end
 
   test "signing out ends the session" do
@@ -38,6 +49,8 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     sign_out
     assert_redirected_to sign_in_path
     get root_path
+    assert_redirected_to sign_in_path
+    get account_path
     assert_redirected_to sign_in_path
   end
 

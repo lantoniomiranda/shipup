@@ -1,7 +1,7 @@
 .project-header {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
   flex: none;
   height: 56px;
   padding: 0 16px;
@@ -10,28 +10,33 @@
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
-.project-header__title { display: flex; align-items: center; gap: 14px; }
-.project-header h2 { font-size: 22px; }
+.project-header__title { display: flex; align-items: center; gap: 10px; flex: none; }
+.project-header h2 { font-size: 18px; white-space: nowrap; }
 
-.project-mark { display: grid; place-items: center; width: 34px; height: 34px; background: var(--hue); border-radius: var(--radius-sm); box-shadow: var(--outline); }
+.project-mark { display: grid; place-items: center; width: 30px; height: 30px; background: var(--hue); border-radius: var(--radius-sm); box-shadow: var(--outline); }
 
-.sprint-badge { display: flex; overflow: hidden; border-radius: var(--radius-sm); box-shadow: 0 0 0 1px var(--ink); font-size: 12px; font-weight: 600; }
+.sprint-badge { display: flex; white-space: nowrap; overflow: hidden; border-radius: var(--radius-sm); box-shadow: 0 0 0 1px var(--ink); font-size: 12px; font-weight: 600; }
 .sprint-badge__name { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: var(--mustard-ink); color: #F3EAD8; }
 .sprint-badge__left { display: flex; align-items: center; padding: 4px 8px; background: var(--mustard-soft); color: #2B211A; }
 
-.tabs { display: flex; flex: 1; align-self: stretch; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; flex: 1; min-width: 0; overflow: hidden; align-self: stretch; border-bottom: 1px solid var(--line); }
 
 .tab {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  gap: 7px;
+  padding: 10px 12px;
+  white-space: nowrap;
   margin-bottom: -1px;
   color: var(--ink-soft);
   border-bottom: 3px solid var(--paper);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 }
+
+/* Chord hints stay out of the way until the tab is hovered. */
+.tab .key { display: none; }
+.tab:hover .key { display: inline-flex; }
 
 .tab:hover { color: var(--ink); }
 .tab--active { color: var(--ink); border-bottom-color: var(--accent); }
@@ -42,4 +47,7 @@
 .project-header__members .avatar { width: 32px; height: 32px; font-size: 12px; box-shadow: inset 0 0 0 2px var(--paper); }
 .project-header__more { color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 
-@media (max-width: 1100px) { .tab span, .tab .key { display: none; } .project-header__members { display: none; } }
+@media (max-width: 900px) { .tab span { display: none; } .project-header__members { display: none; } }
+
+.tab--dragging { opacity: 0.4; }
+.tab[draggable="true"] { cursor: grab; }

@@ -17,6 +17,8 @@ class Topic < ApplicationRecord
 
   validates :title, presence: true
 
+  after_create_commit :notify_members
+
   scope :top, -> { order(votes_score: :desc, created_at: :desc) }
   scope :recent, -> { order(created_at: :desc) }
 
@@ -64,5 +66,11 @@ class Topic < ApplicationRecord
 
   def refresh_votes_score!
     update!(votes_score: votes.sum(:value))
+  end
+
+  private
+
+  def notify_members
+    project.members.where.not(id: author_id).find_each { |member| Notification.notify(user: member, kind: :new_topic, subject: self, actor: author) }
   end
 end

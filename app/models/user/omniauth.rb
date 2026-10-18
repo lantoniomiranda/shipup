@@ -1,4 +1,4 @@
-# Sign-in from an OmniAuth auth hash. ShipUp is invite-only: an unknown email can only get in with
+# Sign-in from an OmniAuth auth hash. ohship is invite-only: an unknown email can only get in with
 # a pending project invitation, or when it is a superadmin email (SUPERADMIN_EMAILS: how the first person gets in).
 module User::Omniauth
   extend ActiveSupport::Concern

@@ -1,9 +1,10 @@
-# Quick search across the topics, tasks and projects the user can see (the "Super Space" palette).
+# Workspace-wide quick search across pages, topics, tasks and projects (the "Super Space" palette).
 class Search
-  SCOPES = %w[everything topics tasks projects].freeze
+  SCOPES = %w[everything pages topics tasks projects].freeze
   LIMIT = 6
-  Results = Data.define(:topics, :tasks, :projects) do
-    def counts = { "topics" => topics.size, "tasks" => tasks.size, "projects" => projects.size }
+  PAGE_LIMIT = 8
+  Results = Data.define(:pages, :topics, :tasks, :projects) do
+    def counts = { "pages" => pages.size, "topics" => topics.size, "tasks" => tasks.size, "projects" => projects.size }
     def empty? = counts.values.all?(&:zero?)
   end
 
@@ -16,15 +17,20 @@ class Search
   end
 
   def results
-    @results ||= if query.length < 2
-      Results.new(topics: [], tasks: [], projects: [])
-    else
-      Results.new(topics: include?("topics") ? topics : [], tasks: include?("tasks") ? tasks : [], projects: include?("projects") ? projects : [])
-    end
+    @results ||= Results.new(
+      pages: include?("pages") ? pages : [],
+      topics: searchable? && include?("topics") ? topics : [],
+      tasks: searchable? && include?("tasks") ? tasks : [],
+      projects: searchable? && include?("projects") ? projects : []
+    )
   end
+
+  # Pages answer from the first keystroke; the rest needs two letters.
+  def searchable? = query.length >= 2
 
   private
 
+  def pages = Search::Pages.new(user: @user).matching(query, limit: PAGE_LIMIT)
   def include?(name) = scope == "everything" || scope == name
   def pattern = "%#{ActiveRecord::Base.sanitize_sql_like(query)}%"
   def project_ids = @project_ids ||= Project.visible_to(@user).ids

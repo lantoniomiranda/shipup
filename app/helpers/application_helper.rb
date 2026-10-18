@@ -1,4 +1,9 @@
 module ApplicationHelper
+  # Data attributes and inline custom properties for <html> from the signed-in person's appearance settings.
+  def html_appearance
+    Appearance.for(Current.user)
+  end
+
   # The signed-in user's chosen palette; visitors get the defaults.
   def current_theme
     preference = Current.user&.preference
@@ -23,6 +28,13 @@ module ApplicationHelper
     when 9..17 then "sun"
     else "moon"
     end
+  end
+
+  # "UTC+1", "UTC-3:30" for a zone right now.
+  def utc_offset_label(zone, now: Time.current)
+    seconds = now.in_time_zone(zone).utc_offset
+    hours, minutes = seconds.abs.divmod(3600)
+    "UTC#{seconds.negative? ? "-" : "+"}#{hours}#{":%02d" % (minutes / 60) if minutes.positive?}"
   end
 
   def local_time(zone, now: Time.current)
@@ -72,22 +84,12 @@ module ApplicationHelper
     l(value.to_date, format: :weekday_day)
   end
 
-  PROJECT_TABS = [
-    { key: :topics, label: "Topics", icon: "messages-square" },
-    { key: :backlog, label: "Backlog", icon: "list-todo" },
-    { key: :board, label: "Board", icon: "kanban" },
-    { key: :timeline, label: "Timeline", icon: "calendar-range" },
-    { key: :clients, label: "Clients", icon: "building-2" },
-    { key: :people, label: "People", icon: "users" },
-    { key: :analytics, label: "Analytics", icon: "chart-column" }
-  ].freeze
-
-  # `data: { hotkey: ... }` for a registered shortcut, e.g. link_to ..., data: hotkey_data(:board).
+  # `data: { hotkey: ... }` for a registered shortcut, honouring the person's remapping.
   def hotkey_data(id, **extra)
     { hotkey: Keybindings.keys(id) }.merge(extra)
   end
 
-  # The little key cap for a registered shortcut.
+  # The little key cap for a registered shortcut (shows the person's own key).
   def key_hint(id)
     render "shared/key", label: Keybindings.label(id)
   end
@@ -101,7 +103,7 @@ module ApplicationHelper
 
   # Where a project tab goes; tabs for screens that are not built yet return nil.
   def project_tab_path(project, tab)
-    case tab
+    case tab.to_sym
     when :topics then project_topics_path(project)
     when :board then project_board_path(project)
     when :backlog then project_backlog_path(project)
@@ -149,6 +151,12 @@ module ApplicationHelper
   # URL for posting a new message to a thread.
   def chat_messages_path(project, thread)
     thread.is_a?(Task) ? project_task_messages_path(project, thread) : project_topic_messages_path(project, thread)
+  end
+
+  # The board's own keys (handled in board_controller.js rather than through data-hotkey).
+  def board_keys
+    { next_card: :board_next_card, prev_card: :board_prev_card, next_column: :board_next_column, prev_column: :board_prev_column, advance: :board_advance }
+      .transform_values { |id| Keybindings.keys(id) }
   end
 
   # Home filter links keep the default (active) URL clean.

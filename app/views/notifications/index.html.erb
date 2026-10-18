@@ -1,0 +1,28 @@
+<% breadcrumbs "Notifications" %>
+<% content_for :title, "Notifications" %>
+<% unread = @notifications.count { |notification| !notification.read? } %>
+
+<header class="page-header">
+  <div class="page-header__heading"><h1>Notifications</h1><p><%= unread.positive? ? "#{pluralize(unread, "unread notification")}." : "You're all caught up." %> Choose what you hear about in <%= link_to "your account", account_path, class: "link" %>.</p></div>
+  <div class="page-header__actions">
+    <% if unread.positive? %>
+      <%= button_to read_all_notifications_path, class: "btn", form: { class: "inline-form" } do %><%= icon "check" %><span>Mark all read</span><% end %>
+    <% end %>
+  </div>
+</header>
+
+<% if @notifications.empty? %>
+  <p class="empty">Nothing yet. Replies, @mentions, assignments, unlocked steps and meeting invites will show up here.</p>
+<% else %>
+  <ul class="notifications-list">
+    <% @notifications.each do |notification| %>
+      <li class="notification <%= "notification--unread" unless notification.read? %>">
+        <%= link_to notification_path(notification), class: "notification__link" do %>
+          <span class="notification__icon"><%= icon notification_icon(notification), size: 18 %></span>
+          <span class="notification__text"><strong><%= notification_summary(notification) %></strong><small><%= notification.created_at.strftime("%b %-d, %H:%M") %></small></span>
+          <% unless notification.read? %><span class="notification__dot" aria-label="Unread"></span><% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

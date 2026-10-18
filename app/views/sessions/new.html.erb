@@ -15,16 +15,16 @@
       <% end %>
 
       <div class="sign-in__options">
-        <%= button_to "/auth/google_oauth2", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey: "g" } do %>
+        <%= button_to "/auth/google_oauth2", class: "btn btn--wide btn--lg", data: { turbo: false, **hotkey_data(:sign_in_google) } do %>
           <%= icon "google", size: 20 %>
           <span class="btn__label"><%= t("sessions.google") %></span>
-          <%= render "shared/key", label: "G" %>
+          <%= key_hint(:sign_in_google) %>
         <% end %>
 
-        <%= button_to "/auth/entra_id", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey: "m" } do %>
+        <%= button_to "/auth/entra_id", class: "btn btn--wide btn--lg", data: { turbo: false, **hotkey_data(:sign_in_microsoft) } do %>
           <%= icon "microsoft", size: 20 %>
           <span class="btn__label"><%= t("sessions.microsoft") %></span>
-          <%= render "shared/key", label: "M" %>
+          <%= key_hint(:sign_in_microsoft) %>
         <% end %>
       </div>
     </div>

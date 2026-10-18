@@ -1,16 +1,26 @@
 <%= turbo_frame_tag "search_results" do %>
   <% results = @search.results %>
   <nav class="spotlight__tabs" aria-label="<%= t("search.scope") %>">
-    <% [ [ "everything", t("search.everything"), nil ], [ "topics", t("search.topics"), @counts["topics"] ], [ "tasks", t("search.tasks"), @counts["tasks"] ], [ "projects", t("search.projects"), @counts["projects"] ] ].each do |key, label, count| %>
-      <%= link_to search_path(q: @search.query, scope: key), class: "spotlight__tab #{"spotlight__tab--active" if @search.scope == key}", data: { spotlight_target: "tab", turbo_frame: "search_results" } do %><%= label %><%= " #{count}" if count && @search.query.length >= 2 %><% end %>
+    <% [ [ "everything", t("search.everything"), nil ], [ "pages", t("search.pages", default: "Pages"), @counts["pages"] ], [ "topics", t("search.topics"), @counts["topics"] ], [ "tasks", t("search.tasks"), @counts["tasks"] ], [ "projects", t("search.projects"), @counts["projects"] ] ].each do |key, label, count| %>
+      <%= link_to search_path(q: @search.query, scope: key), class: "spotlight__tab #{"spotlight__tab--active" if @search.scope == key}", data: { spotlight_target: "tab", turbo_frame: "search_results" } do %><%= label %><%= " #{count}" if count && @search.query.present? %><% end %>
     <% end %>
   </nav>
 
   <div class="spotlight__list">
-    <% if @search.query.length < 2 %>
+    <% if @search.query.blank? %>
       <p class="spotlight__hint"><%= t("search.hint_html", example: "APO-97") %></p>
     <% elsif results.empty? %>
       <p class="spotlight__hint"><%= t("search.empty", query: @search.query) %></p>
+    <% end %>
+
+    <% if results.pages.any? %>
+      <h4 class="eyebrow">Pages</h4>
+      <% results.pages.each do |page| %>
+        <%= link_to page.path, class: "spotlight__result", data: { spotlight_target: "result", turbo_frame: "_top" } do %>
+          <%= icon page.icon, size: 18 %>
+          <span class="spotlight__text"><strong><%= page.title %></strong><small><%= page.hint %></small></span>
+        <% end %>
+      <% end %>
     <% end %>
 
     <% if results.topics.any? %>

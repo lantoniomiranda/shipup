@@ -3,8 +3,8 @@
 <%= form_with scope: :chain, url: project_topic_chains_path(@project, @topic), class: "split", data: { controller: "steps" } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar panel__bar--split">
-      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= render "shared/key", label: "Esc" %>
+      <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
+        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= key_hint(:back) %>
       <% end %>
       <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, url: new_project_topic_chain_path(@project, @topic, draft: 1) %>
     </header>
@@ -30,16 +30,16 @@
         <template data-steps-target="template">
           <%= render "topic_chains/step", step: {}, index: "NEW_INDEX", members: @project.members.order(:name) %>
         </template>
-        <button type="button" class="btn btn--add" data-action="steps#add" data-hotkey="s">
-          <%= icon "plus" %><span><%= t("chain_form.add_step") %></span><%= render "shared/key", label: "S" %>
+        <button type="button" class="btn btn--add" data-action="steps#add" data-hotkey="<%= Keybindings.keys(:add_step) %>">
+          <%= icon "plus" %><span><%= t("chain_form.add_step") %></span><%= key_hint(:add_step) %>
         </button>
       </div>
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-        <%= icon "link" %><span><%= t("chain_form.create") %></span><%= render "shared/key", label: "Ctrl Enter" %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>">
+        <%= icon "link" %><span><%= t("chain_form.create") %></span><%= key_hint(:submit) %>
       </button>
     </footer>
   </section>

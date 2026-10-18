@@ -72,7 +72,7 @@ class GithubRepositoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "the setup page offers GitHub and links to repository management when connected" do
     get integrations_path
-    assert_select ".tool__text strong", "GitHub"
-    assert_select "a", text: /Choose repositories/
+    assert_select ".connector__title strong", "GitHub"
+    assert_select "a", text: /Repositories/
   end
 end

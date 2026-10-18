@@ -3,8 +3,8 @@
 <div class="split">
   <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "similar-topics editor", editor_link_sample_value: t("editor.link_sample"), similar_topics_url_value: similar_project_topics_path(@project) } do |form| %>
     <header class="panel__bar">
-      <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span><%= t("topics.back") %></span><%= render "shared/key", label: "Esc" %>
+      <%= link_to project_topics_path(@project), class: "thread__back", data: { **hotkey_data(:back) } do %>
+        <%= icon "arrow-left" %><span><%= t("topics.back") %></span><%= key_hint(:back) %>
       <% end %>
     </header>
 
@@ -59,9 +59,9 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topics_path(@project), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-        <%= icon "send" %><span><%= t("topics.post") %></span><%= render "shared/key", label: "Ctrl Enter" %>
+      <%= link_to project_topics_path(@project), class: "btn" do %><span><%= t("common.cancel") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>">
+        <%= icon "send" %><span><%= t("topics.post") %></span><%= key_hint(:submit) %>
       </button>
     </footer>
   <% end %>

@@ -9,8 +9,8 @@
       <%= link_to t("clients.archived", count: @archived_count), project_clients_path(@project, filter: "archived"), class: "segmented__item #{"segmented__item--active" if @filter == "archived"}" %>
     </div>
 
-    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { hotkey: "a" } do %>
-      <%= icon "user-plus" %><span><%= t("clients.add") %></span><%= render "shared/key", label: "A" %>
+    <%= link_to new_project_client_path(@project), class: "btn btn--primary", data: { **hotkey_data(:add_client) } do %>
+      <%= icon "user-plus" %><span><%= t("clients.add") %></span><%= key_hint(:add_client) %>
     <% end %>
   </div>
 
