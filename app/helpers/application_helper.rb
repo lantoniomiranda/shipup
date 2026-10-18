@@ -15,10 +15,14 @@ module ApplicationHelper
     content_for(:breadcrumbs) { safe_join(crumbs.each_with_index.map { |crumb, index| breadcrumb(crumb, last: index == crumbs.size - 1) }, icon("chevron-right")) }
   end
 
-  # <span class="avatar avatar--md avatar--teal">IM</span>
+  AVATAR_ICON_SIZES = { sm: 14, md: 17, lg: 22 }.freeze
+
+  # The person's chosen icon on their chosen colour; the initials stay as the accessible label.
+  # <span class="avatar avatar--md avatar--teal" role="img" aria-label="Inês Matos" title="Inês Matos"><svg .../></span>
   def avatar(user, size: :md, **options)
-    tag.span(user.initials, class: [ "avatar", "avatar--#{size}", "avatar--#{user.avatar_color}", options.delete(:class) ].compact,
-                            title: user.name, **options)
+    tag.span(icon(user.avatar_icon, size: AVATAR_ICON_SIZES.fetch(size, 17)),
+             class: [ "avatar", "avatar--#{size}", "avatar--#{user.avatar_color}", options.delete(:class) ].compact,
+             title: user.name, role: "img", "aria-label": "#{user.name} (#{user.initials})", **options)
   end
 
   # Sun / sunrise / moon for a time zone's current local hour.

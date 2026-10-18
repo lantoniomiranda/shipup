@@ -158,6 +158,11 @@ class KeybindingsViewsTest < ActionDispatch::IntegrationTest
     assert_select "a.tab--active[data-hotkey='g b']"
   end
 
+  test "project tab shortcuts are never hidden by the stylesheet" do
+    css = Rails.root.join("app/assets/stylesheets/components/project_header.css").read
+    assert_no_match(/\.tab[^{]*\.key[^{]*\{[^}]*display:\s*none/, css)
+  end
+
   test "remapped keys show up everywhere they appear" do
     users(:ines).preference.update!(keybindings: { "board" => "g x", "notifications" => "g i", "new_topic" => "w" })
     sign_in_as users(:ines)

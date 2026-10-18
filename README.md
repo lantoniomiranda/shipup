@@ -6,11 +6,13 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 ## Changelog
 
+- **Avatars show your icon; tab shortcuts always visible**: `avatar(user)` renders the icon picked in Settings → Account on the chosen colour (initials stay in `aria-label`/`title`), and the project tabs show their `g x` key caps permanently (they were hidden until hover); the current tab hides its own.
+
 Keep this section current: every change set adds a line here (newest first).
 
 - **Connectors redesigned**: the setup wizard is now a *Connectors* page in the normal app shell, with a card per tool grouped as Meetings (Zoom, Google Meet, Teams soon), Code (GitHub, with a link to repositories) and AI (status of `LLM_ENABLED`). Each card shows its connection, and admins can connect, disconnect and pick the default meeting tool in place. Reachable from search ("connectors", "zoom", "github").
 - **Search jumps to pages**: the palette (`/`) has a new *Pages* group that filters from the first keystroke: Account, Appearance, Keyboard shortcuts, Notifications, Time off, Connectors and People (admins), plus every project area ("Apollo Gateway · Board"). An empty palette lists the pages. Backed by `Search::Pages`.
-- **Calmer top bar and project header**: nothing wraps any more (breadcrumbs, timer pill, tabs), icon buttons are 36px, tab chord hints only show on hover, the workspace switcher hides when you only have one, and the first clock is labelled "You" with your UTC offset (e.g. `You UTC+1 11:58`).
+- **Calmer top bar and project header**: nothing wraps any more (breadcrumbs, timer pill, tabs), icon buttons are 36px, the workspace switcher hides when you only have one, and the first clock is labelled "You" with your UTC offset (e.g. `You UTC+1 11:58`).
 - **Test databases**: parallel test workers are capped at 4 (was one per CPU core, which left a dozen `shipup_test_N` databases behind); `task db:clean-test` drops them.
 - **Backoffice removed**: ohship is self-deployed, so there is no platform backoffice. Superadmin emails get admin membership of a built-in `ohship` workspace (`Workspace.instance`) on sign-in and land straight on the dashboard.
 - **Meeting scheduler**: pick any date from a calendar and any time (5-minute steps) instead of a fixed list; times are read in your own time zone (DST-correct), past times are refused, the best-overlap slots stay as one-click chips, and each invitee row shows their local time and turns red when it falls outside their working hours.
