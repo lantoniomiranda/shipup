@@ -9,8 +9,9 @@
       <span class="brand__word"><%= Rails.configuration.x.product_name %></span>
     <% end %>
 
-    <nav class="workspaces" aria-label="Workspaces">
-      <% user.workspaces.order(:id).each_with_index do |workspace, index| %>
+    <% workspaces = user.workspaces.order(:id).to_a %>
+    <nav class="workspaces" aria-label="Workspaces" <%= "hidden" if workspaces.size < 2 %>>
+      <% workspaces.each_with_index do |workspace, index| %>
         <% if workspace == Current.workspace %>
           <span class="workspaces__item workspaces__item--current" title="<%= workspace.name %>"><%= index + 1 %></span>
         <% else %>
@@ -26,10 +27,12 @@
   </div>
 
   <div class="clocks" data-controller="clock">
-    <% Current.workspace.clock_zones(for_user: user).each do |zone| %>
-      <div class="clock" data-clock-target="zone" data-zone="<%= zone %>">
+    <% Current.workspace.clock_zones(for_user: user, limit: 3).each do |zone| %>
+      <% you = zone == user.time_zone %>
+      <div class="clock <%= "clock--you" if you %>" data-clock-target="zone" data-zone="<%= zone %>" title="<%= you ? "Your time zone (change it in Account)" : zone %>">
         <%= icon daypart_icon(zone), size: 14 %>
-        <strong><%= zone.split("/").last.tr("_", " ") %></strong>
+        <strong><%= you ? "You" : zone.split("/").last.tr("_", " ") %></strong>
+        <% if you %><span class="clock__offset"><%= utc_offset_label(zone) %></span><% end %>
         <span data-clock-target="time"><%= local_time(zone) %></span>
       </div>
     <% end %>

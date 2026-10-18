@@ -30,6 +30,13 @@ module ApplicationHelper
     end
   end
 
+  # "UTC+1", "UTC-3:30" for a zone right now.
+  def utc_offset_label(zone, now: Time.current)
+    seconds = now.in_time_zone(zone).utc_offset
+    hours, minutes = seconds.abs.divmod(3600)
+    "UTC#{seconds.negative? ? "-" : "+"}#{hours}#{":%02d" % (minutes / 60) if minutes.positive?}"
+  end
+
   def local_time(zone, now: Time.current)
     now.in_time_zone(zone).strftime("%H:%M")
   end
