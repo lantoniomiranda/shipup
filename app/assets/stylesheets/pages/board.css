@@ -51,7 +51,7 @@
 
 .card:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
 .card--dragging { opacity: 0.45; }
-.card--running { box-shadow: inset 0 0 0 2px var(--ink), 3px 3px 0 var(--ink); }
+.card--running { box-shadow: inset 0 0 0 2px var(--ink), var(--card-lift); }
 .card--done { opacity: 0.75; }
 .card--done .card__title { color: var(--ink-soft); }
 
@@ -100,7 +100,7 @@
   background: var(--side);
   color: var(--side-text);
   border-radius: var(--radius-sm);
-  box-shadow: 3px 3px 0 var(--ink-a33);
+  box-shadow: var(--lift-shadow);
   font-size: 14px;
   font-weight: 600;
   transition: opacity 0.4s;

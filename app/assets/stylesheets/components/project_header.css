@@ -43,3 +43,6 @@
 .project-header__more { color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 
 @media (max-width: 1100px) { .tab span, .tab .key { display: none; } .project-header__members { display: none; } }
+
+.tab--dragging { opacity: 0.4; }
+.tab[draggable="true"] { cursor: grab; }

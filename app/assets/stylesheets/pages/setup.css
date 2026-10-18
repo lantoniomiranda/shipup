@@ -1,5 +1,5 @@
 /* Workspace setup: a steps rail on the left, the active step on the right. */
-.setup { display: flex; gap: 8px; min-height: 100vh; padding: 8px; }
+.setup { display: flex; gap: 8px; min-height: var(--vh); padding: 8px; }
 
 .setup__steps {
   display: flex;

@@ -1,21 +1,25 @@
 <% breadcrumbs "Settings", "Appearance" %>
 <% content_for :content_class, "shell__content--bare" %>
-<% themes = { "paper" => [ "#FBF7EC", "#E9DDC4", "#2B211A" ], "mist" => [ "#F2F6FA", "#C9D6E2", "#16202A" ], "sage" => [ "#F3F6EC", "#D6DEC8", "#1C2519" ], "night" => [ "#1F2030", "#101118", "#E4E6F4" ] } %>
+<% themes = { "paper" => [ "#FBF7EC", "#E9DDC4", "#2B211A" ], "mist" => [ "#F2F6FA", "#C9D6E2", "#16202A" ], "sage" => [ "#F3F6EC", "#D6DEC8", "#1C2519" ],
+              "night" => [ "#1F2030", "#101118", "#E4E6F4" ], "system" => [ "#FBF7EC", "#1F2030", "#2B211A" ] } %>
 <% accents = { "orange" => "#E8632B", "blue" => "#6F94D6", "teal" => "#4FA396", "plum" => "#C8628A", "mustard" => "#EBB43B" } %>
+<% custom_value = @preference.custom_accent || "#E8632B" %>
 
-<%= form_with model: @preference, url: appearance_path, method: :patch, scope: :preference, class: "split appearance", data: { controller: "theme-picker " } do |form| %>
+<%= form_with model: @preference, url: appearance_path, method: :patch, scope: :preference, class: "split appearance",
+              data: { controller: "theme-picker", theme_picker_density_value: Appearance::DENSITY_SCALE.to_json, theme_picker_text_value: Appearance::TEXT_SCALE.to_json,
+                      theme_picker_fonts_value: Appearance::FONTS.transform_values { |font| font[:google] }.to_json } do |form| %>
   <section class="panel panel--form panel--narrow">
-    <div class="form">
-      <header class="form__heading"><h1>Appearance</h1><p>Colors for the whole workspace.</p></header>
+    <div class="form form--scroll">
+      <header class="form__heading"><h1>Appearance</h1><p>Make ohship look the way you like. Changes preview instantly; Done saves them.</p></header>
 
       <fieldset class="field">
         <legend class="eyebrow">Background</legend>
-        <div class="theme-grid">
+        <div class="theme-grid theme-grid--five">
           <% themes.each do |name, (surface, sunken, ink)| %>
             <label class="theme-option">
-              <%= form.radio_button :theme_bg, name, class: "theme-option__input", data: { action: "theme-picker#preview", theme_picker_target: "bg", attribute: "data-bg", value: name } %>
+              <%= form.radio_button :theme_bg, name, class: "theme-option__input", data: { action: "theme-picker#apply", attr: "data-bg" } %>
               <span class="theme-option__swatch" style="--s: <%= surface %>; --d: <%= sunken %>; --i: <%= ink %>"><i></i><b></b></span>
-              <span class="theme-option__name"><%= name.capitalize %><%= icon "check", size: 14 %></span>
+              <span class="theme-option__name"><%= name == "system" ? "Match system" : name.capitalize %><%= icon "check", size: 14 %></span>
             </label>
           <% end %>
         </div>
@@ -23,15 +27,82 @@
 
       <fieldset class="field">
         <legend class="eyebrow">Accent and buttons</legend>
-        <div class="accent-row">
+        <div class="accent-row accent-row--six">
           <% accents.each do |name, color| %>
             <label class="accent-option">
-              <%= form.radio_button :theme_accent, name, class: "accent-option__input", data: { action: "theme-picker#preview", theme_picker_target: "accent", attribute: "data-accent", value: name } %>
+              <%= form.radio_button :theme_accent, name, class: "accent-option__input", data: { action: "theme-picker#accent", attr: "data-accent" } %>
               <span class="accent-option__chip" style="background: <%= color %>"><%= icon "check", size: 18 %></span>
               <span class="accent-option__name"><%= name.capitalize %></span>
             </label>
           <% end %>
+          <label class="accent-option accent-option--custom">
+            <%= form.radio_button :theme_accent, "custom", class: "accent-option__input", data: { action: "theme-picker#accent", attr: "data-accent", theme_picker_target: "customRadio" } %>
+            <span class="accent-option__chip" data-theme-picker-target="customChip" style="background: <%= custom_value %>"><%= icon "check", size: 18 %></span>
+            <span class="accent-option__name">Custom</span>
+            <%= form.color_field :custom_accent, value: custom_value, class: "accent-option__picker", "aria-label": "Custom accent colour", data: { action: "input->theme-picker#custom", theme_picker_target: "customColor" } %>
+          </label>
         </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Font</legend>
+        <div class="font-grid">
+          <% Appearance::FONTS.each do |key, font| %>
+            <label class="font-option">
+              <%= form.radio_button :font, key, class: "font-option__input", data: { action: "theme-picker#font", attr: "data-font" } %>
+              <span class="font-option__sample" style="font-family: <%= font[:stack] %>">Aa</span>
+              <span class="font-option__name"><%= font[:label] %></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <div class="field-row field-row--wrap">
+        <fieldset class="field">
+          <legend class="eyebrow">Density</legend>
+          <div class="choice">
+            <% UserPreference::DENSITIES.each do |value| %>
+              <label class="choice__option"><%= form.radio_button :density, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "density" } %><span><%= value.capitalize %></span></label>
+            <% end %>
+          </div>
+        </fieldset>
+        <fieldset class="field">
+          <legend class="eyebrow">Text size</legend>
+          <div class="choice">
+            <% UserPreference::TEXT_SIZES.each do |value| %>
+              <label class="choice__option"><%= form.radio_button :text_size, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "text" } %><span><%= value.capitalize %></span></label>
+            <% end %>
+          </div>
+        </fieldset>
+        <fieldset class="field">
+          <legend class="eyebrow">Corners</legend>
+          <div class="choice">
+            <% UserPreference::CORNERS.each do |value| %>
+              <label class="choice__option"><%= form.radio_button :corners, value, class: "choice__input", data: { action: "theme-picker#apply", attr: "data-corners" } %><span><%= value.capitalize %></span></label>
+            <% end %>
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Effects and accessibility</legend>
+        <ul class="effects">
+          <% [ [ :hard_shadows, "Offset shadows", "The chunky drop shadows under buttons and cards.", "data-shadows", "hard", "flat" ],
+               [ :high_contrast, "High contrast", "Stronger borders and darker secondary text.", "data-contrast", "high", "normal" ],
+               [ :reduce_motion, "Reduce motion", "Turn off animations and transitions.", "data-motion", "reduced", "normal" ] ].each do |field, title, hint, attr, on, off| %>
+            <li>
+              <div><strong><%= title %></strong><small><%= hint %></small></div>
+              <%= form.hidden_field field, value: "0", id: nil %>
+              <%= form.check_box field, { class: "switch", data: { action: "theme-picker#apply", attr: attr, on: on, off: off } }, "1", "0" %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="eyebrow">Project menu</legend>
+        <p class="effects__hint">Inside a project, drag the tabs (Topics, Backlog, Board…) into the order you want. It's remembered for you.</p>
+        <button type="submit" form="reset-tab-order" class="btn btn--small" formnovalidate><%= icon "rotate-ccw", size: 13 %><span>Reset menu order</span></button>
       </fieldset>
     </div>
 
@@ -46,8 +117,8 @@
     <div class="preview">
       <h3 class="eyebrow">Buttons and labels</h3>
       <div class="preview__row">
-        <span class="btn btn--primary"><%= icon "plus" %><span>New topic</span><%= render "shared/key", label: "K" %></span>
-        <span class="btn"><%= icon "video" %><span>Create meeting</span><%= render "shared/key", label: "K" %></span>
+        <span class="btn btn--primary"><%= icon "plus" %><span>New topic</span></span>
+        <span class="btn"><%= icon "video" %><span>Create meeting</span></span>
       </div>
       <div class="preview__row">
         <span class="tag tag--task-status">In progress</span><span class="tag tag--client">Needs decision</span><span class="tag tag--issue">Bug</span><span class="tag tag--task">Deployed</span><span class="tag tag--similar">Sounds familiar</span>
@@ -57,6 +128,17 @@
         <li class="preview__list-item--active"><strong>Refresh tokens expire silently after 24h</strong><small>Sofia R. · 2 days ago</small></li>
         <li><strong>Webhook retries with exponential backoff</strong><small>Daniel O. · 3 days ago</small></li>
       </ul>
+      <h3 class="eyebrow">A board card</h3>
+      <div class="preview-board">
+        <article class="card card--running"><div class="card__top"><span class="card__key">APO-97</span><span class="card__topic"><%= icon "message-square", size: 12 %>from D-12</span></div>
+          <span class="card__title">Per-key rate limiting</span>
+          <div class="card__timer"><span class="card__timer-dot"></span><span>02:14:09</span></div>
+          <div class="card__footer"><span class="tag tag--label hue-orange">Backend</span><span class="card__meta">Oct 19 <%= avatar(Current.user, size: :sm) %></span></div></article>
+        <div class="xp"><div class="xp__labels"><span>SPRINT 14 · 3 DAYS LEFT</span><strong>68% XP</strong></div>
+          <div class="xp__bar hue-orange"><% 20.times do |i| %><span class="xp__segment <%= "xp__segment--on" if i < 14 %> <%= "xp__segment--edge" if i == 13 %>"></span><% end %></div></div>
+      </div>
     </div>
   </section>
 <% end %>
+
+<%= form_with url: project_tab_order_path, method: :delete, id: "reset-tab-order", class: "hidden-form" do %><% end %>

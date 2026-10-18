@@ -12,16 +12,16 @@
     <% end %>
   </div>
 
-  <nav class="tabs" aria-label="Project sections">
-    <% ApplicationHelper::PROJECT_TABS.each do |tab| %>
+  <nav class="tabs" aria-label="Project sections" data-controller="tab-sort" data-tab-sort-url-value="<%= project_tab_order_path %>" title="Drag a tab to reorder your menu">
+    <% ProjectTabs.for(Current.user).each do |tab| %>
       <% path = project_tab_path(project, tab[:key]) %>
-      <% current = tab[:key] == active %>
+      <% current = tab[:key].to_sym == active %>
       <% body = capture do %>
-        <%= icon tab[:icon] %><span><%= tab[:label] %></span><%= key_hint(tab[:key]) unless current %>
+        <%= icon tab[:icon] %><span><%= tab[:label] %></span><%= key_hint(tab[:key].to_sym) unless current %>
       <% end %>
       <% if path %>
-        <%= link_to body, path, class: "tab #{"tab--active" if current}", aria: { current: ("page" if current) },
-                    data: hotkey_data(tab[:key]) %>
+        <%= link_to body, path, class: "tab #{"tab--active" if current}", aria: { current: ("page" if current) }, draggable: true,
+                    data: hotkey_data(tab[:key].to_sym, tab_sort_target: "tab", tab_key: tab[:key], action: "dragstart->tab-sort#start dragover->tab-sort#over drop->tab-sort#drop dragend->tab-sort#finish") %>
       <% else %>
         <span class="tab tab--soon" title="Coming soon"><%= body %></span>
       <% end %>

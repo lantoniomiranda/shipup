@@ -1,5 +1,5 @@
 /* Public landing page. Same language as the app: paper, hard outlines, one accent, a sunset. */
-.landing { min-height: 100vh; overflow-x: hidden; }
+.landing { min-height: var(--vh); overflow-x: hidden; }
 .landing a:not(.btn) { color: inherit; }
 .wrap, .landing__nav, .landing__footer { max-width: 1200px; margin-inline: auto; padding-inline: 32px; }
 .landing > main > section { padding-block: 72px; }

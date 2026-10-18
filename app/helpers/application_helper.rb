@@ -1,4 +1,9 @@
 module ApplicationHelper
+  # Data attributes and inline custom properties for <html> from the signed-in person's appearance settings.
+  def html_appearance
+    Appearance.for(Current.user)
+  end
+
   # The signed-in user's chosen palette; visitors get the defaults.
   def current_theme
     preference = Current.user&.preference
@@ -43,15 +48,6 @@ module ApplicationHelper
     end
   end
 
-  PROJECT_TABS = [
-    { key: :topics, label: "Topics", icon: "messages-square" },
-    { key: :backlog, label: "Backlog", icon: "list-todo" },
-    { key: :board, label: "Board", icon: "kanban" },
-    { key: :timeline, label: "Timeline", icon: "calendar-range" },
-    { key: :clients, label: "Clients", icon: "building-2" },
-    { key: :analytics, label: "Analytics", icon: "chart-column" }
-  ].freeze
-
   # `data: { hotkey: ... }` for a registered shortcut, honouring the person's remapping.
   def hotkey_data(id, **extra)
     { hotkey: Keybindings.keys(id) }.merge(extra)
@@ -71,7 +67,7 @@ module ApplicationHelper
 
   # Where a project tab goes; tabs for screens that are not built yet return nil.
   def project_tab_path(project, tab)
-    case tab
+    case tab.to_sym
     when :topics then project_topics_path(project)
     when :board then project_board_path(project)
     when :backlog then project_backlog_path(project)

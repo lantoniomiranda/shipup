@@ -1,5 +1,5 @@
 /* Signed-in shell: a 56px top bar above a framed content panel, 8px gutters all round. */
-.shell { display: flex; flex-direction: column; gap: 8px; height: 100vh; padding: 8px; }
+.shell { display: flex; flex-direction: column; gap: 8px; height: var(--vh); padding: 8px; }
 
 /* The accent frame is drawn above the scrolling content so nothing inside can cover it. */
 .shell__frame { position: relative; flex: 1; min-height: 0; border-radius: var(--radius-sm); }

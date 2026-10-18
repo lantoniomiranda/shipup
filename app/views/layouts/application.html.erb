@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bg="<%= current_theme[:bg] %>" data-accent="<%= current_theme[:accent] %>">
+<html lang="en" <%= tag.attributes(html_appearance.html_attributes) %>>
   <head>
     <title><%= [content_for(:title), Rails.configuration.x.product_name].compact.join(" · ") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&display=swap">
+    <% if (font_url = html_appearance.font_stylesheet_url) && html_appearance.font[:label] != "Exo 2" %><link rel="stylesheet" href="<%= font_url %>"><% end %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

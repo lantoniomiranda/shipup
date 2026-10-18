@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get "settings/keyboard", to: "keyboard_settings#show", as: :keyboard_settings
   patch "settings/keyboard", to: "keyboard_settings#update"
   delete "settings/keyboard", to: "keyboard_settings#destroy"
+  patch "preferences/project_tabs", to: "project_tab_orders#update", as: :project_tab_order
+  delete "preferences/project_tabs", to: "project_tab_orders#destroy"
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]
