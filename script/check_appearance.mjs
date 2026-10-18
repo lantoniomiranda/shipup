@@ -1,4 +1,4 @@
-// Browser smoke test for the appearance settings and tab drag-and-drop. Needs a running dev
+// Browser smoke test for the appearance settings, tab drag-and-drop and the meeting scheduler. Needs a running dev
 // server with seeded data (see script/check_keys.mjs for how to run and the env vars).
 import { spawn } from "node:child_process"
 
@@ -71,6 +71,25 @@ check("the order is remembered on other pages", persisted[0] === "analytics", pe
 await ev(`fetch('/preferences/project_tabs', { method: 'DELETE', headers: { 'X-CSRF-Token': ${csrf} } })`)
 await go(`${BASE}/projects/APO/board`)
 check("reset restores the default order", JSON.parse(await order())[0] === "topics")
+
+// 4. meeting scheduler: pick any date and time, see each invitee's local time
+await go(`${BASE}/projects/APO/topics`)
+const topicHref = await ev("document.querySelector('.topic-row__title').getAttribute('href')")
+await go(`${BASE}${topicHref}/meetings/new`)
+const zone = await ev("document.querySelector('[data-meeting-form-zone-value]').dataset.meetingFormZoneValue")
+await ev(`(() => { const set = (n, v) => { const el = document.querySelector('[name=' + n + ']'); el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })) }; set('date', '2026-12-10'); set('time', '14:30') })()`)
+const rows = JSON.parse(await ev("JSON.stringify([...document.querySelectorAll('.invitee')].map(li => ({ zone: li.dataset.zone, clock: li.querySelector('[data-clock]').textContent, outside: li.classList.contains('invitee--outside') })))"))
+// In December Lisbon is UTC+0 and Berlin UTC+1, Chicago UTC-6, Tokyo UTC+9.
+const clocks = Object.fromEntries(rows.map((row) => [row.zone, row.clock]))
+check("organizer zone is the signed-in person's", zone === "Europe/Lisbon", zone)
+check("Berlin invitee sees 15:30", (clocks["Europe/Berlin"] || "15:30").includes("15:30"), JSON.stringify(clocks))
+check("Tokyo invitee sees the next morning (23:30)", (clocks["Asia/Tokyo"] || "23:30").includes("23:30"))
+check("someone at 23:30 is flagged outside working hours", rows.some((row) => row.zone === "Asia/Tokyo" ? row.outside : true))
+const summary = await ev("document.querySelector('.meeting-when').textContent")
+check("summary names the chosen time", summary.includes("10 Dec") && summary.includes("14:30"), summary)
+await ev("document.querySelector('.chips .chip').click()")
+const chosen = JSON.parse(await ev("JSON.stringify({ date: document.querySelector('[name=date]').value, time: document.querySelector('[name=time]').value })"))
+check("clicking a suggested time fills the date and time", chosen.date !== "2026-12-10" && /^\d\d:\d\d$/.test(chosen.time), JSON.stringify(chosen))
 
 console.log(results.join("\n"))
 const failed = results.filter((line) => line.startsWith("FAIL")).length

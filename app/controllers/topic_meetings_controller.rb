@@ -4,11 +4,15 @@ class TopicMeetingsController < ApplicationController
   def new
     @invitees = invitable_people
     @slots = MeetingSlots.suggest(@invitees.map(&:first))
+    @default_start = (@slots.first&.starts_at || 1.day.from_now.change(hour: 14)).in_time_zone
   end
 
   def create
+    starts_at = requested_start
+    return redirect_to(new_project_topic_meeting_path(@project, @topic), alert: "Pick a time in the future.") if starts_at <= Time.current
+
     meeting = @topic.meetings.build(organizer: Current.user, provider: Current.workspace.meeting_provider.to_s,
-                                    starts_at: Time.iso8601(params[:starts_at].to_s), duration_minutes: params[:duration_minutes].to_i,
+                                    starts_at: starts_at, duration_minutes: params[:duration_minutes].to_i,
                                     transcribe: params[:transcribe] == "1")
     Meeting.transaction do
       meeting.save!
@@ -24,6 +28,14 @@ class TopicMeetingsController < ApplicationController
   end
 
   private
+
+  # The date and time the organizer picked, read in their own time zone (the request already runs in
+  # it). An ISO8601 `starts_at` is still accepted for integrations and scripts.
+  def requested_start
+    return Time.iso8601(params[:starts_at].to_s) if params[:date].blank?
+
+    Time.zone.parse("#{params[:date]} #{params[:time].presence || "09:00"}") || raise(ArgumentError, "unreadable date or time")
+  end
 
   # People in this topic first, then the rest of the project team. Value is the reason shown under their name.
   def invitable_people

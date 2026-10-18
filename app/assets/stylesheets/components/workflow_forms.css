@@ -130,3 +130,8 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 .block-form { display: block; width: 100%; }
 
 .check-line { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+/* Meeting scheduler. */
+.meeting-when { margin-top: 10px; color: var(--ink-soft); font-size: 13px; font-weight: 600; }
+.invitee--outside .invitee__time { color: var(--danger); }
+.invitee__time b { font-weight: 600; }
