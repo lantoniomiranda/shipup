@@ -15,10 +15,16 @@
   <td><% if task.estimate_days %><span class="tag"><%= task.estimate_days.round(1).to_s.delete_suffix(".0") %>d</span><% else %><span class="tag tag--similar"><%= t("tasks.no_estimate") %></span><% end %></td>
   <td><% if task.assignee %><span class="owner"><%= avatar(task.assignee, size: :sm) %><%= task.assignee.short_name %></span><% else %><span class="tag tag--plain"><%= t("common.unassigned") %></span><% end %></td>
   <td class="table__code"><% if (pr = task.pull_requests.first) %><%= icon "git-branch", size: 13 %>#<%= pr.number %><% else %><%= icon "git-branch", size: 13 %><%= t("tasks.no_branch") %><% end %></td>
-  <td>
-    <%= button_to schedule_project_task_path(project, task, to: (in_sprint ? "backlog" : "sprint")), method: :patch, class: "icon-button icon-button--small",
-                  title: (in_sprint ? t("tasks.move_backlog") : t("tasks.move_sprint")), aria: { label: (in_sprint ? t("tasks.move_backlog") : t("tasks.move_sprint")) } do %>
-      <%= icon(in_sprint ? "arrow-big-down" : "arrow-big-up", size: 14) %>
+  <td class="table__actions">
+    <% if in_sprint %>
+      <%= button_to schedule_project_task_path(project, task, to: "backlog"), method: :patch, class: "icon-button icon-button--small",
+                    title: t("tasks.move_backlog"), aria: { label: t("tasks.move_backlog") } do %><%= icon "arrow-big-down", size: 14 %><% end %>
+    <% else %>
+      <% sprints.each do |planned| %>
+        <% label = sprints.size > 1 ? t("tasks.move_to_sprint", name: planned.name) : t("tasks.move_sprint") %>
+        <%= button_to schedule_project_task_path(project, task, to: "sprint", sprint_id: planned.id), method: :patch, class: "icon-button icon-button--small",
+                      title: label, aria: { label: label } do %><%= icon "arrow-big-up", size: 14 %><% end %>
+      <% end %>
     <% end %>
   </td>
 </tr>

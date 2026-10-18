@@ -1,7 +1,6 @@
 <% project_header @project, active: :backlog %>
 <% sprint = @backlog.sprint %>
 <% counts = @backlog.counts %>
-<% days_until = sprint ? (sprint.starts_on - Date.current).to_i : nil %>
 
 <div class="split">
   <section class="panel panel--table">
@@ -20,21 +19,22 @@
     <table class="table table--backlog">
       <thead><tr><th></th><th><%= t("backlog.id") %></th><th><%= t("backlog.topic_title") %></th><th><%= t("backlog.kind") %></th><th><%= t("tasks.estimate") %></th><th><%= t("backlog.owner") %></th><th><%= t("backlog.code") %></th><th></th></tr></thead>
       <tbody>
-        <% if sprint %>
+        <% @backlog.sprints.each do |planned| %>
+          <% days_until = (planned.starts_on - Date.current).to_i %>
           <tr class="table__group"><td colspan="8"><div class="table__group-inner">
-            <strong><%= sprint.name %></strong><span><%= short_date(sprint.starts_on) %> – <%= short_date(sprint.ends_on) %> · <%= days_until.positive? ? t("backlog.starts_in", count: days_until) : t("backlog.planned") %></span>
-            <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.planned_days %> / <%= @backlog.capacity_days %> XP</span>
+            <strong><%= planned.name %></strong><span><%= short_date(planned.starts_on) %> – <%= short_date(planned.ends_on) %> · <%= days_until.positive? ? t("backlog.starts_in", count: days_until) : t("backlog.planned") %></span>
+            <% if planned == sprint %><span class="tag"><%= icon "timer", size: 13 %><%= @backlog.planned_days %> / <%= @backlog.capacity_days %> XP</span><% end %>
             <% if @project.managed_by?(Current.user) %>
-              <%= button_to start_project_sprint_path(@project, sprint), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "play", size: 13 %><span><%= t("backlog.start") %></span><% end %>
+              <%= button_to start_project_sprint_path(@project, planned), method: :patch, class: "btn btn--small", form: { class: "inline-form" } do %><%= icon "play", size: 13 %><span><%= t("backlog.start") %></span><% end %>
             <% end %>
           </div></td></tr>
-          <%= render partial: "backlogs/row", collection: @backlog.planned_tasks, as: :task, locals: { project: @project, in_sprint: true } %>
+          <%= render partial: "backlogs/row", collection: @backlog.planned_tasks(planned), as: :task, locals: { project: @project, in_sprint: true, sprints: @backlog.sprints } %>
         <% end %>
         <tr class="table__group"><td colspan="8"><div class="table__group-inner">
           <strong><%= t("backlog.group") %></strong><span><%= t("backlog.tasks_estimated", count: @backlog.backlog_tasks.size, days: @backlog.backlog_days) %></span>
           <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.backlog_days %>d</span>
         </div></td></tr>
-        <%= render partial: "backlogs/row", collection: @backlog.backlog_tasks, as: :task, locals: { project: @project, in_sprint: false } %>
+        <%= render partial: "backlogs/row", collection: @backlog.backlog_tasks, as: :task, locals: { project: @project, in_sprint: false, sprints: @backlog.sprints } %>
       </tbody>
     </table>
 

@@ -518,6 +518,7 @@ en:
     no_branch: No branch
     move_backlog: Move to backlog
     move_sprint: Move to the next sprint
+    move_to_sprint: "Move to %{name}"
     days:
       one: "%{count} day"
       other: "%{count} days"

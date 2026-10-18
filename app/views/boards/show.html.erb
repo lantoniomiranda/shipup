@@ -21,6 +21,10 @@
       <% if sprint %>
         <%= button_to complete_project_sprint_path(@project, sprint), method: :patch, class: "btn", form: { class: "inline-form" }, data: { turbo_confirm: t("board.confirm_complete", name: sprint.name) } do %><%= icon "check" %><span><%= t("board.complete") %></span><% end %>
       <% else %>
+        <% planned = @project.sprints.upcoming.first %>
+        <% if planned %>
+          <%= button_to start_project_sprint_path(@project, planned), method: :patch, class: "btn btn--primary", form: { class: "inline-form" } do %><%= icon "play" %><span><%= t("backlog.start") %> · <%= planned.name %></span><% end %>
+        <% end %>
         <%= link_to new_project_sprint_path(@project), class: "btn btn--primary" do %><%= icon "flag" %><span><%= t("board.start") %></span><% end %>
       <% end %>
     <% end %>

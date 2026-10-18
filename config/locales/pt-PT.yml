@@ -518,6 +518,7 @@ pt-PT:
     no_branch: Sem ramo
     move_backlog: Mover para o backlog
     move_sprint: Mover para o sprint seguinte
+    move_to_sprint: "Mover para %{name}"
     days:
       one: "%{count} dia"
       other: "%{count} dias"
