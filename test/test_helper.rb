@@ -12,6 +12,18 @@ module ActiveSupport
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
+
+    # A developer's .env (real LLM key and model) must never leak into tests: start every test with AI off.
+    LLM_ENV = %w[LLM_ENABLED LLM_API_KEY LLM_MODEL LLM_BASE_URL].freeze
+
+    setup do
+      @llm_env_before = ENV.to_h.slice(*LLM_ENV)
+      LLM_ENV.each { |key| ENV.delete(key) }
+    end
+
+    teardown do
+      LLM_ENV.each { |key| @llm_env_before.key?(key) ? ENV[key] = @llm_env_before[key] : ENV.delete(key) }
+    end
   end
 end
 
