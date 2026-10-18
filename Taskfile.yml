@@ -117,7 +117,7 @@ tasks:
     desc: Wipe the development database and migrate it again, empty (stops the server first)
     cmds:
       - task: server:stop
-      - bin/rails db:drop db:create db:migrate
+      - bin/rails db:create db:schema:load
 
   console:
     desc: Open a Rails console
