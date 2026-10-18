@@ -16,6 +16,8 @@ module ChatMessage
 
     validates :body, presence: true, unless: :deleted?
     validate :parent_in_same_thread
+
+    after_create_commit :notify_people
   end
 
   class_methods do
@@ -52,7 +54,19 @@ module ChatMessage
     deleted? ? "Message removed" : body.to_s.squish.truncate(length)
   end
 
+  # The project this thread lives in (topics and tasks both have one).
+  def project = thread.project
+
   private
+
+  # People who were replied to or @mentioned (by first name, like "@Daniel").
+  def notify_people
+    Notification.notify(user: parent.author, kind: :mention_or_reply, subject: self, actor: author) if parent
+    body.to_s.scan(/@(\p{L}[\p{L}\p{N}_-]*)/).flatten.map(&:downcase).uniq.each do |handle|
+      mentioned = project.members.find { |member| member.first_name.casecmp?(handle) }
+      Notification.notify(user: mentioned, kind: :mention_or_reply, subject: self, actor: author) if mentioned && mentioned != parent&.author
+    end
+  end
 
   def parent_in_same_thread
     return unless parent

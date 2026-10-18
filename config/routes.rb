@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   resources :invitations, only: %i[create destroy] do
     post :resend, on: :member
   end
+  resources :notifications, only: %i[index show] do
+    post :read_all, on: :collection
+  end
   resource :search, only: :show
   resource :account, only: %i[show update]
   resource :appearance, only: %i[show update]

@@ -52,10 +52,10 @@
     <% end %>
     <%= link_to time_off_requests_path, class: "icon-button", aria: { label: "Time off" }, title: "Time off (G O)", data: hotkey_data(:time_off) do %><%= icon "calendar", size: 18 %><% end %>
 
-    <button type="button" class="icon-button" aria-label="Notifications">
+    <%= link_to notifications_path, class: "icon-button", aria: { label: "Notifications#{" (unread)" if unread}" }, title: "Notifications (G N)", data: hotkey_data(:notifications) do %>
       <%= icon "bell", size: 18 %>
       <% if unread %><span class="icon-button__dot"></span><% end %>
-    </button>
+    <% end %>
 
     <%= link_to avatar(user, size: :lg, class: "avatar--ringed"), account_path, aria: { label: "Account" }, title: "Account (G U)", data: hotkey_data(:account) %>
   </div>

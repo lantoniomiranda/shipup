@@ -35,6 +35,8 @@ class Task < ApplicationRecord
 
   before_validation :assign_number, on: :create
   before_save :stamp_completion, if: :status_changed?
+  after_save_commit :notify_assignee, if: :saved_change_to_assignee_id?
+  after_update_commit :notify_next_step_owner, if: -> { saved_change_to_status? && done? }
 
   MINUTES_PER_DAY = 8 * 60
 
@@ -98,6 +100,16 @@ class Task < ApplicationRecord
 
   def assign_number
     self.number ||= project.next_task_number!
+  end
+
+  def notify_assignee
+    Notification.notify(user: assignee, kind: :task_assigned, subject: self) if assignee
+  end
+
+  # Finishing a step of a chain unlocks the next one for whoever owns it.
+  def notify_next_step_owner
+    following = next_in_chain
+    Notification.notify(user: following.assignee, kind: :subtask_unlocked, subject: following) if following&.assignee
   end
 
   def stamp_completion
