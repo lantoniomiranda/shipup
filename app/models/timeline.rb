@@ -1,7 +1,7 @@
 # A planning timeline: one row per feature (a topic's tasks) or loose task, with its steps scheduled
 # back to back. Dates are derived from estimates (working days) since tasks carry no start date.
 class Timeline
-  Bar = Data.define(:label, :starts_on, :ends_on, :state) # state: done | in_progress | planned | risk
+  Bar = Data.define(:label, :title, :task, :starts_on, :ends_on, :state) # state: done | in_progress | planned | risk
   Row = Data.define(:title, :subtitle, :percent, :bars, :due_on)
   Band = Data.define(:sprint, :starts_on, :ends_on)
 
@@ -26,9 +26,16 @@ class Timeline
     end
   end
 
+  # Features with at least one bar inside the window, capped at MAX_ROWS (see #hidden_rows).
   def rows
-    @rows ||= groups.first(MAX_ROWS).map { |title, tasks| build_row(title, tasks) }
+    @rows ||= all_rows.first(MAX_ROWS)
   end
+
+  def hidden_rows = [ all_rows.size - MAX_ROWS, 0 ].max
+
+  def scheduled_tasks? = groups.any?
+
+  def current_window? = range.cover?(today)
 
   def meetings
     @meetings ||= Meeting.where(topic: project.topics).where(starts_at: range.first.beginning_of_day..(range.end - 1).end_of_day).includes(:topic).order(:starts_at)
@@ -39,8 +46,14 @@ class Timeline
     meetings.group_by { |meeting| meeting.starts_at.to_date }
   end
 
-  def self.add_working_days(date, count)
+  # The first working day on or after +date+.
+  def self.next_working_day(date)
     date += 1 until date.on_weekday?
+    date
+  end
+
+  def self.add_working_days(date, count)
+    date = next_working_day(date)
     (count - 1).times do
       date += 1
       date += 1 until date.on_weekday?
@@ -50,25 +63,35 @@ class Timeline
 
   private
 
-  def default_start
-    project.active_sprint&.starts_on || today
+  # The window always opens on the week containing today, so the today marker is in view.
+  def default_start = today
+
+  def all_rows
+    @all_rows ||= groups.map { |title, tasks| build_row(title, tasks) }.select { |row| row.bars.any? { |bar| visible?(bar) } }
   end
+
+  def visible?(bar) = bar.ends_on >= range.first && bar.starts_on < range.end
 
   # [title, [tasks]] — tasks of one topic form a feature; topic-less tasks stand alone.
   def groups
+    @groups ||= build_groups
+  end
+
+  def build_groups
     tasks = project.tasks.where.not(sprint_id: nil).includes(:topic, :chain, :labels, :sprint).order(:chain_position, :number).to_a
     by_topic, loose = tasks.partition(&:topic_id)
     by_topic.group_by(&:topic).map { |topic, list| [ topic.title, list ] } + loose.map { |task| [ task.title, [ task ] ] }
   end
 
   def build_row(title, tasks)
-    cursor = [ tasks.filter_map { |task| task.sprint&.starts_on }.min || today, range.first ].max
+    cursor = tasks.filter_map { |task| task.sprint&.starts_on }.min || today
     bars = tasks.map do |task|
       duration = [ (task.estimate_days || 1).ceil, 1 ].max
-      starts_on = task.done? ? cursor : [ cursor, today ].max
+      starts_on = self.class.next_working_day(task.done? ? cursor : [ cursor, today ].max)
       ends_on = self.class.add_working_days(starts_on, duration)
       cursor = ends_on + 1
-      Bar.new(label: task.labels.first&.name || task.title.split.first, starts_on: starts_on, ends_on: ends_on, state: state_for(task, ends_on))
+      Bar.new(label: task.labels.first&.name || task.title.split.first, title: "#{task.key} #{task.title}", task: task,
+              starts_on: starts_on, ends_on: ends_on, state: state_for(task, ends_on))
     end
     percent = tasks.empty? ? 0 : (tasks.count(&:done?) * 100.0 / tasks.size).round
     first = tasks.first

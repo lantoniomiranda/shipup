@@ -20,6 +20,7 @@
   </div>
 
   <section class="panel panel--gantt">
+    <div class="gantt__scroll">
     <div class="gantt" style="--days: <%= days.size %>">
       <div class="gantt__head">
         <div class="gantt__label"><span class="eyebrow"><%= icon "sparkles", size: 13 %> <%= t("timeline.features") %></span></div>
@@ -32,42 +33,57 @@
           <div class="gantt__weeks">
             <% timeline.weeks.each do |week| %><span style="grid-column: <%= column.(week) %> / span 7"><%= short_date(week) %></span><% end %>
           </div>
+          <div class="gantt__days">
+            <% days.each do |day| %><i class="<%= class_names(weekend: day.on_weekend?, today: day == timeline.today) %>"><small><%= narrow_weekday(day) %></small><%= day.day %></i><% end %>
+          </div>
         </div>
       </div>
 
       <div class="gantt__body">
+        <% day_cells = capture do %><% days.each do |day| %><i class="<%= class_names(weekend: day.on_weekend?, today: day == timeline.today) %>"></i><% end %><% end %>
         <div class="gantt__row gantt__row--meetings">
           <div class="gantt__label"><%= icon "video", size: 15 %><strong><%= t("timeline.meetings") %></strong></div>
           <div class="gantt__track">
-            <% days.each do |day| %><i class="<%= "weekend" if day.on_weekend? %>"></i><% end %>
+            <%= day_cells %>
             <% timeline.meetings_by_day.each do |day, meetings| %>
-              <span class="gantt__meeting" style="grid-column: <%= column.(day) %> / span 2" title="<%= meetings.map { |m| m.topic.title }.to_sentence %>"><%= icon "video", size: 11 %><%= meetings.size > 1 ? t("timeline.meetings_count", count: meetings.size) : t("timeline.meeting") %></span>
+              <span class="gantt__meeting" style="grid-column: <%= column.(day) %>" title="<%= meetings.map { |m| "#{m.starts_at.strftime("%H:%M")} #{m.topic.title}" }.to_sentence %>"><%= icon "video", size: 11 %><% if meetings.size > 1 %><%= meetings.size %><% end %></span>
             <% end %>
           </div>
         </div>
 
         <% timeline.rows.each do |row| %>
           <div class="gantt__row">
-            <div class="gantt__label gantt__label--feature"><div><strong><%= row.title %></strong><small><%= row.subtitle %></small></div><span><%= row.percent %>%</span></div>
+            <div class="gantt__label gantt__label--feature"><div><strong title="<%= row.title %>"><%= row.title %></strong><small><%= row.subtitle %></small></div><span><%= row.percent %>%</span></div>
             <div class="gantt__track">
-              <% days.each do |day| %><i class="<%= "weekend" if day.on_weekend? %>"></i><% end %>
+              <%= day_cells %>
               <% row.bars.each do |bar| %>
                 <% from_day = [ bar.starts_on, days.first ].max %>
                 <% to_day = [ bar.ends_on, last_day ].min %>
                 <% next if to_day < from_day %>
-                <span class="gantt__bar gantt__bar--<%= bar.state %>" style="grid-column: <%= column.(from_day) %> / <%= column.(to_day) + 1 %>"><%= bar.label %></span>
+                <%= link_to bar.label, project_task_path(@project, bar.task), class: class_names("gantt__bar", "gantt__bar--#{bar.state}", "gantt__bar--cut-start": bar.starts_on < from_day, "gantt__bar--cut-end": bar.ends_on > to_day),
+                      style: "grid-column: #{column.(from_day)} / #{column.(to_day) + 1}", title: "#{bar.title} · #{short_date(bar.starts_on)} – #{short_date(bar.ends_on)}" %>
               <% end %>
               <% if row.due_on && (days.first..last_day).cover?(row.due_on) %>
-                <span class="gantt__due" style="grid-column: <%= column.(row.due_on) + 1 %> / span 4"><%= icon "flag", size: 12 %><%= short_date(row.due_on) %></span>
+                <%# Flag sits on the due day, or just after the last bar when the work overruns it. %>
+                <% flag_col = [ column.(row.due_on), column.([ row.bars.last.ends_on + 1, row.due_on ].max) ].max %>
+                <% flag_col = [ flag_col, days.size ].min %>
+                <span class="gantt__due <%= "gantt__due--flip" if flag_col > days.size - 4 %>" style="grid-column: <%= flag_col %>" title="<%= t("timeline.due", date: short_date(row.due_on)) %>"><%= icon "flag", size: 12 %><em><%= short_date(row.due_on) %></em></span>
               <% end %>
             </div>
           </div>
+        <% end %>
+
+        <% if timeline.rows.empty? %>
+          <p class="gantt__empty"><%= timeline.scheduled_tasks? ? t("timeline.nothing_here") : t("timeline.empty") %></p>
+        <% elsif timeline.hidden_rows.positive? %>
+          <p class="gantt__more"><%= t("timeline.more", count: timeline.hidden_rows) %></p>
         <% end %>
 
         <% if (days.first..last_day).cover?(timeline.today) %>
           <span class="gantt__today" style="--col: <%= column.(timeline.today) - 1 %>"><b><%= t("timeline.today") %></b></span>
         <% end %>
       </div>
+    </div>
     </div>
   </section>
 </div>

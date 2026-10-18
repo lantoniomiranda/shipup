@@ -108,6 +108,7 @@ thread, new with similar-topic suggestions, voting) · Move on → create task /
 (Zoom / Google Meet) · backlog and sprint planning · sprint board (drag and drop, keyboard) · task
 page with time tracker · timeline (with `.ics` export) · clients · analytics · account · appearance ·
 time off · project people and invitations.
+The timeline opens on the week containing today (Today button, arrows or Left/Right shift weeks), draws weekday-only task bars that link to their task, and shows an empty state when nothing is scheduled.
 Quick search ("Super Space": `/` or Ctrl/Cmd+Space) covers topics, tasks and projects.
 Not built yet from the design: rediscussion analytics, undo toast
 and Microsoft Teams meetings.
