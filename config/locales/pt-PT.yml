@@ -1,0 +1,869 @@
+pt-PT:
+  locale:
+    switch: Idioma
+    plural_style: standard
+    names:
+      en: English
+      pt-PT: Português (Portugal)
+      fr-FR: Français (France)
+      es-ES: Español (España)
+      it: Italiano (Italia)
+
+  date:
+    formats:
+      short_day: "%-d %b"
+      day_month: "%-d %b"
+      month_year: "%B de %Y"
+      short_day_year: "%-d %b %Y"
+      weekday_day: "%a %-d"
+      weekday_day_month: "%a %-d %b"
+    narrow_day_names: [D, S, T, Q, Q, S, S]
+
+  time:
+    formats:
+      short_day: "%-d %b"
+      weekday_day: "%a %-d"
+      weekday_day_month: "%a %-d %b"
+
+  greetings:
+    morning: "Bom dia, %{name}."
+    afternoon: "Boa tarde, %{name}."
+    evening: "Boa noite, %{name}."
+
+  activity:
+    none: Ainda sem atividade
+    just_now: Ativo agora mesmo
+    minutes: "Ativo há %{count} min"
+    hours: "Ativo há %{count} h"
+    yesterday: Ativo ontem
+    days: "Ativo há %{count} d"
+
+  age:
+    today: hoje
+    days:
+      one: "há %{count} dia"
+      other: "há %{count} dias"
+
+  nav:
+    projects: Projetos
+    topics: Tópicos
+    backlog: Backlog
+    board: Quadro
+    timeline: Cronograma
+    clients: Clientes
+    people: Pessoas
+    analytics: Análise
+    account: Conta
+    time_off: Ausências
+    search: Pesquisar
+    integrations: Integrações
+    notifications: Notificações
+    keyboard: Atalhos de teclado
+    breadcrumb: Trilho
+    workspaces: Espaços
+    coming_soon: Em breve
+    switch_to: "Mudar para %{name}"
+    projects_shortcut: "Projetos (G H)"
+    people_shortcut: "Pessoas (G E)"
+    time_off_shortcut: "Ausências (G O)"
+    account_shortcut: "Conta (G U)"
+    keyboard_shortcut: "Atalhos de teclado (?)"
+    integrations_shortcut: Integrações (administradores)
+
+  common:
+    cancel: Cancelar
+    save: Guardar
+    save_changes: Guardar alterações
+    discard: Descartar
+    back: Voltar
+    close: Fechar
+    done: Feito
+    today: Hoje
+    send: Enviar
+    edit: Editar
+    remove: Remover
+    reply: Responder
+    invite: Convidar
+    restore: Restaurar
+    archive: Arquivar
+    link: Ligar
+    continue: Continuar
+    required: Obrigatório
+    optional: Opcional
+    unassigned: Sem responsável
+    internal: Interno
+    none_yet: Ainda nenhum.
+    of: de
+    previous: Anterior
+    next: Seguinte
+    all: Todos
+    active: Ativo
+    completed: Concluído
+    archived: Arquivado
+    open: Aberto
+    approved: Aprovado
+    canceled: Cancelado
+    waiting: Em espera
+    away: Ausente
+    admin: Administrador
+    manager: Gestor
+    member: Membro
+    bug: Erro
+    task: Tarefa
+    chain: Sequência
+    topic: Tópico
+    issue: Problema
+    feature: Funcionalidade
+    color: Cor
+    icon: Ícone
+    name: Nome
+    title: Título
+    description: Descrição
+    type: Tipo
+    goal: Objetivo
+    email: Endereço de e-mail
+    company: Empresa
+    formatting: Formatação
+    bold: Negrito
+    italic: Itálico
+    list: Lista
+    mention: Menção
+    sign_out: Terminar sessão
+    sign_in: Iniciar sessão
+    go_back: Voltar atrás
+    unsaved: Alterações não guardadas
+
+  roles:
+    superadmin: Superadministrador
+    admin: Administrador
+    manager: Gestor
+    member: Membro
+
+  enums:
+    task_status:
+      todo: Por fazer
+      in_progress: Em curso
+      testing: Em testes
+      ready_to_deploy: Pronto a publicar
+      done: Feito
+    topic_kind:
+      issue: Problema
+      feature: Funcionalidade
+    topic_status:
+      open: Aberto
+      canceled: Cancelado
+      approved: Aprovado
+    project_status:
+      active: Ativo
+      completed: Concluído
+    time_off_kind:
+      vacation: Férias
+      sick: Baixa médica
+      family: Família
+    time_off_kind_inline:
+      vacation: férias
+      sick: baixa
+      family: família
+    time_off_kind_short:
+      vacation: Férias
+      sick: Baixa
+      family: Família
+    time_off_status:
+      pending: Em espera
+      approved: Aprovado
+      declined: Recusado
+    email_frequency:
+      instant: Imediato
+      daily_digest: Resumo diário
+      weekly: Semanal
+    client_status:
+      active: Ativo
+      invite_pending: Convite pendente
+      archived: Arquivado
+    theme:
+      paper: Papel
+      mist: Bruma
+      sage: Sálvia
+      night: Noite
+    accent:
+      orange: Laranja
+      blue: Azul
+      teal: Verde-azulado
+      plum: Ameixa
+      mustard: Mostarda
+    provider:
+      google: Google
+      microsoft: Microsoft
+    backlog_filter:
+      chains: Sequências
+      unassigned: Sem responsável
+      unestimated: Sem estimativa
+    analytics_range:
+      eight_weeks: Últimas 8 semanas
+      sprint: Este sprint
+      quarter: Trimestre
+    chart:
+      opened: Abertos
+      approved: Aprovados
+      canceled: Cancelados
+      work: Esforço
+    gantt:
+      done: Feito
+      in_progress: Em curso
+      planned: Planeado
+      risk: Em risco
+
+  home:
+    summary: "%{projects}, %{sprints}. %{waiting}"
+    projects:
+      one: "%{count} projeto"
+      other: "%{count} projetos"
+    sprints:
+      one: "%{count} sprint em curso"
+      other: "%{count} sprints em curso"
+    waiting:
+      one: "%{count} tópico aguarda a sua resposta"
+      other: "%{count} tópicos aguardam a sua resposta"
+    new_project: Novo projeto
+    start_project: Iniciar um novo projeto
+    start_hint: Só administradores · convide pessoas a seguir
+    empty_html: "Ainda não está em nenhum projeto. Peça a um administrador do projeto para convidar <strong>%{email}</strong> e recarregue esta página."
+    xp: "%{percent}% XP"
+    confirm_complete: "Marcar %{name} como concluído? Passa para o separador Concluído; nada é eliminado."
+    complete: Concluir projeto
+    reopen: Reabrir projeto
+    open_topics:
+      one: "%{count} tópico aberto"
+      other: "%{count} tópicos abertos"
+    tasks:
+      one: "%{count} tarefa"
+      other: "%{count} tarefas"
+    days_left:
+      one: "%{count} dia restante"
+      other: "%{count} dias restantes"
+    new_intro: Tópicos, tarefas e o quadro estão todos dentro de um projeto.
+    key: Chave (2–5 letras)
+    create_project: Criar projeto
+    back_to_projects: Voltar aos projetos
+    created: "%{name} criado."
+    completed: "%{name} marcado como concluído."
+    reactivated: "%{name} está ativo outra vez."
+
+  account:
+    title: A sua conta
+    crumb: Conta
+    appearance: Aspeto
+    display_name: Nome de apresentação
+    avatar: Avatar
+    signed_in_html: "Sessão iniciada com %{provider}"
+    no_password: "%{email} · sem palavra-passe para gerir"
+    notifications: Notificações por e-mail
+    when: Quando isto acontece
+    timing: Envio do e-mail
+    quiet_hours: "Horas de silêncio · %{zone}"
+    quiet_start: Início das horas de silêncio
+    quiet_end: Fim das horas de silêncio
+    language: Idioma
+    saved: Conta guardada.
+    notices:
+      mention_or_reply:
+        title: Menções e respostas
+        hint: Uma menção com @ ou uma resposta ao seu tópico
+      new_topic:
+        title: Novos tópicos nos meus projetos
+        hint: Problemas e funcionalidades abertos pelos colegas
+      similar_topic:
+        title: Alertas de tópicos semelhantes
+        hint: Parece um assunto de que já falámos
+      task_assigned:
+        title: Tarefas atribuídas a mim
+        hint: Inclui tarefas criadas a partir de tópicos
+      subtask_unlocked:
+        title: A minha subtarefa está desbloqueada
+        hint: O passo anterior da sequência foi concluído
+      meeting_invite:
+        title: Convites para reuniões
+        hint: Um gestor escolhe tópicos de que faz parte
+
+  appearance:
+    crumb: Aspeto
+    title: Aspeto
+    settings: Definições
+    intro: Cores para o seu ShipUp.
+    background: Fundo
+    accent: Destaque e botões
+    reset: Repor predefinição
+    preview: Pré-visualização em direto
+    buttons: Botões e etiquetas
+    new_topic: Novo tópico
+    create_meeting: Criar reunião
+    lists: Listas
+    sample_progress: Em curso
+    sample_decision: Precisa de decisão
+    sample_bug: Erro
+    sample_deployed: Publicado
+    sample_familiar: Soa familiar
+    sample_one_title: Os tokens de renovação expiram em silêncio ao fim de 24 h
+    sample_one_meta: Sofia R. · há 2 dias
+    sample_two_title: Novas tentativas do webhook com espera exponencial
+    sample_two_meta: Daniel O. · há 3 dias
+    saved: Aspeto guardado.
+    invalid: Essa paleta não está disponível.
+
+  sessions:
+    title: Iniciar sessão
+    welcome: Bem-vindo de volta.
+    intro: Inicie sessão com a sua conta profissional para continuar.
+    google: Continuar com o Google
+    microsoft: Continuar com a Microsoft
+    invite_only: O ShipUp é só por convite. Peça a um administrador do projeto para convidar este endereço de e-mail.
+    failed: Não foi possível iniciar sessão com essa conta.
+    cancelled: O início de sessão foi cancelado ou falhou. Tente outra vez.
+
+  errors:
+    eyebrow: "Erro %{code}"
+    back_projects: Voltar aos seus projetos
+    go_sign_in: Ir para o início de sessão
+    400:
+      title: Esse pedido não faz sentido
+      detail: Algo no pedido estava mal formado. Volte atrás e tente outra vez.
+    403:
+      title: Não tem acesso a isto
+      detail: Fale com um administrador do projeto se achar que devia ter acesso.
+    404:
+      title: Não encontramos essa página
+      detail: Pode ter mudado de sítio, ter sido eliminada ou nunca ter existido.
+    406:
+      title: O seu navegador é demasiado antigo
+      detail: O ShipUp precisa de uma versão recente do Chrome, Edge, Firefox ou Safari.
+    422:
+      title: Essa alteração foi rejeitada
+      detail: A página expirou ou os dados não eram válidos. Recarregue e tente outra vez.
+    500:
+      title: Algo correu mal do nosso lado
+      detail: Já fomos avisados. Tente outra vez daqui a pouco.
+
+  search:
+    label: Pesquisar
+    placeholder: Pesquisar tópicos, tarefas e projetos
+    open: abrir
+    move: mover
+    switch_filter: mudar filtro
+    scope: Âmbito da pesquisa
+    everything: Tudo
+    topics: Tópicos
+    tasks: Tarefas
+    projects: Projetos
+    hint_html: "Escreva pelo menos duas letras, ou uma chave de tarefa como <code>%{example}</code>."
+    empty: "Nada corresponde a «%{query}»."
+    chain_step: "Sequência %{key} · passo %{position} de %{size}"
+    task_key: "Tarefa %{key}"
+    votes:
+      one: "%{score} voto"
+      other: "%{score} votos"
+
+  shortcuts:
+    title: Atalhos de teclado
+    close: Fechar
+    groups:
+      global: Em todo o lado
+      project: Dentro de um projeto
+      page: Em páginas específicas
+    note: Os atalhos pausam enquanto escreve num campo. Esc volta sempre atrás.
+    footer:
+      cards: mover entre cartões
+      columns: mover entre colunas
+      open: abrir tarefa
+      advance: avançar estado
+
+  keybindings:
+    global:
+      search: Pesquisar tópicos, tarefas e projetos
+      help: Mostrar atalhos de teclado
+      projects: Ir para projetos
+      time_off: Ir para ausências
+      account: Ir para a sua conta
+      back: Voltar atrás ou fechar
+      submit: Submeter o formulário
+    project:
+      topics: Tópicos
+      backlog: Backlog
+      board: Quadro
+      timeline: Cronograma
+      clients: Clientes
+      people: Pessoas
+      analytics: Análise
+    page:
+      open_project: Abrir projeto 1–9 (página de projetos)
+      new: Novo tópico (tópicos) · Novo projeto (projetos)
+      reply: Responder (tópico) · Pedir (ausências) · Repor (aspeto) · Tentar outro rascunho de IA
+      task: Criar tarefa (tópico) · Hoje (cronograma) · Iniciar/parar cronómetro (tarefa)
+      chain: Criar sequência (tópico)
+      meet: Reunir sobre isto (tópico)
+      add: Adicionar cliente (clientes)
+      step: Adicionar passo (sequência) · Adicionar ao calendário (cronograma)
+      plan: Planear sprint (backlog)
+      sign_in: Continuar com o Google (iniciar sessão) — M para a Microsoft
+      board_cards: "Quadro: cartão seguinte — K anterior"
+      board_columns: "Quadro: coluna seguinte — H anterior"
+      board_advance: "Quadro: avançar o estado do cartão em foco"
+      timeline_nav: "Cronograma: mais cedo — seta direita mais tarde"
+
+  topics:
+    title: Tópicos
+    new: Novo tópico
+    back: Voltar aos tópicos
+    posts_to: "%{project} · publica em Tópicos"
+    what: Sobre o que devemos falar?
+    requested_by: Pedido por
+    internal_idea: Ideia interna
+    client_named: "Cliente: %{name}"
+    post: Publicar tópico
+    similar: Tópicos semelhantes · atualiza enquanto escreve
+    empty_html: "Nenhum tópico corresponde. %{link}."
+    start_one: Começar um
+    top: Mais votados
+    newest: Mais recentes
+    filters:
+      issues: Problemas
+      features: Funcionalidades
+      canceled: Cancelados
+      approved: Aprovados
+    opened_by: "Aberto por %{name} · %{when} · %{replies}"
+    requested_tag: "Pedido por %{name}"
+    upvote: A favor
+    downvote: Contra
+    in_chat: Nesta conversa
+    reply_placeholder: Responder a este tópico…
+    read_first: Leia primeiro
+    outcome:
+      task: "Tarefa %{key}"
+      chain: "Sequência %{key}"
+    roles:
+      opened: Abriu
+      replied: Respondeu
+    what_next: E agora
+    canceled_note: Este tópico foi cancelado. Continua legível; reabra-o para continuar a conversa ou planear tarefas.
+    move_on: Avançar
+    move_as: Avançar este tópico como
+    create_task: Criar tarefa
+    create_task_hint: Uma única peça.
+    create_chain: Criar sequência
+    create_chain_hint: Passos que se entregam por ordem.
+    meet: Reunir sobre isto
+    reopen: Reabrir tópico
+    cancel: Cancelar tópico
+    reason: Motivo (opcional)
+    reason_label: Motivo do cancelamento
+    confirm_cancel: Cancelar este tópico? Pode reabri-lo mais tarde.
+    cancel_with_reason: "Tópico cancelado: %{reason}"
+    cancel_without_reason: Tópico cancelado.
+    posted: Tópico publicado.
+    canceled: Tópico cancelado.
+    reopened: Tópico reaberto.
+    replies:
+      one: "%{count} resposta"
+      other: "%{count} respostas"
+
+  tasks:
+    back: Quadro
+    position: "%{current} de %{total} neste sprint"
+    previous: Tarefa anterior
+    next: Tarefa seguinte
+    archive: Arquivar tarefa
+    confirm_archive: "Arquivar %{key}? Sai do quadro e do backlog; pode restaurá-la a partir do backlog."
+    chain_steps:
+      one: "Sequência · %{count} passo"
+      other: "Sequência · %{count} passos"
+    from_topic: "Do tópico · %{title} · %{replies}"
+    from_topic_only: "Do tópico · %{title}"
+    open_topic: Abrir tópico
+    assignee: Responsável
+    created_by: Criado por
+    requested_by: Pedido por
+    sprint: Sprint
+    estimate: Estimativa
+    due: Prazo
+    no_description: Ainda sem descrição.
+    tracker: Registo de tempo
+    running: A contar
+    since: "desde %{time} %{city}"
+    stop: Parar
+    start: Iniciar cronómetro
+    logged: "%{hours}H %{minutes}M REGISTADAS"
+    of_estimate: "DE %{hours}H · %{percent}%"
+    recent: Registos recentes
+    none_logged: Ainda sem tempo registado.
+    chat: Conversa
+    nobody: Ainda ninguém disse nada sobre esta tarefa.
+    reply_placeholder: Responder nesta tarefa…
+    hours_logged: "%{hours} h registadas"
+    hours_only: "%{hours} h"
+    hours_of: "%{logged} h / %{estimate} h"
+    from_discussion: "de D-%{id}"
+    step_of: "Passo %{position} de %{size} · %{title}"
+    unlocks_next: "%{title} desbloqueia a seguir"
+    chain_kind: "Sequência · passo %{position} de %{size}"
+    no_estimate: Sem estimativa
+    no_branch: Sem ramo
+    move_backlog: Mover para o backlog
+    move_sprint: Mover para o sprint seguinte
+    days:
+      one: "%{count} dia"
+      other: "%{count} dias"
+    messages:
+      one: "%{count} mensagem"
+      other: "%{count} mensagens"
+    moved_status: "%{key} passou para %{status}"
+    plan_first: Planeie um sprint primeiro.
+    moved_sprint: "%{key} passou para %{sprint}."
+    moved_backlog: "%{key} passou para o backlog."
+    unlocked: "%{key} feito. %{title} está agora desbloqueado."
+    archived: "%{key} arquivada."
+    restored: "%{key} restaurada."
+    created: "%{key} criada a partir deste tópico."
+    timer_started: "Cronómetro iniciado em %{key}."
+    timer_stopped: Cronómetro parado.
+    chain_progress: "Sequência · %{done} de %{total} feitos"
+    step_done: Feito
+    step_current: Passo atual · visível no quadro
+    step_locked: "Oculto até %{title} estar feito"
+    earlier_steps: passos anteriores
+    no_pr: Ainda sem pull request
+    complete_step: "Concluir %{title}"
+    complete_unlock: "Concluir %{title}, desbloquear %{next}"
+    backlog_option: Backlog (sem sprint)
+    estimate_days: Estimativa (dias)
+    estimate_in_days: Estimativa em dias
+    tags: Etiquetas
+    this_is_a_bug: Isto é um erro
+    from_topic_heading: Do tópico
+    create: Criar tarefa
+    back_to_topic: Voltar ao tópico
+
+  chain_form:
+    title: Criar sequência
+    chain_title: Título da sequência
+    steps: Passos · entregues por esta ordem
+    step_title: Título do passo
+    step_what: O que acontece neste passo?
+    days: dias
+    remove_step: Remover passo
+    add_step: Adicionar passo
+    create: Criar sequência
+    created:
+      one: "Sequência criada com %{count} passo."
+      other: "Sequência criada com %{count} passos."
+
+  ai:
+    drafted:
+      one: "Rascunho a partir de %{count} resposta"
+      other: "Rascunho a partir de %{count} respostas"
+    another: Tentar outro rascunho
+    draft: Rascunhar com IA
+
+  editor:
+    link_sample: texto
+
+  messages:
+    edited: editada
+    removed: Mensagem removida
+    replying: "A responder a"
+    cancel_reply: Cancelar resposta
+    confirm_remove: Remover esta mensagem?
+    write_something: Escreva alguma coisa antes de enviar.
+    not_empty: Uma mensagem não pode estar vazia. Remova-a.
+    removed_flash: Mensagem removida.
+
+  board:
+    none: Sem sprint ativo
+    points: "%{done}/%{total} XP"
+    complete: Concluir sprint
+    confirm_complete: "Concluir %{name}? As tarefas incompletas passam para o próximo sprint planeado."
+    start: Iniciar um sprint
+    more:
+      one: "+ %{count} mais neste sprint"
+      other: "+ %{count} mais neste sprint"
+
+  backlog:
+    title: Sprint e backlog
+    starts_in:
+      one: "começa daqui a %{count} dia"
+      other: "começa daqui a %{count} dias"
+    planned: planeado
+    start: Iniciar sprint
+    group: Backlog
+    tasks_estimated:
+      one: "%{count} tarefa · %{days} dias estimados"
+      other: "%{count} tarefas · %{days} dias estimados"
+    archived:
+      one: "%{count} tarefa arquivada"
+      other: "%{count} tarefas arquivadas"
+    capacity: "Capacidade de %{name}"
+    next: Sprint seguinte
+    planned_xp: "/ %{count} XP planeados"
+    free: "%{count} XP livres."
+    room: Quem tem margem
+    load: "%{load} / %{capacity} dias"
+    empty_sprint: Ainda não há nenhum sprint planeado. Crie o seguinte para começar a passar tarefas para lá.
+    plan: Planear sprint
+    id: ID
+    topic_title: Tópico e título
+    kind: Tipo
+    owner: Responsável
+    code: Código
+
+  sprints:
+    name: "Sprint %{number}"
+    back: Voltar ao backlog
+    new: "Novo %{name}"
+    intro: A duração habitual é de duas semanas. Só um sprint está ativo de cada vez.
+    starts: Início
+    ends: Fim
+    goal_placeholder: O que deve ser verdade quando este sprint terminar?
+    start_now: Iniciá-lo agora e mostrá-lo no quadro
+    start_now_completes: "Iniciá-lo agora e mostrá-lo no quadro (conclui %{name})"
+    carry: "Trazer as tarefas incompletas de %{name} para este sprint"
+    create: "Criar %{name}"
+    started: "%{name} iniciado. Já está no quadro."
+    planned: "%{name} planeado."
+    cannot_start: Esse sprint não pode ser iniciado.
+    only_active: Só o sprint ativo pode ser concluído.
+    completed: "%{name} concluído. As tarefas incompletas avançaram."
+
+  timeline:
+    earlier: Mais cedo
+    later: Mais tarde
+    today: Hoje
+    calendar: Adicionar ao meu calendário
+    features: Funcionalidades · a partir de tarefas
+    meetings: Reuniões
+    meeting: Reunião
+    meetings_count:
+      one: "%{count} reunião"
+      other: "%{count} reuniões"
+    row_subtitle:
+      one: "%{key} · %{done} de %{count} tarefa"
+      other: "%{key} · %{done} de %{count} tarefas"
+
+  analytics:
+    title: Análise
+    topics: Tópicos
+    vs_previous: "%{delta} face ao período anterior"
+    hours: Horas registadas
+    across:
+      one: "Em %{count} item publicado"
+      other: "Em %{count} itens publicados"
+    meetings: Reuniões
+    decisions: "%{duration} · %{decided} de %{total} com uma decisão"
+    invited: Média de convidados
+    per_meeting: Pessoas por reunião
+    topics_week: Tópicos por semana
+    hours_week: Horas por semana
+    closed: Tópicos fechados · decididos neste período
+    nothing_closed: Nada foi fechado neste período.
+    closed_as: "Fechado como %{status}"
+    topics_count:
+      one: "%{count} tópico"
+      other: "%{count} tópicos"
+
+  clients:
+    all: "Todos %{count}"
+    active: "Ativos %{count}"
+    pending: "Convite pendente %{count}"
+    archived: "Arquivados %{count}"
+    add: Adicionar cliente
+    none_archived: Sem clientes arquivados.
+    empty_html: "Ainda não há clientes aqui. %{link} para os tópicos poderem dizer quem os pediu."
+    add_one: Adicionar um
+    client: Cliente
+    contacts: Contactos
+    topics: Tópicos
+    last_activity: Última atividade
+    status: Estado
+    added: "Adicionado %{date}"
+    extra_contacts:
+      one: "+%{count} contacto"
+      other: "+%{count} contactos"
+    no_topics: Ainda sem tópicos
+    topic_count:
+      one: "%{count} tópico"
+      other: "%{count} tópicos"
+    confirm_archive: "Arquivar %{name}? Desaparece da lista de clientes de todos os projetos; os tópicos mantêm o histórico."
+    title: Adicionar um cliente
+    back: Voltar aos clientes
+    intro: Alguém da equipa do cliente que pode ser indicado como autor do pedido nos tópicos
+    contact_name: Nome do contacto
+    emails: E-mails
+    email_placeholder: Adicione outro e prima Enter
+    remove_email: "Remover %{email}"
+    in_project: Clientes neste projeto
+    added_flash: "%{name} adicionado. Vai receber um convite por e-mail."
+    archived_flash: "%{name} arquivado. Restaure-o a partir do separador Arquivados."
+    restored_flash: "%{name} restaurado."
+
+  people:
+    title: "Pessoas em %{project}"
+    intro:
+      one: "%{count} pessoa. Toda a gente inicia sessão com o Google ou a Microsoft, por isso para convidar basta um endereço de e-mail."
+      other: "%{count} pessoas. Toda a gente inicia sessão com o Google ou a Microsoft, por isso para convidar basta um endereço de e-mail."
+    person: Pessoa
+    email: E-mail
+    role: Função
+    role_of: "Função de %{name}"
+    last_sign_in: Último início de sessão
+    joined: Entrada
+    never: Nunca
+    ago: "há %{time}"
+    remove: Remover
+    confirm_remove: "Remover %{name} de %{project}?"
+    pending: Convites pendentes
+    invited_by: Convidado por
+    sent: Enviado
+    resend: Reenviar
+    revoke: Revogar
+    confirm_revoke: Revogar este convite?
+    product: ShipUp
+    now_role: "%{name} é agora %{role}."
+    bad_role: Essa função não está disponível.
+    not_self: Não pode remover-se.
+    removed: "%{name} já não tem acesso a %{project}."
+    added_member: "%{name} adicionado a %{project}."
+    sent_invite: "Convite enviado para %{email}."
+    resent: "Convite reenviado para %{email}."
+    revoked: "Convite para %{email} revogado."
+
+  time_off:
+    title: Ausências
+    crumb: Ausências
+    request: Pedir
+    request_title: Pedir ausência
+    back: Voltar às ausências
+    intro: O aprovador recebe um e-mail. A resposta chega quando houver decisão.
+    previous_month: Mês anterior
+    next_month: Mês seguinte
+    pick: Escolha o primeiro dia
+    pick_help: Clique numa data de início e depois numa data de fim.
+    approver: Aprovador
+    choose_approver: Escolha um aprovador
+    approver_superadmin: superadministrador
+    approver_admin: administrador
+    send: Enviar pedido
+    days_of: "%{left} de %{allowance} dias restantes"
+    my_requests: Os meus pedidos
+    working_days:
+      one: "%{count} dia útil"
+      other: "%{count} dias úteis"
+    waiting_for: "À espera de %{name}"
+    waiting_approval: À espera de aprovação
+    nothing: Ainda sem pedidos.
+    to_approve: Por aprovar
+    waiting_count:
+      one: "%{count} em espera"
+      other: "%{count} em espera"
+    overlaps: "Coincide com %{name}, %{date}"
+    decline: Recusar
+    approve: Aprovar
+    legend_vacation: Férias
+    legend_sick: Baixa
+    legend_waiting: À espera de aprovação
+    waiting_short: em espera
+    sent: Pedido enviado.
+    sent_to: "Pedido enviado para %{name}."
+    decided_approved: "O pedido de %{name} foi aprovado."
+    decided_declined: "O pedido de %{name} foi recusado."
+    calendar:
+      working_days:
+        one: "%{count} dia útil"
+        other: "%{count} dias úteis"
+      remaining:
+        one: "%{left} dia de %{kind} restante, %{after} após este pedido"
+        other: "%{left} dias de %{kind} restantes, %{after} após este pedido"
+
+  meetings:
+    title: Discutir este tópico em direto
+    link_note: "%{title}. A ligação é publicada na conversa do tópico."
+    none_html: "Ainda não há ferramenta de reuniões ligada. %{link} (só administradores)."
+    set_up: Configurar uma
+    when: Quando
+    slot: "%{when} · %{time} UTC · %{duration} min"
+    covered: "(%{covered}/%{total} em horário de trabalho)"
+    length: Duração
+    minutes: "%{count} min"
+    recording: Gravação
+    transcribe: Transcrever e acrescentar um resumo ao tópico
+    invite:
+      one: "Convidar · %{count} pessoa"
+      other: "Convidar · %{count} pessoas"
+    invite_person: "Convidar %{name}"
+    opened: Abriu o tópico
+    replied: Respondeu
+    not_in_topic: Não está neste tópico
+    create: Criar e publicar ligação
+    topic: Tópico
+    hours: Horário de trabalho · 24 h em UTC
+    posted: Ligação da reunião publicada na conversa do tópico.
+    need_tool: Um administrador tem de ligar uma ferramenta de reuniões primeiro.
+    failed: Não foi possível criar essa reunião. Verifique a hora e tente outra vez.
+
+  integrations:
+    title: Ferramenta de reuniões
+    setup: Configurar o ShipUp
+    admin_only: Só administradores
+    company: Empresa
+    meeting_tool: Ferramenta de reuniões
+    meeting_caption: Escolha uma vez para toda a gente
+    calendar: Calendário
+    calendar_caption: Horário de trabalho e disponibilidade
+    people: Pessoas
+    people_caption: Convide pessoas para cada projeto
+    step: "Passo %{current} de %{total}"
+    choose: Escolha a ferramenta de reuniões
+    subtitle: Toda a gente a usa para as ligações das reuniões. Pode mudá-la mais tarde em Integrações.
+    code: Código
+    zoom: Ligações, gravação na nuvem e transcrições por tópico.
+    teams: Ligações através dos calendários do Microsoft 365.
+    meet: Ligações através do Google Calendar.
+    github: Associe repositórios para os pull requests aparecerem nas tarefas.
+    choose_repos: Escolha repositórios para os seus projetos
+    use: "Usar %{name}"
+    coming_soon: Em breve
+    connected_as: "Ligado como %{account}"
+    not_connected: Não ligado
+    connect: Ligar
+    now_tool: "%{provider} é agora a sua ferramenta de reuniões."
+    connect_first: Ligue primeiro uma ferramenta de reuniões e depois continue.
+    not_configured: "%{provider} não está configurado neste servidor."
+    expired: Essa tentativa de ligação expirou. Tente outra vez.
+    denied: "Não foi concedido acesso a %{provider}."
+    connected: "%{provider} ligado."
+    could_not: "Não foi possível ligar %{provider}. Tente outra vez."
+    repos_title: Repositórios GitHub
+    repos_crumb: Repositórios GitHub
+    setup_crumb: Configuração
+    repos_intro_html: "Ligado como <strong>%{account}</strong>. Os pull requests que mencionem uma chave de tarefa (como <code>%{example}</code>) no título, no ramo ou na descrição ficam associados a essa tarefa."
+    unlink: "Desassociar %{name}"
+    no_repo: Nenhum repositório associado
+    choose_repo: Escolha um repositório…
+    pick_first: Escolha primeiro um repositório.
+    linked: "%{repo} associado a %{project}."
+    link_failed: Não foi possível associar esse repositório. Verifique as permissões do GitHub e tente outra vez.
+    unlinked: "%{repo} desassociado."
+    connect_github: Ligue primeiro o GitHub.
+
+  model_errors:
+    ends_on_after_start: tem de ser igual ou posterior à data de início
+    ended_after_start: tem de ser depois de ter começado
+    same_conversation: tem de estar na mesma conversa
+    one_email: Adicione pelo menos um e-mail
+    one_step: Adicione pelo menos um passo
+    too_many_days: "São mais dias do que os %{left} dias de %{kind} que ainda tem"
+    already_member: já está neste projeto
+
+  mailer:
+    subject: "Convite para %{project} no %{product}"
+    join: "Junte-se a %{project} no %{product}"
+    invited_by: "%{name} enviou-lhe um convite como %{role} de %{project}."
+    invited: "Recebeu um convite como %{role} de %{project}."
+    no_password: "Não há palavra-passe para criar: inicie sessão com a conta Google ou Microsoft que usa %{email} e entra de imediato."
+    sign_in: "Iniciar sessão no %{product}"
