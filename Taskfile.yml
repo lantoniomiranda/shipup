@@ -20,6 +20,14 @@ tasks:
       - task: server:start
       - echo "ohship is running at http://localhost:{{.PORT}}  (task logs · task stop)"
 
+  setup:
+    desc: Start Postgres, migrate the database (no demo data) and start the server; sign in with a SUPERADMIN_EMAILS address
+    cmds:
+      - task: db:up
+      - task: db:prepare
+      - task: server:restart
+      - echo "ohship is running at http://localhost:{{.PORT}}. Sign in with Google using an address from SUPERADMIN_EMAILS in .env"
+
   stop:
     desc: Stop the Rails server and Postgres
     cmds:
@@ -64,6 +72,12 @@ tasks:
           sleep 1
         done
         curl -s -o /dev/null -w "server up (HTTP %{http_code})\n" http://127.0.0.1:{{.PORT}}/up
+
+  server:restart:
+    desc: Restart only the Rails server
+    cmds:
+      - task: server:stop
+      - task: server:start
 
   server:stop:
     desc: Stop only the Rails server
