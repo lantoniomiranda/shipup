@@ -114,3 +114,11 @@ tasks:
     desc: Run everything CI runs (rubocop, audits, brakeman, tests)
     cmds:
       - bin/ci
+
+  db:clean-test:
+    desc: Drop the numbered parallel test databases (shipup_test_0, _1, ...)
+    cmds:
+      - |
+        for db in $(docker exec shipup-postgres-1 psql -U shipup -d postgres -Atc "select datname from pg_database where datname ~ '^shipup_test.*_[0-9]+$'"); do
+          docker exec shipup-postgres-1 psql -U shipup -d postgres -qc "drop database \"$db\""
+        done
