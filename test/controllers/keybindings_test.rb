@@ -59,7 +59,7 @@ class KeybindingsTest < ActionDispatch::IntegrationTest
     sign_in_as users(:ines)
     get root_path
 
-    assert_select "body[data-controller=hotkeys]"
+    assert_select "body[data-controller~=hotkeys]"
     assert_select "a[data-hotkey='g h']"
     assert_select "a[data-hotkey='g o']"
     assert_select "a[data-hotkey='g u']"

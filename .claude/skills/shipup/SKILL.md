@@ -59,3 +59,4 @@ Standard Rails "Solid" stack with no Node build step:
 
 - **agent1 (basics)**, branch `agent1/basics` (worktree `../shipup-agent1`, `DB_SUFFIX=_agent1`, port 3001): product renamed to **ohship** (lowercase wordmark, `config.x.product_name`); rocket logo from `logo.png` lives in `app/assets/images/logo.png` and is rendered by `shared/_logo_mark` as a CSS mask (follows `currentColor`); favicon is `public/icon.png`.
   - Landing page: `LandingController#show` at `/` for visitors via `VisitorConstraint` (a routing constraint that checks the signed `session_id` cookie); same path serves `projects#index` to signed-in users. Styles in `pages/landing.css` (use the `.wrap` container).
+  - Time zones: `users.time_zone_set_by_user` false = follow the `browser_time_zone` cookie (`ApplicationController#follow_browser_time_zone`); `use_user_time_zone` wraps requests in `Time.use_zone`. Use `Time.zone`/`in_time_zone`, never assume UTC in views.

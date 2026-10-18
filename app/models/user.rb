@@ -33,6 +33,14 @@ class User < ApplicationRecord
     super || build_preference
   end
 
+  # Time zone names for the settings select: "(UTC+01:00) Lisbon" => "Europe/Lisbon".
+  def self.time_zone_options
+    ActiveSupport::TimeZone.all.sort_by { |zone| [ zone.utc_offset, zone.name ] }.map { |zone| [ "(UTC#{zone.formatted_offset}) #{zone.name}", zone.tzinfo.name ] }
+  end
+
+  # While true the zone follows the browser (see ApplicationController#follow_browser_time_zone).
+  def time_zone_auto? = !time_zone_set_by_user?
+
   def initials
     name.split.map { |part| part[0] }.first(2).join.upcase
   end

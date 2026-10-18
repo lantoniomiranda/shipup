@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- **Time zones**: a person's zone now follows their browser (a `browser_time_zone` cookie set by `timezone_controller.js`) until they pick one under Account → Time zone; the top-bar clocks start with their own city and every page renders dates in their zone (`Time.use_zone` around each request, storage stays UTC).
 - Public **landing page** at `/` for visitors (hero with a live-component preview, how it works, features, sign-in call to action); signed-in people still get the dashboard at the same address (`VisitorConstraint` in `config/routes.rb`, `LandingController`).
 - Renamed the product to **ohship** and added the rocket logo (CSS-masked so it follows the theme colours) and a new favicon.
 - `Taskfile.yml`: `task start | stop | restart | status | logs` manage the server and Postgres.

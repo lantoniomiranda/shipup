@@ -48,6 +48,16 @@
 
       <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span>Sign out</span><% end %>
 
+      <fieldset class="field">
+        <legend class="eyebrow">Time zone</legend>
+        <%= form.select :time_zone, User.time_zone_options, {}, class: "select" %>
+        <label class="check-line">
+          <%= hidden_field_tag "user[time_zone_auto]", "0", id: nil %>
+          <%= check_box_tag "user[time_zone_auto]", "1", @user.time_zone_auto?, class: "check" %>
+          <span>Follow my browser's time zone automatically</span>
+        </label>
+      </fieldset>
+
       <div class="signin-note">
         <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>
         <div><strong>Signed in with <%= (identity&.provider || "Google").capitalize %></strong><small><%= @user.email %> · no password to manage</small></div>
