@@ -1,0 +1,110 @@
+<% content_for :title, "Talk it through. Ship it." %>
+<% content_for :head do %>
+  <meta name="description" content="ohship turns conversations into tasks, chains and sprints, with meetings, GitHub and AI drafts built in.">
+<% end %>
+
+<div class="landing">
+  <header class="landing__nav">
+    <%= render "shared/logo", size: :small %>
+    <nav aria-label="Sections">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <%= link_to "Sign in", sign_in_path, class: "btn btn--primary" %>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">Project management that follows the conversation</p>
+        <h1>Talk it through.<br><span>Ship it.</span></h1>
+        <p class="hero__lead">ohship turns what your team discusses into tasks, chains and sprints. Meetings, GitHub and AI drafts are built in, so nothing gets lost between "we agreed" and "it shipped".</p>
+        <div class="hero__actions">
+          <%= link_to sign_in_path, class: "btn btn--primary btn--lg" do %><span>Sign in</span><% end %>
+          <a class="btn btn--lg" href="#how"><span>See how it works</span></a>
+        </div>
+        <p class="hero__note">Invite-only. Ask your project manager to invite your work email, then sign in with Google or Microsoft.</p>
+      </div>
+
+      <%# A static slice of the product, built from the real components. %>
+      <div class="hero__preview" aria-hidden="true">
+        <div class="preview-card">
+          <div class="preview-topic">
+            <div class="votes"><span class="votes__button"><%= icon "arrow-big-up", size: 16 %></span><span class="votes__score votes__score--up">+18</span></div>
+            <div>
+              <strong>Refresh tokens expire silently after 24h</strong>
+              <p>Partners report 401s exactly 24h after authorizing.</p>
+              <span class="tag tag--kind tag--issue"><%= icon "circle-alert", size: 13 %>Issue</span>
+              <span class="tag tag--task"><%= icon "circle-check", size: 13 %>Task APO-97</span>
+            </div>
+          </div>
+          <div class="preview-chain">
+            <p class="eyebrow">Chain · shipped in this order</p>
+            <ol>
+              <li class="preview-step preview-step--done"><span>1</span>Backend<em>3d</em></li>
+              <li class="preview-step preview-step--now"><span>2</span>Dashboard<em>2d</em></li>
+              <li class="preview-step"><span>3</span>QA<em>1d</em></li>
+            </ol>
+          </div>
+          <div class="preview-sprint">
+            <div class="xp__labels"><span>SPRINT 14 · 3 DAYS LEFT</span><strong>68% XP</strong></div>
+            <div class="xp__bar hue-orange"><% 20.times do |i| %><span class="xp__segment <%= "xp__segment--on" if i < 14 %> <%= "xp__segment--edge" if i == 13 %>"></span><% end %></div>
+          </div>
+        </div>
+        <div class="preview-sun"></div>
+      </div>
+      </div>
+    </section>
+
+    <section class="steps" id="how">
+      <div class="wrap">
+      <header class="section-head"><p class="eyebrow">How it works</p><h2>From a question to a shipped task, in one place</h2></header>
+      <ol class="steps__list">
+        <% [ [ "Discuss", "messages-square", "Open a topic, vote, reply. While you type a title, ohship shows similar topics so you don't repeat yourself." ],
+             [ "Decide", "corner-down-right", "Move on as a task or an ordered chain of steps. Let AI draft it from the thread, then tweak." ],
+             [ "Ship", "kanban", "Plan sprints, drag cards across the board, track time, and see GitHub pull requests land on the task." ],
+             [ "Learn", "chart-column", "Timeline, analytics and clients show what shipped, what slipped and who asked for it." ] ].each_with_index do |(title, glyph, text), index| %>
+          <li>
+            <span class="steps__node"><%= index + 1 %></span>
+            <h3><%= icon glyph, size: 20 %> <%= title %></h3>
+            <p><%= text %></p>
+          </li>
+        <% end %>
+      </ol>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="wrap">
+      <header class="section-head"><p class="eyebrow">What's inside</p><h2>Everything a delivery team reaches for</h2></header>
+      <div class="features__grid">
+        <% [ [ "link", "Chains", "Steps that unlock in order, so the next person only sees work that is ready." ],
+             [ "video", "Meetings", "Pick a time from a calendar, invite who's required, and a Zoom or Google Meet link lands in the topic." ],
+             [ "git-pull-request", "GitHub", "Mention APO-97 in a PR and it attaches itself to the task." ],
+             [ "sparkles", "AI drafts", "Bring your own model (Claude, Gemini, Grok or GPT) to draft tasks and chains." ],
+             [ "calendar", "Time off", "Allowances, approvals and a team timeline, next to the work." ],
+             [ "keyboard", "Keyboard first", "Every action has a shortcut, and you can remap them in settings." ],
+             [ "palette", "Yours to style", "Backgrounds, accents, fonts, density. It looks the way you like it." ],
+             [ "building-2", "Clients", "Know which customer asked for what, and keep them in the loop." ] ].each do |glyph, title, text| %>
+          <article><span class="features__icon"><%= icon glyph, size: 20 %></span><h3><%= title %></h3><p><%= text %></p></article>
+        <% end %>
+      </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="wrap">
+      <h2>Ready when you are.</h2>
+      <p>Sign in with the work account you were invited with.</p>
+      <%= link_to "Sign in to ohship", sign_in_path, class: "btn btn--primary btn--lg" %>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing__footer">
+    <%= render "shared/logo", size: :small %>
+    <span>© <%= Date.current.year %> ohship</span>
+    <%= link_to "Sign in", sign_in_path %>
+  </footer>
+</div>

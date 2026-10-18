@@ -1,8 +1,24 @@
 require "test_helper"
 
 class AuthenticationTest < ActionDispatch::IntegrationTest
-  test "visitors are sent to the sign-in page" do
+  test "visitors see the public landing page at the root" do
     get root_path
+    assert_response :success
+    assert_select "h1", /Talk it through/
+    assert_select "a.btn--primary[href=?]", sign_in_path
+    assert_select ".hero__note", /Invite-only/
+  end
+
+  test "signed-in people get the dashboard at the same address" do
+    sign_in_as users(:ines)
+    get root_path
+    assert_select ".project-card h2", "Apollo Gateway"
+    assert_select "h1", count: 1
+    assert_select ".landing", count: 0
+  end
+
+  test "protected pages still send visitors to sign in" do
+    get account_path
     assert_redirected_to sign_in_path
   end
 
@@ -28,9 +44,9 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
   end
 
   test "returns the user to the page they originally asked for" do
-    get "/?from=link"
+    get "/account?from=link"
     sign_in_as users(:ines)
-    assert_redirected_to "http://www.example.com/?from=link"
+    assert_redirected_to "http://www.example.com/account?from=link"
   end
 
   test "signing out ends the session" do
@@ -38,6 +54,8 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     sign_out
     assert_redirected_to sign_in_path
     get root_path
+    assert_select ".landing" # back to the public page
+    get account_path
     assert_redirected_to sign_in_path
   end
 

@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- Public **landing page** at `/` for visitors (hero with a live-component preview, how it works, features, sign-in call to action); signed-in people still get the dashboard at the same address (`VisitorConstraint` in `config/routes.rb`, `LandingController`).
 - Renamed the product to **ohship** and added the rocket logo (CSS-masked so it follows the theme colours) and a new favicon.
 - `Taskfile.yml`: `task start | stop | restart | status | logs` manage the server and Postgres.
 - **Multi-tenant SaaS**: a workspace is a tenant with a status (active/suspended), plan (trial/starter/team/enterprise), trial end and seat limit. Sign-up is **invite-only**: unknown emails are refused unless they hold a pending `Invitation`, belong to a workspace that enabled company-domain joining, or are platform staff listed in `PLATFORM_ADMIN_EMAILS`. Signing in consumes invitations (a person can belong to several tenants). `Workspace.provision!` creates a tenant and invites its first admin.
