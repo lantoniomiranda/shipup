@@ -159,7 +159,7 @@ class ChatTest < ActionDispatch::IntegrationTest
     assert_select "#message-#{second.id} strong", count: 0
     assert_select "#message-#{second.id} .message__stamp"
     assert_select "#message-#{second.id} .message__actions button[data-action='message#reply']"
-    assert_select "#message-#{other.id} strong", "Jonas"
+    assert_select "#message-#{other.id} strong", "Jonas K."
     assert_select ".chat .message__day", 1
   end
 
