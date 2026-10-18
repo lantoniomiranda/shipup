@@ -9,8 +9,9 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as users(:ines)
     get integrations_path
     assert_response :success
-    assert_select ".tool", 4 # three meeting tools plus GitHub
-    assert_select ".tool__text strong", text: "Zoom"
+    assert_select ".connector", 5 # three meeting tools, GitHub and AI
+    assert_select ".connector__title strong", text: "Zoom"
+    assert_equal %w[Meetings Code AI], css_select("h2.eyebrow").map(&:text)
   end
 
   test "members cannot open admin setup" do
@@ -84,8 +85,30 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
     patch meeting_tool_path, params: { provider: "zoom" }
 
-    assert_redirected_to root_path
+    assert_redirected_to integrations_path
     assert_equal "zoom", workspaces(:orbit).reload.meeting_provider
+  end
+
+  test "disconnecting removes the connection and clears it as the meeting tool" do
+    workspaces(:orbit).integration_connections.create!(provider: "zoom", external_account: "ops@orbitlabs.dev", connected_by: users(:ines))
+    workspaces(:orbit).update!(meeting_provider: "zoom")
+    sign_in_as users(:ines)
+
+    assert_difference -> { workspaces(:orbit).integration_connections.count }, -1 do
+      delete connect_integration_path(provider: "zoom")
+    end
+
+    assert_redirected_to integrations_path
+    assert_nil workspaces(:orbit).reload.meeting_provider
+  end
+
+  test "members cannot disconnect" do
+    workspaces(:orbit).integration_connections.create!(provider: "zoom", external_account: "x", connected_by: users(:ines))
+    sign_in_as users(:jonas)
+    assert_no_difference -> { IntegrationConnection.count } do
+      delete connect_integration_path(provider: "zoom")
+    end
+    assert_response :forbidden
   end
 
   test "choosing a tool that is not connected is refused" do

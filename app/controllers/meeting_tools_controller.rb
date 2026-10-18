@@ -6,9 +6,9 @@ class MeetingToolsController < ApplicationController
     provider = params[:provider].to_s
 
     if Current.workspace.connection_for(provider) && Current.workspace.update(meeting_provider: provider)
-      redirect_to root_path, notice: "#{Integrations.provider(provider).label} is now your meeting tool."
+      redirect_to integrations_path, notice: "#{Integrations.provider(provider).label} is now your meeting tool."
     else
-      redirect_to integrations_path, alert: "Connect a meeting tool first, then continue."
+      redirect_to integrations_path, alert: "Connect that meeting tool first."
     end
   end
 end

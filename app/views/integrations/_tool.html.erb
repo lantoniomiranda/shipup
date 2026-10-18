@@ -1,28 +1,36 @@
-<%# A selectable meeting tool. Radios live outside the connect forms and attach to #meeting-tool-form. %>
+<%# One connector card. `default` marks the workspace's meeting tool. %>
 <% connected = connection.present? %>
-<% coming_soon = tool[:coming_soon] %>
-<div class="tool <%= "tool--selected" if selected %> <%= "tool--muted" if coming_soon %>">
-  <% unless local_assigns[:selectable] == false %>
-    <input type="radio" class="radio" name="provider" value="<%= tool[:key] %>" form="meeting-tool-form"
-           aria-label="Use <%= tool[:name] %>" <%= "checked" if selected %> <%= "disabled" if coming_soon || !connected %>>
-    <span class="radio__box" aria-hidden="true"><%= icon "check", size: 14 %></span>
-  <% end %>
-
-  <span class="tool__logo tool__logo--<%= tool[:hue] %>"><%= tool[:letter] %></span>
-
-  <div class="tool__text">
-    <strong><%= tool[:name] %></strong>
-    <span><%= tool[:description] %></span>
+<div class="connector <%= "connector--default" if default %> <%= "connector--muted" if tool[:coming_soon] %>">
+  <div class="connector__head">
+    <span class="connector__logo connector__logo--<%= tool[:hue] %>"><%= tool[:letter] %></span>
+    <div class="connector__title">
+      <strong><%= tool[:name] %></strong>
+      <% if tool[:coming_soon] %>
+        <span class="connector__status">Coming soon</span>
+      <% elsif connected %>
+        <span class="connector__status connector__status--on" title="<%= connection.external_account %>">Connected as <%= connection.external_account %></span>
+      <% else %>
+        <span class="connector__status">Not connected</span>
+      <% end %>
+    </div>
+    <% if default %><span class="tag connector__badge">Default</span><% end %>
   </div>
 
-  <% if coming_soon %>
-    <span class="tool__status">Coming soon</span>
-  <% elsif connected %>
-    <span class="tool__status tool__status--connected">Connected as <%= connection.external_account %></span>
-  <% else %>
-    <span class="tool__status">Not connected</span>
-    <%= button_to connect_integration_path(provider: tool[:key]), class: "btn", data: { turbo: false } do %>
-      <%= icon "plug" %><span>Connect</span>
-    <% end %>
+  <p class="connector__text"><%= tool[:description] %></p>
+
+  <% unless tool[:coming_soon] %>
+    <div class="connector__actions">
+      <% if connected %>
+        <% if tool[:meeting] && !default %>
+          <%= button_to meeting_tool_path(provider: tool[:key]), method: :patch, class: "btn btn--primary", form: { class: "inline-form" } do %><%= icon "check" %><span>Use for meetings</span><% end %>
+        <% end %>
+        <% if tool[:repositories] %>
+          <%= link_to github_repositories_path, class: "btn" do %><%= icon "git-branch" %><span>Repositories</span><% end %>
+        <% end %>
+        <%= button_to connect_integration_path(provider: tool[:key]), method: :delete, class: "btn", form: { class: "inline-form", data: { turbo_confirm: "Disconnect #{tool[:name]}?" } } do %><span>Disconnect</span><% end %>
+      <% else %>
+        <%= button_to connect_integration_path(provider: tool[:key]), class: "btn btn--primary", data: { turbo: false }, form: { class: "inline-form" } do %><%= icon "plug" %><span>Connect</span><% end %>
+      <% end %>
+    </div>
   <% end %>
 </div>

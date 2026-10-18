@@ -1,5 +1,6 @@
-# "Set up your workspace" — choose and connect the meeting tool. Admin only.
+# Connectors: connect Zoom, Google Meet and GitHub, and see the AI status. Admin only.
 class IntegrationsController < ApplicationController
+  layout "app"
   before_action :require_workspace_admin
 
   def index

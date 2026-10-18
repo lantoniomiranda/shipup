@@ -1,64 +1,56 @@
-<% content_for :title, "Meeting tool" %>
+<% breadcrumbs [ "Workspace", root_path ], "Connectors" %>
+<% content_for :title, "Connectors" %>
 <%
-  tools = [
-    { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: "Links, cloud recording and transcripts by topic." },
-    { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: "Links through Microsoft 365 calendars.", coming_soon: true },
-    { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: "Links through Google Calendar." }
-  ]
-  selected = @workspace.meeting_provider
+  groups = {
+    "Meetings" => [
+      { key: "zoom", name: "Zoom", letter: "Z", hue: "blue", description: "Meeting links, cloud recording and transcripts by topic.", meeting: true },
+      { key: "google_meet", name: "Google Meet", letter: "G", hue: "teal", description: "Meeting links through Google Calendar.", meeting: true },
+      { key: "microsoft_teams", name: "Microsoft Teams", letter: "T", hue: "plum", description: "Meeting links through Microsoft 365 calendars.", coming_soon: true }
+    ],
+    "Code" => [
+      { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: "Link repositories so pull requests show up on the tasks they mention.", repositories: true }
+    ]
+  }
+  default_tool = @workspace.meeting_provider
 %>
 
-<main class="setup">
-  <aside class="setup__steps">
-    <%= render "shared/logo", size: :small %>
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1>Connectors</h1>
+    <p>Connect the tools your team already uses. Everyone in <strong><%= @workspace.name %></strong> shares these connections.</p>
+  </div>
+  <div class="page-header__actions"><span class="tag tag--admin">Admin only</span></div>
+</header>
 
-    <header class="setup__intro">
-      <h1>Set up your workspace</h1>
-      <span class="tag tag--admin">Admin only</span>
-    </header>
+<div class="connectors">
+  <% groups.each do |group, tools| %>
+    <section class="connectors__group">
+      <h2 class="eyebrow"><%= group %></h2>
+      <div class="connectors__grid">
+        <% tools.each do |tool| %>
+          <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], default: default_tool == tool[:key] %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
 
-    <ol class="steps">
-      <%= render "integrations/step", state: :done, label: "Workspace", caption: @workspace.name %>
-      <%= render "integrations/step", state: :current, number: 2, label: "Meeting tool", caption: "Pick once for everyone" %>
-      <%= render "integrations/step", state: :todo, number: 3, label: "Calendar", caption: "Working hours and availability" %>
-      <%= render "integrations/step", state: :todo, number: 4, label: "People", caption: "Invite admins and managers", last: true %>
-    </ol>
-  </aside>
-
-  <section class="setup__panel">
-    <header class="setup__header">
-      <p class="eyebrow">Step 2 of 4</p>
-      <h2>Choose your meeting tool</h2>
-      <p class="setup__subtitle">Everyone uses it for meeting links. You can change it later in Integrations.</p>
-    </header>
-
-    <% flash.each do |type, message| %>
-      <p class="flash flash--<%= type %>" role="status"><%= message %></p>
-    <% end %>
-
-    <div class="setup__body">
-      <% tools.each do |tool| %>
-        <%= render "integrations/tool", tool: tool, connection: @connections[tool[:key]], selected: selected == tool[:key] %>
-      <% end %>
-
-      <h3 class="eyebrow setup__section">Code</h3>
-      <%= render "integrations/tool", tool: { key: "github", name: "GitHub", letter: "GH", hue: "blue", description: "Link repositories so pull requests show up on tasks." },
-                                      connection: @connections["github"], selected: false, selectable: false %>
-      <% if @connections["github"] %>
-        <p class="setup__hint"><%= link_to "Choose repositories for your projects", github_repositories_path, class: "link" %></p>
-      <% end %>
+  <section class="connectors__group">
+    <h2 class="eyebrow">AI</h2>
+    <div class="connectors__grid">
+      <div class="connector">
+        <div class="connector__head">
+          <span class="connector__logo connector__logo--mustard"><%= icon "sparkles", size: 20 %></span>
+          <div class="connector__title">
+            <strong>AI drafting</strong>
+            <% if Llm.enabled? %>
+              <span class="connector__status connector__status--on">Enabled · <%= Llm.provider %></span>
+            <% else %>
+              <span class="connector__status">Not configured</span>
+            <% end %>
+          </div>
+        </div>
+        <p class="connector__text">Drafts tasks and chains from a topic. Set by the server operator: <code>LLM_ENABLED</code> (claude, gemini, grok or gpt) and <code>LLM_API_KEY</code>.</p>
+      </div>
     </div>
-
-    <footer class="setup__footer">
-      <%= link_to root_path, class: "btn", data: { **hotkey_data(:back) } do %>
-        <%= icon "arrow-left" %><span>Back</span><%= key_hint(:back) %>
-      <% end %>
-
-      <%= form_with url: meeting_tool_path, method: :patch, id: "meeting-tool-form" do %>
-        <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>">
-          <%= icon "arrow-right" %><span>Continue</span><%= key_hint(:submit) %>
-        </button>
-      <% end %>
-    </footer>
   </section>
-</main>
+</div>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get "integrations", to: "integrations#index"
   scope "integrations/:provider", constraints: { provider: /zoom|google_meet|github/ } do
     post "connection", to: "integration_connections#create", as: :connect_integration
+    delete "connection", to: "integration_connections#destroy"
     get "callback", to: "integration_connections#callback", as: :integration_callback
   end
   patch "meeting_tool", to: "meeting_tools#update"

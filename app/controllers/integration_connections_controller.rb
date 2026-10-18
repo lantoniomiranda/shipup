@@ -1,4 +1,4 @@
-# OAuth round-trip that links a workspace to Zoom, Google Meet or GitHub.
+# OAuth round-trip that links a workspace to Zoom, Google Meet or GitHub, and the way back out.
 class IntegrationConnectionsController < ApplicationController
   before_action :require_workspace_admin
   before_action :set_provider
@@ -21,6 +21,12 @@ class IntegrationConnectionsController < ApplicationController
   rescue Integrations::Error => error
     Rails.logger.warn("Integration connect failed: #{error.message}")
     redirect_to integrations_path, alert: "We couldn't connect #{@provider.label}. Please try again."
+  end
+
+  def destroy
+    Current.workspace.connection_for(@provider.key)&.destroy
+    Current.workspace.update!(meeting_provider: nil) if Current.workspace.meeting_provider == @provider.key
+    redirect_to integrations_path, notice: "#{@provider.label} disconnected."
   end
 
   private
