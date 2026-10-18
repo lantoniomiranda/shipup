@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   get "auth/failure", to: "omniauth_callbacks#failure"
 
   # Integrations (admins only): connect Zoom / Google Meet / GitHub and pick the meeting tool.
-  get "integrations", to: "integrations#index"
+  get "integrations", to: redirect("/settings/connectors"), as: :legacy_integrations
+  get "settings/connectors", to: "integrations#index", as: :integrations
   scope "integrations/:provider", constraints: { provider: /zoom|google_meet|github/ } do
     post "connection", to: "integration_connections#create", as: :connect_integration
     delete "connection", to: "integration_connections#destroy"
@@ -27,8 +28,13 @@ Rails.application.routes.draw do
   patch "preferences/project_tabs", to: "project_tab_orders#update", as: :project_tab_order
   delete "preferences/project_tabs", to: "project_tab_orders#destroy"
   resource :search, only: :show
-  resource :account, only: %i[show update]
-  resource :appearance, only: %i[show update]
+  get "settings", to: redirect("/settings/account")
+  scope "settings" do
+    resource :account, only: %i[show update]
+    resource :language_setting, path: "language", controller: "language_settings", only: %i[show update]
+    resource :notification_setting, path: "notifications", controller: "notification_settings", only: %i[show update]
+    resource :appearance, only: %i[show update]
+  end
   resources :github_repositories, only: %i[index create destroy], path: "integrations/github/repositories"
 
   post "webhooks/github", to: "webhooks/github#create"

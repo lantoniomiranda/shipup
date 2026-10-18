@@ -1,7 +1,7 @@
 # Settings → Keyboard shortcuts: remap any (non-fixed) shortcut, only to combinations that work
 # in every browser. Validation lives in Keybindings.
 class KeyboardSettingsController < ApplicationController
-  layout "app"
+  layout "settings"
 
   def show
     @overrides = preference.keybindings

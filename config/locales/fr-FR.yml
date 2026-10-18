@@ -358,6 +358,11 @@ fr-FR:
     tasks: Tâches
     projects: Projets
     pages: Pages
+    chains: "Séquences"
+    in_project: "Dans %{project}"
+    chain_hint:
+      one: "Séquence · %{count} étape"
+      other: "Séquence · %{count} étapes"
     hint_html : "Saisissez au moins deux lettres, ou une clé de tâche comme <code>%{example}</code>."
     empty : "Aucun résultat pour « %{query} »."
     chain_step : "Séquence %{key} · étape %{position} sur %{size}"
@@ -885,3 +890,36 @@ fr-FR:
     invited : "Vous avez une invitation en tant que %{role} de %{project}."
     no_password : "Aucun mot de passe à créer : connectez-vous avec le compte Google ou Microsoft qui utilise %{email} et vous y êtes."
     sign_in : "Se connecter à %{product}"
+
+  settings:
+    title: "Réglages"
+    account:
+      title: "Compte"
+      hint: "Profil et connexion"
+      intro: "Votre profil et la façon dont vous vous connectez."
+      login: "Informations de connexion"
+    language:
+      title: "Langue et heure"
+      hint: "Langue, fuseau horaire"
+      intro: "Comment l’application vous parle et indique l’heure."
+      time_zone: "Fuseau horaire"
+      follow_browser: "Suivre automatiquement le fuseau horaire de mon navigateur"
+      working_hours: "Heures de travail"
+      working_hours_hint: "Sert à repérer les meilleurs créneaux lors de la planification de réunions."
+      work_start: "La journée commence"
+      work_end: "La journée se termine"
+    appearance:
+      title: "Apparence"
+      hint: "Arrière-plan et accent"
+    notifications:
+      title: "Notifications"
+      hint: "Par e-mail uniquement"
+      intro: "Tout arrive par e-mail. Choisissez ce qui mérite un e-mail."
+    keyboard:
+      title: "Raccourcis clavier"
+      hint: "Réattribuez n’importe quelle touche"
+    connectors:
+      title: "Connecteurs"
+      hint: "Réunions, code, IA"
+  language_settings:
+    saved: "Langue et heure enregistrées."

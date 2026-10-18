@@ -12,7 +12,7 @@ class AccountAndAppearanceTest < ActionDispatch::IntegrationTest
     assert_select ".tag--role", /Superadmin/
     assert_select ".signin-note", /Signed in with Google/
     assert_select ".avatar-option", 10
-    assert_select ".settings-list li", 6
+    assert_select ".settings__nav .settings__item--active", /Account/
   end
 
   test "project admins see the projects they manage next to their role" do
@@ -21,21 +21,27 @@ class AccountAndAppearanceTest < ActionDispatch::IntegrationTest
   end
 
   test "notification defaults match the design until changed" do
-    get account_path
+    get notification_setting_path
     assert_select "input[type=checkbox][name='notifications[mention_or_reply]'][checked]"
     assert_select "input[type=checkbox][name='notifications[new_topic]'][checked]", count: 0
   end
 
-  test "saving updates profile, preferences and notifications together" do
-    patch account_path, params: {
-      user: { name: "Inês M.", avatar_icon: "rocket", avatar_color: "plum" },
-      preference: { email_frequency: "weekly", quiet_hours_start: "21:00", quiet_hours_end: "07:30" },
-      notifications: { new_topic: "1", mention_or_reply: "0" }
-    }
+  test "saving the account updates the profile" do
+    patch account_path, params: { user: { name: "Inês M.", avatar_icon: "rocket", avatar_color: "plum" } }
 
     assert_redirected_to account_path
     user = users(:ines).reload
     assert_equal [ "Inês M.", "rocket", "plum" ], [ user.name, user.avatar_icon, user.avatar_color ]
+  end
+
+  test "saving notification settings updates preferences and subscriptions together" do
+    patch notification_setting_path, params: {
+      preference: { email_frequency: "weekly", quiet_hours_start: "21:00", quiet_hours_end: "07:30" },
+      notifications: { new_topic: "1", mention_or_reply: "0" }
+    }
+
+    assert_redirected_to notification_setting_path
+    user = users(:ines).reload
     assert_equal "weekly", user.preference.email_frequency
     assert_equal "07:30", user.preference.quiet_hours_end.strftime("%H:%M")
     assert user.subscribed_to?("new_topic")
@@ -43,17 +49,44 @@ class AccountAndAppearanceTest < ActionDispatch::IntegrationTest
     assert user.subscribed_to?("task_assigned") # untouched kinds keep their default
   end
 
+  test "the notification settings page lists every kind of notice" do
+    get notification_setting_path
+    assert_select ".settings-list li", 6
+  end
+
+  test "saving language and time stores the working hours" do
+    patch language_setting_path, params: { user: { time_zone: "Europe/Berlin", time_zone_auto: "0" }, preference: { work_day_start: "08:00", work_day_end: "16:30" } }
+
+    assert_redirected_to language_setting_path
+    preference = users(:ines).reload.preference
+    assert_equal [ "08:00", "16:30" ], [ preference.work_day_start.strftime("%H:%M"), preference.work_day_end.strftime("%H:%M") ]
+  end
+
   test "invalid profile changes are rejected without saving anything" do
-    patch account_path, params: { user: { name: "", avatar_icon: "rocket", avatar_color: "plum" }, preference: { email_frequency: "weekly" } }
+    patch account_path, params: { user: { name: "", avatar_icon: "rocket", avatar_color: "plum" } }
     assert_response :unprocessable_content
     assert_equal "cat", users(:ines).reload.avatar_icon
-    assert_equal "daily_digest", users(:ines).preference.email_frequency
   end
 
   test "unknown notification kinds are ignored" do
-    patch account_path, params: { user: { name: "Inês" }, preference: { email_frequency: "instant" }, notifications: { bogus: "1" } }
-    assert_redirected_to account_path
+    patch notification_setting_path, params: { preference: { email_frequency: "instant" }, notifications: { bogus: "1" } }
+    assert_redirected_to notification_setting_path
     assert_equal 0, users(:ines).notification_subscriptions.where(kind: "bogus").count
+  end
+
+  test "settings is one place: the old pages are gone and /settings lands on the account" do
+    get "/settings"
+    assert_redirected_to "/settings/account"
+    get "/integrations"
+    assert_redirected_to "/settings/connectors"
+  end
+
+  test "the settings menu shows connectors to superadmins only" do
+    get account_path
+    assert_select ".settings__nav a[href=?]", integrations_path
+    sign_in_as users(:jonas)
+    get account_path
+    assert_select ".settings__nav a[href=?]", integrations_path, count: 0
   end
 
   test "appearance lists every background and accent" do

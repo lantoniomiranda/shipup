@@ -1,0 +1,26 @@
+<%# The Settings menu. The current section is the controller that rendered it. %>
+<% sections = [
+  [ "account", "user", account_path, "accounts" ],
+  [ "language", "calendar", language_setting_path, "language_settings" ],
+  [ "appearance", "palette", appearance_path, "appearances" ],
+  [ "notifications", "bell", notification_setting_path, "notification_settings" ],
+  [ "keyboard", "keyboard", keyboard_settings_path, "keyboard_settings" ],
+  ([ "connectors", "plug", integrations_path, "integrations" ] if Current.user.superadmin?)
+].compact %>
+<aside class="settings__nav panel">
+  <h2><%= t("settings.title") %></h2>
+  <nav aria-label="<%= t("settings.title") %>">
+    <% sections.each do |key, icon, path, controller| %>
+      <% current = controller_name == controller %>
+      <%= link_to path, class: "settings__item #{"settings__item--active" if current}", aria: { current: ("page" if current) } do %>
+        <%= icon icon, size: 18 %>
+        <span><strong><%= t("settings.#{key}.title") %></strong><small><%= t("settings.#{key}.hint") %></small></span>
+      <% end %>
+    <% end %>
+  </nav>
+  <div class="settings__me">
+    <%= avatar(Current.user, size: :md) %>
+    <span><strong><%= Current.user.name %></strong><small><%= Current.user.email %></small></span>
+  </div>
+  <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span><%= t("common.sign_out") %></span><% end %>
+</aside>

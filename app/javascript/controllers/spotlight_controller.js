@@ -51,7 +51,10 @@ export default class extends Controller {
   }
 
   load() {
-    this.frameTarget.src = `${this.urlValue}?q=${encodeURIComponent(this.inputTarget.value)}&scope=${this.filter}`
+    const url = new URL(this.urlValue, window.location.origin)
+    url.searchParams.set("q", this.inputTarget.value)
+    url.searchParams.set("scope", this.filter)
+    this.frameTarget.src = url.pathname + url.search
     this.index = -1
     // Highlight the first result once the frame has loaded.
     this.frameTarget.addEventListener("turbo:frame-load", () => this.select(0), { once: true })

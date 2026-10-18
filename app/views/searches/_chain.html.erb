@@ -1,0 +1,5 @@
+<% first_step = chain.tasks.first %>
+<%= link_to (first_step ? project_task_path(chain.project, first_step) : project_backlog_path(chain.project)), class: "spotlight__result", data: { spotlight_target: "result" } do %>
+  <%= icon "link", size: 18 %>
+  <span class="spotlight__text"><strong><%= chain.title %></strong><small><%= chain.project.name %> · <%= t("search.chain_hint", count: chain.tasks.size) %></small></span>
+<% end %>

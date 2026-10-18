@@ -39,9 +39,9 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
   end
 
   test "returns the user to the page they originally asked for" do
-    get "/account?from=link"
+    get "/settings/account?from=link"
     sign_in_as users(:ines)
-    assert_redirected_to "http://www.example.com/account?from=link"
+    assert_redirected_to "http://www.example.com/settings/account?from=link"
   end
 
   test "signing out ends the session" do

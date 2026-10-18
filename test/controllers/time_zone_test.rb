@@ -38,9 +38,9 @@ class TimeZoneTest < ActionDispatch::IntegrationTest
     assert_equal "UTC", @user.reload.time_zone
   end
 
-  test "picking a zone in the account stops following the browser" do
+  test "picking a zone in the settings stops following the browser" do
     sign_in_as @user
-    patch account_path, params: { user: { name: "Newcomer", time_zone: "Europe/Berlin", time_zone_auto: "0" }, preference: { email_frequency: "instant" } }
+    patch language_setting_path, params: { user: { time_zone: "Europe/Berlin", time_zone_auto: "0" }, preference: { work_day_start: "09:00", work_day_end: "17:00" } }
     assert_equal [ "Europe/Berlin", false ], [ @user.reload.time_zone, @user.time_zone_auto? ]
 
     cookies[:browser_time_zone] = "Europe/Lisbon"
@@ -51,7 +51,7 @@ class TimeZoneTest < ActionDispatch::IntegrationTest
   test "ticking automatic resumes following the browser" do
     @user.update!(time_zone: "Europe/Berlin", time_zone_set_by_user: true)
     sign_in_as @user
-    patch account_path, params: { user: { name: "Newcomer", time_zone: "Europe/Berlin", time_zone_auto: "1" }, preference: { email_frequency: "instant" } }
+    patch language_setting_path, params: { user: { time_zone: "Europe/Berlin", time_zone_auto: "1" }, preference: { work_day_start: "09:00", work_day_end: "17:00" } }
     assert @user.reload.time_zone_auto?
 
     cookies[:browser_time_zone] = "Europe/Lisbon"
@@ -61,14 +61,14 @@ class TimeZoneTest < ActionDispatch::IntegrationTest
 
   test "an invalid zone is rejected" do
     sign_in_as @user
-    patch account_path, params: { user: { name: "Newcomer", time_zone: "Nowhere/Land", time_zone_auto: "0" }, preference: { email_frequency: "instant" } }
+    patch language_setting_path, params: { user: { time_zone: "Nowhere/Land", time_zone_auto: "0" }, preference: { work_day_start: "09:00", work_day_end: "17:00" } }
     assert_response :unprocessable_content
     assert_equal "UTC", @user.reload.time_zone
   end
 
-  test "the account page offers the zones with their offsets and the automatic switch" do
+  test "the language and time page offers the zones with their offsets and the automatic switch" do
     sign_in_as @user
-    get account_path
+    get language_setting_path
     assert_select "select[name='user[time_zone]'] option[value='Europe/Lisbon']"
     assert_select "input[name='user[time_zone_auto]'][type=checkbox][checked]"
     assert_includes User.time_zone_options.map(&:first), "(UTC+00:00) Lisbon"

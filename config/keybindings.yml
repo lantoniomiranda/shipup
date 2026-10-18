@@ -32,7 +32,7 @@ shortcuts:
   projects:      { context: global,     keys: "g h",        label: "Go to projects" }
   notifications: { context: global,     keys: "g n",        label: "Go to notifications" }
   time_off:      { context: global,     keys: "g o",        label: "Go to time off" }
-  account:       { context: global,     keys: "g u",        label: "Go to your account" }
+  account:       { context: global,     keys: "g u",        label: "Go to your settings" }
   back:          { context: global,     keys: "escape",     label: "Go back or close", fixed: true }
   submit:        { context: global,     keys: "ctrl+enter", label: "Submit the form", fixed: true }
 

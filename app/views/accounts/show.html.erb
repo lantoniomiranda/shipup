@@ -1,21 +1,12 @@
-<% breadcrumbs [ t("nav.projects"), root_path ], t("account.crumb") %>
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.account.title") %>
+<% content_for :title, t("settings.account.title") %>
 <% identity = @user.identities.first %>
-<% preference = @user.preference %>
 
-<%= form_with model: @user, url: account_path, method: :patch, class: "account", data: { controller: "dirty-form " } do |form| %>
-  <header class="page-header">
-    <div class="page-header__heading"><h1><%= t("account.title") %></h1></div>
-    <div class="page-header__actions">
-      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
-      <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span><%= t("account.appearance") %></span><% end %>
-      <%= link_to keyboard_settings_path, class: "btn" do %><%= icon "keyboard" %><span><%= t("account.shortcuts", default: "Shortcuts") %></span><% end %>
-      <%= link_to account_path, class: "btn", data: { **hotkey_data(:back) } do %><span><%= t("common.discard") %></span><%= key_hint(:back) %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= key_hint(:submit) %></button>
-    </div>
-  </header>
+<%= form_with model: @user, url: account_path, method: :patch, class: "settings__form", data: { controller: "dirty-form" } do |form| %>
+  <section class="panel">
+    <div class="form form--scroll">
+      <header class="form__heading"><h1><%= t("settings.account.title") %></h1><p><%= t("settings.account.intro") %></p></header>
 
-  <div class="account__grid">
-    <section class="card-panel profile">
       <div class="profile__head">
         <span class="profile__avatar avatar--<%= @user.avatar_color %>" data-dirty-form-target="avatarPreview"><%= icon @user.avatar_icon, size: 44 %></span>
         <div>
@@ -48,62 +39,19 @@
       </fieldset>
 
       <div class="field">
-        <p class="eyebrow"><%= t("account.language") %></p>
-        <%= render "shared/locale_switch" %>
-      </div>
-
-      <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span><%= t("common.sign_out") %></span><% end %>
-
-      <fieldset class="field">
-        <legend class="eyebrow">Time zone</legend>
-        <%= form.select :time_zone, User.time_zone_options, {}, class: "select" %>
-        <label class="check-line">
-          <%= hidden_field_tag "user[time_zone_auto]", "0", id: nil %>
-          <%= check_box_tag "user[time_zone_auto]", "1", @user.time_zone_auto?, class: "check" %>
-          <span>Follow my browser's time zone automatically</span>
-        </label>
-      </fieldset>
-
-      <div class="signin-note">
-        <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>
-        <div><strong><%= t("account.signed_in_html", provider: t("enums.provider.#{identity&.provider || "google"}")) %></strong><small><%= t("account.no_password", email: @user.email) %></small></div>
-        <%= icon "lock", size: 16 %>
-      </div>
-    </section>
-
-    <section class="card-panel notifications">
-      <header class="notifications__head">
-        <h2><%= t("account.notifications") %></h2>
-      </header>
-      <p class="eyebrow notifications__label"><%= t("account.when") %></p>
-      <ul class="settings-list">
-        <% %w[mention_or_reply new_topic similar_topic task_assigned subtask_unlocked meeting_invite].each do |kind| %>
-          <li>
-            <div><strong><%= t("account.notices.#{kind}.title") %></strong><small><%= t("account.notices.#{kind}.hint") %></small></div>
-            <%= hidden_field_tag "notifications[#{kind}]", "0", id: nil %>
-            <%= check_box_tag "notifications[#{kind}]", "1", @user.subscribed_to?(kind), class: "switch" %>
-          </li>
-        <% end %>
-      </ul>
-
-      <div class="field-row field-row--timing">
-        <fieldset class="field">
-          <legend class="eyebrow"><%= t("account.timing") %></legend>
-          <div class="choice">
-            <% UserPreference::EMAIL_FREQUENCIES.each do |frequency| %>
-              <label class="choice__option"><%= radio_button_tag "preference[email_frequency]", frequency, preference.email_frequency == frequency, class: "choice__input" %><span><%= t("enums.email_frequency.#{frequency}") %></span></label>
-            <% end %>
-          </div>
-        </fieldset>
-        <div class="field">
-          <p class="eyebrow"><%= t("account.quiet_hours", zone: @user.time_zone) %></p>
-          <div class="quiet-hours">
-            <%= icon "moon", size: 15 %>
-            <%= time_field_tag "preference[quiet_hours_start]", preference.quiet_hours_start.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_start") %>–
-            <%= time_field_tag "preference[quiet_hours_end]", preference.quiet_hours_end.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_end") %>
-          </div>
+        <p class="eyebrow"><%= t("settings.account.login") %></p>
+        <div class="signin-note">
+          <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>
+          <div><strong><%= t("account.signed_in_html", provider: t("enums.provider.#{identity&.provider || "google"}")) %></strong><small><%= t("account.no_password", email: @user.email) %></small></div>
+          <%= icon "lock", size: 16 %>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+
+    <footer class="panel__footer">
+      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
+      <%= link_to account_path, class: "btn", data: { **hotkey_data(:back) } do %><span><%= t("common.discard") %></span><%= key_hint(:back) %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= key_hint(:submit) %></button>
+    </footer>
+  </section>
 <% end %>

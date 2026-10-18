@@ -1,6 +1,8 @@
-<% breadcrumbs [ "Workspace", root_path ], [ "Account", account_path ], "Keyboard shortcuts" %>
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.keyboard.title") %>
 <% content_for :title, "Keyboard shortcuts" %>
 
+<section class="panel">
+<div class="form form--scroll">
 <header class="page-header">
   <div class="page-header__heading">
     <h1>Keyboard shortcuts</h1>
@@ -45,3 +47,5 @@
     <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span>Save shortcuts</span><%= key_hint(:submit) %></button>
   </div>
 <% end %>
+</div>
+</section>

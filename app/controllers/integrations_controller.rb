@@ -1,6 +1,6 @@
 # Connectors: connect Zoom, Google Meet and GitHub, and see the AI status. Superadmins only.
 class IntegrationsController < ApplicationController
-  layout "app"
+  layout "settings"
   before_action :require_superadmin
 
   def index

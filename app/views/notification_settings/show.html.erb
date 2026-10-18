@@ -1,0 +1,46 @@
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.notifications.title") %>
+<% content_for :title, t("settings.notifications.title") %>
+<% preference = @user.preference %>
+
+<%= form_with url: notification_setting_path, method: :patch, class: "settings__form", data: { controller: "dirty-form" } do %>
+  <section class="panel">
+    <div class="form form--scroll">
+      <header class="form__heading"><h1><%= t("settings.notifications.title") %></h1><p><%= t("settings.notifications.intro") %></p></header>
+
+      <p class="eyebrow notifications__label"><%= t("account.when") %></p>
+      <ul class="settings-list">
+        <% %w[mention_or_reply new_topic similar_topic task_assigned subtask_unlocked meeting_invite].each do |kind| %>
+          <li>
+            <div><strong><%= t("account.notices.#{kind}.title") %></strong><small><%= t("account.notices.#{kind}.hint") %></small></div>
+            <%= hidden_field_tag "notifications[#{kind}]", "0", id: nil %>
+            <%= check_box_tag "notifications[#{kind}]", "1", @user.subscribed_to?(kind), class: "switch" %>
+          </li>
+        <% end %>
+      </ul>
+
+      <div class="field-row field-row--timing">
+        <fieldset class="field">
+          <legend class="eyebrow"><%= t("account.timing") %></legend>
+          <div class="choice">
+            <% UserPreference::EMAIL_FREQUENCIES.each do |frequency| %>
+              <label class="choice__option"><%= radio_button_tag "preference[email_frequency]", frequency, preference.email_frequency == frequency, class: "choice__input" %><span><%= t("enums.email_frequency.#{frequency}") %></span></label>
+            <% end %>
+          </div>
+        </fieldset>
+        <div class="field">
+          <p class="eyebrow"><%= t("account.quiet_hours", zone: @user.time_zone) %></p>
+          <div class="quiet-hours">
+            <%= icon "moon", size: 15 %>
+            <%= time_field_tag "preference[quiet_hours_start]", preference.quiet_hours_start.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_start") %>–
+            <%= time_field_tag "preference[quiet_hours_end]", preference.quiet_hours_end.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_end") %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="panel__footer">
+      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= key_hint(:submit) %></button>
+    </footer>
+  </section>
+<% end %>

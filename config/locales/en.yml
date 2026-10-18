@@ -358,6 +358,11 @@ en:
     tasks: Tasks
     projects: Projects
     pages: Pages
+    chains: "Chains"
+    in_project: "In %{project}"
+    chain_hint:
+      one: "Chain · %{count} step"
+      other: "Chain · %{count} steps"
     hint_html: "Jump to a page, or type two letters to search topics, tasks and projects. Try <code>%{example}</code>."
     empty: "Nothing matches “%{query}”."
     chain_step: "Chain %{key} · step %{position} of %{size}"
@@ -885,3 +890,36 @@ en:
     invited: "You have been invited as %{role} of %{project}."
     no_password: "There is no password to create: sign in with the Google or Microsoft account that uses %{email} and you are in."
     sign_in: "Sign in to %{product}"
+
+  settings:
+    title: "Settings"
+    account:
+      title: "Account"
+      hint: "Profile and login"
+      intro: "Your profile and how you sign in."
+      login: "Login details"
+    language:
+      title: "Language and time"
+      hint: "Language, time zone"
+      intro: "How the app speaks to you and tells time."
+      time_zone: "Time zone"
+      follow_browser: "Follow my browser's time zone automatically"
+      working_hours: "Working hours"
+      working_hours_hint: "Used to flag the best times when you schedule meetings."
+      work_start: "Working day starts"
+      work_end: "Working day ends"
+    appearance:
+      title: "Appearance"
+      hint: "Background and accent"
+    notifications:
+      title: "Notifications"
+      hint: "Email only"
+      intro: "Everything arrives by email. Choose what is worth an email."
+    keyboard:
+      title: "Keyboard shortcuts"
+      hint: "Remap any key"
+    connectors:
+      title: "Connectors"
+      hint: "Meetings, code, AI"
+  language_settings:
+    saved: "Language and time saved."

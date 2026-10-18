@@ -358,6 +358,11 @@ it:
     tasks: Attività
     projects: Progetti
     pages: Pagine
+    chains: "Sequenze"
+    in_project: "In %{project}"
+    chain_hint:
+      one: "Sequenza · %{count} passo"
+      other: "Sequenza · %{count} passi"
     hint_html: "Scrivi almeno due lettere, o una sigla attività come <code>%{example}</code>."
     empty: "Niente corrisponde a «%{query}»."
     chain_step: "Sequenza %{key} · passo %{position} di %{size}"
@@ -885,3 +890,36 @@ it:
     invited: "Ti hanno invitato come %{role} di %{project}."
     no_password: "Non c'è una password da creare: accedi con l'account Google o Microsoft che usa %{email} e sei dentro."
     sign_in: "Accedi a %{product}"
+
+  settings:
+    title: "Impostazioni"
+    account:
+      title: "Account"
+      hint: "Profilo e accesso"
+      intro: "Il tuo profilo e come accedi."
+      login: "Dati di accesso"
+    language:
+      title: "Lingua e ora"
+      hint: "Lingua, fuso orario"
+      intro: "Come l’app ti parla e segna l’ora."
+      time_zone: "Fuso orario"
+      follow_browser: "Segui automaticamente il fuso orario del mio browser"
+      working_hours: "Orario di lavoro"
+      working_hours_hint: "Serve a evidenziare gli orari migliori quando pianifichi riunioni."
+      work_start: "La giornata inizia"
+      work_end: "La giornata finisce"
+    appearance:
+      title: "Aspetto"
+      hint: "Sfondo e colore d’accento"
+    notifications:
+      title: "Notifiche"
+      hint: "Solo via email"
+      intro: "Tutto arriva via email. Scegli cosa merita un’email."
+    keyboard:
+      title: "Scorciatoie da tastiera"
+      hint: "Riassegna qualsiasi tasto"
+    connectors:
+      title: "Connettori"
+      hint: "Riunioni, codice, IA"
+  language_settings:
+    saved: "Lingua e ora salvate."

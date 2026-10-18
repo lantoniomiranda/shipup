@@ -1,0 +1,6 @@
+<%= link_to project_topic_path(topic.project, topic), class: "spotlight__result", data: { spotlight_target: "result" } do %>
+  <%= icon topic.issue? ? "circle-alert" : "sparkles", size: 18 %>
+  <span class="spotlight__text"><strong><%= topic.title %></strong><small><%= topic.project.name %> · <%= topic.author.short_name %> · <%= t("topics.replies", count: topic.messages_count) %></small></span>
+  <span class="spotlight__votes"><%= format("%+d", topic.votes_score) %></span>
+  <%= render "topics/outcome_tag", topic: topic %>
+<% end %>

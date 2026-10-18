@@ -1,0 +1,9 @@
+<%# Settings: a left menu of sections and the chosen section beside it. Nested inside layouts/app. %>
+<% content_for :content_class, "shell__content--bare" %>
+<% content_for :settings_body do %>
+  <div class="settings">
+    <%= render "settings/nav" %>
+    <div class="settings__body"><%= yield %></div>
+  </div>
+<% end %>
+<%= render template: "layouts/app" %>

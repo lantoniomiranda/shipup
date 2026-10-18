@@ -1,5 +1,5 @@
-<% breadcrumbs t("appearance.settings"), t("appearance.crumb") %>
-<% content_for :content_class, "shell__content--bare" %>
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.appearance.title") %>
+<% content_for :title, t("settings.appearance.title") %>
 <% themes = { "paper" => [ "#FBF7EC", "#E9DDC4", "#2B211A" ], "mist" => [ "#F2F6FA", "#C9D6E2", "#16202A" ], "sage" => [ "#F3F6EC", "#D6DEC8", "#1C2519" ],
               "night" => [ "#1F2030", "#101118", "#E4E6F4" ], "system" => [ "#FBF7EC", "#1F2030", "#2B211A" ] } %>
 <% accents = { "orange" => "#E8632B", "blue" => "#6F94D6", "teal" => "#4FA396", "plum" => "#C8628A", "mustard" => "#EBB43B" } %>

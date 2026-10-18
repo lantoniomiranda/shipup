@@ -1,0 +1,27 @@
+/* Settings: a menu of sections beside the chosen one. */
+.settings { display: flex; flex: 1; gap: 8px; min-height: 0; }
+.settings__body { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
+.settings__form { display: flex; flex: 1; min-height: 0; }
+
+.settings__nav { flex: 0 0 280px; gap: 16px; padding: 22px 16px 16px; background: var(--paper); }
+.settings__nav h2 { padding: 0 8px; font-size: 26px; }
+.settings__nav nav { display: flex; flex-direction: column; gap: 4px; }
+.settings__item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--radius-sm); }
+.settings__item span { display: flex; flex-direction: column; min-width: 0; }
+.settings__item strong { font-size: 15px; font-weight: 700; }
+.settings__item small { color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+.settings__item:hover { background: var(--sunken-a55); }
+.settings__item--active { background: var(--accent-tint); box-shadow: inset 3px 0 0 var(--accent); }
+.settings__me { display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 12px 8px 0; border-top: 1px solid var(--line); }
+.settings__me span { display: flex; flex-direction: column; min-width: 0; }
+.settings__me strong { overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.settings__me small { overflow: hidden; color: var(--ink-soft); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+
+.settings .form { padding: 28px 32px; }
+.settings .panel__footer .tag--unsaved { margin-right: auto; }
+
+@media (max-width: 900px) {
+  .settings { flex-direction: column; }
+  .settings__nav { flex-basis: auto; }
+}
+.settings .quiet-hours { align-self: flex-start; }

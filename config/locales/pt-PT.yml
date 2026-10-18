@@ -358,6 +358,11 @@ pt-PT:
     tasks: Tarefas
     projects: Projetos
     pages: Páginas
+    chains: "Sequências"
+    in_project: "Em %{project}"
+    chain_hint:
+      one: "Sequência · %{count} passo"
+      other: "Sequência · %{count} passos"
     hint_html: "Escreva pelo menos duas letras, ou uma chave de tarefa como <code>%{example}</code>."
     empty: "Nada corresponde a «%{query}»."
     chain_step: "Sequência %{key} · passo %{position} de %{size}"
@@ -885,3 +890,36 @@ pt-PT:
     invited: "Recebeu um convite como %{role} de %{project}."
     no_password: "Não há palavra-passe para criar: inicie sessão com a conta Google ou Microsoft que usa %{email} e entra de imediato."
     sign_in: "Iniciar sessão no %{product}"
+
+  settings:
+    title: "Definições"
+    account:
+      title: "Conta"
+      hint: "Perfil e início de sessão"
+      intro: "O seu perfil e a forma como inicia sessão."
+      login: "Dados de início de sessão"
+    language:
+      title: "Idioma e hora"
+      hint: "Idioma, fuso horário"
+      intro: "Como a aplicação lhe fala e mostra as horas."
+      time_zone: "Fuso horário"
+      follow_browser: "Seguir automaticamente o fuso horário do meu navegador"
+      working_hours: "Horário de trabalho"
+      working_hours_hint: "Serve para assinalar as melhores horas ao marcar reuniões."
+      work_start: "O dia de trabalho começa"
+      work_end: "O dia de trabalho termina"
+    appearance:
+      title: "Aspeto"
+      hint: "Fundo e cor de destaque"
+    notifications:
+      title: "Notificações"
+      hint: "Só por email"
+      intro: "Tudo chega por email. Escolha o que merece um email."
+    keyboard:
+      title: "Atalhos de teclado"
+      hint: "Reatribua qualquer tecla"
+    connectors:
+      title: "Conectores"
+      hint: "Reuniões, código, IA"
+  language_settings:
+    saved: "Idioma e hora guardados."

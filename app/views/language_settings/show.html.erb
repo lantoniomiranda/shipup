@@ -1,0 +1,41 @@
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.language.title") %>
+<% content_for :title, t("settings.language.title") %>
+<% preference = @user.preference %>
+
+<%= form_with model: @user, url: language_setting_path, method: :patch, class: "settings__form", data: { controller: "dirty-form" } do |form| %>
+  <section class="panel">
+    <div class="form form--scroll">
+      <header class="form__heading"><h1><%= t("settings.language.title") %></h1><p><%= t("settings.language.intro") %></p></header>
+
+      <div class="field">
+        <p class="eyebrow"><%= t("account.language") %></p>
+        <%= render "shared/locale_switch" %>
+      </div>
+
+      <fieldset class="field">
+        <legend class="eyebrow"><%= t("settings.language.time_zone") %></legend>
+        <label class="check-line">
+          <%= hidden_field_tag "user[time_zone_auto]", "0", id: nil %>
+          <%= check_box_tag "user[time_zone_auto]", "1", @user.time_zone_auto?, class: "check" %>
+          <span><%= t("settings.language.follow_browser") %></span>
+        </label>
+        <%= form.select :time_zone, User.time_zone_options, {}, class: "select" %>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="eyebrow"><%= t("settings.language.working_hours") %></legend>
+        <div class="quiet-hours">
+          <%= icon "calendar", size: 15 %>
+          <%= time_field_tag "preference[work_day_start]", preference.work_day_start.strftime("%H:%M"), class: "input input--time", "aria-label": t("settings.language.work_start") %>–
+          <%= time_field_tag "preference[work_day_end]", preference.work_day_end.strftime("%H:%M"), class: "input input--time", "aria-label": t("settings.language.work_end") %>
+        </div>
+        <p class="effects__hint"><%= t("settings.language.working_hours_hint") %></p>
+      </fieldset>
+    </div>
+
+    <footer class="panel__footer">
+      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
+      <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= key_hint(:submit) %></button>
+    </footer>
+  </section>
+<% end %>

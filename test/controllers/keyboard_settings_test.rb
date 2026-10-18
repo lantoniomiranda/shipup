@@ -73,9 +73,9 @@ class KeyboardSettingsTest < ActionDispatch::IntegrationTest
     assert_select "a.tab--active[data-hotkey='g b']"
   end
 
-  test "the account page links to the shortcut settings and requires sign-in" do
+  test "the settings menu links to the shortcut settings and requires sign-in" do
     get account_path
-    assert_select "a[href=?]", keyboard_settings_path, text: /Shortcuts/
+    assert_select ".settings__nav a[href=?]", keyboard_settings_path, text: /Keyboard shortcuts/
     sign_out
     get keyboard_settings_path
     assert_redirected_to sign_in_path

@@ -1,0 +1,5 @@
+<%= link_to project_task_path(task.project, task), class: "spotlight__result", data: { spotlight_target: "result" } do %>
+  <%= icon task.chain ? "link" : "circle-check", size: 18 %>
+  <span class="spotlight__text"><strong><%= task.title %></strong><small><%= task.project.name %> · <%= task.chain ? t("search.chain_step", key: task.key, position: task.chain_position, size: task.chain_size) : t("search.task_key", key: task.key) %></small></span>
+  <span class="tag tag--task-status tag--status-<%= task.status %>"><%= Board.status_label(task.status) %></span>
+<% end %>

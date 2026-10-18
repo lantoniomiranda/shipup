@@ -358,6 +358,11 @@ es-ES:
     tasks: Tareas
     projects: Proyectos
     pages: Páginas
+    chains: "Secuencias"
+    in_project: "En %{project}"
+    chain_hint:
+      one: "Secuencia · %{count} paso"
+      other: "Secuencia · %{count} pasos"
     hint_html: "Escribe al menos dos letras, o una clave de tarea como <code>%{example}</code>."
     empty: "Nada coincide con «%{query}»."
     chain_step: "Secuencia %{key} · paso %{position} de %{size}"
@@ -885,3 +890,36 @@ es-ES:
     invited: "Te han invitado como %{role} de %{project}."
     no_password: "No hay contraseña que crear: inicia sesión con la cuenta de Google o Microsoft que usa %{email} y ya estás dentro."
     sign_in: "Iniciar sesión en %{product}"
+
+  settings:
+    title: "Ajustes"
+    account:
+      title: "Cuenta"
+      hint: "Perfil e inicio de sesión"
+      intro: "Tu perfil y cómo inicias sesión."
+      login: "Datos de inicio de sesión"
+    language:
+      title: "Idioma y hora"
+      hint: "Idioma, zona horaria"
+      intro: "Cómo te habla la aplicación y cómo marca la hora."
+      time_zone: "Zona horaria"
+      follow_browser: "Seguir automáticamente la zona horaria de mi navegador"
+      working_hours: "Horario laboral"
+      working_hours_hint: "Sirve para señalar las mejores horas al programar reuniones."
+      work_start: "La jornada empieza"
+      work_end: "La jornada termina"
+    appearance:
+      title: "Apariencia"
+      hint: "Fondo y color de acento"
+    notifications:
+      title: "Notificaciones"
+      hint: "Solo por correo"
+      intro: "Todo llega por correo. Elige qué merece un correo."
+    keyboard:
+      title: "Atajos de teclado"
+      hint: "Reasigna cualquier tecla"
+    connectors:
+      title: "Conectores"
+      hint: "Reuniones, código, IA"
+  language_settings:
+    saved: "Idioma y hora guardados."

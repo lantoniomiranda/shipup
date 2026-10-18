@@ -98,4 +98,54 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_select ".shell[data-controller~=spotlight] .spotlight[data-spotlight-target=root]"
     assert_select ".shell[data-controller~=spotlight] button.hint--button"
   end
+
+  test "every settings section can be found from search" do
+    { "language" => language_setting_path, "time zone" => language_setting_path, "theme" => appearance_path,
+      "email digest" => notification_setting_path, "hotkeys" => keyboard_settings_path, "profile" => account_path }.each do |query, path|
+      get search_path(q: query)
+      assert_select ".spotlight__result[href='#{path}']", minimum: 1, message: "#{query.inspect} should lead to #{path}"
+    end
+    get search_path(q: "settings")
+    assert_select ".spotlight__result strong", "Settings"
+  end
+
+  test "inside a project the search also finds its topics, tasks and chains, before other projects' results" do
+    other = Project.create!(name: "Other Place", key: "OTH", color: "teal", icon: "rocket", description: "x", position: 9)
+    other.topics.create!(author: users(:jonas), title: "Rate card for partners")
+    Chain.create!(project: @project, title: "Rate limit rollout").tasks.create!(project: @project, creator: users(:ines), title: "Ship the rate limiter", chain_position: 1, number: 900)
+    Chain.create!(project: other, title: "Rate review chain")
+
+    get search_path(q: "rate", project: @project.key)
+
+    assert_select "h4", "In Apollo Gateway"
+    headings = css_select("h4").map(&:text)
+    assert_operator headings.index("In Apollo Gateway"), :<, headings.index("Topics")
+    assert_select ".spotlight__result strong", "Rate limit rollout"
+    assert_select ".spotlight__result strong", "Rate card for partners"
+    assert_select ".spotlight__result strong", "Rate review chain"
+    assert_select ".spotlight__tab", /Chains 2/
+  end
+
+  test "chains are searchable on their own, without a project" do
+    Chain.create!(project: @project, title: "Rate limit rollout").tasks.create!(project: @project, creator: users(:ines), title: "Step one", chain_position: 1, number: 901)
+    get search_path(q: "rollout", scope: "chains")
+    assert_select "h4", "Chains"
+    assert_select ".spotlight__result strong", "Rate limit rollout"
+    assert_select "h4", text: "Topics", count: 0
+  end
+
+  test "the palette knows which project it was opened from" do
+    get project_topics_path(@project)
+    assert_select "[data-spotlight-url-value=?]", search_path(project: @project.key)
+    get root_path
+    assert_select "[data-spotlight-url-value=?]", search_path
+  end
+
+  test "a project the person cannot see is ignored as the search context" do
+    sign_in_as users(:jonas)
+    hidden = Project.create!(name: "Hidden", key: "HID", color: "teal", icon: "rocket", description: "x", position: 8)
+    get search_path(q: "hid", project: hidden.key)
+    assert_response :success
+    assert_select "h4", text: /In Hidden/, count: 0
+  end
 end

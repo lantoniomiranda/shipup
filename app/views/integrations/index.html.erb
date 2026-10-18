@@ -1,4 +1,4 @@
-<% breadcrumbs [ t("nav.projects"), root_path ], t("integrations.title") %>
+<% breadcrumbs [ t("settings.title"), account_path ], t("settings.connectors.title") %>
 <% content_for :title, t("integrations.title") %>
 <%
   groups = {
@@ -14,6 +14,8 @@
   default_tool = @default_tool
 %>
 
+<section class="panel">
+<div class="form form--scroll">
 <header class="page-header">
   <div class="page-header__heading">
     <h1><%= t("integrations.title") %></h1>
@@ -54,3 +56,5 @@
     </div>
   </section>
 </div>
+</div>
+</section>

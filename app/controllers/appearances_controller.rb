@@ -1,7 +1,7 @@
 # Look and feel, saved per person: background, accent (or any colour), font, density, text size,
 # corners and a few effects. They land on <html> through the Appearance model.
 class AppearancesController < ApplicationController
-  layout "app"
+  layout "settings"
 
   PERMITTED = %i[theme_bg theme_accent custom_accent font density text_size corners hard_shadows high_contrast reduce_motion].freeze
 
