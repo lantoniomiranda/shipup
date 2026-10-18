@@ -31,7 +31,7 @@
 
     <div class="messages">
       <%= render "topics/opening", topic: @topic %>
-      <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @topic, project: @project } %>
+      <%= render "messages/list", messages: @messages, thread: @topic, project: @project %>
     </div>
 
     <%= render "messages/composer", project: @project, thread: @topic, placeholder: t("topics.reply_placeholder") %>

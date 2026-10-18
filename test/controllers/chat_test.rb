@@ -146,4 +146,30 @@ class ChatTest < ActionDispatch::IntegrationTest
       post project_topic_messages_path(@project, @topic), params: { message: { body: "Hello" } }
     end
   end
+
+  test "consecutive messages by one author share a single header" do
+    now = Time.current.change(hour: 12)
+    first = @task.messages.create!(author: users(:ines), body: "One", created_at: now)
+    second = @task.messages.create!(author: users(:ines), body: "Two", created_at: now + 1.minute)
+    other = @task.messages.create!(author: users(:jonas), body: "Three", created_at: now + 2.minutes)
+    get project_task_path(@project, @task)
+
+    assert_select "#message-#{first.id} strong", "Inês M."
+    assert_select "#message-#{second.id}.message--follow-up"
+    assert_select "#message-#{second.id} strong", count: 0
+    assert_select "#message-#{second.id} .message__stamp"
+    assert_select "#message-#{second.id} .message__actions button[data-action='message#reply']"
+    assert_select "#message-#{other.id} strong", "Jonas"
+    assert_select ".chat .message__day", 1
+  end
+
+  test "a reply inside a group keeps its quote and its own header" do
+    now = Time.current.change(hour: 12)
+    original = @topic.messages.create!(author: users(:ines), body: "Question?", created_at: now)
+    reply = @topic.messages.create!(author: users(:ines), body: "Answer", parent: original, created_at: now + 1.minute)
+    get project_topic_path(@project, @topic)
+
+    assert_select "#message-#{reply.id}:not(.message--follow-up) strong", "Inês M."
+    assert_select "#message-#{reply.id} .message__quote"
+  end
 end

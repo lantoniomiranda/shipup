@@ -1,11 +1,19 @@
-<%# One chat message with reply / edit / remove. `thread` is the Topic or Task, `project` its project. %>
+<%# One chat message with reply / edit / remove. `thread` is the Topic or Task, `project` its project.
+    `first` is false for a follow-up in a group (no avatar/name; just a hover timestamp in the gutter). %>
 <% parent = message.parent %>
-<article class="message <%= "message--removed" if message.deleted? %>" id="message-<%= message.id %>" data-controller="message">
-  <%= avatar(message.author, size: :md) %>
+<% first = true unless local_assigns.key?(:first) %>
+<article class="message <%= "message--removed" if message.deleted? %> <%= "message--follow-up" unless first %>" id="message-<%= message.id %>" data-controller="message">
+  <% if first %>
+    <%= avatar(message.author, size: :md) %>
+  <% else %>
+    <time class="message__stamp" datetime="<%= message.created_at.iso8601 %>"><%= message.created_at.in_time_zone(Current.user.time_zone).strftime("%H:%M") %></time>
+  <% end %>
   <div class="message__body">
     <header>
-      <strong><%= message.author.short_name %></strong>
-      <time><%= author_time(message.created_at, message.author) %></time>
+      <% if first %>
+        <strong><%= message.author.short_name %></strong>
+        <time><%= author_time(message.created_at, message.author) %></time>
+      <% end %>
       <% if message.edited? %><span class="message__edited"><%= t("messages.edited") %></span><% end %>
       <% unless message.deleted? %>
         <span class="message__actions">
