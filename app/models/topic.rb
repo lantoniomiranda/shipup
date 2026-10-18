@@ -32,7 +32,9 @@ class Topic < ApplicationRecord
 
   # Topics whose titles read like `text`, best match first. Each carries a 0-100 `match_percent`.
   scope :similar_to, ->(text) {
-    score = sanitize_sql_array([ "similarity(topics.title, ?)", text ])
+    # word_similarity matches what is typed against any part of a title, so a half-typed
+    # "refresh tokens" scores high against "Refresh tokens expiring silently".
+    score = sanitize_sql_array([ "GREATEST(similarity(topics.title, ?), word_similarity(?, topics.title))", text, text ])
     select("topics.*, ROUND(#{score} * 100)::int AS match_percent")
       .where("#{score} > 0.15")
       .order(Arel.sql("#{score} DESC"))

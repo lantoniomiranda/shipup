@@ -46,6 +46,12 @@ class LlmTest < ActiveSupport::TestCase
     assert_requested stub
   end
 
+  test "Claude turns friendly model names from .env into API ids" do
+    { "sonnet-5.5" => "claude-sonnet-5-5", "Claude Sonnet 5.5" => "claude-sonnet-5-5", "fable-5.1" => "claude-fable-5-1", "claude-opus-5-5" => "claude-opus-5-5" }.each do |given, id|
+      with_llm("claude", model: given) { assert_equal id, Llm.client.model }
+    end
+  end
+
   test "Claude is told to answer in JSON when json mode is on" do
     stub = stub_request(:post, "https://api.anthropic.com/v1/messages").with { |request| JSON.parse(request.body)["system"].include?("single valid JSON object") }
       .to_return(status: 200, body: { content: [ { type: "text", text: "{}" } ] }.to_json, headers: JSON_HEADERS)

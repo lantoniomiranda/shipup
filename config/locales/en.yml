@@ -429,6 +429,7 @@ en:
     client_named: "Client: %{name}"
     post: Post topic
     similar: Similar topics · updates as you type
+    no_similar: "No similar topics yet. Keep typing."
     empty_html: "No topics match. %{link}."
     start_one: Start one
     top: Top voted

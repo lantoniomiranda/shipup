@@ -429,6 +429,7 @@ fr-FR:
     client_named : "Client : %{name}"
     post: Publier le sujet
     similar: Sujets similaires · mis à jour en cours de saisie
+    no_similar: "Aucun sujet similaire pour l'instant. Continuez à écrire."
     empty_html : "Aucun sujet ne correspond. %{link}."
     start_one: En créer un
     top: Les plus votés

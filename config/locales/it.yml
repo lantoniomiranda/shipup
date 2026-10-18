@@ -429,6 +429,7 @@ it:
     client_named: "Cliente: %{name}"
     post: Pubblica argomento
     similar: Argomenti simili · si aggiornano mentre scrivi
+    no_similar: "Nessun argomento simile per ora. Continua a scrivere."
     empty_html: "Nessun argomento corrisponde. %{link}."
     start_one: Inizia uno
     top: Più votati

@@ -147,3 +147,4 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 .meeting-when { margin-top: 10px; color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 .invitee--outside .invitee__time { color: var(--danger); }
 .invitee__time b { font-weight: 600; }
+.ai-draft__error { margin-top: 6px; color: var(--danger); font-size: 12px; font-weight: 600; display: flex; gap: 4px; align-items: center; }

@@ -88,6 +88,16 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".similar--best .similar__read"
   end
 
+  test "a half-typed title still gets a match percentage" do
+    get similar_project_topics_path(@project, q: "refresh tokens")
+    assert_select ".similar--best .similar__head span", /\d+%/
+  end
+
+  test "says so when nothing is similar" do
+    get similar_project_topics_path(@project, q: "zzzqqq xxyyww")
+    assert_select ".similar__empty"
+  end
+
   test "does not search for very short queries" do
     get similar_project_topics_path(@project, q: "re")
     assert_select ".similar", count: 0

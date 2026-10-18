@@ -28,7 +28,8 @@ class TopicChainsController < ApplicationController
     @drafted = true
   rescue Llm::Error => error
     Rails.logger.warn("AI chain draft failed: #{error.message}")
-    flash.now[:alert] = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed. You can still add the steps by hand."
+    @draft_error = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed: #{error.message.truncate(300)}"
+    flash.now[:alert] = @draft_error
   end
 
   def chain_params

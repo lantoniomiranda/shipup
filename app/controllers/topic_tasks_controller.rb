@@ -26,7 +26,8 @@ class TopicTasksController < ApplicationController
     @drafted = true
   rescue Llm::Error => error
     Rails.logger.warn("AI task draft failed: #{error.message}")
-    flash.now[:alert] = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed. You can still write the task by hand."
+    @draft_error = error.is_a?(Llm::NotConfigured) ? "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY." : "The AI draft failed: #{error.message.truncate(300)}"
+    flash.now[:alert] = @draft_error
   end
 
   def task_params

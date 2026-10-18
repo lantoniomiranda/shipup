@@ -6,7 +6,7 @@
       <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
         <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= key_hint(:back) %>
       <% end %>
-      <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, url: new_project_topic_task_path(@project, @topic, draft: 1) %>
+      <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, error: @draft_error, url: new_project_topic_task_path(@project, @topic, draft: 1) %>
     </header>
 
     <div class="form">
