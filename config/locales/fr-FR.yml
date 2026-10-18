@@ -577,6 +577,8 @@ fr-FR:
     link_sample: texte
 
   messages:
+    today: "Aujourd'hui"
+    yesterday: "Hier"
     edited: modifié
     removed: Message retiré
     replying: En réponse à

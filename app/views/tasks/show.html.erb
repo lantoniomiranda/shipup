@@ -101,7 +101,7 @@
     <section class="side__section chat">
       <header><h3><%= t("tasks.chat") %></h3><span class="chat__count"><%= t("tasks.messages", count: @messages.reject(&:deleted?).size) %></span></header>
       <div class="chat__messages">
-        <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @task, project: @project } %>
+        <%= render "messages/list", messages: @messages, thread: @task, project: @project %>
         <% if @messages.empty? %><p class="entries__empty"><%= t("tasks.nobody") %></p><% end %>
       </div>
       <%= render "messages/composer", project: @project, thread: @task, placeholder: t("tasks.reply_placeholder") %>

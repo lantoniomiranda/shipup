@@ -1,0 +1,8 @@
+<%# The messages of a thread, grouped by author and time (see MessageGrouping), with day separators. %>
+<% today = Time.current.in_time_zone(Current.user.time_zone).to_date %>
+<% MessageGrouping.new(messages, time_zone: Current.user.time_zone).entries.each do |entry| %>
+  <% if entry.new_day? %>
+    <div class="message__day" role="separator"><span><%= entry.date == today ? t("messages.today") : entry.date == today - 1 ? t("messages.yesterday") : l(entry.date, format: :long) %></span></div>
+  <% end %>
+  <%= render "messages/message", message: entry.message, thread: thread, project: project, first: entry.first_in_group? %>
+<% end %>

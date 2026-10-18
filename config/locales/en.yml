@@ -577,6 +577,8 @@ en:
     link_sample: text
 
   messages:
+    today: "Today"
+    yesterday: "Yesterday"
     edited: edited
     removed: Message removed
     replying: "Replying to"

@@ -49,6 +49,13 @@
 .message__edit { display: flex; flex-direction: column; gap: 8px; }
 .message__edit[hidden] { display: none; }
 .message__edit div { display: flex; gap: 8px; }
+.message--follow-up { margin-top: -14px; }
+.chat__messages .message--follow-up { margin-top: -10px; }
+.message__stamp { flex: none; width: 30px; color: var(--ink-soft); font-size: 10px; font-weight: 500; line-height: 20px; text-align: center; opacity: 0; transition: opacity 0.1s; }
+.message:hover .message__stamp, .message:focus-within .message__stamp { opacity: 1; }
+.message--follow-up .message__body header { position: absolute; top: 0; right: 0; }
+.message__day { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); font-size: 11px; font-weight: 600; }
+.message__day::before, .message__day::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .message:target { animation: message-flash 1.6s ease-out; }
 @keyframes message-flash { from { background: var(--accent-tint); } to { background: transparent; } }
 

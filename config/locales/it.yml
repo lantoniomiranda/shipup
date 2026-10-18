@@ -577,6 +577,8 @@ it:
     link_sample: testo
 
   messages:
+    today: "Oggi"
+    yesterday: "Ieri"
     edited: modificato
     removed: Messaggio rimosso
     replying: In risposta a
