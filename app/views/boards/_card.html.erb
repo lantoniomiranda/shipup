@@ -12,7 +12,7 @@
     <% if done %>
       <span class="card__done"><%= icon "circle-check", size: 14 %></span>
     <% elsif task.topic %>
-      <%= link_to project_topic_path(project, task.topic), class: "card__topic", draggable: false do %><%= icon "message-square", size: 12 %>from D-<%= task.topic.id %><% end %>
+      <%= link_to project_topic_path(project, task.topic), class: "card__topic", draggable: false do %><%= icon "message-square", size: 12 %><%= t("tasks.from_discussion", id: task.topic.id) %><% end %>
     <% end %>
   </div>
 
@@ -22,10 +22,10 @@
     <% following = task.next_in_chain %>
     <div class="chain-strip">
       <div class="chain-strip__row">
-        <%= icon "layers", size: 13 %><span>Step <%= task.chain_position %> of <%= task.chain_size %> · <%= task.title.split.first %></span>
+        <%= icon "layers", size: 13 %><span><%= t("tasks.step_of", position: task.chain_position, size: task.chain_size, title: task.title.split.first) %></span>
         <span class="dots"><% task.chain_size.times do |index| %><i class="dots__dot <%= "dots__dot--on" if index < task.chain_position %>"></i><% end %></span>
       </div>
-      <% if following %><p class="chain-strip__hint"><%= icon "lock", size: 12 %><%= following.title.split.first %> unlocks next</p><% end %>
+      <% if following %><p class="chain-strip__hint"><%= icon "lock", size: 12 %><%= t("tasks.unlocks_next", title: following.title.split.first) %></p><% end %>
     </div>
   <% end %>
 
@@ -34,7 +34,7 @@
   <% else %>
     <div class="card__time <%= "card__time--over" if task.over_estimate? %>">
       <%= icon "timer", size: 13 %>
-      <span><%= done ? "#{(task.logged_minutes / 60.0).round}h logged" : "#{(task.logged_minutes / 60.0).round}h#{" / #{estimate_hours}h" if estimate_hours}" %></span>
+      <span><% hours = (task.logged_minutes / 60.0).round %><%= done ? t("tasks.hours_logged", hours: hours) : (estimate_hours ? t("tasks.hours_of", logged: hours, estimate: estimate_hours) : t("tasks.hours_only", hours: hours)) %></span>
       <% if pull_request %>
         <span class="card__pr"><%= icon "git-branch", size: 13 %><%= icon(pull_request.merged? ? "git-merge" : "git-pull-request", size: 13) %>#<%= pull_request.number %></span>
       <% else %>
@@ -46,7 +46,7 @@
   <div class="card__footer">
     <% if label %><span class="tag tag--label hue-<%= label.color %>"><%= label.name %></span><% else %><span></span><% end %>
     <span class="card__meta <%= "card__meta--late" if task.overdue? %>">
-      <% if task.due_on %><%= task.due_on.strftime("%b %-d") %><% end %>
+      <% if task.due_on %><%= short_date(task.due_on) %><% end %>
       <% if task.assignee %><%= avatar(task.assignee, size: :sm) %><% end %>
     </span>
   </div>

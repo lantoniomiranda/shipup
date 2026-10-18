@@ -6,17 +6,17 @@
     <header>
       <strong><%= message.author.short_name %></strong>
       <time><%= author_time(message.created_at, message.author) %></time>
-      <% if message.edited? %><span class="message__edited">edited</span><% end %>
+      <% if message.edited? %><span class="message__edited"><%= t("messages.edited") %></span><% end %>
       <% unless message.deleted? %>
         <span class="message__actions">
-          <button type="button" aria-label="Reply" title="Reply" data-action="message#reply" data-message-id-param="<%= message.id %>"
+          <button type="button" aria-label="<%= t("common.reply") %>" title="<%= t("common.reply") %>" data-action="message#reply" data-message-id-param="<%= message.id %>"
                   data-message-name-param="<%= message.author.short_name %>" data-message-excerpt-param="<%= message.excerpt %>"><%= icon "corner-down-right", size: 14 %></button>
           <% if message.editable_by?(Current.user) %>
-            <button type="button" aria-label="Edit" title="Edit" data-action="message#edit"><%= icon "pencil", size: 14 %></button>
+            <button type="button" aria-label="<%= t("common.edit") %>" title="<%= t("common.edit") %>" data-action="message#edit"><%= icon "pencil", size: 14 %></button>
           <% end %>
           <% if message.removable_by?(Current.user, project) %>
-            <%= button_to chat_message_path(project, thread, message), method: :delete, class: "message__remove", form: { class: "inline-form", data: { turbo_confirm: "Remove this message?" } },
-                          aria: { label: "Remove" }, title: "Remove" do %><%= icon "x", size: 14 %><% end %>
+            <%= button_to chat_message_path(project, thread, message), method: :delete, class: "message__remove", form: { class: "inline-form", data: { turbo_confirm: t("messages.confirm_remove") } },
+                          aria: { label: t("common.remove") }, title: t("common.remove") do %><%= icon "x", size: 14 %><% end %>
           <% end %>
         </span>
       <% end %>
@@ -27,13 +27,13 @@
     <% end %>
 
     <% if message.deleted? %>
-      <p class="message__text message__text--removed">Message removed</p>
+      <p class="message__text message__text--removed"><%= t("messages.removed") %></p>
     <% else %>
       <p class="message__text" data-message-target="text"><%= simple_format(h(message.body), {}, wrapper_tag: "span") %></p>
       <% if message.editable_by?(Current.user) %>
         <%= form_with model: message, url: chat_message_path(project, thread, message), method: :patch, scope: :message, class: "message__edit", data: { message_target: "form" } do |form| %>
           <%= form.text_area :body, rows: 2, class: "input", required: true, data: { action: "keydown->message#keydown" } %>
-          <div><button type="submit" class="btn btn--small btn--primary">Save</button><button type="button" class="btn btn--small" data-action="message#cancel">Cancel</button></div>
+          <div><button type="submit" class="btn btn--small btn--primary"><%= t("common.save") %></button><button type="button" class="btn btn--small" data-action="message#cancel"><%= t("common.cancel") %></button></div>
         <% end %>
       <% end %>
     <% end %>

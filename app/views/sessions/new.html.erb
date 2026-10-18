@@ -1,4 +1,4 @@
-<% content_for :title, "Sign in" %>
+<% content_for :title, t("sessions.title") %>
 
 <main class="sign-in">
   <section class="sign-in__form">
@@ -6,8 +6,8 @@
 
     <div class="sign-in__welcome">
       <header class="sign-in__heading">
-        <h1>Welcome back.</h1>
-        <p>Sign in with your work account to continue.</p>
+        <h1><%= t("sessions.welcome") %></h1>
+        <p><%= t("sessions.intro") %></p>
       </header>
 
       <% if alert %>
@@ -17,19 +17,19 @@
       <div class="sign-in__options">
         <%= button_to "/auth/google_oauth2", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey: "g" } do %>
           <%= icon "google", size: 20 %>
-          <span class="btn__label">Continue with Google</span>
+          <span class="btn__label"><%= t("sessions.google") %></span>
           <%= render "shared/key", label: "G" %>
         <% end %>
 
         <%= button_to "/auth/entra_id", class: "btn btn--wide btn--lg", data: { turbo: false, hotkey: "m" } do %>
           <%= icon "microsoft", size: 20 %>
-          <span class="btn__label">Continue with Microsoft</span>
+          <span class="btn__label"><%= t("sessions.microsoft") %></span>
           <%= render "shared/key", label: "M" %>
         <% end %>
       </div>
     </div>
 
-    <div class="sign-in__spacer"></div>
+    <div class="sign-in__spacer"><%= render "shared/locale_switch" %></div>
   </section>
 
   <%= render "sessions/sunset" %>

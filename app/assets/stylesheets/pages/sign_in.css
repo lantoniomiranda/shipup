@@ -16,6 +16,10 @@
 .sign-in__options { display: flex; flex-direction: column; gap: 12px; }
 .sign-in__alert { padding: 10px 14px; background: var(--danger-soft); color: var(--danger); border-radius: var(--radius-sm); font-weight: 600; }
 .sign-in__spacer { height: 38px; } /* balances the logo so the welcome block sits centred */
+.locale-switch { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.locale-switch__item { color: var(--ink-soft); font-size: 13px; font-weight: 600; text-decoration: none; }
+.locale-switch__item--current { color: var(--ink); }
+.locale-switch__item:hover { color: var(--accent); }
 
 /* The sunset scene: a fixed 880x960 stage centred inside a flexible gradient panel. */
 .sunset {

@@ -69,9 +69,7 @@ Rails.application.configure do
     }
   end
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
+  # Fallbacks are the map in config/application.rb (pt-PT uses European Portuguese, then English).
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

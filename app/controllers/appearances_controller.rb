@@ -1,4 +1,4 @@
-# Workspace look: background and accent. Saved per user, applied through data attributes on <html>.
+# Your look: background and accent. Saved per user, applied through data attributes on <html>.
 class AppearancesController < ApplicationController
   layout "app"
 
@@ -13,8 +13,8 @@ class AppearancesController < ApplicationController
     else
       preference.update!(params.expect(preference: %i[theme_bg theme_accent]))
     end
-    redirect_to appearance_path, notice: "Appearance saved.", status: :see_other
+    redirect_to appearance_path, notice: t("appearance.saved"), status: :see_other
   rescue ActiveRecord::RecordInvalid
-    redirect_to appearance_path, alert: "That palette isn't available.", status: :see_other
+    redirect_to appearance_path, alert: t("appearance.invalid"), status: :see_other
   end
 end

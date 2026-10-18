@@ -3,7 +3,7 @@
 <% current = steps.find { |step| !step.done? } %>
 <section class="chain">
   <header class="chain__header">
-    <h3 class="eyebrow">Chain · <%= steps.count(&:done?) %> of <%= steps.size %> done</h3>
+    <h3 class="eyebrow"><%= t("tasks.chain_progress", done: steps.count(&:done?), total: steps.size) %></h3>
   </header>
 
   <ol class="chain__steps">
@@ -16,15 +16,15 @@
         </div>
         <p class="chain-step__desc"><%= step.description %></p>
         <p class="chain-step__state">
-          <% case state when :done %><%= icon "circle-check", size: 13 %>Done
-          <% when :current %><%= icon "eye", size: 13 %>Current step · visible on the board
-          <% else %><%= icon "lock", size: 13 %>Hidden until <%= current&.title || "earlier steps" %> is done
+          <% case state when :done %><%= icon "circle-check", size: 13 %><%= t("tasks.step_done") %>
+          <% when :current %><%= icon "eye", size: 13 %><%= t("tasks.step_current") %>
+          <% else %><%= icon "lock", size: 13 %><%= t("tasks.step_locked", title: current&.title || t("tasks.earlier_steps")) %>
           <% end %>
         </p>
         <% if (pull_request = step.pull_requests.first) %>
           <p class="chain-step__pr"><%= icon "git-pull-request", size: 13 %>#<%= pull_request.number %> <%= pull_request.state %></p>
         <% else %>
-          <p class="chain-step__pr chain-step__pr--none"><%= icon "git-pull-request", size: 13 %>No PR yet</p>
+          <p class="chain-step__pr chain-step__pr--none"><%= icon "git-pull-request", size: 13 %><%= t("tasks.no_pr") %></p>
         <% end %>
       </li>
     <% end %>
@@ -33,7 +33,7 @@
   <% if current && current == task %>
     <% following = task.next_in_chain %>
     <%= button_to advance_project_task_path(project, task), class: "btn btn--primary" do %>
-      <%= icon "check" %><span>Complete <%= task.title %><%= ", unlock #{following.title}" if following %></span><%= render "shared/key", label: "Enter" %>
+      <%= icon "check" %><span><%= following ? t("tasks.complete_unlock", title: task.title, next: following.title) : t("tasks.complete_step", title: task.title) %></span><%= render "shared/key", label: "Enter" %>
     <% end %>
   <% end %>
 </section>

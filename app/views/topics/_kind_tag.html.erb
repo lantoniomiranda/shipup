@@ -1,4 +1,4 @@
 <%# Issue / Feature label. Pass `tinted: true` to colour issues (used in the thread header). %>
 <span class="tag tag--kind <%= "tag--issue" if local_assigns[:tinted] && topic.issue? %>">
-  <%= icon topic.issue? ? "circle-alert" : "sparkles", size: 13 %><%= topic.kind.capitalize %>
+  <%= icon topic.issue? ? "circle-alert" : "sparkles", size: 13 %><%= t("enums.topic_kind.#{topic.kind}") %>
 </span>

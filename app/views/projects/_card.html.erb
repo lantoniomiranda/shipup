@@ -18,15 +18,15 @@
     <p class="project-card__description"><%= project.description %></p>
 
     <div class="project-card__stats">
-      <span><%= icon "messages-square", size: 14 %><%= pluralize(open_topics, "open topic") %></span>
-      <span><%= icon "circle-check-big", size: 14 %><%= pluralize(tasks, "task") %></span>
+      <span><%= icon "messages-square", size: 14 %><%= t("home.open_topics", count: open_topics) %></span>
+      <span><%= icon "circle-check-big", size: 14 %><%= t("home.tasks", count: tasks) %></span>
     </div>
 
     <% if sprint %>
       <div class="xp">
         <div class="xp__labels">
-          <span><%= sprint.name.upcase %> · <%= pluralize(sprint.days_left, "day").upcase %> LEFT</span>
-          <strong><%= percent %>% XP</strong>
+          <span><%= sprint.name.upcase %> · <%= t("home.days_left", count: sprint.days_left).upcase %></span>
+          <strong><%= t("home.xp", percent: percent) %></strong>
         </div>
         <div class="xp__bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100">
           <% Project::XP_SEGMENTS.times do |segment| %>

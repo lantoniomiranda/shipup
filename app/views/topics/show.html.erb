@@ -6,14 +6,14 @@
     <header class="thread__header">
       <div class="thread__back-row">
         <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
-          <%= icon "arrow-left" %><span>Topics</span><%= render "shared/key", label: "Esc" %>
+          <%= icon "arrow-left" %><span><%= t("topics.title") %></span><%= render "shared/key", label: "Esc" %>
         <% end %>
 
         <div class="vote-bar">
-          <%= button_to project_topic_vote_path(@project, @topic, value: 1), class: "vote-bar__up #{"vote-bar__up--active" if @vote&.value == 1}", aria: { label: "Upvote" } do %>
+          <%= button_to project_topic_vote_path(@project, @topic, value: 1), class: "vote-bar__up #{"vote-bar__up--active" if @vote&.value == 1}", aria: { label: t("topics.upvote") } do %>
             <%= icon "arrow-big-up", size: 16 %><span class="votes__score <%= score_class %>"><%= format("%+d", @topic.votes_score) %></span>
           <% end %>
-          <%= button_to project_topic_vote_path(@project, @topic, value: -1), class: "vote-bar__down", aria: { label: "Downvote" } do %>
+          <%= button_to project_topic_vote_path(@project, @topic, value: -1), class: "vote-bar__down", aria: { label: t("topics.downvote") } do %>
             <%= icon "arrow-big-down", size: 16 %>
           <% end %>
         </div>
@@ -21,12 +21,12 @@
 
       <div class="thread__tags">
         <%= render "topics/kind_tag", topic: @topic, tinted: true %>
-        <% if @topic.client %><span class="tag tag--client">Requested by <%= @topic.client.name %></span><% end %>
-        <span class="tag tag--status tag--status-<%= @topic.status %>"><%= @topic.status.capitalize %></span>
+        <% if @topic.client %><span class="tag tag--client"><%= t("topics.requested_tag", name: @topic.client.name) %></span><% end %>
+        <span class="tag tag--status tag--status-<%= @topic.status %>"><%= t("enums.topic_status.#{@topic.status}") %></span>
       </div>
 
       <h1><%= @topic.title %></h1>
-      <p class="thread__meta">Opened by <%= @topic.author.short_name %> · <%= topic_age(@topic.created_at) %> · <%= pluralize(@topic.messages_count, "reply") %></p>
+      <p class="thread__meta"><%= t("topics.opened_by", name: @topic.author.short_name, when: topic_age(@topic.created_at), replies: t("topics.replies", count: @topic.messages_count)) %></p>
     </header>
 
     <div class="messages">
@@ -34,14 +34,14 @@
       <%= render partial: "messages/message", collection: @messages, as: :message, locals: { thread: @topic, project: @project } %>
     </div>
 
-    <%= render "messages/composer", project: @project, thread: @topic, placeholder: "Reply to this topic…" %>
+    <%= render "messages/composer", project: @project, thread: @topic, placeholder: t("topics.reply_placeholder") %>
   </section>
 
   <aside class="side">
     <%= render "topics/what_next", project: @project, topic: @topic %>
 
     <section class="side__section">
-      <h3 class="eyebrow">In this chat</h3>
+      <h3 class="eyebrow"><%= t("topics.in_chat") %></h3>
       <ul class="participants">
         <% @participants.each do |user, role| %>
           <li><%= avatar(user, size: :md) %><span><%= user.short_name %></span><em><%= role %></em></li>

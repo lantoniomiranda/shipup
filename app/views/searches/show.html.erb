@@ -1,24 +1,24 @@
 <%= turbo_frame_tag "search_results" do %>
   <% results = @search.results %>
-  <nav class="spotlight__tabs" aria-label="Search scope">
-    <% [ [ "everything", "Everything", nil ], [ "topics", "Topics", @counts["topics"] ], [ "tasks", "Tasks", @counts["tasks"] ], [ "projects", "Projects", @counts["projects"] ] ].each do |key, label, count| %>
+  <nav class="spotlight__tabs" aria-label="<%= t("search.scope") %>">
+    <% [ [ "everything", t("search.everything"), nil ], [ "topics", t("search.topics"), @counts["topics"] ], [ "tasks", t("search.tasks"), @counts["tasks"] ], [ "projects", t("search.projects"), @counts["projects"] ] ].each do |key, label, count| %>
       <%= link_to search_path(q: @search.query, scope: key), class: "spotlight__tab #{"spotlight__tab--active" if @search.scope == key}", data: { spotlight_target: "tab", turbo_frame: "search_results" } do %><%= label %><%= " #{count}" if count && @search.query.length >= 2 %><% end %>
     <% end %>
   </nav>
 
   <div class="spotlight__list">
     <% if @search.query.length < 2 %>
-      <p class="spotlight__hint">Type at least two letters, or a task key like <code>APO-97</code>.</p>
+      <p class="spotlight__hint"><%= t("search.hint_html", example: "APO-97") %></p>
     <% elsif results.empty? %>
-      <p class="spotlight__hint">Nothing matches “<%= @search.query %>”.</p>
+      <p class="spotlight__hint"><%= t("search.empty", query: @search.query) %></p>
     <% end %>
 
     <% if results.topics.any? %>
-      <h4 class="eyebrow">Topics</h4>
+      <h4 class="eyebrow"><%= t("search.topics") %></h4>
       <% results.topics.each do |topic| %>
         <%= link_to project_topic_path(topic.project, topic), class: "spotlight__result", data: { spotlight_target: "result" } do %>
           <%= icon topic.issue? ? "circle-alert" : "sparkles", size: 18 %>
-          <span class="spotlight__text"><strong><%= topic.title %></strong><small><%= topic.project.name %> · <%= topic.author.short_name %> · <%= pluralize(topic.messages_count, "reply") %></small></span>
+          <span class="spotlight__text"><strong><%= topic.title %></strong><small><%= topic.project.name %> · <%= topic.author.short_name %> · <%= t("topics.replies", count: topic.messages_count) %></small></span>
           <span class="spotlight__votes"><%= format("%+d", topic.votes_score) %></span>
           <%= render "topics/outcome_tag", topic: topic %>
         <% end %>
@@ -26,18 +26,18 @@
     <% end %>
 
     <% if results.tasks.any? %>
-      <h4 class="eyebrow">Tasks</h4>
+      <h4 class="eyebrow"><%= t("search.tasks") %></h4>
       <% results.tasks.each do |task| %>
         <%= link_to project_task_path(task.project, task), class: "spotlight__result", data: { spotlight_target: "result" } do %>
           <%= icon task.chain ? "link" : "circle-check", size: 18 %>
-          <span class="spotlight__text"><strong><%= task.title %></strong><small><%= task.project.name %> · <%= task.chain ? "Chain #{task.key} · step #{task.chain_position} of #{task.chain_size}" : "Task #{task.key}" %></small></span>
-          <span class="tag tag--task-status tag--status-<%= task.status %>"><%= Board::LABELS.fetch(task.status) %></span>
+          <span class="spotlight__text"><strong><%= task.title %></strong><small><%= task.project.name %> · <%= task.chain ? t("search.chain_step", key: task.key, position: task.chain_position, size: task.chain_size) : t("search.task_key", key: task.key) %></small></span>
+          <span class="tag tag--task-status tag--status-<%= task.status %>"><%= Board.status_label(task.status) %></span>
         <% end %>
       <% end %>
     <% end %>
 
     <% if results.projects.any? %>
-      <h4 class="eyebrow">Projects</h4>
+      <h4 class="eyebrow"><%= t("search.projects") %></h4>
       <% results.projects.each do |project| %>
         <%= link_to project_topics_path(project), class: "spotlight__result", data: { spotlight_target: "result" } do %>
           <%= icon project.icon, size: 18 %>

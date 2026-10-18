@@ -6,13 +6,13 @@ class OmniauthCallbacksController < ApplicationController
     start_new_session_for user
     redirect_to after_authentication_url
   rescue User::NotInvited
-    redirect_to sign_in_path, alert: "ShipUp is invite-only. Ask your workspace admin to invite this email address."
+    redirect_to sign_in_path, alert: t("sessions.invite_only")
   rescue KeyError, ArgumentError, ActiveRecord::RecordInvalid => error
     Rails.logger.warn("OAuth sign-in rejected: #{error.message}")
-    redirect_to sign_in_path, alert: "We couldn't sign you in with that account."
+    redirect_to sign_in_path, alert: t("sessions.failed")
   end
 
   def failure
-    redirect_to sign_in_path, alert: "Sign-in was cancelled or failed. Please try again."
+    redirect_to sign_in_path, alert: t("sessions.cancelled")
   end
 end

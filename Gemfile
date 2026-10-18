@@ -17,6 +17,10 @@ gem "stimulus-rails"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
+# Date names, pluralization and default error messages for pt-PT, fr, es and it.
+# UI copy lives in config/locales; this gem only supplies Rails defaults.
+gem "rails-i18n", "~> 8.0"
+
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"

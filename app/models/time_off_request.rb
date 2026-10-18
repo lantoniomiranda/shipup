@@ -46,10 +46,10 @@ class TimeOffRequest < ApplicationRecord
     return unless user && kind && starts_on && ends_on
 
     left = self.class.balance_for(user, kind, year: starts_on.year).left
-    errors.add(:base, "That's more than the #{left} #{kind} days you have left") if working_days.to_i > left
+    errors.add(:base, I18n.t("model_errors.too_many_days", left: left, kind: I18n.t("enums.time_off_kind_inline.#{kind}"))) if working_days.to_i > left
   end
 
   def ends_after_start
-    errors.add(:ends_on, "must be on or after the start date") if starts_on && ends_on && ends_on < starts_on
+    errors.add(:ends_on, I18n.t("model_errors.ends_on_after_start")) if starts_on && ends_on && ends_on < starts_on
   end
 end

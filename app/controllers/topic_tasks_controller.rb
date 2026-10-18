@@ -11,7 +11,7 @@ class TopicTasksController < ApplicationController
     @task = @project.tasks.build(task_params.merge(creator: Current.user, topic: @topic))
     if @task.save
       @topic.approve!
-      redirect_to project_topic_path(@project, @topic), notice: "#{@task.key} created from this topic."
+      redirect_to project_topic_path(@project, @topic), notice: t("tasks.created", key: @task.key)
     else
       render :new, status: :unprocessable_content
     end

@@ -22,6 +22,6 @@ class TimeEntry < ApplicationRecord
   private
 
   def ends_after_start
-    errors.add(:ended_at, "must be after it started") if ended_at && started_at && ended_at < started_at
+    errors.add(:ended_at, I18n.t("model_errors.ended_after_start")) if ended_at && started_at && ended_at < started_at
   end
 end

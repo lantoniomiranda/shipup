@@ -2,6 +2,10 @@
 # "XP" is estimated hours: done / total for the sprint.
 class Board
   LABELS = { "todo" => "To Do", "in_progress" => "In Progress", "testing" => "Testing", "ready_to_deploy" => "Ready to deploy", "done" => "Done" }.freeze
+
+  def self.status_label(status)
+    I18n.t("enums.task_status.#{status}")
+  end
   PIPS = { "todo" => "ink", "in_progress" => "orange", "testing" => "mustard", "ready_to_deploy" => "blue", "done" => "teal" }.freeze
   Column = Data.define(:status, :label, :pip, :tasks)
 
@@ -14,7 +18,7 @@ class Board
 
   def columns
     @columns ||= Task::STATUSES.map do |status|
-      Column.new(status: status, label: LABELS.fetch(status), pip: PIPS.fetch(status), tasks: tasks_by_status.fetch(status, []))
+      Column.new(status: status, label: self.class.status_label(status), pip: PIPS.fetch(status), tasks: tasks_by_status.fetch(status, []))
     end
   end
 

@@ -4,9 +4,9 @@
   <strong><%= topic.title %></strong>
   <div class="topic-card__meta">
     <%= render "topics/kind_tag", topic: topic %>
-    <span><%= format("%+d", topic.votes_score) %> votes · <%= pluralize(topic.messages_count, "reply") %></span>
+    <span><%= t("search.votes", count: topic.votes_score.abs, score: format("%+d", topic.votes_score)) %> · <%= t("topics.replies", count: topic.messages_count) %></span>
   </div>
   <% if local_assigns[:link] %>
-    <%= link_to project_topic_path(topic.project, topic), class: "topic-card__link" do %>Open topic <%= icon "arrow-up-right", size: 12 %><% end %>
+    <%= link_to project_topic_path(topic.project, topic), class: "topic-card__link" do %><%= t("tasks.open_topic") %> <%= icon "arrow-up-right", size: 12 %><% end %>
   <% end %>
 </div>

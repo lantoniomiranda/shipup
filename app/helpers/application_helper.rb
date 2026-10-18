@@ -31,16 +31,45 @@ module ApplicationHelper
 
   # "Active 12 min ago", "Active 3h ago", "Active yesterday", "Active 4d ago"
   def time_ago_label(time, now: Time.current)
-    return "No activity yet" unless time
+    return t("activity.none") unless time
 
     minutes = ((now - time) / 60).floor
-    "Active " + case minutes
-    when ...1 then "just now"
-    when 1...60 then "#{minutes} min ago"
-    when 60...1440 then "#{minutes / 60}h ago"
-    when 1440...2880 then "yesterday"
-    else "#{minutes / 1440}d ago"
+    case minutes
+    when ...1 then t("activity.just_now")
+    when 1...60 then t("activity.minutes", count: minutes)
+    when 60...1440 then t("activity.hours", count: minutes / 60)
+    when 1440...2880 then t("activity.yesterday")
+    else t("activity.days", count: minutes / 1440)
     end
+  end
+
+  def short_date(value)
+    l(value.to_date, format: :short_day)
+  end
+
+  def day_month(value)
+    l(value.to_date, format: :day_month)
+  end
+
+  def month_heading(value)
+    l(value.to_date, format: :month_year)
+  end
+
+  # Monday-first abbreviations from the locale's day names.
+  def weekday_headers
+    I18n.t("date.abbr_day_names").rotate(1)
+  end
+
+  def narrow_weekday(date)
+    I18n.t("date.narrow_day_names")[date.wday]
+  end
+
+  def short_date_year(value)
+    l(value.to_date, format: :short_day_year)
+  end
+
+  def weekday_date(value)
+    l(value.to_date, format: :weekday_day)
   end
 
   PROJECT_TABS = [
@@ -64,7 +93,7 @@ module ApplicationHelper
 
   # Renders the project header (name, sprint, tabs, members) above the content frame.
   def project_header(project, active:)
-    breadcrumbs [ "Projects", root_path ], project.name
+    breadcrumbs [ t("nav.projects"), root_path ], project.name
     content_for(:content_class, "shell__content--bare")
     content_for(:project_header) { render("projects/header", project: project, active: active) }
   end
@@ -84,10 +113,10 @@ module ApplicationHelper
   # "2 days ago" inside the first week, then a plain "12 Sep".
   def topic_age(time, now: Time.current)
     days = (now.to_date - time.to_date).to_i
-    return "today" if days.zero?
-    return "#{days} #{"day".pluralize(days)} ago" if days < 7
+    return t("age.today") if days.zero?
+    return t("age.days", count: days) if days < 7
 
-    time.strftime("%-d %b")
+    day_month(time)
   end
 
   # "08:12 · Austin": the moment in the author's own time zone.

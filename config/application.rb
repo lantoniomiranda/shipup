@@ -23,6 +23,13 @@ module Shipup
     #
     config.x.product_name = "ShipUp"
 
+    # English is the default. People choose pt-PT, fr-FR, es-ES or it (Italy).
+    # :pt stays available only so rails-i18n's European Portuguese dates and error
+    # messages can back pt-PT. pt-BR is not loaded.
+    config.i18n.available_locales = [ :en, :"pt-PT", :pt, :"fr-FR", :"es-ES", :it ]
+    config.i18n.default_locale = :en
+    config.i18n.fallbacks = { :"pt-PT" => [ :pt, :en ], :"fr-FR" => [ :en ], :"es-ES" => [ :en ], :it => [ :en ], :pt => [ :en ] }
+
     # Render errors through ErrorsController (branded pages) instead of the static public/*.html files.
     config.exceptions_app = routes
     config.active_storage.variant_processor = :disabled # no image variants used

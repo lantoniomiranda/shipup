@@ -4,30 +4,30 @@
   <section class="panel panel--form">
     <header class="panel__bar panel__bar--split">
       <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back to topic</span><%= render "shared/key", label: "Esc" %>
+        <%= icon "arrow-left" %><span><%= t("tasks.back_to_topic") %></span><%= render "shared/key", label: "Esc" %>
       <% end %>
       <%= render "topics/ai_draft", topic: @topic, drafted: @drafted, url: new_project_topic_task_path(@project, @topic, draft: 1) %>
     </header>
 
     <div class="form">
       <header class="form__heading">
-        <h1>Create task</h1>
-        <p>From topic · <%= @topic.title %></p>
+        <h1><%= t("tasks.create") %></h1>
+        <p><%= t("tasks.from_topic_only", title: @topic.title) %></p>
       </header>
 
       <% if @task.errors.any? %><p class="flash flash--alert"><%= @task.errors.full_messages.to_sentence %></p><% end %>
 
       <div class="field">
-        <%= form.label :title, "Title", class: "eyebrow" %>
+        <%= form.label :title, t("common.title"), class: "eyebrow" %>
         <%= form.text_field :title, class: "input input--title", required: true, autocomplete: "off" %>
       </div>
 
       <div class="field field--grow">
-        <%= form.label :description, "Description", class: "eyebrow" %>
-        <div class="editor" data-controller="editor">
-          <div class="editor__toolbar" role="toolbar" aria-label="Formatting">
+        <%= form.label :description, t("common.description"), class: "eyebrow" %>
+        <div class="editor" data-controller="editor" data-editor-link-sample-value="<%= t("editor.link_sample") %>">
+          <div class="editor__toolbar" role="toolbar" aria-label="<%= t("common.formatting") %>">
             <% [ [ "bold", "bold", "**" ], [ "italic", "italic", "_" ], [ "list", "list", "- " ], [ "link", "link", "link" ], [ "at-sign", "mention", "@" ] ].each do |glyph, label, token| %>
-              <button type="button" aria-label="<%= label.capitalize %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
+              <button type="button" aria-label="<%= t("common.#{label}") %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
             <% end %>
           </div>
           <%= form.text_area :description, class: "editor__input", data: { editor_target: "input" } %>
@@ -36,39 +36,39 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to project_topic_path(@project, @topic), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
       <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-        <%= icon "square-check" %><span>Create task</span><%= render "shared/key", label: "Ctrl Enter" %>
+        <%= icon "square-check" %><span><%= t("tasks.create") %></span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>
   </section>
 
   <aside class="side side--wide side--padded">
-    <%= render "shared/topic_summary", topic: @topic, heading: "From topic", link: true %>
+    <%= render "shared/topic_summary", topic: @topic, heading: t("tasks.from_topic_heading"), link: true %>
 
     <div class="field">
-      <%= form.label :assignee_id, "Assignee", class: "eyebrow" %>
-      <%= form.collection_select :assignee_id, @project.members.order(:name), :id, :name, { include_blank: "Unassigned" }, class: "select" %>
+      <%= form.label :assignee_id, t("tasks.assignee"), class: "eyebrow" %>
+      <%= form.collection_select :assignee_id, @project.members.order(:name), :id, :name, { include_blank: t("common.unassigned") }, class: "select" %>
     </div>
 
     <div class="field-row">
       <div class="field">
-        <%= form.label :estimate_days, "Estimate (days)", class: "eyebrow" %>
+        <%= form.label :estimate_days, t("tasks.estimate_days"), class: "eyebrow" %>
         <%= form.number_field :estimate_days, min: 0, step: 0.5, class: "input" %>
       </div>
       <div class="field">
-        <%= form.label :due_on, "Due", class: "eyebrow" %>
+        <%= form.label :due_on, t("tasks.due"), class: "eyebrow" %>
         <%= form.date_field :due_on, class: "input" %>
       </div>
     </div>
 
     <div class="field">
-      <%= form.label :sprint_id, "Sprint", class: "eyebrow" %>
-      <%= form.collection_select :sprint_id, @project.sprints.order(number: :desc), :id, :name, { include_blank: "Backlog (no sprint)" }, class: "select" %>
+      <%= form.label :sprint_id, t("tasks.sprint"), class: "eyebrow" %>
+      <%= form.collection_select :sprint_id, @project.sprints.order(number: :desc), :id, :name, { include_blank: t("tasks.backlog_option") }, class: "select" %>
     </div>
 
     <fieldset class="field">
-      <legend class="eyebrow">Tags</legend>
+      <legend class="eyebrow"><%= t("tasks.tags") %></legend>
       <div class="chips chips--wrap">
         <%= form.collection_check_boxes :label_ids, @project.labels.order(:name), :id, :name do |box| %>
           <label class="chip chip--toggle"><%= box.check_box(class: "chip__input") %><span><%= box.text %></span></label>
@@ -77,10 +77,10 @@
     </fieldset>
 
     <label class="switch-row">
-      <%= icon "bug", size: 16 %><span>This is a bug</span>
+      <%= icon "bug", size: 16 %><span><%= t("tasks.this_is_a_bug") %></span>
       <%= form.check_box :bug, class: "switch" %>
     </label>
 
-    <% if @topic.client %><p class="requested-by">Requested by <span class="tag tag--client"><%= @topic.client.name %></span></p><% end %>
+    <% if @topic.client %><p class="requested-by"><%= t("tasks.requested_by") %> <span class="tag tag--client"><%= @topic.client.name %></span></p><% end %>
   </aside>
 <% end %>

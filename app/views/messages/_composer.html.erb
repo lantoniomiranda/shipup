@@ -1,14 +1,14 @@
 <%# Reply box for a chat thread, with "replying to" support. %>
 <%= form_with url: chat_messages_path(project, thread), scope: :message, class: "composer", data: { controller: "composer composer-reply" } do |form| %>
   <div class="composer__reply" data-composer-reply-target="banner" hidden>
-    <%= icon "corner-down-right", size: 13 %><span>Replying to <strong data-composer-reply-target="name"></strong>: <em data-composer-reply-target="excerpt"></em></span>
-    <button type="button" data-action="composer-reply#cancel" aria-label="Cancel reply"><%= icon "x", size: 13 %></button>
+    <%= icon "corner-down-right", size: 13 %><span><%= t("messages.replying") %> <strong data-composer-reply-target="name"></strong>: <em data-composer-reply-target="excerpt"></em></span>
+    <button type="button" data-action="composer-reply#cancel" aria-label="<%= t("messages.cancel_reply") %>"><%= icon "x", size: 13 %></button>
   </div>
   <div class="composer__row">
     <%= form.hidden_field :parent_id, data: { composer_reply_target: "parent" } %>
     <%= form.text_area :body, rows: 1, placeholder: placeholder, class: "composer__input", required: true,
                        data: { composer_target: "input", composer_reply_target: "input", action: "keydown->composer#submitOnEnter" } %>
     <%= render "shared/key", label: "R" %>
-    <button type="submit" class="composer__send" aria-label="Send"><%= icon "send", size: 16 %></button>
+    <button type="submit" class="composer__send" aria-label="<%= t("common.send") %>"><%= icon "send", size: 16 %></button>
   </div>
 <% end %>

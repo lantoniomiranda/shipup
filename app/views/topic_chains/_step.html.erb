@@ -2,10 +2,10 @@
   <span class="step-card__grip"><%= icon "grip-vertical", size: 14 %></span>
   <span class="step-card__number" data-steps-target="number"></span>
   <div class="step-card__fields">
-    <%= text_field_tag "chain[steps][#{index}][title]", step[:title], class: "input input--bare", placeholder: "Step title", autocomplete: "off" %>
-    <%= text_field_tag "chain[steps][#{index}][description]", step[:description], class: "input input--bare input--small", placeholder: "What happens in this step?", autocomplete: "off" %>
+    <%= text_field_tag "chain[steps][#{index}][title]", step[:title], class: "input input--bare", placeholder: t("chain_form.step_title"), autocomplete: "off" %>
+    <%= text_field_tag "chain[steps][#{index}][description]", step[:description], class: "input input--bare input--small", placeholder: t("chain_form.step_what"), autocomplete: "off" %>
   </div>
-  <%= select_tag "chain[steps][#{index}][assignee_id]", options_from_collection_for_select(members, :id, :short_name, step[:assignee_id]), include_blank: "Unassigned", class: "select select--small" %>
-  <%= number_field_tag "chain[steps][#{index}][estimate_days]", step[:estimate_days], min: 0, step: 0.5, class: "input input--days", placeholder: "days", "aria-label": "Estimate in days" %>
-  <button type="button" class="step-card__remove" data-action="steps#remove" aria-label="Remove step"><%= icon "x", size: 14 %></button>
+  <%= select_tag "chain[steps][#{index}][assignee_id]", options_from_collection_for_select(members, :id, :short_name, step[:assignee_id]), include_blank: t("common.unassigned"), class: "select select--small" %>
+  <%= number_field_tag "chain[steps][#{index}][estimate_days]", step[:estimate_days], min: 0, step: 0.5, class: "input input--days", placeholder: t("chain_form.days"), "aria-label": t("tasks.estimate_in_days") %>
+  <button type="button" class="step-card__remove" data-action="steps#remove" aria-label="<%= t("chain_form.remove_step") %>"><%= icon "x", size: 14 %></button>
 </li>

@@ -13,7 +13,7 @@ class Sprint < ApplicationRecord
   validate :ends_after_start
 
   def name
-    "Sprint #{number}"
+    I18n.t("sprints.name", number: number)
   end
 
   # The next free number and a default two-week window after the latest sprint.
@@ -56,6 +56,6 @@ class Sprint < ApplicationRecord
   private
 
   def ends_after_start
-    errors.add(:ends_on, "must be on or after the start date") if starts_on && ends_on && ends_on < starts_on
+    errors.add(:ends_on, I18n.t("model_errors.ends_on_after_start")) if starts_on && ends_on && ends_on < starts_on
   end
 end

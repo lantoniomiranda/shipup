@@ -18,23 +18,23 @@ class SprintsController < ApplicationController
       @sprint.start!(carry_over: carry_over?) if params[:start_now] == "1"
     end
     redirect_to @sprint.active? ? project_board_path(@project) : project_backlog_path(@project),
-                notice: @sprint.active? ? "#{@sprint.name} started. It's on the board now." : "#{@sprint.name} planned.", status: :see_other
+                notice: @sprint.active? ? t("sprints.started", name: @sprint.name) : t("sprints.planned", name: @sprint.name), status: :see_other
   rescue ActiveRecord::RecordInvalid
     render :new, status: :unprocessable_content
   end
 
   def start
-    return redirect_to project_backlog_path(@project), alert: "That sprint can't be started." unless @sprint.planned?
+    return redirect_to project_backlog_path(@project), alert: t("sprints.cannot_start") unless @sprint.planned?
 
     @sprint.start!(carry_over: carry_over?)
-    redirect_to project_board_path(@project), notice: "#{@sprint.name} started. It's on the board now.", status: :see_other
+    redirect_to project_board_path(@project), notice: t("sprints.started", name: @sprint.name), status: :see_other
   end
 
   def complete
-    return redirect_to project_board_path(@project), alert: "Only the active sprint can be completed." unless @sprint.active?
+    return redirect_to project_board_path(@project), alert: t("sprints.only_active") unless @sprint.active?
 
     @sprint.complete!(carry_over_to: @project.sprints.upcoming.first)
-    redirect_to project_backlog_path(@project), notice: "#{@sprint.name} completed. Unfinished tasks moved on.", status: :see_other
+    redirect_to project_backlog_path(@project), notice: t("sprints.completed", name: @sprint.name), status: :see_other
   end
 
   private

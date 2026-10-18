@@ -6,22 +6,22 @@
   <div class="toolbar">
     <div class="toolbar__sprint">
       <% if sprint %>
-        <h1><%= sprint.starts_on.strftime("%b %-d") %> – <%= sprint.ends_on.strftime("%b %-d") %></h1>
+        <h1><%= short_date(sprint.starts_on) %> – <%= short_date(sprint.ends_on) %></h1>
         <div class="xp xp--inline">
           <div class="xp__bar xp__bar--small" role="progressbar" aria-valuenow="<%= @board.progress_percent %>" aria-valuemin="0" aria-valuemax="100">
             <% 16.times do |segment| %><span class="xp__segment <%= "xp__segment--on" if segment < lit %> <%= "xp__segment--edge" if segment == lit - 1 %>"></span><% end %>
           </div>
-          <span class="toolbar__points"><%= @board.done_points %>/<%= @board.total_points %> XP</span>
+          <span class="toolbar__points"><%= t("board.points", done: @board.done_points, total: @board.total_points) %></span>
         </div>
       <% else %>
-        <h1>No active sprint</h1>
+        <h1><%= t("board.none") %></h1>
       <% end %>
     </div>
     <% if @project.managed_by?(Current.user) %>
       <% if sprint %>
-        <%= button_to complete_project_sprint_path(@project, sprint), method: :patch, class: "btn", form: { class: "inline-form" }, data: { turbo_confirm: "Complete #{sprint.name}? Unfinished tasks move to the next planned sprint." } do %><%= icon "check" %><span>Complete sprint</span><% end %>
+        <%= button_to complete_project_sprint_path(@project, sprint), method: :patch, class: "btn", form: { class: "inline-form" }, data: { turbo_confirm: t("board.confirm_complete", name: sprint.name) } do %><%= icon "check" %><span><%= t("board.complete") %></span><% end %>
       <% else %>
-        <%= link_to new_project_sprint_path(@project), class: "btn btn--primary" do %><%= icon "flag" %><span>Start a sprint</span><% end %>
+        <%= link_to new_project_sprint_path(@project), class: "btn btn--primary" do %><%= icon "flag" %><span><%= t("board.start") %></span><% end %>
       <% end %>
     <% end %>
   </div>
@@ -41,15 +41,15 @@
           <%= render "boards/card", task: task, project: @project, running: task.id == @running_task_id %>
         <% end %>
         <% hidden = column.tasks.size - visible.size %>
-        <% if hidden.positive? %><p class="column__more">+ <%= hidden %> more this sprint</p><% end %>
+        <% if hidden.positive? %><p class="column__more"><%= t("board.more", count: hidden) %></p><% end %>
       </section>
     <% end %>
   </div>
 
-  <footer class="shortcuts" aria-label="Keyboard shortcuts">
-    <span><kbd class="key">J</kbd><kbd class="key">K</kbd> move between cards</span>
-    <span><kbd class="key">H</kbd><kbd class="key">L</kbd> move between columns</span>
-    <span><kbd class="key">Enter</kbd> open task</span>
-    <span><kbd class="key">Shift</kbd><kbd class="key">Right</kbd> advance status</span>
+  <footer class="shortcuts" aria-label="<%= t("shortcuts.title") %>">
+    <span><kbd class="key">J</kbd><kbd class="key">K</kbd> <%= t("shortcuts.footer.cards") %></span>
+    <span><kbd class="key">H</kbd><kbd class="key">L</kbd> <%= t("shortcuts.footer.columns") %></span>
+    <span><kbd class="key">Enter</kbd> <%= t("shortcuts.footer.open") %></span>
+    <span><kbd class="key">Shift</kbd><kbd class="key">Right</kbd> <%= t("shortcuts.footer.advance") %></span>
   </footer>
 </div>

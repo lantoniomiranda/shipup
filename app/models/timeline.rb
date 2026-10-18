@@ -72,7 +72,7 @@ class Timeline
     end
     percent = tasks.empty? ? 0 : (tasks.count(&:done?) * 100.0 / tasks.size).round
     first = tasks.first
-    Row.new(title: title, subtitle: "#{first.key} · #{tasks.count(&:done?)} of #{tasks.size} #{"task".pluralize(tasks.size)}",
+    Row.new(title: title, subtitle: I18n.t("timeline.row_subtitle", key: first.key, done: tasks.count(&:done?), count: tasks.size),
             percent: percent, bars: bars, due_on: tasks.filter_map(&:due_on).max || bars.last&.ends_on)
   end
 

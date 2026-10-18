@@ -12,7 +12,7 @@ class Chain < ApplicationRecord
   def self.create_with_steps!(project:, creator:, steps:, **attributes)
     steps = steps.reject { |step| step[:title].blank? }
     chain = project.chains.new(**attributes)
-    chain.errors.add(:base, "Add at least one step") if steps.empty?
+    chain.errors.add(:base, I18n.t("model_errors.one_step")) if steps.empty?
     raise ActiveRecord::RecordInvalid, chain if chain.errors.any?
 
     transaction do

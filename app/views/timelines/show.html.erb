@@ -7,22 +7,22 @@
 <div class="timeline-page">
   <div class="toolbar toolbar--timeline">
     <div class="timeline-nav">
-      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: "Earlier" }, data: { hotkey: "arrowleft" } %>
-      <h1><%= timeline.range.first.strftime("%b %-d") %> – <%= (timeline.range.end - 1).strftime("%b %-d") %></h1>
-      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: "Later" }, data: { hotkey: "arrowright" } %>
-      <%= link_to project_timeline_path(@project), class: "btn", data: { hotkey: "t" } do %><span>Today</span><%= render "shared/key", label: "T" %><% end %>
+      <%= link_to icon("chevron-left"), project_timeline_path(@project, from: (timeline.from - 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.earlier") }, data: { hotkey: "arrowleft" } %>
+      <h1><%= short_date(timeline.range.first) %> – <%= short_date(timeline.range.end - 1) %></h1>
+      <%= link_to icon("chevron-right"), project_timeline_path(@project, from: (timeline.from + 7).iso8601), class: "btn btn--icon", aria: { label: t("timeline.later") }, data: { hotkey: "arrowright" } %>
+      <%= link_to project_timeline_path(@project), class: "btn", data: { hotkey: "t" } do %><span><%= t("timeline.today") %></span><%= render "shared/key", label: "T" %><% end %>
     </div>
     <ul class="legend">
-      <li><i class="legend__swatch legend__swatch--done"></i>Done</li><li><i class="legend__swatch legend__swatch--progress"></i>In progress</li>
-      <li><i class="legend__swatch legend__swatch--planned"></i>Planned</li><li><i class="legend__swatch legend__swatch--risk"></i>At risk</li>
+      <li><i class="legend__swatch legend__swatch--done"></i><%= t("enums.gantt.done") %></li><li><i class="legend__swatch legend__swatch--progress"></i><%= t("enums.gantt.in_progress") %></li>
+      <li><i class="legend__swatch legend__swatch--planned"></i><%= t("enums.gantt.planned") %></li><li><i class="legend__swatch legend__swatch--risk"></i><%= t("enums.gantt.risk") %></li>
     </ul>
-    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { hotkey: "s" } do %><%= icon "calendar" %><span>Add to my calendar</span><%= render "shared/key", label: "S" %><% end %>
+    <%= link_to project_timeline_path(@project, format: :ics), class: "btn", data: { hotkey: "s" } do %><%= icon "calendar" %><span><%= t("timeline.calendar") %></span><%= render "shared/key", label: "S" %><% end %>
   </div>
 
   <section class="panel panel--gantt">
     <div class="gantt" style="--days: <%= days.size %>">
       <div class="gantt__head">
-        <div class="gantt__label"><span class="eyebrow"><%= icon "sparkles", size: 13 %> Features · from tasks</span></div>
+        <div class="gantt__label"><span class="eyebrow"><%= icon "sparkles", size: 13 %> <%= t("timeline.features") %></span></div>
         <div class="gantt__scale">
           <div class="gantt__bands">
             <% timeline.bands.each do |band| %>
@@ -30,18 +30,18 @@
             <% end %>
           </div>
           <div class="gantt__weeks">
-            <% timeline.weeks.each do |week| %><span style="grid-column: <%= column.(week) %> / span 7"><%= week.strftime("%b %-d") %></span><% end %>
+            <% timeline.weeks.each do |week| %><span style="grid-column: <%= column.(week) %> / span 7"><%= short_date(week) %></span><% end %>
           </div>
         </div>
       </div>
 
       <div class="gantt__body">
         <div class="gantt__row gantt__row--meetings">
-          <div class="gantt__label"><%= icon "video", size: 15 %><strong>Meetings</strong></div>
+          <div class="gantt__label"><%= icon "video", size: 15 %><strong><%= t("timeline.meetings") %></strong></div>
           <div class="gantt__track">
             <% days.each do |day| %><i class="<%= "weekend" if day.on_weekend? %>"></i><% end %>
             <% timeline.meetings_by_day.each do |day, meetings| %>
-              <span class="gantt__meeting" style="grid-column: <%= column.(day) %> / span 2" title="<%= meetings.map { |m| m.topic.title }.to_sentence %>"><%= icon "video", size: 11 %><%= meetings.size > 1 ? "#{meetings.size} meetings" : "Meeting" %></span>
+              <span class="gantt__meeting" style="grid-column: <%= column.(day) %> / span 2" title="<%= meetings.map { |m| m.topic.title }.to_sentence %>"><%= icon "video", size: 11 %><%= meetings.size > 1 ? t("timeline.meetings_count", count: meetings.size) : t("timeline.meeting") %></span>
             <% end %>
           </div>
         </div>
@@ -58,14 +58,14 @@
                 <span class="gantt__bar gantt__bar--<%= bar.state %>" style="grid-column: <%= column.(from_day) %> / <%= column.(to_day) + 1 %>"><%= bar.label %></span>
               <% end %>
               <% if row.due_on && (days.first..last_day).cover?(row.due_on) %>
-                <span class="gantt__due" style="grid-column: <%= column.(row.due_on) + 1 %> / span 4"><%= icon "flag", size: 12 %><%= row.due_on.strftime("%b %-d") %></span>
+                <span class="gantt__due" style="grid-column: <%= column.(row.due_on) + 1 %> / span 4"><%= icon "flag", size: 12 %><%= short_date(row.due_on) %></span>
               <% end %>
             </div>
           </div>
         <% end %>
 
         <% if (days.first..last_day).cover?(timeline.today) %>
-          <span class="gantt__today" style="--col: <%= column.(timeline.today) - 1 %>"><b>Today</b></span>
+          <span class="gantt__today" style="--col: <%= column.(timeline.today) - 1 %>"><b><%= t("timeline.today") %></b></span>
         <% end %>
       </div>
     </div>

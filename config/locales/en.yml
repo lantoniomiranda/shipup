@@ -1,31 +1,869 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  locale:
+    switch: Language
+    plural_style: standard
+    names:
+      en: English
+      pt-PT: Português (Portugal)
+      fr-FR: Français (France)
+      es-ES: Español (España)
+      it: Italiano (Italia)
+
+  date:
+    formats:
+      short_day: "%b %-d"
+      day_month: "%-d %b"
+      month_year: "%B %Y"
+      short_day_year: "%b %-d, %Y"
+      weekday_day: "%a %-d"
+      weekday_day_month: "%a %-d %b"
+    narrow_day_names: [S, M, T, W, T, F, S]
+
+  time:
+    formats:
+      short_day: "%b %-d"
+      weekday_day: "%a %-d"
+      weekday_day_month: "%a %-d %b"
+
+  greetings:
+    morning: "Good morning, %{name}."
+    afternoon: "Good afternoon, %{name}."
+    evening: "Good evening, %{name}."
+
+  activity:
+    none: No activity yet
+    just_now: Active just now
+    minutes: "Active %{count} min ago"
+    hours: "Active %{count}h ago"
+    yesterday: Active yesterday
+    days: "Active %{count}d ago"
+
+  age:
+    today: today
+    days:
+      one: "%{count} day ago"
+      other: "%{count} days ago"
+
+  nav:
+    projects: Projects
+    topics: Topics
+    backlog: Backlog
+    board: Board
+    timeline: Timeline
+    clients: Clients
+    people: People
+    analytics: Analytics
+    account: Account
+    time_off: Time off
+    search: Search
+    integrations: Integrations
+    notifications: Notifications
+    keyboard: Keyboard shortcuts
+    breadcrumb: Breadcrumb
+    workspaces: Workspaces
+    coming_soon: Coming soon
+    switch_to: "Switch to %{name}"
+    projects_shortcut: "Projects (G H)"
+    people_shortcut: "People (G E)"
+    time_off_shortcut: "Time off (G O)"
+    account_shortcut: "Account (G U)"
+    keyboard_shortcut: "Keyboard shortcuts (?)"
+    integrations_shortcut: Integrations (admins)
+
+  common:
+    cancel: Cancel
+    save: Save
+    save_changes: Save changes
+    discard: Discard
+    back: Back
+    close: Close
+    done: Done
+    today: Today
+    send: Send
+    edit: Edit
+    remove: Remove
+    reply: Reply
+    invite: Invite
+    restore: Restore
+    archive: Archive
+    link: Link
+    continue: Continue
+    required: Required
+    optional: Optional
+    unassigned: Unassigned
+    internal: Internal
+    none_yet: None yet.
+    of: of
+    previous: Previous
+    next: Next
+    all: All
+    active: Active
+    completed: Completed
+    archived: Archived
+    open: Open
+    approved: Approved
+    canceled: Canceled
+    waiting: Waiting
+    away: Away
+    admin: Admin
+    manager: Manager
+    member: Member
+    bug: Bug
+    task: Task
+    chain: Chain
+    topic: Topic
+    issue: Issue
+    feature: Feature
+    color: Color
+    icon: Icon
+    name: Name
+    title: Title
+    description: Description
+    type: Type
+    goal: Goal
+    email: Email address
+    company: Company
+    formatting: Formatting
+    bold: Bold
+    italic: Italic
+    list: List
+    mention: Mention
+    sign_out: Sign out
+    sign_in: Sign in
+    go_back: Go back
+    unsaved: Unsaved changes
+
+  roles:
+    superadmin: Superadmin
+    admin: Admin
+    manager: Manager
+    member: Member
+
+  enums:
+    task_status:
+      todo: To Do
+      in_progress: In Progress
+      testing: Testing
+      ready_to_deploy: Ready to deploy
+      done: Done
+    topic_kind:
+      issue: Issue
+      feature: Feature
+    topic_status:
+      open: Open
+      canceled: Canceled
+      approved: Approved
+    project_status:
+      active: Active
+      completed: Completed
+    time_off_kind:
+      vacation: Vacation
+      sick: Sick leave
+      family: Family
+    time_off_kind_inline:
+      vacation: vacation
+      sick: sick
+      family: family
+    time_off_kind_short:
+      vacation: Vacation
+      sick: Sick
+      family: Family
+    time_off_status:
+      pending: Waiting
+      approved: Approved
+      declined: Declined
+    email_frequency:
+      instant: Instant
+      daily_digest: Daily digest
+      weekly: Weekly
+    client_status:
+      active: Active
+      invite_pending: Invite pending
+      archived: Archived
+    theme:
+      paper: Paper
+      mist: Mist
+      sage: Sage
+      night: Night
+    accent:
+      orange: Orange
+      blue: Blue
+      teal: Teal
+      plum: Plum
+      mustard: Mustard
+    provider:
+      google: Google
+      microsoft: Microsoft
+    backlog_filter:
+      chains: Chains
+      unassigned: Unassigned
+      unestimated: Unestimated
+    analytics_range:
+      eight_weeks: Last 8 weeks
+      sprint: This sprint
+      quarter: Quarter
+    chart:
+      opened: Opened
+      approved: Approved
+      canceled: Canceled
+      work: Work
+    gantt:
+      done: Done
+      in_progress: In progress
+      planned: Planned
+      risk: At risk
+
+  home:
+    summary: "%{projects}, %{sprints}. %{waiting}"
+    projects:
+      one: "%{count} project"
+      other: "%{count} projects"
+    sprints:
+      one: "%{count} sprint in flight"
+      other: "%{count} sprints in flight"
+    waiting:
+      one: "%{count} topic is waiting for your reply"
+      other: "%{count} topics are waiting for your reply"
+    new_project: New project
+    start_project: Start a new project
+    start_hint: Admins only · invite people afterwards
+    empty_html: "You're not on a project yet. Ask a project admin to invite <strong>%{email}</strong>, then reload this page."
+    xp: "%{percent}% XP"
+    confirm_complete: "Mark %{name} as completed? It moves to the Completed tab; nothing is deleted."
+    complete: Complete project
+    reopen: Reopen project
+    open_topics:
+      one: "%{count} open topic"
+      other: "%{count} open topics"
+    tasks:
+      one: "%{count} task"
+      other: "%{count} tasks"
+    days_left:
+      one: "%{count} day left"
+      other: "%{count} days left"
+    new_intro: Topics, tasks and the board all live inside a project.
+    key: Key (2–5 letters)
+    create_project: Create project
+    back_to_projects: Back to projects
+    created: "%{name} created."
+    completed: "%{name} marked as completed."
+    reactivated: "%{name} is active again."
+
+  account:
+    title: Your account
+    crumb: Account
+    appearance: Appearance
+    display_name: Display name
+    avatar: Avatar
+    signed_in_html: "Signed in with %{provider}"
+    no_password: "%{email} · no password to manage"
+    notifications: Email notifications
+    when: When this happens
+    timing: Email timing
+    quiet_hours: "Quiet hours · %{zone}"
+    quiet_start: Quiet hours start
+    quiet_end: Quiet hours end
+    language: Language
+    saved: Account saved.
+    notices:
+      mention_or_reply:
+        title: Mentions and replies
+        hint: Someone @-mentions you or answers your topic
+      new_topic:
+        title: New topics in my projects
+        hint: Issues and features opened by teammates
+      similar_topic:
+        title: Similar-topic alerts
+        hint: Sounds like something we've already talked about
+      task_assigned:
+        title: Tasks assigned to me
+        hint: Including tasks created from topics
+      subtask_unlocked:
+        title: My subtask is unlocked
+        hint: The previous step in a chain was completed
+      meeting_invite:
+        title: Meeting invites
+        hint: A manager picks topics you are part of
+
+  appearance:
+    crumb: Appearance
+    title: Appearance
+    settings: Settings
+    intro: Colors for your ShipUp.
+    background: Background
+    accent: Accent and buttons
+    reset: Reset to default
+    preview: Live preview
+    buttons: Buttons and labels
+    new_topic: New topic
+    create_meeting: Create meeting
+    lists: Lists
+    sample_progress: In progress
+    sample_decision: Needs decision
+    sample_bug: Bug
+    sample_deployed: Deployed
+    sample_familiar: Sounds familiar
+    sample_one_title: Refresh tokens expire silently after 24h
+    sample_one_meta: Sofia R. · 2 days ago
+    sample_two_title: Webhook retries with exponential backoff
+    sample_two_meta: Daniel O. · 3 days ago
+    saved: Appearance saved.
+    invalid: That palette isn't available.
+
+  sessions:
+    title: Sign in
+    welcome: Welcome back.
+    intro: Sign in with your work account to continue.
+    google: Continue with Google
+    microsoft: Continue with Microsoft
+    invite_only: ShipUp is invite-only. Ask a project admin to invite this email address.
+    failed: We couldn't sign you in with that account.
+    cancelled: Sign-in was cancelled or failed. Please try again.
+
+  errors:
+    eyebrow: "Error %{code}"
+    back_projects: Back to your projects
+    go_sign_in: Go to sign in
+    400:
+      title: That request didn't make sense
+      detail: Something in the request was malformed. Go back and try again.
+    403:
+      title: You don't have access to this
+      detail: Ask a project admin if you think you should.
+    404:
+      title: We can't find that page
+      detail: It may have moved, been deleted, or never existed.
+    406:
+      title: Your browser is too old
+      detail: ShipUp needs a recent version of Chrome, Edge, Firefox or Safari.
+    422:
+      title: That change was rejected
+      detail: The page expired or the data wasn't valid. Reload and try again.
+    500:
+      title: Something went wrong on our side
+      detail: We've been notified. Try again in a moment.
+
+  search:
+    label: Search
+    placeholder: Search topics, tasks and projects
+    open: open
+    move: move
+    switch_filter: switch filter
+    scope: Search scope
+    everything: Everything
+    topics: Topics
+    tasks: Tasks
+    projects: Projects
+    hint_html: "Type at least two letters, or a task key like <code>%{example}</code>."
+    empty: "Nothing matches “%{query}”."
+    chain_step: "Chain %{key} · step %{position} of %{size}"
+    task_key: "Task %{key}"
+    votes:
+      one: "%{score} vote"
+      other: "%{score} votes"
+
+  shortcuts:
+    title: Keyboard shortcuts
+    close: Close
+    groups:
+      global: Everywhere
+      project: Inside a project
+      page: On specific pages
+    note: Shortcuts pause while you type in a field. Esc always goes back.
+    footer:
+      cards: move between cards
+      columns: move between columns
+      open: open task
+      advance: advance status
+
+  keybindings:
+    global:
+      search: Search topics, tasks and projects
+      help: Show keyboard shortcuts
+      projects: Go to projects
+      time_off: Go to time off
+      account: Go to your account
+      back: Go back or close
+      submit: Submit the form
+    project:
+      topics: Topics
+      backlog: Backlog
+      board: Board
+      timeline: Timeline
+      clients: Clients
+      people: People
+      analytics: Analytics
+    page:
+      open_project: Open project 1–9 (projects page)
+      new: New topic (topics) · New project (projects)
+      reply: Reply (topic) · Request (time off) · Reset (appearance) · Try another AI draft
+      task: Create task (topic) · Today (timeline) · Start/stop timer (task)
+      chain: Create chain (topic)
+      meet: Meet about it (topic)
+      add: Add client (clients)
+      step: Add step (chain) · Add to calendar (timeline)
+      plan: Plan sprint (backlog)
+      sign_in: Continue with Google (sign in) — M for Microsoft
+      board_cards: "Board: next card — K previous"
+      board_columns: "Board: next column — H previous"
+      board_advance: "Board: advance the focused card's status"
+      timeline_nav: "Timeline: earlier — Right arrow later"
+
+  topics:
+    title: Topics
+    new: New topic
+    back: Back to topics
+    posts_to: "%{project} · posts to Topics"
+    what: What should we talk about?
+    requested_by: Requested by
+    internal_idea: Internal idea
+    client_named: "Client: %{name}"
+    post: Post topic
+    similar: Similar topics · updates as you type
+    empty_html: "No topics match. %{link}."
+    start_one: Start one
+    top: Top voted
+    newest: Newest
+    filters:
+      issues: Issues
+      features: Features
+      canceled: Canceled
+      approved: Approved
+    opened_by: "Opened by %{name} · %{when} · %{replies}"
+    requested_tag: "Requested by %{name}"
+    upvote: Upvote
+    downvote: Downvote
+    in_chat: In this chat
+    reply_placeholder: Reply to this topic…
+    read_first: Read it first
+    outcome:
+      task: "Task %{key}"
+      chain: "Chain %{key}"
+    roles:
+      opened: Opened
+      replied: Replied
+    what_next: What next
+    canceled_note: This topic was canceled. It stays readable; reopen it to keep talking or plan work.
+    move_on: Move on
+    move_as: Move this topic on as
+    create_task: Create task
+    create_task_hint: A single piece of work.
+    create_chain: Create chain
+    create_chain_hint: Steps that ship in order.
+    meet: Meet about it
+    reopen: Reopen topic
+    cancel: Cancel topic
+    reason: Reason (optional)
+    reason_label: Reason for canceling
+    confirm_cancel: Cancel this topic? You can reopen it later.
+    cancel_with_reason: "Canceled this topic: %{reason}"
+    cancel_without_reason: Canceled this topic.
+    posted: Topic posted.
+    canceled: Topic canceled.
+    reopened: Topic reopened.
+    replies:
+      one: "%{count} reply"
+      other: "%{count} replies"
+
+  tasks:
+    back: Board
+    position: "%{current} of %{total} in this sprint"
+    previous: Previous task
+    next: Next task
+    archive: Archive task
+    confirm_archive: "Archive %{key}? It leaves the board and backlog; you can restore it from the backlog."
+    chain_steps:
+      one: "Chain · %{count} step"
+      other: "Chain · %{count} steps"
+    from_topic: "From topic · %{title} · %{replies}"
+    from_topic_only: "From topic · %{title}"
+    open_topic: Open topic
+    assignee: Assignee
+    created_by: Created by
+    requested_by: Requested by
+    sprint: Sprint
+    estimate: Estimate
+    due: Due
+    no_description: No description yet.
+    tracker: Time tracker
+    running: Running
+    since: "since %{time} %{city}"
+    stop: Stop
+    start: Start timer
+    logged: "%{hours}H %{minutes}M LOGGED"
+    of_estimate: "OF %{hours}H · %{percent}%"
+    recent: Recent entries
+    none_logged: No time logged yet.
+    chat: Chat
+    nobody: Nobody has said anything about this task yet.
+    reply_placeholder: Reply in this task…
+    hours_logged: "%{hours}h logged"
+    hours_only: "%{hours}h"
+    hours_of: "%{logged}h / %{estimate}h"
+    from_discussion: "from D-%{id}"
+    step_of: "Step %{position} of %{size} · %{title}"
+    unlocks_next: "%{title} unlocks next"
+    chain_kind: "Chain · step %{position} of %{size}"
+    no_estimate: No estimate
+    no_branch: No branch
+    move_backlog: Move to backlog
+    move_sprint: Move to the next sprint
+    days:
+      one: "%{count} day"
+      other: "%{count} days"
+    messages:
+      one: "%{count} message"
+      other: "%{count} messages"
+    moved_status: "%{key} moved to %{status}"
+    plan_first: Plan a sprint first.
+    moved_sprint: "%{key} moved to %{sprint}."
+    moved_backlog: "%{key} moved to the backlog."
+    unlocked: "%{key} done. %{title} is now unlocked."
+    archived: "%{key} archived."
+    restored: "%{key} restored."
+    created: "%{key} created from this topic."
+    timer_started: "Timer started on %{key}."
+    timer_stopped: Timer stopped.
+    chain_progress: "Chain · %{done} of %{total} done"
+    step_done: Done
+    step_current: Current step · visible on the board
+    step_locked: "Hidden until %{title} is done"
+    earlier_steps: earlier steps
+    no_pr: No PR yet
+    complete_step: "Complete %{title}"
+    complete_unlock: "Complete %{title}, unlock %{next}"
+    backlog_option: Backlog (no sprint)
+    estimate_days: Estimate (days)
+    estimate_in_days: Estimate in days
+    tags: Tags
+    this_is_a_bug: This is a bug
+    from_topic_heading: From topic
+    create: Create task
+    back_to_topic: Back to topic
+
+  chain_form:
+    title: Create chain
+    chain_title: Chain title
+    steps: Steps · shipped in this order
+    step_title: Step title
+    step_what: What happens in this step?
+    days: days
+    remove_step: Remove step
+    add_step: Add step
+    create: Create chain
+    created:
+      one: "Chain created with %{count} step."
+      other: "Chain created with %{count} steps."
+
+  ai:
+    drafted:
+      one: "Drafted from %{count} reply"
+      other: "Drafted from %{count} replies"
+    another: Try another draft
+    draft: Draft with AI
+
+  editor:
+    link_sample: text
+
+  messages:
+    edited: edited
+    removed: Message removed
+    replying: "Replying to"
+    cancel_reply: Cancel reply
+    confirm_remove: Remove this message?
+    write_something: Write something before sending.
+    not_empty: A message can't be empty. Remove it instead.
+    removed_flash: Message removed.
+
+  board:
+    none: No active sprint
+    points: "%{done}/%{total} XP"
+    complete: Complete sprint
+    confirm_complete: "Complete %{name}? Unfinished tasks move to the next planned sprint."
+    start: Start a sprint
+    more:
+      one: "+ %{count} more this sprint"
+      other: "+ %{count} more this sprint"
+
+  backlog:
+    title: Sprint and backlog
+    starts_in:
+      one: "starts in %{count} day"
+      other: "starts in %{count} days"
+    planned: planned
+    start: Start sprint
+    group: Backlog
+    tasks_estimated:
+      one: "%{count} task · %{days} days estimated"
+      other: "%{count} tasks · %{days} days estimated"
+    archived:
+      one: "%{count} archived task"
+      other: "%{count} archived tasks"
+    capacity: "%{name} capacity"
+    next: Next sprint
+    planned_xp: "/ %{count} XP planned"
+    free: "%{count} XP free."
+    room: Who has room
+    load: "%{load} / %{capacity} days"
+    empty_sprint: No sprint is planned yet. Create the next one to start moving tasks into it.
+    plan: Plan sprint
+    id: ID
+    topic_title: Topic and title
+    kind: Kind
+    owner: Owner
+    code: Code
+
+  sprints:
+    name: "Sprint %{number}"
+    back: Back to backlog
+    new: "New %{name}"
+    intro: Two weeks is the usual length. Only one sprint is active at a time.
+    starts: Starts
+    ends: Ends
+    goal_placeholder: What should be true when this sprint ends?
+    start_now: "Start it now and show it on the board"
+    start_now_completes: "Start it now and show it on the board (completes %{name})"
+    carry: "Carry unfinished tasks from %{name} over to this sprint"
+    create: "Create %{name}"
+    started: "%{name} started. It's on the board now."
+    planned: "%{name} planned."
+    cannot_start: That sprint can't be started.
+    only_active: Only the active sprint can be completed.
+    completed: "%{name} completed. Unfinished tasks moved on."
+
+  timeline:
+    earlier: Earlier
+    later: Later
+    today: Today
+    calendar: Add to my calendar
+    features: Features · from tasks
+    meetings: Meetings
+    meeting: Meeting
+    meetings_count:
+      one: "%{count} meeting"
+      other: "%{count} meetings"
+    row_subtitle:
+      one: "%{key} · %{done} of %{count} task"
+      other: "%{key} · %{done} of %{count} tasks"
+
+  analytics:
+    title: Analytics
+    topics: Topics
+    vs_previous: "%{delta} vs previous period"
+    hours: Hours logged
+    across:
+      one: "Across %{count} deployed item"
+      other: "Across %{count} deployed items"
+    meetings: Meetings
+    decisions: "%{duration} · %{decided} of %{total} ended with a decision"
+    invited: Average invited
+    per_meeting: People per meeting
+    topics_week: Topics per week
+    hours_week: Hours per week
+    closed: Closed topics · decided in this period
+    nothing_closed: Nothing was closed in this period.
+    closed_as: "Closed as %{status}"
+    topics_count:
+      one: "%{count} topic"
+      other: "%{count} topics"
+
+  clients:
+    all: "All %{count}"
+    active: "Active %{count}"
+    pending: "Invite pending %{count}"
+    archived: "Archived %{count}"
+    add: Add client
+    none_archived: No archived clients.
+    empty_html: "No clients here yet. %{link} so topics can say who asked for them."
+    add_one: Add one
+    client: Client
+    contacts: Contacts
+    topics: Topics
+    last_activity: Last activity
+    status: Status
+    added: "Added %{date}"
+    extra_contacts:
+      one: "+%{count} contact"
+      other: "+%{count} contacts"
+    no_topics: No topics yet
+    topic_count:
+      one: "%{count} topic"
+      other: "%{count} topics"
+    confirm_archive: "Archive %{name}? It disappears from every project's client list; its topics keep their history."
+    title: Add a client
+    back: Back to clients
+    intro: Someone from the client team who can be named as the requester on topics
+    contact_name: Contact name
+    emails: Emails
+    email_placeholder: Add another and press Enter
+    remove_email: "Remove %{email}"
+    in_project: Clients in this project
+    added_flash: "%{name} added. They'll get an invite by email."
+    archived_flash: "%{name} archived. Restore it from the Archived tab."
+    restored_flash: "%{name} restored."
+
+  people:
+    title: "People on %{project}"
+    intro:
+      one: "%{count} person. Everyone signs in with Google or Microsoft, so inviting is just an email address."
+      other: "%{count} people. Everyone signs in with Google or Microsoft, so inviting is just an email address."
+    person: Person
+    email: Email
+    role: Role
+    role_of: "Role of %{name}"
+    last_sign_in: Last sign-in
+    joined: Joined
+    never: Never
+    ago: "%{time} ago"
+    remove: Remove
+    confirm_remove: "Remove %{name} from %{project}?"
+    pending: Pending invitations
+    invited_by: Invited by
+    sent: Sent
+    resend: Resend
+    revoke: Revoke
+    confirm_revoke: Revoke this invitation?
+    product: ShipUp
+    now_role: "%{name} is now %{role}."
+    bad_role: That role isn't available.
+    not_self: You can't remove yourself.
+    removed: "%{name} no longer has access to %{project}."
+    added_member: "%{name} added to %{project}."
+    sent_invite: "Invitation sent to %{email}."
+    resent: "Invitation re-sent to %{email}."
+    revoked: "Invitation for %{email} revoked."
+
+  time_off:
+    title: Time off
+    crumb: Time off
+    request: Request
+    request_title: Request time off
+    back: Back to time off
+    intro: Your approver gets an email and you hear back when they decide.
+    previous_month: Previous month
+    next_month: Next month
+    pick: Pick your first day
+    pick_help: Click a start date, then an end date.
+    approver: Approver
+    choose_approver: Choose an approver
+    approver_superadmin: superadmin
+    approver_admin: admin
+    send: Send request
+    days_of: "%{left} of %{allowance} days left"
+    my_requests: My requests
+    working_days:
+      one: "%{count} working day"
+      other: "%{count} working days"
+    waiting_for: "Waiting for %{name}"
+    waiting_approval: Waiting for approval
+    nothing: Nothing requested yet.
+    to_approve: To approve
+    waiting_count:
+      one: "%{count} waiting"
+      other: "%{count} waiting"
+    overlaps: "Overlaps %{name}, %{date}"
+    decline: Decline
+    approve: Approve
+    legend_vacation: Vacation
+    legend_sick: Sick
+    legend_waiting: Waiting for approval
+    waiting_short: waiting
+    sent: Request sent.
+    sent_to: "Request sent to %{name}."
+    decided_approved: "%{name}'s request approved."
+    decided_declined: "%{name}'s request declined."
+    calendar:
+      working_days:
+        one: "%{count} working day"
+        other: "%{count} working days"
+      remaining:
+        one: "%{left} %{kind} day left, %{after} after this request"
+        other: "%{left} %{kind} days left, %{after} after this request"
+
+  meetings:
+    title: Discuss this topic live
+    link_note: "%{title}. The link is posted in the topic chat."
+    none_html: "No meeting tool is connected yet. %{link} (admins only)."
+    set_up: Set one up
+    when: When
+    slot: "%{when} · %{time} UTC · %{duration} min"
+    covered: "(%{covered}/%{total} in working hours)"
+    length: Length
+    minutes: "%{count} min"
+    recording: Recording
+    transcribe: Transcribe and add a digest to the topic
+    invite:
+      one: "Invite · %{count} person"
+      other: "Invite · %{count} people"
+    invite_person: "Invite %{name}"
+    opened: Opened the topic
+    replied: Replied
+    not_in_topic: Not in this topic
+    create: Create and post link
+    topic: Topic
+    hours: Working hours · 24h in UTC
+    posted: Meeting link posted in the topic chat.
+    need_tool: An admin needs to connect a meeting tool first.
+    failed: We couldn't create that meeting. Check the time and try again.
+
+  integrations:
+    title: Meeting tool
+    setup: Set up ShipUp
+    admin_only: Admin only
+    company: Company
+    meeting_tool: Meeting tool
+    meeting_caption: Pick once for everyone
+    calendar: Calendar
+    calendar_caption: Working hours and availability
+    people: People
+    people_caption: Invite people to each project
+    step: "Step %{current} of %{total}"
+    choose: Choose your meeting tool
+    subtitle: Everyone uses it for meeting links. You can change it later in Integrations.
+    code: Code
+    zoom: Links, cloud recording and transcripts by topic.
+    teams: Links through Microsoft 365 calendars.
+    meet: Links through Google Calendar.
+    github: Link repositories so pull requests show up on tasks.
+    choose_repos: Choose repositories for your projects
+    use: "Use %{name}"
+    coming_soon: Coming soon
+    connected_as: "Connected as %{account}"
+    not_connected: Not connected
+    connect: Connect
+    now_tool: "%{provider} is now your meeting tool."
+    connect_first: Connect a meeting tool first, then continue.
+    not_configured: "%{provider} isn't configured on this server."
+    expired: That connection attempt expired. Please try again.
+    denied: "%{provider} access was not granted."
+    connected: "%{provider} connected."
+    could_not: "We couldn't connect %{provider}. Please try again."
+    repos_title: GitHub repositories
+    repos_crumb: GitHub repositories
+    setup_crumb: Setup
+    repos_intro_html: "Connected as <strong>%{account}</strong>. Pull requests that mention a task key (like <code>%{example}</code>) in their title, branch or description attach to that task."
+    unlink: "Unlink %{name}"
+    no_repo: No repository linked
+    choose_repo: Choose a repository…
+    pick_first: Pick a repository first.
+    linked: "%{repo} linked to %{project}."
+    link_failed: Couldn't link that repository. Check your GitHub permissions and try again.
+    unlinked: "%{repo} unlinked."
+    connect_github: Connect GitHub first.
+
+  model_errors:
+    ends_on_after_start: must be on or after the start date
+    ended_after_start: must be after it started
+    same_conversation: must be in the same conversation
+    one_email: Add at least one email
+    one_step: Add at least one step
+    too_many_days: "That's more than the %{left} %{kind} days you have left"
+    already_member: is already on this project
+
+  mailer:
+    subject: "You're invited to %{project} on %{product}"
+    join: "Join %{project} on %{product}"
+    invited_by: "%{name} has invited you as %{role} of %{project}."
+    invited: "You have been invited as %{role} of %{project}."
+    no_password: "There is no password to create: sign in with the Google or Microsoft account that uses %{email} and you are in."
+    sign_in: "Sign in to %{product}"

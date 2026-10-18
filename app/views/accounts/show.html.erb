@@ -1,15 +1,15 @@
-<% breadcrumbs [ "Workspace", root_path ], "Account" %>
+<% breadcrumbs [ t("nav.projects"), root_path ], t("account.crumb") %>
 <% identity = @user.identities.first %>
 <% preference = @user.preference %>
 
 <%= form_with model: @user, url: account_path, method: :patch, class: "account", data: { controller: "dirty-form " } do |form| %>
   <header class="page-header">
-    <div class="page-header__heading"><h1>Your account</h1></div>
+    <div class="page-header__heading"><h1><%= t("account.title") %></h1></div>
     <div class="page-header__actions">
-      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %>Unsaved changes</span>
-      <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span>Appearance</span><% end %>
-      <%= link_to account_path, class: "btn", data: { hotkey: "escape" } do %><span>Discard</span><%= render "shared/key", label: "Esc" %><% end %>
-      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span>Save changes</span><%= render "shared/key", label: "Ctrl Enter" %></button>
+      <span class="tag tag--unsaved" data-dirty-form-target="flag" hidden><%= icon "pencil", size: 13 %><%= t("common.unsaved") %></span>
+      <%= link_to appearance_path, class: "btn" do %><%= icon "palette" %><span><%= t("account.appearance") %></span><% end %>
+      <%= link_to account_path, class: "btn", data: { hotkey: "escape" } do %><span><%= t("common.discard") %></span><%= render "shared/key", label: "Esc" %><% end %>
+      <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter"><%= icon "check" %><span><%= t("common.save_changes") %></span><%= render "shared/key", label: "Ctrl Enter" %></button>
     </div>
   </header>
 
@@ -24,12 +24,12 @@
       </div>
 
       <div class="field">
-        <%= form.label :name, "Display name", class: "eyebrow" %>
+        <%= form.label :name, t("account.display_name"), class: "eyebrow" %>
         <%= form.text_field :name, class: "input", required: true %>
       </div>
 
       <fieldset class="field">
-        <legend class="eyebrow">Avatar</legend>
+        <legend class="eyebrow"><%= t("account.avatar") %></legend>
         <div class="avatar-grid">
           <% User::AVATAR_ICONS.each do |name| %>
             <label class="avatar-option"><%= form.radio_button :avatar_icon, name, class: "avatar-option__input", data: { action: "dirty-form#preview", icon: name } %><span><%= icon name, size: 22 %></span></label>
@@ -38,7 +38,7 @@
       </fieldset>
 
       <fieldset class="field">
-        <legend class="eyebrow">Color</legend>
+        <legend class="eyebrow"><%= t("common.color") %></legend>
         <div class="swatches">
           <% Hued::HUES.each do |hue| %>
             <label class="swatch swatch--<%= hue %>"><%= form.radio_button :avatar_color, hue, class: "swatch__input", data: { action: "dirty-form#preview", hue: hue } %><span><%= icon "check", size: 16 %></span></label>
@@ -46,29 +46,29 @@
         </div>
       </fieldset>
 
-      <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span>Sign out</span><% end %>
+      <div class="field">
+        <p class="eyebrow"><%= t("account.language") %></p>
+        <%= render "shared/locale_switch" %>
+      </div>
+
+      <%= button_to sign_out_path, method: :delete, class: "btn btn--block", form: { class: "inline-form block-form" } do %><%= icon "arrow-left" %><span><%= t("common.sign_out") %></span><% end %>
 
       <div class="signin-note">
         <%= icon(identity&.provider == "microsoft" ? "microsoft" : "google", size: 20) %>
-        <div><strong>Signed in with <%= (identity&.provider || "Google").capitalize %></strong><small><%= @user.email %> · no password to manage</small></div>
+        <div><strong><%= t("account.signed_in_html", provider: t("enums.provider.#{identity&.provider || "google"}")) %></strong><small><%= t("account.no_password", email: @user.email) %></small></div>
         <%= icon "lock", size: 16 %>
       </div>
     </section>
 
     <section class="card-panel notifications">
       <header class="notifications__head">
-        <h2>Email notifications</h2>
+        <h2><%= t("account.notifications") %></h2>
       </header>
-      <p class="eyebrow notifications__label">When this happens</p>
+      <p class="eyebrow notifications__label"><%= t("account.when") %></p>
       <ul class="settings-list">
-        <% { "mention_or_reply" => [ "Mentions and replies", "Someone @-mentions you or answers your topic" ],
-             "new_topic" => [ "New topics in my projects", "Issues and features opened by teammates" ],
-             "similar_topic" => [ "Similar-topic alerts", "Sounds like something we've already talked about" ],
-             "task_assigned" => [ "Tasks assigned to me", "Including tasks created from topics" ],
-             "subtask_unlocked" => [ "My subtask is unlocked", "The previous step in a chain was completed" ],
-             "meeting_invite" => [ "Meeting invites", "A manager picks topics you are part of" ] }.each do |kind, (title, hint)| %>
+        <% %w[mention_or_reply new_topic similar_topic task_assigned subtask_unlocked meeting_invite].each do |kind| %>
           <li>
-            <div><strong><%= title %></strong><small><%= hint %></small></div>
+            <div><strong><%= t("account.notices.#{kind}.title") %></strong><small><%= t("account.notices.#{kind}.hint") %></small></div>
             <%= hidden_field_tag "notifications[#{kind}]", "0", id: nil %>
             <%= check_box_tag "notifications[#{kind}]", "1", @user.subscribed_to?(kind), class: "switch" %>
           </li>
@@ -77,19 +77,19 @@
 
       <div class="field-row field-row--timing">
         <fieldset class="field">
-          <legend class="eyebrow">Email timing</legend>
+          <legend class="eyebrow"><%= t("account.timing") %></legend>
           <div class="choice">
             <% UserPreference::EMAIL_FREQUENCIES.each do |frequency| %>
-              <label class="choice__option"><%= radio_button_tag "preference[email_frequency]", frequency, preference.email_frequency == frequency, class: "choice__input" %><span><%= frequency.humanize %></span></label>
+              <label class="choice__option"><%= radio_button_tag "preference[email_frequency]", frequency, preference.email_frequency == frequency, class: "choice__input" %><span><%= t("enums.email_frequency.#{frequency}") %></span></label>
             <% end %>
           </div>
         </fieldset>
         <div class="field">
-          <p class="eyebrow">Quiet hours · <%= @user.time_zone %></p>
+          <p class="eyebrow"><%= t("account.quiet_hours", zone: @user.time_zone) %></p>
           <div class="quiet-hours">
             <%= icon "moon", size: 15 %>
-            <%= time_field_tag "preference[quiet_hours_start]", preference.quiet_hours_start.strftime("%H:%M"), class: "input input--time", "aria-label": "Quiet hours start" %>–
-            <%= time_field_tag "preference[quiet_hours_end]", preference.quiet_hours_end.strftime("%H:%M"), class: "input input--time", "aria-label": "Quiet hours end" %>
+            <%= time_field_tag "preference[quiet_hours_start]", preference.quiet_hours_start.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_start") %>–
+            <%= time_field_tag "preference[quiet_hours_end]", preference.quiet_hours_end.strftime("%H:%M"), class: "input input--time", "aria-label": t("account.quiet_end") %>
           </div>
         </div>
       </div>

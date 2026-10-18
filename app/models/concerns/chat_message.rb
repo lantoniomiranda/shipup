@@ -34,7 +34,7 @@ module ChatMessage
 
   def editable_by?(user) = !deleted? && author_id == user.id
 
-  # Authors can remove their own messages; workspace admins and project managers can moderate.
+  # Authors can remove their own messages; superadmins and project admins can moderate.
   def removable_by?(user, project)
     !deleted? && (author_id == user.id || project.managed_by?(user))
   end
@@ -57,6 +57,6 @@ module ChatMessage
   def parent_in_same_thread
     return unless parent
 
-    errors.add(:parent, "must be in the same conversation") unless parent.thread == thread
+    errors.add(:parent, I18n.t("model_errors.same_conversation")) unless parent.thread == thread
   end
 end

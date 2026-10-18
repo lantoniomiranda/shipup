@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Pick a start and end day on the month grid; shows the working-day count and what is left of the allowance.
 export default class extends Controller {
   static targets = ["day", "start", "end", "kind", "range", "days", "left", "submit"]
-  static values = { balances: Object }
+  static values = { balances: Object, kinds: Object, plural: String, daysOne: String, daysOther: String, leftOne: String, leftOther: String }
 
   connect() {
     this.update()
@@ -36,9 +36,12 @@ export default class extends Controller {
     const days = this.workingDays(start, end)
     const kind = this.kindTargets.find((el) => el.checked)?.value || "vacation"
     const left = this.balancesValue[kind] ?? 0
+    const after = left - days
     this.rangeTarget.textContent = start === end ? this.format(start) : `${this.format(start)} – ${this.format(end)}`
-    this.daysTarget.textContent = `${days} working ${days === 1 ? "day" : "days"}`
-    this.leftTarget.textContent = `${left} ${kind} days left, ${left - days} after this request`
+    this.daysTarget.textContent = this.fill(this.one(days) ? this.daysOneValue : this.daysOtherValue, { count: days })
+    this.leftTarget.textContent = this.fill(this.one(after) && this.one(left) ? this.leftOneValue : this.leftOtherValue, {
+      left, after, kind: this.kindsValue[kind] || kind
+    })
     this.submitTarget.disabled = days > left
   }
 
@@ -51,6 +54,15 @@ export default class extends Controller {
   }
 
   format(iso) {
-    return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })
+    const locale = document.documentElement.lang || "en-GB"
+    return new Date(`${iso}T00:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "UTC" })
+  }
+
+  one(count) {
+    return this.pluralValue === "french" ? count === 0 || count === 1 : count === 1
+  }
+
+  fill(template, values) {
+    return Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`%{${key}}`, value), template)
   }
 }

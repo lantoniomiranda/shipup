@@ -11,7 +11,7 @@ class TopicChainsController < ApplicationController
     @chain = Chain.create_with_steps!(project: @project, creator: Current.user, topic: @topic, title: chain_params[:title],
                                       sprint: @project.sprints.find_by(id: chain_params[:sprint_id]), steps: step_params)
     @topic.approve!
-    redirect_to project_topic_path(@project, @topic), notice: "Chain created with #{@chain.tasks.count} steps."
+    redirect_to project_topic_path(@project, @topic), notice: t("chain_form.created", count: @chain.tasks.count)
   rescue ActiveRecord::RecordInvalid => error
     @chain = @project.chains.build(chain_params.slice(:title))
     @steps = step_params.presence || [ {} ]

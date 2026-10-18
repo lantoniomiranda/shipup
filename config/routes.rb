@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # OAuth is the only way in. OmniAuth owns POST /auth/:provider (request phase).
   get "sign_in", to: "sessions#new"
   delete "sign_out", to: "sessions#destroy"
+  patch "locale", to: "locales#update"
   match "auth/:provider/callback", to: "omniauth_callbacks#create", via: %i[get post], as: :omniauth_callback
   get "auth/failure", to: "omniauth_callbacks#failure"
 

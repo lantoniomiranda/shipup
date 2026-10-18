@@ -3,7 +3,7 @@
 class MeetingSlots
   Slot = Data.define(:starts_at, :covered, :total) do
     def label(duration)
-      "#{starts_at.strftime("%a %-d %b")} · #{starts_at.strftime("%H:%M")} UTC · #{duration} min"
+      I18n.t("meetings.slot", when: I18n.l(starts_at, format: :weekday_day_month), time: starts_at.strftime("%H:%M"), duration: duration)
     end
   end
 

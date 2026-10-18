@@ -14,7 +14,7 @@ class AccountsController < ApplicationController
       @user.preference.update!(params.expect(preference: %i[email_frequency quiet_hours_start quiet_hours_end]))
       @user.update_notification_subscriptions(params.fetch(:notifications, {}).permit(*NotificationSubscription::KINDS).to_h)
     end
-    redirect_to account_path, notice: "Account saved.", status: :see_other
+    redirect_to account_path, notice: t("account.saved"), status: :see_other
   rescue ActiveRecord::RecordInvalid => error
     @roles = role_summary(@user)
     flash.now[:alert] = error.record.errors.full_messages.to_sentence

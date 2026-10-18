@@ -18,7 +18,8 @@ export default class extends Controller {
     this.zoneTargets.forEach((el) => {
       const zone = el.dataset.zone
       const time = el.querySelector("[data-clock-target='time']")
-      time.textContent = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: zone }).format(now)
+      const locale = document.documentElement.lang || "en-GB"
+      time.textContent = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: zone }).format(now)
     })
   }
 }

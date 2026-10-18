@@ -4,25 +4,25 @@
 
 <div class="analytics">
   <header class="toolbar">
-    <h1>Analytics</h1>
+    <h1><%= t("analytics.title") %></h1>
     <div class="segmented segmented--dark">
-      <% Analytics::LABELS.each do |key, label| %>
-        <%= link_to label, project_analytics_path(@project, range: key), class: "segmented__item #{"segmented__item--active" if a.range_key == key}" %>
+      <% Analytics::RANGES.each do |key| %>
+        <%= link_to t("enums.analytics_range.#{key}"), project_analytics_path(@project, range: key), class: "segmented__item #{"segmented__item--active" if a.range_key == key}" %>
       <% end %>
     </div>
   </header>
 
   <div class="kpis">
-    <section class="kpi"><h3 class="eyebrow">Topics</h3><strong><%= a.topics_count %></strong><p><%= format("%+d", a.topics_delta) %> vs previous period</p></section>
-    <section class="kpi"><h3 class="eyebrow">Hours logged</h3><strong><%= a.hours_logged %>h</strong><p>Across <%= pluralize(a.deployed_items, "deployed item") %></p></section>
-    <section class="kpi"><h3 class="eyebrow">Meetings</h3><strong><%= a.meetings.size %></strong><p><%= duration.(a.meeting_minutes) %> · <%= a.decided_meetings %> of <%= a.meetings.size %> ended with a decision</p></section>
-    <section class="kpi"><h3 class="eyebrow">Average invited</h3><strong><%= a.average_invited %></strong><p>People per meeting</p></section>
+    <section class="kpi"><h3 class="eyebrow"><%= t("analytics.topics") %></h3><strong><%= a.topics_count %></strong><p><%= t("analytics.vs_previous", delta: format("%+d", a.topics_delta)) %></p></section>
+    <section class="kpi"><h3 class="eyebrow"><%= t("analytics.hours") %></h3><strong><%= a.hours_logged %>h</strong><p><%= t("analytics.across", count: a.deployed_items) %></p></section>
+    <section class="kpi"><h3 class="eyebrow"><%= t("analytics.meetings") %></h3><strong><%= a.meetings.size %></strong><p><%= t("analytics.decisions", duration: duration.(a.meeting_minutes), decided: a.decided_meetings, total: a.meetings.size) %></p></section>
+    <section class="kpi"><h3 class="eyebrow"><%= t("analytics.invited") %></h3><strong><%= a.average_invited %></strong><p><%= t("analytics.per_meeting") %></p></section>
   </div>
 
   <div class="charts">
     <section class="chart-card">
-      <header><h3 class="eyebrow">Topics per week</h3>
-        <ul class="legend"><li><i class="legend__swatch legend__swatch--progress"></i>Opened</li><li><i class="legend__swatch legend__swatch--vacation"></i>Approved</li><li><i class="legend__swatch legend__swatch--canceled"></i>Canceled</li></ul></header>
+      <header><h3 class="eyebrow"><%= t("analytics.topics_week") %></h3>
+        <ul class="legend"><li><i class="legend__swatch legend__swatch--progress"></i><%= t("enums.chart.opened") %></li><li><i class="legend__swatch legend__swatch--vacation"></i><%= t("enums.chart.approved") %></li><li><i class="legend__swatch legend__swatch--canceled"></i><%= t("enums.chart.canceled") %></li></ul></header>
       <div class="chart chart--grouped">
         <% a.weeks.each do |week| %>
           <div class="chart__col">
@@ -38,7 +38,7 @@
     </section>
 
     <section class="chart-card">
-      <header><h3 class="eyebrow">Hours per week</h3><ul class="legend"><li><i class="legend__swatch legend__swatch--vacation"></i>Work</li></ul></header>
+      <header><h3 class="eyebrow"><%= t("analytics.hours_week") %></h3><ul class="legend"><li><i class="legend__swatch legend__swatch--vacation"></i><%= t("enums.chart.work") %></li></ul></header>
       <div class="chart">
         <% a.weeks.each do |week| %>
           <div class="chart__col">
@@ -51,17 +51,17 @@
   </div>
 
   <section class="chart-card chart-card--table">
-    <header><h3 class="eyebrow">Closed topics · decided in this period</h3><strong><%= pluralize(a.closed_topics.size, "topic") %></strong></header>
+    <header><h3 class="eyebrow"><%= t("analytics.closed") %></h3><strong><%= t("analytics.topics_count", count: a.closed_topics.size) %></strong></header>
     <% if a.closed_topics.empty? %>
-      <p class="empty">Nothing was closed in this period.</p>
+      <p class="empty"><%= t("analytics.nothing_closed") %></p>
     <% else %>
       <ul class="closed">
         <% a.closed_topics.each do |topic| %>
           <li>
             <%= link_to topic.title, project_topic_path(@project, topic) %>
-            <span class="tag <%= topic.approved? ? "tag--task" : "tag--quiet" %>">Closed as <%= topic.status %></span>
-            <span><%= pluralize(topic.messages_count, "reply") %></span>
-            <time><%= topic.created_at.strftime("%b %-d") %></time>
+            <span class="tag <%= topic.approved? ? "tag--task" : "tag--quiet" %>"><%= t("analytics.closed_as", status: t("enums.topic_status.#{topic.status}").downcase) %></span>
+            <span><%= t("topics.replies", count: topic.messages_count) %></span>
+            <time><%= short_date(topic.created_at) %></time>
           </li>
         <% end %>
       </ul>

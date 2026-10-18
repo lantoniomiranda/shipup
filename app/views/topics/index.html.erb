@@ -3,31 +3,31 @@
 <div class="panel">
   <header class="panel__header">
     <div class="panel__title-row">
-      <h1>Topics</h1>
+      <h1><%= t("topics.title") %></h1>
       <%= link_to new_project_topic_path(@project), class: "btn btn--primary", data: { hotkey: "n" } do %>
-        <%= icon "plus" %><span>New topic</span><%= render "shared/key", label: "N" %>
+        <%= icon "plus" %><span><%= t("topics.new") %></span><%= render "shared/key", label: "N" %>
       <% end %>
     </div>
 
     <div class="panel__filter-row">
       <div class="chips">
-        <% [ [ "issues", "circle-alert", "Issues" ], [ "features", "sparkles", "Features" ], [ "canceled", "ban", "Canceled" ], [ "approved", "circle-check", "Approved" ] ].each do |key, glyph, label| %>
+        <% [ [ "issues", "circle-alert" ], [ "features", "sparkles" ], [ "canceled", "ban" ], [ "approved", "circle-check" ] ].each do |key, glyph| %>
           <%= link_to project_topics_path(@project, filter: (key unless @filter == key), sort: @sort.presence_in(%w[new])),
                       class: "chip #{"chip--active" if @filter == key}", aria: { pressed: @filter == key } do %>
-            <%= icon glyph, size: 14 %><%= label %> <%= @counts[key] %>
+            <%= icon glyph, size: 14 %><%= t("topics.filters.#{key}") %> <%= @counts[key] %>
           <% end %>
         <% end %>
       </div>
 
       <div class="sort">
-        <%= link_to "Top voted", project_topics_path(@project, filter: @filter), class: "sort__option #{"sort__option--active" if @sort == "top"}" %>
-        <%= link_to "Newest", project_topics_path(@project, filter: @filter, sort: "new"), class: "sort__option #{"sort__option--active" if @sort == "new"}" %>
+        <%= link_to t("topics.top"), project_topics_path(@project, filter: @filter), class: "sort__option #{"sort__option--active" if @sort == "top"}" %>
+        <%= link_to t("topics.newest"), project_topics_path(@project, filter: @filter, sort: "new"), class: "sort__option #{"sort__option--active" if @sort == "new"}" %>
       </div>
     </div>
   </header>
 
   <% if @topics.empty? %>
-    <p class="empty">No topics match. <%= link_to "Start one", new_project_topic_path(@project) %>.</p>
+    <p class="empty"><%= t("topics.empty_html", link: link_to(t("topics.start_one"), new_project_topic_path(@project))) %></p>
   <% else %>
     <ul class="topic-list">
       <%= render partial: "topics/row", collection: @topics, as: :topic, locals: { votes: @votes } %>

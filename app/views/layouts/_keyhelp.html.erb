@@ -1,19 +1,19 @@
 <%# Keyboard shortcut cheat sheet, rendered from config/keybindings.yml. Open with "?". %>
 <div class="keyhelp" hidden data-shortcuts-target="root" data-action="click->shortcuts#backdrop">
-  <div class="keyhelp__panel" role="dialog" aria-label="Keyboard shortcuts" aria-modal="true">
-    <header><h2>Keyboard shortcuts</h2><button type="button" class="icon-button icon-button--small" data-action="shortcuts#close" aria-label="Close"><%= icon "x", size: 16 %></button></header>
+  <div class="keyhelp__panel" role="dialog" aria-label="<%= t("shortcuts.title") %>" aria-modal="true">
+    <header><h2><%= t("shortcuts.title") %></h2><button type="button" class="icon-button icon-button--small" data-action="shortcuts#close" aria-label="<%= t("shortcuts.close") %>"><%= icon "x", size: 16 %></button></header>
     <div class="keyhelp__groups">
-      <% { global: "Everywhere", project: "Inside a project", page: "On specific pages" }.each do |group, title| %>
+      <% %i[global project page].each do |group| %>
         <section>
-          <h3 class="eyebrow"><%= title %></h3>
+          <h3 class="eyebrow"><%= t("shortcuts.groups.#{group}") %></h3>
           <dl>
-            <% Keybindings.groups.fetch(group).each_value do |entry| %>
-              <div><dt><%= entry[:label] %></dt><dd><kbd class="key"><%= Keybindings.label(entry[:keys]) %></kbd></dd></div>
+            <% Keybindings.groups.fetch(group).each do |id, entry| %>
+              <div><dt><%= t("keybindings.#{group}.#{id}") %></dt><dd><kbd class="key"><%= Keybindings.label(entry[:keys]) %></kbd></dd></div>
             <% end %>
           </dl>
         </section>
       <% end %>
     </div>
-    <p class="keyhelp__note">Shortcuts pause while you type in a field. Esc always goes back.</p>
+    <p class="keyhelp__note"><%= t("shortcuts.note") %></p>
   </div>
 </div>

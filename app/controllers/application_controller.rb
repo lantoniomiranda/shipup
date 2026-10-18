@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  prepend_before_action :set_locale
+
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
@@ -11,6 +13,10 @@ class ApplicationController < ActionController::Base
   before_action :require_workspace_access
 
   private
+
+  def set_locale
+    I18n.locale = Locale.resolve(cookie: cookies[:locale], accept_language: request.env["HTTP_ACCEPT_LANGUAGE"])
+  end
 
   def require_workspace_admin
     render_error(403) unless Current.user&.role_in(Current.workspace) == "admin"

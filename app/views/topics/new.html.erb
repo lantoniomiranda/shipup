@@ -1,17 +1,17 @@
 <% project_header @project, active: :topics %>
 
 <div class="split">
-  <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "similar-topics editor", similar_topics_url_value: similar_project_topics_path(@project) } do |form| %>
+  <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "similar-topics editor", editor_link_sample_value: t("editor.link_sample"), similar_topics_url_value: similar_project_topics_path(@project) } do |form| %>
     <header class="panel__bar">
       <%= link_to project_topics_path(@project), class: "thread__back", data: { hotkey: "escape" } do %>
-        <%= icon "arrow-left" %><span>Back to topics</span><%= render "shared/key", label: "Esc" %>
+        <%= icon "arrow-left" %><span><%= t("topics.back") %></span><%= render "shared/key", label: "Esc" %>
       <% end %>
     </header>
 
     <div class="form">
       <header class="form__heading">
-        <h1>New topic</h1>
-        <p><%= @project.name %> · posts to Topics</p>
+        <h1><%= t("topics.new") %></h1>
+        <p><%= t("topics.posts_to", project: @project.name) %></p>
       </header>
 
       <% if @topic.errors.any? %>
@@ -19,39 +19,39 @@
       <% end %>
 
       <fieldset class="field">
-        <legend class="eyebrow">Type</legend>
+        <legend class="eyebrow"><%= t("common.type") %></legend>
         <div class="choice">
           <% Topic::KINDS.each do |kind| %>
-            <label class="choice__option"><%= form.radio_button :kind, kind, class: "choice__input" %><span><%= kind.capitalize %></span></label>
+            <label class="choice__option"><%= form.radio_button :kind, kind, class: "choice__input" %><span><%= t("enums.topic_kind.#{kind}") %></span></label>
           <% end %>
         </div>
       </fieldset>
 
       <div class="field">
-        <%= form.label :title, "Title", class: "eyebrow" %>
+        <%= form.label :title, t("common.title"), class: "eyebrow" %>
         <%= form.text_field :title, class: "input input--title", required: true, autofocus: true, autocomplete: "off",
                                     data: { similar_topics_target: "input", action: "input->similar-topics#search" } %>
       </div>
 
       <div class="field field--grow">
-        <%= form.label :body, "What should we talk about?", class: "eyebrow" %>
+        <%= form.label :body, t("topics.what"), class: "eyebrow" %>
         <div class="editor">
-          <div class="editor__toolbar" role="toolbar" aria-label="Formatting">
+          <div class="editor__toolbar" role="toolbar" aria-label="<%= t("common.formatting") %>">
             <% [ [ "bold", "bold", "**" ], [ "italic", "italic", "_" ], [ "list", "list", "- " ], [ "link", "link", "link" ], [ "at-sign", "mention", "@" ] ].each do |glyph, label, token| %>
-              <button type="button" aria-label="<%= label.capitalize %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
+              <button type="button" aria-label="<%= t("common.#{label}") %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
             <% end %>
           </div>
           <%= form.text_area :body, class: "editor__input", data: { editor_target: "input" } %>
         </div>
       </div>
 
-      <% if @project.clients.any? %>
+      <% if @project.clients.active.any? %>
         <fieldset class="field">
-          <legend class="eyebrow">Requested by</legend>
+          <legend class="eyebrow"><%= t("topics.requested_by") %></legend>
           <div class="choice">
-            <label class="choice__option"><%= form.radio_button :client_id, "", checked: @topic.client_id.nil?, class: "choice__input" %><span>Internal idea</span></label>
-            <% @project.clients.order(:name).each do |client| %>
-              <label class="choice__option"><%= form.radio_button :client_id, client.id, class: "choice__input" %><span>Client: <%= client.name %></span></label>
+            <label class="choice__option"><%= form.radio_button :client_id, "", checked: @topic.client_id.nil?, class: "choice__input" %><span><%= t("topics.internal_idea") %></span></label>
+            <% @project.clients.active.order(:name).each do |client| %>
+              <label class="choice__option"><%= form.radio_button :client_id, client.id, class: "choice__input" %><span><%= t("topics.client_named", name: client.name) %></span></label>
             <% end %>
           </div>
         </fieldset>
@@ -59,16 +59,16 @@
     </div>
 
     <footer class="panel__footer">
-      <%= link_to project_topics_path(@project), class: "btn" do %><span>Cancel</span><%= render "shared/key", label: "Esc" %><% end %>
+      <%= link_to project_topics_path(@project), class: "btn" do %><span><%= t("common.cancel") %></span><%= render "shared/key", label: "Esc" %><% end %>
       <button type="submit" class="btn btn--primary" data-hotkey="ctrl+enter">
-        <%= icon "send" %><span>Post topic</span><%= render "shared/key", label: "Ctrl Enter" %>
+        <%= icon "send" %><span><%= t("topics.post") %></span><%= render "shared/key", label: "Ctrl Enter" %>
       </button>
     </footer>
   <% end %>
 
   <aside class="side side--wide">
     <section class="side__section">
-      <h3 class="eyebrow">Similar topics · updates as you type</h3>
+      <h3 class="eyebrow"><%= t("topics.similar") %></h3>
       <%= turbo_frame_tag "similar_topics", data: { similar_topics_target: "results" } %>
     </section>
   </aside>

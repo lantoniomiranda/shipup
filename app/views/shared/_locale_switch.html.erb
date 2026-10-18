@@ -1,0 +1,8 @@
+<nav class="locale-switch" aria-label="<%= t("locale.switch") %>">
+  <% Locale.options.each do |option| %>
+    <%= link_to option.name, locale_path(locale: option.code),
+                class: "locale-switch__item #{"locale-switch__item--current" if I18n.locale.to_s == option.code}",
+                data: { turbo_method: :patch },
+                aria: { current: ("true" if I18n.locale.to_s == option.code) } %>
+  <% end %>
+</nav>

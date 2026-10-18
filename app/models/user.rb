@@ -55,7 +55,7 @@ class User < ApplicationRecord
   def greeting(now: Time.current)
     hour = now.in_time_zone(time_zone).hour
     period = hour < 12 ? "morning" : (hour < 18 ? "afternoon" : "evening")
-    "Good #{period}, #{first_name}."
+    I18n.t("greetings.#{period}", name: first_name)
   end
 
   # Is this kind of notification switched on? Unset kinds fall back to NotificationSubscription::DEFAULTS.

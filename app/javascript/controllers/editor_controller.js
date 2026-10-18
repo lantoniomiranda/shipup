@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Minimal markdown helper for the toolbar: wraps the selection (bold, italic) or prefixes the line (list).
 export default class extends Controller {
   static targets = ["input"]
+  static values = { linkSample: { type: String, default: "text" } }
 
   format({ params: { token, kind } }) {
     const input = this.inputTarget
@@ -11,7 +12,7 @@ export default class extends Controller {
 
     let insert
     if (kind === "bold" || kind === "italic") insert = `${token}${selected || kind}${token}`
-    else if (kind === "link") insert = `[${selected || "text"}](https://)`
+    else if (kind === "link") insert = `[${selected || this.linkSampleValue}](https://)`
     else if (kind === "list") insert = selected ? selected.split("\n").map((line) => `- ${line}`).join("\n") : "- "
     else insert = token
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bg="<%= current_theme[:bg] %>" data-accent="<%= current_theme[:accent] %>">
+<html lang="<%= Locale.html_lang %>" data-bg="<%= current_theme[:bg] %>" data-accent="<%= current_theme[:accent] %>">
   <head>
     <title><%= [content_for(:title), Rails.configuration.x.product_name].compact.join(" · ") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
