@@ -5,7 +5,7 @@
 <header class="top-bar">
   <div class="top-bar__left">
     <%= link_to root_path, class: "brand", title: "Projects (G H)", data: hotkey_data(:projects) do %>
-      <span class="brand__mark" aria-hidden="true"><span class="brand__ring"></span></span>
+      <%= render "shared/logo_mark" %>
       <span class="brand__word"><%= Rails.configuration.x.product_name %></span>
     <% end %>
 

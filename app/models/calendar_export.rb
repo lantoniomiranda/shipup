@@ -6,7 +6,7 @@ class CalendarExport
   end
 
   def to_ics
-    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ShipUp//#{@project.key}//EN", "CALSCALE:GREGORIAN" ]
+    lines = [ "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ohship//#{@project.key}//EN", "CALSCALE:GREGORIAN" ]
     due_tasks.each { |task| lines.concat(task_event(task)) }
     meetings.each { |meeting| lines.concat(meeting_event(meeting)) }
     lines << "END:VCALENDAR"

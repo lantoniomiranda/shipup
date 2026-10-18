@@ -1,6 +1,6 @@
 # Shipup
 
-Rails 8 app (product name **ShipUp**): project management built around **topics** (conversations),
+Rails 8 app (product name **ohship**): project management built around **topics** (conversations),
 **tasks and chains** (the work), **meetings**, a sprint **board**, clients and team time off.
 The UI is replicated from `design-draft-claude-1.pen`.
 
@@ -8,6 +8,7 @@ The UI is replicated from `design-draft-claude-1.pen`.
 
 Keep this section current: every change set adds a line here (newest first).
 
+- Renamed the product to **ohship** and added the rocket logo (CSS-masked so it follows the theme colours) and a new favicon.
 - `Taskfile.yml`: `task start | stop | restart | status | logs` manage the server and Postgres.
 - **Multi-tenant SaaS**: a workspace is a tenant with a status (active/suspended), plan (trial/starter/team/enterprise), trial end and seat limit. Sign-up is **invite-only**: unknown emails are refused unless they hold a pending `Invitation`, belong to a workspace that enabled company-domain joining, or are platform staff listed in `PLATFORM_ADMIN_EMAILS`. Signing in consumes invitations (a person can belong to several tenants). `Workspace.provision!` creates a tenant and invites its first admin.
 - **Tenant side of the SaaS**: workspace switcher in the top bar (session-based, only your own tenants), a *People* page for workspace admins (invite by email, change roles, remove people, resend/revoke invitations; the last admin can't be demoted or removed; seat limits enforced), a branded "workspace suspended" page, a "no workspace yet" page, and a trial banner for admins. `test/controllers/tenant_isolation_test.rb` pins that one tenant can never read or write another's data.
@@ -17,7 +18,7 @@ Keep this section current: every change set adds a line here (newest first).
 - Keyboard shortcuts rebuilt: one global handler (`hotkeys_controller.js`) driven by `data-hotkey` attributes and one registry, `config/keybindings.yml`, which also feeds the **?** help dialog. Navigation uses `g` chords (`g b` board, `g t` topics, `g h` projects…); primary actions use **Ctrl/Cmd+Enter**; no browser-owned combos (Ctrl+S, Space…). Project tabs now show the shortcuts of the *other* tabs, not the current one. `node script/check_keys.mjs` presses the real keys in a browser.
 - Sprints have a state (planned, active, completed) with a unique-index guarantee of **one active sprint per project**. Create a sprint from the backlog (*Plan sprint*), start it (carrying unfinished tasks over if you like) and it shows on the board immediately; *Complete sprint* sits on the board. Workspace admins and project managers manage sprints.
 - Branded error pages (400, 403, 404, 406, 422, 500) rendered by `ErrorsController` via `config.exceptions_app`; static `public/*.html` fallbacks restyled. Forbidden actions render the 403 page.
-- Fix: project cards on the dashboard now open the project. Product renamed from Nook to **ShipUp**.
+- Fix: project cards on the dashboard now open the project. Product renamed from Nook to **ohship**.
 
 ## Stack
 

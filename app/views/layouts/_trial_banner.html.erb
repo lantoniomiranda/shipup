@@ -4,6 +4,6 @@
   <% days = ((workspace.trial_ends_at - Time.current) / 1.day).ceil %>
   <p class="trial-banner <%= "trial-banner--over" if days <= 3 %>">
     <%= icon "timer", size: 14 %>
-    <% if days <= 0 %>Your trial has ended. Contact ShipUp to pick a plan and keep your data.<% else %>Your trial ends in <%= pluralize(days, "day") %>. Contact ShipUp to pick a plan.<% end %>
+    <% if days <= 0 %>Your trial has ended. Contact ohship to pick a plan and keep your data.<% else %>Your trial ends in <%= pluralize(days, "day") %>. Contact ohship to pick a plan.<% end %>
   </p>
 <% end %>

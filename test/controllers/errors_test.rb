@@ -45,13 +45,13 @@ class ErrorsTest < ActionDispatch::IntegrationTest
 
   test "errors carry the product name in the title" do
     get "/nope"
-    assert_select "title", /404 .* ShipUp/
+    assert_select "title", /404 .* ohship/
   end
 
   test "static fallbacks are branded and self-contained" do
     %w[400 404 406-unsupported-browser 422 500].each do |name|
       html = File.read(Rails.root.join("public/#{name}.html"))
-      assert_includes html, "ShipUp"
+      assert_includes html, "ohship"
       assert_not_includes html, "<link", "#{name}.html must not depend on other assets"
     end
   end

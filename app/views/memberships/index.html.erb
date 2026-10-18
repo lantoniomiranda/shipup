@@ -51,7 +51,7 @@
           <tr>
             <td><strong><%= invitation.email %></strong></td>
             <td><span class="tag"><%= invitation.role.capitalize %></span></td>
-            <td><%= invitation.invited_by&.short_name || "ShipUp" %></td>
+            <td><%= invitation.invited_by&.short_name || "ohship" %></td>
             <td><%= invitation.created_at.strftime("%b %-d") %></td>
             <td class="table__actions">
               <%= button_to resend_invitation_path(invitation), class: "btn btn--small", form: { class: "inline-form" } do %><span>Resend</span><% end %>

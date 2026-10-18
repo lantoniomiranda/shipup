@@ -21,7 +21,7 @@ module Shipup
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    config.x.product_name = "ShipUp"
+    config.x.product_name = "ohship"
 
     # Render errors through ErrorsController (branded pages) instead of the static public/*.html files.
     config.exceptions_app = routes

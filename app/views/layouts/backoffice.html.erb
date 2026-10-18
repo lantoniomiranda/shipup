@@ -1,10 +1,10 @@
-<%# ShipUp staff shell: a lean top bar, no tenant context. Nested inside layouts/application. %>
+<%# ohship staff shell: a lean top bar, no tenant context. Nested inside layouts/application. %>
 <% content_for :app_content do %>
   <div class="shell shell--backoffice">
     <header class="top-bar">
       <div class="top-bar__left">
         <%= link_to backoffice_root_path, class: "brand" do %>
-          <span class="brand__mark" aria-hidden="true"><span class="brand__ring"></span></span>
+          <%= render "shared/logo_mark" %>
           <span class="brand__word"><%= Rails.configuration.x.product_name %></span>
         <% end %>
         <span class="tag tag--staff">Backoffice</span>

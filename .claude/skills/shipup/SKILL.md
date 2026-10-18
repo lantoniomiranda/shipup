@@ -5,9 +5,19 @@ description: Codebase guide for the shipup Rails 8.1 app. Use when working in th
 
 # shipup
 
+## Working with other agents (read first)
+
+Several agents may edit this repo at the same time. To keep out of each other's way:
+
+- Before starting, run `git status`, `git log --oneline -5` and `git worktree list`. Uncommitted changes or migrations you didn't write belong to someone else: don't commit, revert or "fix" them.
+- If another agent is changing the schema or core models, work in your own **git worktree** (`git worktree add ../shipup-<name> -b <name>/<topic>`) with your own databases (`DB_SUFFIX=_<name>` in that worktree's `.env`, read by `config/database.yml`) and your own port. Never run `db:migrate`/`db:reset` in a tree whose pending migrations aren't yours.
+- Commit only your own paths (`git add <paths>`, never `git add -A` in a shared tree) with focused messages; rebase or merge onto the main branch before handing over and resolve conflicts, don't overwrite.
+- Update this file in small, additive bullets under the right section (append, don't rewrite or reorder), so concurrent edits merge cleanly. Add a line to the **Agent log** at the bottom for anything others must know.
+
+
 ## Project state
 
-Rails 8.1 app (Ruby version in `.ruby-version`); the product is called **ShipUp** (`config.x.product_name`). The UI is replicated from `design-draft-claude-1.pen`. Check the code before assuming any feature exists.
+Rails 8.1 app (Ruby version in `.ruby-version`); the product is called **ohship** (`config.x.product_name`). The UI is replicated from `design-draft-claude-1.pen`. Check the code before assuming any feature exists.
 
 `design-draft-claude-1.pen` is an encrypted Pencil design file (untracked). Access it only through the `pencil` MCP tools, never Read/Grep.
 
@@ -40,7 +50,11 @@ Standard Rails "Solid" stack with no Node build step:
 - **Keyboard shortcuts**: add every shortcut to `config/keybindings.yml` and put `data-hotkey="<spec>"` on the clickable element (`hotkey_data(:id)` / `key_hint(:id)` helpers); `hotkeys_controller.js` on `<body>` does the rest and a test fails on unregistered specs. Don't reuse CSS class names for dialogs that the handler queries (`.keyhelp`, `.spotlight`). Browser check: `node script/check_keys.mjs`.
 - **LLM**: `Llm` (`app/models/llm*`) is provider-agnostic: `LLM_ENABLED=claude|gemini|grok|gpt` + `LLM_API_KEY`. Call `Llm.client.complete(prompt, system:, json:)` and `Llm.enabled?`; never call a provider API directly. `Llm::Drafts` builds task/chain drafts from a topic. Tests use `with_llm("gemini") { }` and WebMock.
 - **Chat**: `TaskMessage` and `TopicMessage` share the `ChatMessage` concern (parent reply, `edit!`, soft `remove!`); controllers share `ChatMessages`; views `messages/_message` + `messages/_composer`. Stimulus actions only work inside their controller's element, so cross-element features (Reply buttons → composer) use a document event (`chat:reply`).
-- **Tenancy**: `Workspace` = tenant (status/plan/seats). Everything tenant-owned is reached through `Current.workspace` (never `Model.find` unscoped). Sign-up is invite-only (`Invitation`, `Workspace#allow_domain_join`, `PLATFORM_ADMIN_EMAILS`); `User::Omniauth::NotInvited` is the refusal. `users.platform_admin` marks ShipUp staff.
+- **Tenancy**: `Workspace` = tenant (status/plan/seats). Everything tenant-owned is reached through `Current.workspace` (never `Model.find` unscoped). Sign-up is invite-only (`Invitation`, `Workspace#allow_domain_join`, `PLATFORM_ADMIN_EMAILS`); `User::Omniauth::NotInvited` is the refusal. `users.platform_admin` marks ohship staff.
 - **Backoffice**: `Backoffice::*` controllers (layout `backoffice`) inherit `Backoffice::BaseController`, which 404s anyone but `platform_admin` users. Staff have no workspace, so never assume `Current.workspace` there.
 - **Tenant access**: `ApplicationController#set_current_workspace` picks the tenant (session switcher → first active); `require_workspace_access` renders the suspended / no-workspace pages. Controllers that must work regardless (errors, sign out, switcher, backoffice) `skip_before_action :require_workspace_access`. New tenant-owned routes need a case in `tenant_isolation_test.rb`.
 - **Running locally**: `task start` / `task stop` / `task restart` / `task status` (Taskfile.yml; pid in tmp/pids/server.pid, output in log/server.out). go-task runs a limited shell: use `ps -p`, not `kill -0`.
+
+## Agent log
+
+- **agent1 (basics)**, branch `agent1/basics` (worktree `../shipup-agent1`, `DB_SUFFIX=_agent1`, port 3001): product renamed to **ohship** (lowercase wordmark, `config.x.product_name`); rocket logo from `logo.png` lives in `app/assets/images/logo.png` and is rendered by `shared/_logo_mark` as a CSS mask (follows `currentColor`); favicon is `public/icon.png`.

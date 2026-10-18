@@ -76,7 +76,7 @@ class User < ApplicationRecord
     self != other && %w[admin manager].include?(role_in(workspace))
   end
 
-  # Platform staff (ShipUp itself, not a customer). Listed in PLATFORM_ADMIN_EMAILS.
+  # Platform staff (ohship itself, not a customer). Listed in PLATFORM_ADMIN_EMAILS.
   def self.platform_admin_email?(email)
     ENV["PLATFORM_ADMIN_EMAILS"].to_s.split(",").map { |address| address.strip.downcase }.include?(email.to_s.strip.downcase)
   end

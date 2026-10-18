@@ -52,7 +52,7 @@ class Backoffice::WorkspacesController < Backoffice::BaseController
 
   def suspend
     @workspace.suspend!(params[:reason])
-    redirect_to backoffice_tenant_path(@workspace), notice: "#{@workspace.name} is suspended. Its members can no longer use ShipUp.", status: :see_other
+    redirect_to backoffice_tenant_path(@workspace), notice: "#{@workspace.name} is suspended. Its members can no longer use ohship.", status: :see_other
   end
 
   def reactivate

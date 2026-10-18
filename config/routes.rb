@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # ShipUp staff only: manage customers (tenants).
+  # ohship staff only: manage customers (tenants).
   namespace :backoffice do
     root "dashboards#show"
     resources :tenants, controller: "workspaces", only: %i[index show new create edit update] do

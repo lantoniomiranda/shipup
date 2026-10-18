@@ -1,4 +1,4 @@
-# Demo workspace mirroring the ShipUp design. Safe to run repeatedly.
+# Demo workspace mirroring the ohship design. Safe to run repeatedly.
 today = Date.current
 
 workspace = Workspace.find_or_create_by!(slug: "orbit-labs") do |w|
@@ -169,7 +169,7 @@ if rate_limiting.messages.none?
   rate_limiting.messages.create!(author: people.fetch("ines"), body: "Northwind needs this before their Oct 26 launch. QA starts when the dashboard lands.", parent: first, created_at: 4.hours.ago)
 end
 
-# ShipUp staff: sign in locally with /dev/sign_in?email=staff@shipup.dev&to=/backoffice
+# ohship staff: sign in locally with /dev/sign_in?email=staff@shipup.dev&to=/backoffice
 User.find_or_create_by!(email: "staff@shipup.dev") { |u| u.assign_attributes(name: "Sam Staff", platform_admin: true, avatar_color: "plum") }
 
 # A couple of extra tenants so the backoffice has something to list.

@@ -37,7 +37,7 @@
     <header><h3 class="eyebrow">Pending invitations · <%= @invitations.size %></h3></header>
     <ul class="closed bo-list">
       <% @invitations.each do |invitation| %>
-        <li><span><%= invitation.email %> <small>invited <%= invitation.invited_by&.short_name || "by ShipUp" %></small></span><span class="tag"><%= invitation.role %></span>
+        <li><span><%= invitation.email %> <small>invited <%= invitation.invited_by&.short_name || "by ohship" %></small></span><span class="tag"><%= invitation.role %></span>
           <span class="bo-actions">
             <%= button_to resend_backoffice_tenant_invitation_path(@workspace, invitation), class: "btn btn--small", form: { class: "inline-form" } do %><span>Resend</span><% end %>
             <%= button_to backoffice_tenant_invitation_path(@workspace, invitation), method: :delete, class: "btn btn--small", form: { class: "inline-form", data: { turbo_confirm: "Revoke this invitation?" } } do %><span>Revoke</span><% end %>

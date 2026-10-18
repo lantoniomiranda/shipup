@@ -205,7 +205,7 @@ class BackofficeTest < ActionDispatch::IntegrationTest
   test "invitation emails explain how to get in" do
     mail = InvitationMailer.invite(@acme.invitations.sole)
     assert_equal [ "boss@acme.io" ], mail.to
-    assert_match(/invited to Acme Corp on ShipUp/, mail.subject)
+    assert_match(/invited to Acme Corp on ohship/, mail.subject)
     assert_includes mail.text_part.body.to_s, "Google or Microsoft account"
     assert_includes mail.html_part.body.to_s, sign_in_url(host: "example.com")
   end
