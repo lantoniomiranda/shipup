@@ -1,7 +1,10 @@
 <%# "Draft with AI" / "Try another draft" controls for the create task and chain pages. %>
-<% if Llm.enabled? %>
+<% if Llm.enabled? || local_assigns[:error].present? %>
   <div class="ai-draft">
+    <% if Llm.enabled? %>
     <% if drafted %><span class="tag tag--draft"><%= icon "sparkles", size: 13 %><%= t("ai.drafted", count: topic.messages_count) %></span><% end %>
     <%= link_to url, class: "btn btn--small", data: { **hotkey_data(:try_draft) } do %><%= icon "rotate-ccw", size: 13 %><span><%= drafted ? t("ai.another") : t("ai.draft") %></span><%= key_hint(:try_draft) %><% end %>
+    <% end %>
   </div>
+  <% if local_assigns[:error].present? %><p class="ai-draft__error" role="alert"><%= icon "circle-alert", size: 14 %> <%= error %></p><% end %>
 <% end %>

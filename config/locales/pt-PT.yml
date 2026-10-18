@@ -429,6 +429,7 @@ pt-PT:
     client_named: "Cliente: %{name}"
     post: Publicar tópico
     similar: Tópicos semelhantes · atualiza enquanto escreve
+    no_similar: "Ainda não há tópicos semelhantes. Continue a escrever."
     empty_html: "Nenhum tópico corresponde. %{link}."
     start_one: Começar um
     top: Mais votados

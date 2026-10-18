@@ -33,6 +33,8 @@ class Llm::Base
     end
     raise Llm::Error, "#{provider_name} error (#{response.status}): #{error_message(response.body)}" unless response.success?
 
+    raise Llm::Error, "#{provider_name} returned an unexpected response" unless response.body.is_a?(Hash)
+
     response.body
   rescue Faraday::Error => error
     raise Llm::Error, "#{provider_name} request failed: #{error.message}"

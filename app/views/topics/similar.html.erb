@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "similar_topics" do %>
+  <% if @similar.blank? && @query.length >= 3 %><p class="similar__empty"><%= t("topics.no_similar") %></p><% end %>
   <% @similar.each_with_index do |topic, index| %>
     <%= link_to project_topic_path(@project, topic), class: "similar #{"similar--best" if index.zero?}", target: "_top" do %>
       <div class="similar__head"><strong><%= topic.title %></strong><span><%= topic.match_percent %>%</span></div>

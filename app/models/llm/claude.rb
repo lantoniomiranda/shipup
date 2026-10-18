@@ -11,7 +11,18 @@ class Llm::Claude < Llm::Base
     text.presence || raise(Llm::Error, "claude returned no text")
   end
 
+  def initialize(api_key:, model: nil, base_url: nil)
+    super
+    @model = self.class.normalize_model(@model)
+  end
+
   private
 
   def default_model = "claude-sonnet-5-5"
+
+  # Accepts friendly names from .env ("sonnet-5.5", "Claude Sonnet 5.5") and turns them into API ids ("claude-sonnet-5-5").
+  def self.normalize_model(name)
+    id = name.to_s.strip.downcase.gsub(/[\s._]+/, "-")
+    id.start_with?("claude-") ? id : "claude-#{id}"
+  end
 end

@@ -429,6 +429,7 @@ es-ES:
     client_named: "Cliente: %{name}"
     post: Publicar tema
     similar: Temas parecidos · se actualizan mientras escribes
+    no_similar: "Aún no hay temas parecidos. Sigue escribiendo."
     empty_html: "Ningún tema coincide. %{link}."
     start_one: Empieza uno
     top: Más votados

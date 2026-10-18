@@ -210,6 +210,7 @@ class TopicAiDraftTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select "input[name='task[title]'][value=?]", @topic.title
       assert_select ".toast--alert", /AI draft failed/
+      assert_select ".ai-draft__error", /AI draft failed: gemini error \(500\)/
     end
   end
 
