@@ -53,6 +53,14 @@ class User::OmniauthTest < ActiveSupport::TestCase
     ENV.delete("PLATFORM_ADMIN_EMAILS")
   end
 
+  test "SUPERADMIN_EMAILS is accepted as an alias" do
+    ENV["SUPERADMIN_EMAILS"] = "boss@shipup.dev"
+    assert User.platform_admin_email?("Boss@shipup.dev")
+    assert_not User.platform_admin_email?("other@shipup.dev")
+  ensure
+    ENV.delete("SUPERADMIN_EMAILS")
+  end
+
   test "existing users are promoted to platform admin when their email is listed" do
     ENV["PLATFORM_ADMIN_EMAILS"] = users(:ines).email
     assert User.from_omniauth(auth(uid: "p-2", email: users(:ines).email)).platform_admin?

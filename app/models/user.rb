@@ -86,7 +86,9 @@ class User < ApplicationRecord
 
   # Platform staff (ohship itself, not a customer). Listed in PLATFORM_ADMIN_EMAILS.
   def self.platform_admin_email?(email)
-    ENV["PLATFORM_ADMIN_EMAILS"].to_s.split(",").map { |address| address.strip.downcase }.include?(email.to_s.strip.downcase)
+    # SUPERADMIN_EMAILS is the newer name for the same list; either works.
+    listed = [ ENV["PLATFORM_ADMIN_EMAILS"], ENV["SUPERADMIN_EMAILS"] ].join(",").split(",").map { |address| address.strip.downcase }
+    listed.include?(email.to_s.strip.downcase)
   end
 
   def role_in(workspace)
