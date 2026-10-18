@@ -85,7 +85,5 @@ Rails.application.routes.draw do
   # Error pages. Rails calls these paths itself (config.exceptions_app); they also work as plain URLs.
   match "/:code", to: "errors#show", via: :all, constraints: { code: /400|403|404|406|422|500/ }
 
-  # "/" is the public landing page for visitors and the dashboard for signed-in people.
-  get "/", to: "landing#show", constraints: VisitorConstraint, as: :landing
   root "projects#index"
 end
