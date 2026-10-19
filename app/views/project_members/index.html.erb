@@ -34,7 +34,7 @@
               <% else %>
                 <span class="tag"><%= t("roles.#{membership.role}") %></span>
               <% end %>
-              <% if user.superadmin? %><span class="tag tag--admin"><%= t("roles.admin") %></span><% end %>
+              <% if user.superadmin? %><span class="tag tag--admin"><%= t("roles.superadmin") %></span><% end %>
             </td>
             <td><%= (seen = @last_seen[user.id]) ? t("people.ago", time: time_ago_in_words(seen)) : t("people.never") %></td>
             <td><%= short_date_year(membership.created_at) %></td>

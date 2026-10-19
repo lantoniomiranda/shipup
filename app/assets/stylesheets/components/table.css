@@ -71,5 +71,19 @@
 .panel--inline { flex: none; overflow: visible; }
 .panel--inline::after { box-shadow: inset 0 0 0 1px var(--line); }
 .section-title { margin-top: 8px; font-size: 20px; }
-.table__actions { display: flex; gap: 8px; justify-content: flex-end; }
+.table__actions { text-align: right; white-space: nowrap; }
+.table__actions > * + * { margin-left: 8px; }
+.table__actions .inline-form { vertical-align: middle; }
 .role-form { margin: 0; }
+
+@media (max-width: 700px) {
+  .table th, .table td { padding: 10px 12px; }
+  .panel--inline { overflow-x: auto; }
+  .invite-bar { flex-wrap: wrap; max-width: none; }
+  .invite-bar .input { flex: 1 1 100%; }
+}
+@media (max-width: 700px) {
+  .toolbar--chips { flex-wrap: wrap; gap: 8px; }
+  .toolbar--chips .segmented { max-width: 100%; overflow-x: auto; }
+  .toolbar--chips .segmented__item { white-space: nowrap; }
+}
