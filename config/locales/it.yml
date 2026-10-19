@@ -607,6 +607,7 @@ it:
       one: "inizia tra %{count} giorno"
       other: "inizia tra %{count} giorni"
     planned: pianificato
+    active: in corso
     start: Avvia sprint
     group: Backlog
     tasks_estimated:

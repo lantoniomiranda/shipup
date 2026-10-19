@@ -4,14 +4,18 @@ class Backlog
   DAYS_PER_PERSON = 10 # working days in a two-week sprint
   FILTERS = %w[chains unassigned unestimated].freeze
 
-  attr_reader :project, :sprint, :sprints, :filter
+  attr_reader :project, :sprint, :sprints, :active, :filter
 
   def initialize(project:, filter: nil, today: Date.current)
     @project = project
     @filter = filter.presence_in(FILTERS)
     @sprints = project.sprints.upcoming.to_a # every planned sprint, whatever its start date
     @sprint = sprints.first
+    @active = project.active_sprint
   end
+
+  # Where a backlog task can go: the running sprint first, then every planned one.
+  def targets = [ active, *sprints ].compact
 
   def planned_tasks(for_sprint = sprint) = filtered(for_sprint ? tasks.select { |task| task.sprint_id == for_sprint.id } : [])
   def backlog_tasks = filtered(tasks.select { |task| task.sprint_id.nil? })
@@ -38,7 +42,7 @@ class Backlog
   private
 
   def visible_tasks = tasks.select { |task| task.sprint_id.nil? || planned_ids.include?(task.sprint_id) }
-  def planned_ids = @planned_ids ||= sprints.map(&:id)
+  def planned_ids = @planned_ids ||= targets.map(&:id)
 
   def days(minutes) = (minutes / Task::MINUTES_PER_DAY.to_f).round
 

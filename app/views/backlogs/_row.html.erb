@@ -21,7 +21,7 @@
                     title: t("tasks.move_backlog"), aria: { label: t("tasks.move_backlog") } do %><%= icon "arrow-big-down", size: 14 %><% end %>
     <% else %>
       <% sprints.each do |planned| %>
-        <% label = sprints.size > 1 ? t("tasks.move_to_sprint", name: planned.name) : t("tasks.move_sprint") %>
+        <% label = sprints.size > 1 || planned.active? ? t("tasks.move_to_sprint", name: planned.name) : t("tasks.move_sprint") %>
         <%= button_to schedule_project_task_path(project, task, to: "sprint", sprint_id: planned.id), method: :patch, class: "icon-button icon-button--small",
                       title: label, aria: { label: label } do %><%= icon "arrow-big-up", size: 14 %><% end %>
       <% end %>

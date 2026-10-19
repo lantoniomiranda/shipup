@@ -83,4 +83,33 @@ class SprintPlanningTest < ActionDispatch::IntegrationTest
     get project_board_path(@project)
     assert_select "form[action=?] button", start_project_sprint_path(@project, sprint), /Start sprint/
   end
+
+  test "an unscheduled task can join the running sprint and shows on the board" do
+    task = todo_task("Join running")
+    get project_backlog_path(@project)
+    assert_select "tr.table__group", text: /Sprint 14.*in progress/m
+    assert_select "form[action=?] button", schedule_project_task_path(@project, task, to: "sprint", sprint_id: sprints(:sprint_14).id)
+
+    patch schedule_project_task_path(@project, task, to: "sprint", sprint_id: sprints(:sprint_14).id)
+    assert_equal sprints(:sprint_14), task.reload.sprint
+    get project_backlog_path(@project)
+    assert_select "tr", text: /Join running/ # listed under the running sprint
+    get project_board_path(@project)
+    assert_select "article.card", text: /Join running/
+  end
+
+  test "a task cannot be scheduled into a completed sprint" do
+    done = @project.sprints.create!(number: 3, starts_on: Date.current - 90, ends_on: Date.current - 77, state: "completed")
+    task = todo_task
+    patch schedule_project_task_path(@project, task, to: "sprint", sprint_id: done.id)
+    assert_nil task.reload.sprint
+  end
+
+  test "a failed sprint form keeps the start now and carry over choices" do
+    post project_sprints_path(@project), params: { sprint: { goal: "G", starts_on: Date.current, ends_on: Date.current - 1 }, start_now: "0", carry_over: "0" }
+    assert_response :unprocessable_content
+    assert_select "input#start_now[checked]", count: 0
+    assert_select "input#carry_over[checked]", count: 0
+    assert_select "input#sprint_goal[value=?]", "G"
+  end
 end

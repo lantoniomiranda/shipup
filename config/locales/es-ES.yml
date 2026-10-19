@@ -607,6 +607,7 @@ es-ES:
       one: "empieza en %{count} día"
       other: "empieza en %{count} días"
     planned: planificado
+    active: en curso
     start: Empezar sprint
     group: Backlog
     tasks_estimated:

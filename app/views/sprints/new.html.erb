@@ -23,14 +23,14 @@
 
       <label class="check-card">
         <%= hidden_field_tag :start_now, "0", id: nil %>
-        <%= check_box_tag :start_now, "1", true, class: "check" %>
+        <%= check_box_tag :start_now, "1", params[:start_now] != "0", class: "check" %>
         <span><%= active ? t("sprints.start_now_completes", name: active.name) : t("sprints.start_now") %></span>
       </label>
 
       <% if active %>
         <label class="check-card">
           <%= hidden_field_tag :carry_over, "0", id: nil %>
-          <%= check_box_tag :carry_over, "1", true, class: "check" %>
+          <%= check_box_tag :carry_over, "1", params[:carry_over] != "0", class: "check" %>
           <span><%= t("sprints.carry", name: active.name) %></span>
         </label>
       <% end %>

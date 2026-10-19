@@ -607,6 +607,7 @@ en:
       one: "starts in %{count} day"
       other: "starts in %{count} days"
     planned: planned
+    active: in progress
     start: Start sprint
     group: Backlog
     tasks_estimated:
