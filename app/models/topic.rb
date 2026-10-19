@@ -31,12 +31,13 @@ class Topic < ApplicationRecord
   }
 
   # Topics whose titles read like `text`, best match first. Each carries a 0-100 `match_percent`.
+  # The score blends whole-title trigram similarity with how much of each side the other covers
+  # (word_similarity both ways, the weaker direction wins), so a single shared word is a weak
+  # match, a half-typed title still finds its topic, and only a near-identical title nears 100%.
   scope :similar_to, ->(text) {
-    # word_similarity matches what is typed against any part of a title, so a half-typed
-    # "refresh tokens" scores high against "Refresh tokens expiring silently".
-    score = sanitize_sql_array([ "GREATEST(similarity(topics.title, ?), word_similarity(?, topics.title))", text, text ])
+    score = sanitize_sql_array([ "(0.5 * similarity(topics.title, ?) + 0.5 * LEAST(word_similarity(?, topics.title), word_similarity(topics.title, ?)))", text, text, text ])
     select("topics.*, ROUND(#{score} * 100)::int AS match_percent")
-      .where("#{score} > 0.15")
+      .where("#{score} > 0.2")
       .order(Arel.sql("#{score} DESC"))
   }
 

@@ -1,7 +1,8 @@
 <% project_header @project, active: :topics %>
 
-<div class="split">
-  <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "similar-topics editor", editor_link_sample_value: t("editor.link_sample"), similar_topics_url_value: similar_project_topics_path(@project) } do |form| %>
+<%# The similar-topics controller wraps the form (the input) and the sidebar (the results frame). %>
+<div class="split" data-controller="similar-topics" data-similar-topics-url-value="<%= similar_project_topics_path(@project) %>">
+  <%= form_with model: [ @project, @topic ], class: "panel panel--form", data: { controller: "editor", editor_link_sample_value: t("editor.link_sample") } do |form| %>
     <header class="panel__bar">
       <%= link_to project_topics_path(@project), class: "thread__back", data: { **hotkey_data(:back) } do %>
         <%= icon "arrow-left" %><span><%= t("topics.back") %></span><%= key_hint(:back) %>

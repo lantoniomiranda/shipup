@@ -81,6 +81,14 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".choice__option", /Internal idea/
   end
 
+  test "the similar-topics controller wraps both the title input and the results frame" do
+    get new_project_topic_path(@project)
+    # Stimulus targets are only found inside the controller's element: results live in the sidebar.
+    assert_select "[data-controller~=similar-topics] input[data-similar-topics-target=input]"
+    assert_select "[data-controller~=similar-topics] turbo-frame#similar_topics[data-similar-topics-target=results]"
+    assert_select "[data-controller~=similar-topics][data-similar-topics-url-value=?]", similar_project_topics_path(@project)
+  end
+
   test "suggests similar topics as the title is typed" do
     get similar_project_topics_path(@project, q: "Refresh tokens expiring")
     assert_response :success
