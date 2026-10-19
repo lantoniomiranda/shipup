@@ -1,23 +1,45 @@
 <%# Keyboard shortcut cheat sheet from config/keybindings.yml, showing the signed-in person's own keys. Open with "?". %>
 <div class="keyhelp" hidden data-shortcuts-target="root" data-action="click->shortcuts#backdrop">
   <div class="keyhelp__panel" role="dialog" aria-label="<%= t("shortcuts.title") %>" aria-modal="true">
-    <header>
+    <header class="keyhelp__head">
       <h2><%= t("shortcuts.title") %></h2>
-      <span><%= link_to t("shortcuts.customize", default: "Customize"), keyboard_settings_path, class: "btn btn--small" %>
+      <span><%= link_to t("shortcuts.customize"), keyboard_settings_path, class: "btn btn--small" %>
       <button type="button" class="icon-button icon-button--small" data-action="shortcuts#close" aria-label="<%= t("shortcuts.close") %>"><%= icon "x", size: 16 %></button></span>
     </header>
+    <div class="keyhelp__intro">
+      <p><%= t("shortcuts.intro_html", example: key_caps("g b"), single: key_caps("n")) %></p>
+      <label class="key-filter">
+        <%= icon "search", size: 16 %>
+        <input type="search" class="key-filter__input" placeholder="<%= t("shortcuts.filter_placeholder") %>" aria-label="<%= t("shortcuts.filter") %>" autocomplete="off"
+               data-shortcuts-target="filter" data-action="input->shortcuts#filter">
+      </label>
+    </div>
+    <div class="keyhelp__scroll">
     <div class="keyhelp__groups">
-      <% Keybindings.by_context.except(:sign_in).each do |context, entries| %>
-        <section>
-          <h3 class="eyebrow"><%= Keybindings::CONTEXTS.dig(context, :title) %></h3>
+      <% Keybindings.sections.each do |section| %>
+        <section class="keyhelp__group" data-shortcuts-target="section">
+          <h3 class="eyebrow"><%= section[:title] %></h3>
+          <p class="keyhelp__hint"><%= shortcut_context_hint(section[:context]) %></p>
           <dl>
-            <% entries.each do |entry| %>
-              <div><dt><%= entry[:label] %></dt><dd><kbd class="key"><%= Keybindings.label(entry[:id]) %></kbd></dd></div>
+            <% section[:shortcuts].each do |entry| %>
+              <% current = Keybindings.keys(entry[:id]) %>
+              <div data-shortcuts-target="item" data-search="<%= shortcut_search_text(entry[:label], current, section[:title]) %>">
+                <dt><%= entry[:label] %></dt>
+                <dd><%= key_caps(current, custom: current != entry[:keys], fixed: entry[:fixed].present?) %></dd>
+              </div>
+            <% end %>
+            <% section[:reference].each do |entry| %>
+              <div class="keyhelp__builtin" data-shortcuts-target="item" data-search="<%= shortcut_search_text(shortcut_reference_label(entry), entry[:keys], section[:title]) %>">
+                <dt><%= shortcut_reference_label(entry) %></dt>
+                <dd><%= key_caps(entry[:keys], fixed: true) %></dd>
+              </div>
             <% end %>
           </dl>
         </section>
       <% end %>
+      <p class="keyhelp__empty" data-shortcuts-target="empty" hidden><%= t("shortcuts.no_match") %></p>
     </div>
-    <p class="keyhelp__note"><%= t("shortcuts.note") %></p>
+    <p class="keyhelp__note"><%= t("shortcuts.note") %> <%= t("shortcuts.legend_html", custom: tag.span(class: "keyhelp__dot"), fixed: icon("lock", size: 11)) %></p>
+    </div>
   </div>
 </div>

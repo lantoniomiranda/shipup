@@ -1,50 +1,105 @@
 <% breadcrumbs [ t("settings.title"), account_path ], t("settings.keyboard.title") %>
-<% content_for :title, "Keyboard shortcuts" %>
+<% content_for :title, t("settings.keyboard.title") %>
+<% sections = Keybindings.sections %>
+<% messages = %w[press_keys recording idle set_to reset_done browser_owned need_shift_arrow no_shift bad_key conflict fix_conflicts unsaved].index_with { |key| t("shortcuts.settings.#{key}") } %>
 
 <section class="panel">
-<div class="form form--scroll">
+<div class="form form--scroll" data-controller="key-settings"
+     data-key-settings-messages-value="<%= messages.merge(then: t("shortcuts.then")).to_json %>"
+     data-key-settings-coactive-value="<%= Keybindings.coactive_contexts.to_json %>">
 <header class="page-header">
   <div class="page-header__heading">
-    <h1>Keyboard shortcuts</h1>
-    <p>Click a shortcut, then press the keys you want. Only combinations that work in every browser are accepted: a letter, a digit, <kbd class="key">/</kbd> or <kbd class="key">?</kbd>, or a two-key chord like <kbd class="key">G</kbd> <kbd class="key">X</kbd>. Ctrl, Cmd and Alt combinations belong to the browser.</p>
+    <h1><%= t("settings.keyboard.title") %></h1>
+    <p><%= t("shortcuts.intro_html", example: key_caps("g b"), single: key_caps("n")) %></p>
+    <p class="key-lead"><%= t("shortcuts.settings.lead") %></p>
   </div>
   <div class="page-header__actions">
-    <%= button_to keyboard_settings_path, method: :delete, class: "btn", form: { class: "inline-form", data: { turbo_confirm: "Reset every shortcut to its default?" } } do %><%= icon "rotate-ccw" %><span>Reset all</span><% end %>
+    <%= button_to keyboard_settings_path, method: :delete, class: "btn", form: { class: "inline-form", data: { turbo_confirm: t("shortcuts.settings.reset_confirm") } } do %><%= icon "rotate-ccw" %><span><%= t("shortcuts.settings.reset_all") %></span><% end %>
   </div>
 </header>
 
 <% if @problems.present? %>
-  <ul class="flash flash--alert key-problems" role="alert"><% @problems.each do |problem| %><li><%= problem %></li><% end %></ul>
+  <div class="flash flash--alert key-problems" role="alert">
+    <strong><%= t("shortcuts.settings.not_saved") %></strong>
+    <ul><% @problems.each do |problem| %><li><%= problem %></li><% end %></ul>
+  </div>
 <% end %>
 
-<%= form_with url: keyboard_settings_path, method: :patch, class: "key-settings", data: { controller: "key-settings" } do %>
-  <% Keybindings.by_context.except(:sign_in).each do |context, entries| %>
-    <section class="card-panel">
-      <h2><%= Keybindings::CONTEXTS.dig(context, :title) %></h2>
+<div class="key-toolbar">
+  <label class="key-filter">
+    <%= icon "search", size: 16 %>
+    <input type="search" class="key-filter__input" placeholder="<%= t("shortcuts.filter_placeholder") %>" aria-label="<%= t("shortcuts.filter") %>" autocomplete="off"
+           data-key-settings-target="filter" data-action="input->key-settings#filter">
+  </label>
+  <nav class="key-nav" aria-label="<%= t("shortcuts.jump_to") %>">
+    <% sections.each do |section| %>
+      <a href="#keys-<%= section[:context] %>" class="key-nav__link" data-key-settings-target="navLink" data-context="<%= section[:context] %>"><%= section[:title] %></a>
+    <% end %>
+  </nav>
+</div>
+
+<%= form_with url: keyboard_settings_path, method: :patch, class: "key-settings", data: { key_settings_target: "form" } do %>
+  <% sections.each do |section| %>
+    <% context = section[:context] %>
+    <section class="card-panel key-section" id="keys-<%= context %>" data-key-settings-target="section" data-context="<%= context %>">
+      <header class="key-section__head">
+        <h2><%= section[:title] %></h2>
+        <p><%= shortcut_context_hint(context) %></p>
+      </header>
       <ul class="key-rows">
-        <% entries.each do |entry| %>
+        <% section[:shortcuts].each do |entry| %>
           <% id = entry[:id] %>
           <% current = @overrides[id.to_s].presence || entry[:keys] %>
-          <li class="key-row <%= "key-row--changed" if current != entry[:keys] %>">
-            <span class="key-row__label"><%= entry[:label] %></span>
-            <% if entry[:fixed] %>
-              <kbd class="key key--fixed" title="This one can't be changed"><%= Keybindings.label(entry[:keys]) %></kbd>
-            <% else %>
-              <%= hidden_field_tag "keybindings[#{id}]", current, id: "keybinding_#{id}", data: { key_settings_target: "field", default: entry[:keys] } %>
-              <button type="button" class="key-capture" data-key-settings-target="button" data-action="key-settings#record"
-                      data-id="<%= id %>" data-single-key="<%= entry[:single_key].present? %>" data-shift-arrow="<%= entry[:shift_arrow].present? %>"
-                      aria-label="Change shortcut for <%= entry[:label] %>"><kbd class="key"><%= Keybindings.label(current) %></kbd></button>
-              <button type="button" class="key-row__reset" data-action="key-settings#reset" data-id="<%= id %>" aria-label="Reset <%= entry[:label] %>" title="Reset to <%= Keybindings.label(entry[:keys]) %>"><%= icon "rotate-ccw", size: 14 %></button>
-            <% end %>
+          <% changed = current != entry[:keys] %>
+          <li class="key-row <%= "key-row--changed" if changed %> <%= "key-row--fixed" if entry[:fixed] %>" id="key-<%= id %>" data-key-settings-target="row"
+              data-id="<%= id %>" data-context="<%= context %>" data-label="<%= entry[:label] %>" data-spec="<%= current %>" data-default="<%= entry[:keys] %>"
+              data-search="<%= shortcut_search_text(entry[:label], [ current, entry[:keys] ], section[:title]) %>">
+            <div class="key-row__text">
+              <span class="key-row__label"><%= entry[:label] %></span>
+              <span class="key-row__meta">
+                <% if entry[:single_key] %><span class="key-row__note"><%= t("shortcuts.single_key_note") %></span><% end %>
+                <% if entry[:shift_arrow] %><span class="key-row__note"><%= t("shortcuts.shift_arrow_note") %></span><% end %>
+                <span class="key-row__state" data-key-settings-target="state"><%= t("shortcuts.customized") %><span class="key-row__default"> · <%= t("shortcuts.default_keys", keys: Keybindings.label(entry[:keys])) %></span></span>
+              </span>
+              <span class="key-row__warn" data-key-settings-target="warn" role="alert" hidden></span>
+            </div>
+            <div class="key-row__keys">
+              <% if entry[:fixed] %>
+                <span class="key-fixed" title="<%= t("shortcuts.fixed_title") %>"><%= key_caps(entry[:keys], fixed: true) %><%= icon "lock", size: 14 %></span>
+              <% else %>
+                <%= hidden_field_tag "keybindings[#{id}]", current, id: "keybinding_#{id}", data: { key_settings_target: "field", default: entry[:keys], initial: current } %>
+                <button type="button" class="key-capture" data-key-settings-target="button" data-action="key-settings#record"
+                        data-id="<%= id %>" data-single-key="<%= entry[:single_key].present? %>" data-shift-arrow="<%= entry[:shift_arrow].present? %>"
+                        aria-label="<%= t("shortcuts.settings.change", label: entry[:label]) %>"><%= key_caps(current, custom: changed) %></button>
+                <button type="button" class="key-row__reset" data-action="key-settings#reset" data-id="<%= id %>" data-key-settings-target="resetButton" <%= "hidden" unless changed %>
+                        aria-label="<%= t("shortcuts.settings.reset_one", label: entry[:label]) %>" title="<%= t("shortcuts.settings.reset_to", keys: Keybindings.label(entry[:keys])) %>"><%= icon "rotate-ccw", size: 14 %></button>
+              <% end %>
+            </div>
           </li>
         <% end %>
       </ul>
+      <% if section[:reference].any? %>
+        <div class="key-builtin">
+          <h3 class="eyebrow"><%= icon "lock", size: 12 %> <%= t("shortcuts.built_in") %></h3>
+          <ul class="key-rows">
+            <% section[:reference].each do |entry| %>
+              <li class="key-row key-row--fixed" data-key-settings-target="row" data-search="<%= shortcut_search_text(shortcut_reference_label(entry), entry[:keys], section[:title]) %>">
+                <div class="key-row__text"><span class="key-row__label"><%= shortcut_reference_label(entry) %></span></div>
+                <div class="key-row__keys"><span class="key-fixed" title="<%= t("shortcuts.fixed_title") %>"><%= key_caps(entry[:keys], fixed: true) %></span></div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
     </section>
   <% end %>
 
+  <p class="key-empty" data-key-settings-target="empty" hidden><%= t("shortcuts.no_match") %></p>
+
   <div class="key-settings__bar">
-    <p class="key-settings__hint" data-key-settings-target="hint" role="status">Press the keys for the shortcut you picked, or Esc to cancel.</p>
-    <button type="submit" class="btn btn--primary" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span>Save shortcuts</span><%= key_hint(:submit) %></button>
+    <p class="key-settings__hint" data-key-settings-target="hint" role="status"><%= t("shortcuts.settings.idle") %></p>
+    <span class="tag tag--unsaved key-settings__dirty" data-key-settings-target="dirty" hidden></span>
+    <button type="submit" class="btn btn--primary" data-key-settings-target="save" data-hotkey="<%= Keybindings.keys(:submit) %>"><%= icon "check" %><span><%= t("shortcuts.settings.save") %></span></button>
   </div>
 <% end %>
 </div>

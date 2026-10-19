@@ -12,6 +12,8 @@ module Keybindings
   CONTEXTS = CONFIG.fetch(:contexts).freeze
   SHORTCUTS = CONFIG.fetch(:shortcuts).transform_values { |entry| entry.merge(context: entry[:context].to_sym) }.freeze
 
+  REFERENCE = CONFIG.fetch(:reference, {}).transform_values { |entry| entry.merge(context: entry[:context].to_sym) }.freeze
+
   KEY = %r{[a-z0-9/?]}
   SPEC = /\A(?:#{KEY}(?: #{KEY})?|ctrl\+enter|shift\+arrow(?:left|right|up|down)|arrow(?:left|right|up|down)|escape)\z/
   ARROWS = %w[arrowleft arrowright arrowup arrowdown].freeze
@@ -31,9 +33,33 @@ module Keybindings
   def fixed?(id) = entry(id)[:fixed] == true
   def customizable = all.reject { |entry| entry[:fixed] }
 
-  # Entries grouped by context in file order, for the help dialog and the settings page.
+  # Entries grouped by context, in the order of `contexts:` in the YAML.
   def by_context
-    all.group_by { |entry| entry[:context] }
+    grouped = all.group_by { |entry| entry[:context] }
+    CONTEXTS.keys.filter_map { |context| [ context, grouped[context] ] if grouped[context] }.to_h
+  end
+
+  # Built-in keys that can't be remapped (see `reference:` in the YAML).
+  def reference
+    REFERENCE.map { |id, entry| entry.merge(id: id) }
+  end
+
+  # What the help dialog and the settings page list: one section per context (sign-in excluded, it
+  # is shown before anyone is signed in) with its shortcuts and its built-in reference keys.
+  def sections
+    shortcuts = by_context
+    built_in = reference.group_by { |entry| entry[:context] }
+    CONTEXTS.keys.excluding(:sign_in).filter_map do |context|
+      next unless shortcuts.key?(context) || built_in.key?(context)
+
+      { context: context, title: CONTEXTS.dig(context, :title), shortcuts: shortcuts.fetch(context, []), reference: built_in.fetch(context, []) }
+    end
+  end
+
+  # For each context, the contexts that can be on screen with it (the settings page uses this to
+  # warn about clashes while you type, the server still has the last word).
+  def coactive_contexts
+    CONTEXTS.keys.index_with { |a| CONTEXTS.keys.select { |b| co_active?(a, b) } }
   end
 
   # ---- effective keys ------------------------------------------------------------------------
@@ -45,7 +71,7 @@ module Keybindings
   # "g b" -> "G B", "ctrl+enter" -> "Ctrl Enter", "escape" -> "Esc": what a key cap shows.
   def label(id_or_keys, user: Current.user)
     spec = id_or_keys.is_a?(Symbol) ? keys(id_or_keys, user: user) : id_or_keys.to_s
-    spec.split(/[ +]/).map { |part| { "escape" => "Esc", "ctrl" => "Ctrl", "shift" => "Shift", "enter" => "Enter", "arrowleft" => "←", "arrowright" => "→", "arrowup" => "↑", "arrowdown" => "↓" }.fetch(part, part.upcase) }.join(" ")
+    spec.split(/[ +]/).map { |part| { "escape" => "Esc", "ctrl" => "Ctrl", "shift" => "Shift", "enter" => "Enter", "tab" => "Tab", "space" => "Space", "arrowleft" => "←", "arrowright" => "→", "arrowup" => "↑", "arrowdown" => "↓" }.fetch(part, part.upcase) }.join(" ")
   end
 
   # ---- validation -----------------------------------------------------------------------------

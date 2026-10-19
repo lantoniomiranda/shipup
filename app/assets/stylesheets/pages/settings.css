@@ -22,6 +22,10 @@
 
 @media (max-width: 900px) {
   .settings { flex-direction: column; }
-  .settings__nav { flex-basis: auto; }
+  .settings__nav { flex: none; gap: 8px; padding: 12px; }
+  .settings__nav h2, .settings__me, .settings__item small { display: none; }
+  .settings__nav nav { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
+  .settings__item { flex: none; padding: 8px 12px; }
+  .settings__item--active { box-shadow: inset 0 -3px 0 var(--accent); }
 }
 .settings .quiet-hours { align-self: flex-start; }

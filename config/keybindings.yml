@@ -8,11 +8,16 @@
 # project page, anything else on that one page. Two shortcuts may share a key only when they can
 # never be active at the same time (e.g. `n` for "new topic" and "new project"). `fixed: true`
 # entries cannot be remapped. `single_key: true` entries are handled by dedicated JavaScript and
-# cannot be chords; `shift_arrow: true` ones must be Shift+arrow.
+# cannot be chords; `shift_arrow: true` ones must be Shift+arrow. The order of `contexts` is the order
+# the help dialog and Settings > Keyboard list them in.
+#
+# `reference` lists keys that are built into a page's own behaviour: they are documented next to the
+# shortcuts of the same context but can't be remapped and aren't checked for conflicts. `keys` is a
+# list of alternatives; the label lives in the locale files (shortcuts.reference.<id>).
 contexts:
   global:     { title: "Everywhere" }
-  project:    { title: "Inside a project" }
   projects:   { title: "Projects page" }
+  project:    { title: "Inside a project" }
   topics:     { title: "Topics list", in_project: true }
   topic:      { title: "A topic", in_project: true }
   draft:      { title: "Create task / chain", in_project: true }
@@ -69,3 +74,12 @@ shortcuts:
   reset_appearance: { context: appearance, keys: "r",       label: "Reset to default" }
   sign_in_google:    { context: sign_in, keys: "g",         label: "Continue with Google" }
   sign_in_microsoft: { context: sign_in, keys: "m",         label: "Continue with Microsoft" }
+
+reference:
+  palette_open:        { context: global, keys: ["ctrl+space"] }
+  palette_move:        { context: global, keys: ["arrowup", "arrowdown"] }
+  palette_open_result: { context: global, keys: ["enter"] }
+  palette_filters:     { context: global, keys: ["tab"] }
+  composer_send:       { context: topic,  keys: ["enter"] }
+  composer_newline:    { context: topic,  keys: ["shift+enter"] }
+  board_open_card:     { context: board,  keys: ["enter"] }

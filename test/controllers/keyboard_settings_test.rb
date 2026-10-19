@@ -11,10 +11,42 @@ class KeyboardSettingsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".key-settings h2", text: "Everywhere"
     assert_select ".key-settings h2", text: "Board"
-    assert_select ".key-row", Keybindings.all.count { |entry| entry[:context] != :sign_in }
+    assert_select ".key-row[data-id]", Keybindings.all.count { |entry| entry[:context] != :sign_in }
     assert_select ".key-capture", Keybindings.customizable.count { |entry| entry[:context] != :sign_in }
-    assert_select ".key--fixed", 3 # back, submit, open project
+    assert_select ".key-row--fixed[data-id] .keys--fixed", 3 # back, submit, open project
     assert_select "input[type=hidden][name='keybindings[board]'][value='g b']"
+  end
+
+  test "sections come in a sensible order with anchors, a jump bar, a filter and the built-in keys" do
+    get keyboard_settings_path
+
+    titles = css_select(".key-settings .key-section h2").map(&:text)
+    assert_equal [ "Everywhere", "Projects page", "Inside a project" ], titles.first(3)
+    assert_select ".key-nav a[href='#keys-global']", text: "Everywhere"
+    assert_select ".key-nav a[href='#keys-board']"
+    assert_select "section#keys-board"
+    assert_select "input[type=search][data-key-settings-target=filter]"
+    assert_select ".key-builtin .key-row", Keybindings.reference.size
+    assert_select "#keys-global .key-builtin .keys[data-keys='ctrl+space']"
+    assert_select "#key-board .keys[data-keys='g b'] kbd", 2
+    assert_select ".key-row__note", text: "One key only"
+    assert_select "[data-key-settings-coactive-value]"
+  end
+
+  test "a customised row is marked and offers a reset, a default row does not" do
+    preference.remap_keybindings!("board" => "g x")
+    get keyboard_settings_path
+
+    assert_select "#key-board.key-row--changed .keys--custom[data-keys='g x']"
+    assert_select "#key-board .key-row__default", /G B/
+    assert_select "#key-board .key-row__reset:not([hidden])"
+    assert_select "#key-topics .key-row__reset[hidden]"
+    assert_select "#key-topics.key-row--changed", count: 0
+  end
+
+  test "the page is translated" do
+    get keyboard_settings_path(locale: "pt-PT"), headers: { "Accept-Language" => "pt-PT" }
+    assert_select ".key-filter__input[placeholder=?]", I18n.t("shortcuts.filter_placeholder", locale: :"pt-PT")
   end
 
   test "the sign-in keys are not offered" do
