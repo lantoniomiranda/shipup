@@ -576,6 +576,8 @@ it:
       other: "Bozza da %{count} risposte"
     another: Prova un'altra bozza
     draft: Bozza con l'IA
+    switched_off: "Le bozze con IA sono disattivate. Imposta LLM_ENABLED e LLM_API_KEY."
+    failed: "La bozza con IA non è riuscita: %{message}"
 
   editor:
     link_sample: testo

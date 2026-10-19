@@ -576,6 +576,8 @@ pt-PT:
       other: "Rascunho a partir de %{count} respostas"
     another: Tentar outro rascunho
     draft: Rascunhar com IA
+    switched_off: "Os rascunhos com IA estão desligados. Defina LLM_ENABLED e LLM_API_KEY."
+    failed: "O rascunho com IA falhou: %{message}"
 
   editor:
     link_sample: texto

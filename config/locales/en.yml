@@ -576,6 +576,8 @@ en:
       other: "Drafted from %{count} replies"
     another: Try another draft
     draft: Draft with AI
+    switched_off: "AI drafts are switched off. Set LLM_ENABLED and LLM_API_KEY."
+    failed: "The AI draft failed: %{message}"
 
   editor:
     link_sample: text

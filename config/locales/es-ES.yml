@@ -576,6 +576,8 @@ es-ES:
       other: "Borrador a partir de %{count} respuestas"
     another: Probar otro borrador
     draft: Redactar con IA
+    switched_off: "Los borradores con IA están desactivados. Define LLM_ENABLED y LLM_API_KEY."
+    failed: "El borrador con IA ha fallado: %{message}"
 
   editor:
     link_sample: texto

@@ -576,6 +576,8 @@ fr-FR:
       other : "Brouillon à partir de %{count} réponses"
     another: Essayer un autre brouillon
     draft: Rédiger avec l’IA
+    switched_off: "Les brouillons IA sont désactivés. Définissez LLM_ENABLED et LLM_API_KEY."
+    failed: "Le brouillon IA a échoué : %{message}"
 
   editor:
     link_sample: texte
