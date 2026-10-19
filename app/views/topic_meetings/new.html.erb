@@ -1,7 +1,7 @@
 <% project_header @project, active: :topics %>
 <% provider = Setting.meeting_provider %>
 
-<%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form", meeting_form_zone_value: Current.user.time_zone } do |form| %>
+<%= form_with url: project_topic_meetings_path(@project, @topic), class: "split", data: { controller: "meeting-form", meeting_form_zone_value: Current.user.time_zone, meeting_form_inside_value: t("meetings.inside_hours"), meeting_form_outside_value: t("meetings.outside_hours"), meeting_form_outside_one_value: t("meetings.outside_summary", count: 1), meeting_form_outside_other_value: t("meetings.outside_summary", count: 2) } do |form| %>
   <section class="panel panel--form">
     <header class="panel__bar">
       <%= link_to project_topic_path(@project, @topic), class: "thread__back", data: { **hotkey_data(:back) } do %>
@@ -21,12 +21,12 @@
 
       <div class="field-row field-row--wide">
         <div class="field">
-          <%= label_tag :date, "Date", class: "eyebrow" %>
+          <%= label_tag :date, t("meetings.date"), class: "eyebrow" %>
           <%= date_field_tag :date, @default_start.to_date, min: Date.current, required: true, class: "input",
                              data: { meeting_form_target: "date", action: "input->meeting-form#recompute" } %>
         </div>
         <div class="field">
-          <%= label_tag :time, "Time", class: "eyebrow" %>
+          <%= label_tag :time, t("meetings.time"), class: "eyebrow" %>
           <%= time_field_tag :time, @default_start.strftime("%H:%M"), step: 300, required: true, class: "input",
                              data: { meeting_form_target: "time", action: "input->meeting-form#recompute" } %>
         </div>
@@ -45,23 +45,23 @@
       </div>
 
       <div class="field">
-        <p class="eyebrow">Suggested times · best overlap of working hours</p>
+        <p class="eyebrow"><%= t("meetings.suggested") %></p>
         <div class="chips chips--wrap">
           <% @slots.each do |slot| %>
             <% local = slot.starts_at.in_time_zone %>
             <button type="button" class="chip" data-action="meeting-form#pick" data-meeting-form-date-param="<%= local.to_date.iso8601 %>" data-meeting-form-time-param="<%= local.strftime("%H:%M") %>">
-              <%= local.strftime("%a %-d %b · %H:%M") %> · <%= slot.covered %>/<%= slot.total %> available
+              <%= local.strftime("%a %-d %b · %H:%M") %> · <%= t("meetings.available", covered: slot.covered, total: slot.total) %>
             </button>
           <% end %>
         </div>
-        <p class="meeting-when" data-meeting-form-target="summary" role="status">Times are in your time zone, <%= Current.user.time_zone.tr("_", " ") %> (UTC<%= Time.zone.now.formatted_offset %>).</p>
+        <p class="meeting-when" data-meeting-form-target="summary" role="status"><%= t("meetings.tz_note", zone: Current.user.time_zone.tr("_", " "), offset: Time.zone.now.formatted_offset) %></p>
       </div>
 
       <div class="field">
-        <p class="eyebrow"><%= "Invite · #{pluralize(@invitees.size, "person")}" %></p>
+        <p class="eyebrow"><%= t("meetings.invite", count: @invitees.size) %></p>
         <ul class="invitees">
           <% @invitees.each do |user, reason| %>
-            <% in_topic = reason != "Not in this topic" %>
+            <% in_topic = reason != t("meetings.not_in_topic") %>
             <% prefs = user.preference %>
             <li class="invitee <%= "invitee--off" unless in_topic %>" data-meeting-form-target="invitee" data-zone="<%= user.time_zone %>"
                 data-work-start="<%= prefs.work_day_start.hour * 60 + prefs.work_day_start.min %>" data-work-end="<%= prefs.work_day_end.hour * 60 + prefs.work_day_end.min %>">

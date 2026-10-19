@@ -160,3 +160,15 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
   .split > .panel--form { flex: none; overflow: visible; }
   .split > .panel--form .panel__footer { position: sticky; bottom: 0; }
 }
+
+/* Meeting form on narrow screens: fields wrap, invitee rows take two lines. */
+@media (max-width: 700px) {
+  .form { padding: 20px 16px 18px; }
+  .form__heading h1 { font-size: 28px; }
+  .field-row--wide { flex-wrap: wrap; }
+  .field-row--wide .field { flex: 1 1 140px; min-width: 0; }
+  .invitee { flex-wrap: wrap; gap: 6px 12px; padding: 10px 12px; }
+  .invitee__name { flex: 1 1 120px; min-width: 0; }
+  .invitee__time { flex: 1 1 auto; padding-left: 58px; }
+  .chips--wrap .chip { white-space: normal; text-align: left; }
+}

@@ -824,6 +824,17 @@ pt-PT:
     opened: Abriu o tópico
     replied: Respondeu
     not_in_topic: Não está neste tópico
+    date: "Data"
+    time: "Hora"
+    suggested: "Horas sugeridas · maior sobreposição de horário de trabalho"
+    available: "%{covered}/%{total} disponíveis"
+    tz_note: "As horas estão no seu fuso horário, %{zone} (UTC%{offset})."
+    future: "Escolha uma hora no futuro."
+    inside_hours: "Dentro do horário de trabalho"
+    outside_hours: "Fora do horário de trabalho"
+    outside_summary:
+      one: "%{count} pessoa convidada está fora do horário de trabalho"
+      other: "%{count} pessoas convidadas estão fora do horário de trabalho"
     create: Criar e publicar ligação
     topic: Tópico
     hours: Horário de trabalho · 24 h em UTC

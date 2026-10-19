@@ -824,6 +824,17 @@ es-ES:
     opened: Abrió el tema
     replied: Respondió
     not_in_topic: No está en este tema
+    date: "Fecha"
+    time: "Hora"
+    suggested: "Horas sugeridas · mayor coincidencia de horario laboral"
+    available: "%{covered}/%{total} disponibles"
+    tz_note: "Las horas están en tu zona horaria, %{zone} (UTC%{offset})."
+    future: "Elige una hora futura."
+    inside_hours: "Dentro de su horario laboral"
+    outside_hours: "Fuera de su horario laboral"
+    outside_summary:
+      one: "%{count} persona invitada está fuera del horario laboral"
+      other: "%{count} personas invitadas están fuera del horario laboral"
     create: Crear y publicar enlace
     topic: Tema
     hours: Horario laboral · 24 h en UTC

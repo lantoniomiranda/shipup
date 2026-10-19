@@ -824,6 +824,17 @@ en:
     opened: Opened the topic
     replied: Replied
     not_in_topic: Not in this topic
+    date: "Date"
+    time: "Time"
+    suggested: "Suggested times · best overlap of working hours"
+    available: "%{covered}/%{total} available"
+    tz_note: "Times are in your time zone, %{zone} (UTC%{offset})."
+    future: "Pick a time in the future."
+    inside_hours: "Within their working hours"
+    outside_hours: "Outside their working hours"
+    outside_summary:
+      one: "%{count} invited person is outside working hours"
+      other: "%{count} invited people are outside working hours"
     create: Create and post link
     topic: Topic
     hours: Working hours · 24h in UTC
