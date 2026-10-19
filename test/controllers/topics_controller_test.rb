@@ -106,6 +106,42 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".similar__empty"
   end
 
+  test "the post text also feeds the suggestions" do
+    get similar_project_topics_path(@project, q: "Sessions drop", body: "Partners report 401s exactly after authorizing")
+    assert_select ".similar strong", @topic.title
+  end
+
+  test "a topic page lists related topics in a lazy frame that refreshes itself" do
+    get project_topic_path(@project, @topic)
+    assert_select "turbo-frame#related_topics[loading=lazy][data-controller~=frame-refresh][src=?]", related_project_topic_path(@project, @topic)
+  end
+
+  test "related topics are computed from the whole discussion and update with new replies" do
+    sibling = @project.topics.create!(author: users(:ines), title: "Gateway logouts on mobile", body: "Gateway logouts on mobile happen every morning, nobody knows why.")
+    get related_project_topic_path(@project, @topic)
+    assert_response :success
+    assert_select ".similar strong", text: sibling.title, count: 0
+
+    @topic.messages.create!(author: users(:jonas), body: "Gateway logouts on mobile happen every morning here too, nobody knows why.")
+    get related_project_topic_path(@project, @topic)
+    assert_select ".similar strong", sibling.title
+    assert_select ".similar strong", text: @topic.title, count: 0
+  end
+
+  test "says so when a topic has no related topics" do
+    get related_project_topic_path(@project, @topic)
+    assert_select ".similar__empty"
+  end
+
+  test "related topics of a project the user is not on are a 404" do
+    other = Project.create!(name: "Secret", key: "SEC")
+    secret = other.topics.create!(author: users(:ines), title: "Hidden")
+    sign_out
+    sign_in_as users(:jonas)
+    get related_project_topic_path(other, secret)
+    assert_response :not_found
+  end
+
   test "does not search for very short queries" do
     get similar_project_topics_path(@project, q: "re")
     assert_select ".similar", count: 0

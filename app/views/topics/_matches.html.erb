@@ -1,0 +1,11 @@
+<%# Similar / related topic cards with their match percentage. locals: matches, project, empty_text %>
+<% if matches.empty? && empty_text %><p class="similar__empty"><%= empty_text %></p><% end %>
+<% matches.each_with_index do |match, index| %>
+  <% topic = match.topic %>
+  <%= link_to project_topic_path(project, topic), class: "similar #{"similar--best" if index.zero?}", target: "_top" do %>
+    <div class="similar__head"><strong><%= topic.title %></strong><span><%= match.percent %>%</span></div>
+    <div class="meter"><span style="width: <%= match.percent %>%"></span></div>
+    <p><%= t("enums.topic_status.#{topic.status}") %> · <%= t("topics.replies", count: topic.messages_count) %></p>
+    <% if index.zero? %><span class="similar__read"><%= t("topics.read_first") %> <%= icon "arrow-up-right", size: 12 %></span><% end %>
+  <% end %>
+<% end %>

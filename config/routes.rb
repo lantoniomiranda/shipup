@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     end
     resources :topics, only: %i[index show new create] do
       get :similar, on: :collection
+      get :related, on: :member
       patch :cancel, on: :member
       patch :reopen, on: :member
       resource :vote, only: :create, controller: "topic_votes"

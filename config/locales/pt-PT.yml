@@ -430,6 +430,8 @@ pt-PT:
     post: Publicar tópico
     similar: Tópicos semelhantes · atualiza enquanto escreve
     no_similar: "Ainda não há tópicos semelhantes. Continue a escrever."
+    related: "Tópicos relacionados · atualizam com a discussão"
+    no_related: "Ainda não há tópicos relacionados."
     empty_html: "Nenhum tópico corresponde. %{link}."
     start_one: Começar um
     top: Mais votados

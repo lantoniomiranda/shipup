@@ -1,0 +1,3 @@
+<%= turbo_frame_tag "related_topics" do %>
+  <%= render "topics/matches", matches: @matches, project: @project, empty_text: t("topics.no_related") %>
+<% end %>

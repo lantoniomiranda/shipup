@@ -430,6 +430,8 @@ it:
     post: Pubblica argomento
     similar: Argomenti simili · si aggiornano mentre scrivi
     no_similar: "Nessun argomento simile per ora. Continua a scrivere."
+    related: "Argomenti correlati · si aggiornano con la discussione"
+    no_related: "Ancora nessun argomento correlato."
     empty_html: "Nessun argomento corrisponde. %{link}."
     start_one: Inizia uno
     top: Più votati

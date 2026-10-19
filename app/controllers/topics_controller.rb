@@ -57,7 +57,14 @@ class TopicsController < ApplicationController
   # Titles that read like what the user is typing, for the "Similar topics" side panel.
   def similar
     @query = params[:q].to_s.strip
-    @similar = @query.length < 3 ? [] : @project.topics.similar_to(@query).limit(3)
+    @matches = TopicSimilarity.new(project: @project, title: @query, body: params[:body]).matches
+    render layout: false
+  end
+
+  # Other topics that read like this whole discussion; recalculated on every request so new replies show up.
+  def related
+    @topic = @project.topics.find(params[:id])
+    @matches = TopicSimilarity.for_topic(@topic).matches
     render layout: false
   end
 

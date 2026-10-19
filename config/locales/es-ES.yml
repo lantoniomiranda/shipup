@@ -430,6 +430,8 @@ es-ES:
     post: Publicar tema
     similar: Temas parecidos · se actualizan mientras escribes
     no_similar: "Aún no hay temas parecidos. Sigue escribiendo."
+    related: "Temas relacionados · se actualizan con la conversación"
+    no_related: "Todavía no hay temas relacionados."
     empty_html: "Ningún tema coincide. %{link}."
     start_one: Empieza uno
     top: Más votados

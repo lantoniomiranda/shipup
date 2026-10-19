@@ -42,7 +42,7 @@
               <button type="button" aria-label="<%= t("common.#{label}") %>" data-action="editor#format" data-editor-token-param="<%= token %>" data-editor-kind-param="<%= label %>"><%= icon glyph, size: 15 %></button>
             <% end %>
           </div>
-          <%= form.text_area :body, class: "editor__input", data: { editor_target: "input" } %>
+          <%= form.text_area :body, class: "editor__input", data: { editor_target: "input", similar_topics_target: "body", action: "input->similar-topics#search" } %>
         </div>
       </div>
 

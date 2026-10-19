@@ -430,6 +430,8 @@ fr-FR:
     post: Publier le sujet
     similar: Sujets similaires · mis à jour en cours de saisie
     no_similar: "Aucun sujet similaire pour l'instant. Continuez à écrire."
+    related: "Sujets liés · mis à jour avec la discussion"
+    no_related: "Aucun sujet lié pour l’instant."
     empty_html : "Aucun sujet ne correspond. %{link}."
     start_one: En créer un
     top: Les plus votés

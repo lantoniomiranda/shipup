@@ -430,6 +430,8 @@ en:
     post: Post topic
     similar: Similar topics · updates as you type
     no_similar: "No similar topics yet. Keep typing."
+    related: "Related topics · updates with the discussion"
+    no_related: "No related topics yet."
     empty_html: "No topics match. %{link}."
     start_one: Start one
     top: Top voted

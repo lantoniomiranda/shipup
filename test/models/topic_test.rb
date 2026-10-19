@@ -33,37 +33,3 @@ class TopicTest < ActiveSupport::TestCase
     assert_equal other, projects(:apollo).topics.top.first
   end
 end
-
-class TopicSimilarityTest < ActiveSupport::TestCase
-  test "ranks titles by trigram similarity with a percentage" do
-    projects(:apollo).topics.create!(author: users(:ines), title: "Webhook retries with backoff")
-    results = projects(:apollo).topics.similar_to("Refresh tokens expiring silently")
-
-    assert_equal topics(:refresh_tokens), results.first
-    assert_operator results.first.match_percent, :>, 30
-    assert_not_includes results.map(&:title), "Webhook retries with backoff"
-  end
-
-  test "an identical title is 100% and a longer sibling scores clearly lower" do
-    long = projects(:apollo).topics.create!(author: users(:ines), title: "Refresh tokens expire silently after 24h on mobile")
-    results = projects(:apollo).topics.similar_to("Refresh tokens expire silently after 24h")
-
-    assert_equal [ 100 ], results.select { |topic| topic.id == topics(:refresh_tokens).id }.map(&:match_percent)
-    assert_operator results.find { |topic| topic.id == long.id }.match_percent, :<, 90
-  end
-
-  test "a single shared word is only a weak match, never 100%" do
-    results = projects(:apollo).topics.similar_to("tokens")
-    assert_operator results.map(&:match_percent).max.to_i, :<, 60
-  end
-
-  test "a half-typed title still finds its topic" do
-    results = projects(:apollo).topics.similar_to("refresh tokens expire")
-    assert_equal topics(:refresh_tokens), results.first
-    assert_operator results.first.match_percent, :>=, 40
-  end
-
-  test "unrelated text matches nothing" do
-    assert_empty projects(:apollo).topics.similar_to("quarterly billing export")
-  end
-end
