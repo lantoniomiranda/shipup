@@ -9,7 +9,7 @@ class TopicMeetingsController < ApplicationController
 
   def create
     starts_at = requested_start
-    return redirect_to(new_project_topic_meeting_path(@project, @topic), alert: "Pick a time in the future.") if starts_at <= Time.current
+    return redirect_to(new_project_topic_meeting_path(@project, @topic), alert: t("meetings.future")) if starts_at <= Time.current
 
     meeting = @topic.meetings.build(organizer: Current.user, provider: Setting.meeting_provider.to_s,
                                     starts_at: starts_at, duration_minutes: params[:duration_minutes].to_i,

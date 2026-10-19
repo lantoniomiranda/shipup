@@ -457,6 +457,7 @@ pt-PT:
     what_next: E agora
     canceled_note: Este tópico foi cancelado. Continua legível; reabra-o para continuar a conversa ou planear tarefas.
     move_on: Avançar
+    move_on_as: Avançar este tópico como
     move_as: Avançar este tópico como
     create_task: Criar tarefa
     create_task_hint: Uma única peça.
@@ -575,6 +576,8 @@ pt-PT:
       other: "Rascunho a partir de %{count} respostas"
     another: Tentar outro rascunho
     draft: Rascunhar com IA
+    switched_off: "Os rascunhos com IA estão desligados. Defina LLM_ENABLED e LLM_API_KEY."
+    failed: "O rascunho com IA falhou: %{message}"
 
   editor:
     link_sample: texto
@@ -822,6 +825,17 @@ pt-PT:
     opened: Abriu o tópico
     replied: Respondeu
     not_in_topic: Não está neste tópico
+    date: "Data"
+    time: "Hora"
+    suggested: "Horas sugeridas · maior sobreposição de horário de trabalho"
+    available: "%{covered}/%{total} disponíveis"
+    tz_note: "As horas estão no seu fuso horário, %{zone} (UTC%{offset})."
+    future: "Escolha uma hora no futuro."
+    inside_hours: "Dentro do horário de trabalho"
+    outside_hours: "Fora do horário de trabalho"
+    outside_summary:
+      one: "%{count} pessoa convidada está fora do horário de trabalho"
+      other: "%{count} pessoas convidadas estão fora do horário de trabalho"
     create: Criar e publicar ligação
     topic: Tópico
     hours: Horário de trabalho · 24 h em UTC

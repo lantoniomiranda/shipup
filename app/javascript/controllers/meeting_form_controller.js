@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
 // marker on the working-hours bars (24h UTC axis).
 export default class extends Controller {
   static targets = ["date", "time", "hours", "invitee", "summary"]
-  static values = { zone: String }
+  static values = { zone: String, inside: String, outside: String, outsideOne: String, outsideOther: String }
 
   connect() {
     this.recompute()
@@ -30,12 +30,12 @@ export default class extends Controller {
       const outside = minutes < Number(row.dataset.workStart) || minutes >= Number(row.dataset.workEnd)
       row.classList.toggle("invitee--outside", outside)
       row.querySelector("[data-clock]").textContent = this.format(instant, zone)
-      row.querySelector(".invitee__time").title = outside ? "Outside their working hours" : "Within their working hours"
+      row.querySelector(".invitee__time").title = outside ? this.outsideValue : this.insideValue
     })
 
     const outsideCount = this.inviteeTargets.filter((row) => row.classList.contains("invitee--outside") && row.querySelector("input[type=checkbox]:checked")).length
     this.summaryTarget.textContent = `${this.format(instant, this.zoneValue, true)} (${this.zoneValue.replaceAll("_", " ")})` +
-      (outsideCount ? ` · ${outsideCount} invited ${outsideCount === 1 ? "person is" : "people are"} outside working hours` : "")
+      (outsideCount ? ` · ${(outsideCount === 1 ? this.outsideOneValue : this.outsideOtherValue).replace(/\d+/, outsideCount)}` : "")
   }
 
   // The instant for the wall-clock date and time typed in, in the organiser's zone.

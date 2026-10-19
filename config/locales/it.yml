@@ -457,6 +457,7 @@ it:
     what_next: E ora?
     canceled_note: Questo argomento è stato annullato. Resta leggibile; riaprilo per continuare a parlarne o pianificare il lavoro.
     move_on: Procedi
+    move_on_as: Procedi con questo argomento come
     move_as: Porta avanti questo argomento come
     create_task: Crea attività
     create_task_hint: Un singolo pezzo di lavoro.
@@ -575,6 +576,8 @@ it:
       other: "Bozza da %{count} risposte"
     another: Prova un'altra bozza
     draft: Bozza con l'IA
+    switched_off: "Le bozze con IA sono disattivate. Imposta LLM_ENABLED e LLM_API_KEY."
+    failed: "La bozza con IA non è riuscita: %{message}"
 
   editor:
     link_sample: testo
@@ -822,6 +825,17 @@ it:
     opened: Ha aperto l'argomento
     replied: Ha risposto
     not_in_topic: Non in questo argomento
+    date: "Data"
+    time: "Ora"
+    suggested: "Orari suggeriti · maggiore sovrapposizione dell'orario di lavoro"
+    available: "%{covered}/%{total} disponibili"
+    tz_note: "Gli orari sono nel tuo fuso orario, %{zone} (UTC%{offset})."
+    future: "Scegli un orario futuro."
+    inside_hours: "Nel suo orario di lavoro"
+    outside_hours: "Fuori dal suo orario di lavoro"
+    outside_summary:
+      one: "%{count} persona invitata è fuori dall'orario di lavoro"
+      other: "%{count} persone invitate sono fuori dall'orario di lavoro"
     create: Crea e pubblica il link
     topic: Argomento
     hours: Orario di lavoro · 24 h in UTC

@@ -457,6 +457,7 @@ fr-FR:
     what_next: Et ensuite
     canceled_note : "Ce sujet a été annulé. Il reste lisible ; rouvrez-le pour continuer la discussion ou planifier le travail."
     move_on: Donner suite
+    move_on_as: Donner suite à ce sujet en tant que
     move_as: Transformer ce sujet en
     create_task: Créer une tâche
     create_task_hint: Un seul livrable.
@@ -575,6 +576,8 @@ fr-FR:
       other : "Brouillon à partir de %{count} réponses"
     another: Essayer un autre brouillon
     draft: Rédiger avec l’IA
+    switched_off: "Les brouillons IA sont désactivés. Définissez LLM_ENABLED et LLM_API_KEY."
+    failed: "Le brouillon IA a échoué : %{message}"
 
   editor:
     link_sample: texte
@@ -822,6 +825,17 @@ fr-FR:
     opened: A ouvert le sujet
     replied: A répondu
     not_in_topic: Pas dans ce sujet
+    date: "Date"
+    time: "Heure"
+    suggested: "Horaires suggérés · meilleur chevauchement des heures de travail"
+    available: "%{covered}/%{total} disponibles"
+    tz_note: "Les heures sont dans votre fuseau horaire, %{zone} (UTC%{offset})."
+    future: "Choisissez une heure dans le futur."
+    inside_hours: "Dans ses heures de travail"
+    outside_hours: "En dehors de ses heures de travail"
+    outside_summary:
+      one: "%{count} personne invitée est en dehors des heures de travail"
+      other: "%{count} personnes invitées sont en dehors des heures de travail"
     create: Créer et publier le lien
     topic: Sujet
     hours: Heures de travail · 24 h en UTC

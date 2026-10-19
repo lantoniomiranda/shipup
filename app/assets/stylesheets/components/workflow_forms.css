@@ -148,3 +148,27 @@ code { padding: 1px 6px; background: var(--sunken); border-radius: var(--radius-
 .invitee--outside .invitee__time { color: var(--danger); }
 .invitee__time b { font-weight: 600; }
 .ai-draft__error { margin-top: 6px; color: var(--danger); font-size: 12px; font-weight: 600; display: flex; gap: 4px; align-items: center; }
+
+/* The AI error sits on its own row under the back link / draft button instead of squeezing the header. */
+.panel__bar--split { flex-wrap: wrap; row-gap: 8px; }
+.panel__bar--split .thread__back { white-space: nowrap; }
+.panel__bar--split > .ai-draft__error { flex: 1 0 100%; margin-top: 0; line-height: 16px; overflow-wrap: anywhere; }
+.panel__bar--split > .ai-draft { margin-left: auto; }
+
+/* Stacked layout: forms keep their natural height (the page scrolls) instead of collapsing to a sliver. */
+@media (max-width: 1100px) {
+  .split > .panel--form { flex: none; overflow: visible; }
+  .split > .panel--form .panel__footer { position: sticky; bottom: 0; }
+}
+
+/* Meeting form on narrow screens: fields wrap, invitee rows take two lines. */
+@media (max-width: 700px) {
+  .form { padding: 20px 16px 18px; }
+  .form__heading h1 { font-size: 28px; }
+  .field-row--wide { flex-wrap: wrap; }
+  .field-row--wide .field { flex: 1 1 140px; min-width: 0; }
+  .invitee { flex-wrap: wrap; gap: 6px 12px; padding: 10px 12px; }
+  .invitee__name { flex: 1 1 120px; min-width: 0; }
+  .invitee__time { flex: 1 1 auto; padding-left: 58px; }
+  .chips--wrap .chip { white-space: normal; text-align: left; }
+}
