@@ -716,6 +716,7 @@ it:
     room: Chi ha spazio
     load: "%{load} / %{capacity} giorni"
     empty_sprint: Nessuno sprint è ancora pianificato. Crea il prossimo per iniziare a spostarci le attività.
+    empty_backlog: Il backlog è vuoto. Le nuove attività senza sprint compaiono qui.
     plan: Pianifica sprint
     id: ID
     topic_title: Argomento e titolo

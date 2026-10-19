@@ -20,7 +20,7 @@
         <%= icon tab[:icon] %><span><%= t("nav.#{tab[:key]}") %></span><%= key_hint(tab[:key].to_sym) unless current %>
       <% end %>
       <% if path %>
-        <%= link_to body, path, class: "tab #{"tab--active" if current}", aria: { current: ("page" if current) }, draggable: true,
+        <%= link_to body, path, class: "tab #{"tab--active" if current}", title: t("nav.#{tab[:key]}"), aria: { current: ("page" if current), label: t("nav.#{tab[:key]}") }, draggable: true,
                     data: hotkey_data(tab[:key].to_sym, tab_sort_target: "tab", tab_key: tab[:key], action: "dragstart->tab-sort#start dragover->tab-sort#over drop->tab-sort#drop dragend->tab-sort#finish") %>
       <% else %>
         <span class="tab tab--soon" title="<%= t("nav.coming_soon") %>"><%= body %></span>

@@ -716,6 +716,7 @@ en:
     room: Who has room
     load: "%{load} / %{capacity} days"
     empty_sprint: No sprint is planned yet. Create the next one to start moving tasks into it.
+    empty_backlog: Nothing in the backlog. New tasks without a sprint land here.
     plan: Plan sprint
     id: ID
     topic_title: Topic and title

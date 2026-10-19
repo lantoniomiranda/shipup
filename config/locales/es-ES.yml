@@ -716,6 +716,7 @@ es-ES:
     room: Quién tiene hueco
     load: "%{load} / %{capacity} días"
     empty_sprint: Aún no hay ningún sprint planificado. Crea el siguiente para empezar a mover tareas.
+    empty_backlog: El backlog está vacío. Las tareas nuevas sin sprint aparecen aquí.
     plan: Planificar sprint
     id: ID
     topic_title: Tema y título

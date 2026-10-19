@@ -22,13 +22,13 @@
   <div class="charts">
     <section class="chart-card">
       <header><h3 class="eyebrow"><%= t("analytics.topics_week") %></h3>
-        <ul class="legend"><li><i class="legend__swatch legend__swatch--progress"></i><%= t("enums.chart.opened") %></li><li><i class="legend__swatch legend__swatch--vacation"></i><%= t("enums.chart.approved") %></li><li><i class="legend__swatch legend__swatch--canceled"></i><%= t("enums.chart.canceled") %></li></ul></header>
+        <ul class="legend"><li><i class="legend__swatch legend__swatch--opened"></i><%= t("enums.chart.opened") %></li><li><i class="legend__swatch legend__swatch--vacation"></i><%= t("enums.chart.approved") %></li><li><i class="legend__swatch legend__swatch--canceled"></i><%= t("enums.chart.canceled") %></li></ul></header>
       <div class="chart chart--grouped">
         <% a.weeks.each do |week| %>
           <div class="chart__col">
             <div class="chart__bars">
               <% { "opened" => week.opened, "approved" => week.approved, "canceled" => week.canceled }.each do |kind, value| %>
-                <span class="chart__bar chart__bar--<%= kind %>" style="height: <%= value * 100.0 / a.max_topics %>%" title="<%= value %> <%= kind %>"></span>
+                <span class="chart__bar chart__bar--<%= kind %>" style="height: <%= value * 100.0 / a.max_topics %>%" title="<%= value %> <%= kind %>" <%= tag.attributes(data: { value: value }) if value.positive? %>></span>
               <% end %>
             </div>
             <small><%= week.label %></small>
@@ -42,7 +42,7 @@
       <div class="chart">
         <% a.weeks.each do |week| %>
           <div class="chart__col">
-            <div class="chart__bars"><span class="chart__bar chart__bar--work" style="height: <%= week.hours * 100.0 / a.max_hours %>%" title="<%= week.hours %>h"></span></div>
+            <div class="chart__bars"><span class="chart__bar chart__bar--work" style="height: <%= week.hours * 100.0 / a.max_hours %>%" title="<%= week.hours %>h" <%= tag.attributes(data: { value: week.hours.round(1).to_s.delete_suffix(".0") }) if week.hours.positive? %>></span></div>
             <small><%= week.label %></small>
           </div>
         <% end %>
