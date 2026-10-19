@@ -622,6 +622,7 @@ fr-FR:
     room: Qui a de la marge
     load : "%{load} / %{capacity} jours"
     empty_sprint: Aucun sprint n’est encore planifié. Créez le suivant pour y déplacer des tâches.
+    empty_backlog: Le backlog est vide. Les nouvelles tâches sans sprint arrivent ici.
     plan: Planifier le sprint
     id: ID
     topic_title: Sujet et titre

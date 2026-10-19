@@ -50,7 +50,8 @@
 .table__group-inner .btn { margin-left: 0; white-space: nowrap; }
 @media (max-width: 1500px) and (min-width: 1101px) { .table--backlog th:nth-child(7), .table--backlog td:nth-child(7) { display: none; } }
 @media (max-width: 760px) { .table--backlog th:nth-child(4), .table--backlog td:nth-child(4), .table--backlog th:nth-child(7), .table--backlog td:nth-child(7) { display: none; } }
-.table--backlog td:nth-child(3) { white-space: normal; }
+.table--backlog td:nth-child(3) { min-width: 180px; max-width: 360px; white-space: normal; overflow-wrap: anywhere; }
+.table .table__empty { padding: 32px 24px; color: var(--ink-soft); white-space: normal; }
 .table__grip { color: var(--ink-soft); }
 .table__id { font-size: 13px; font-weight: 700; white-space: nowrap; }
 .table__title { font-size: 16px; font-weight: 700; }

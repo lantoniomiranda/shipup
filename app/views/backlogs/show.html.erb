@@ -34,6 +34,7 @@
           <strong><%= t("backlog.group") %></strong><span><%= t("backlog.tasks_estimated", count: @backlog.backlog_tasks.size, days: @backlog.backlog_days) %></span>
           <span class="tag"><%= icon "timer", size: 13 %><%= @backlog.backlog_days %>d</span>
         </div></td></tr>
+        <% if @backlog.backlog_tasks.empty? %><tr><td colspan="8" class="table__empty"><%= t("backlog.empty_backlog") %></td></tr><% end %>
         <%= render partial: "backlogs/row", collection: @backlog.backlog_tasks, as: :task, locals: { project: @project, in_sprint: false, sprints: @backlog.sprints } %>
       </tbody>
     </table>
