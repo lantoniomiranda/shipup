@@ -8,11 +8,15 @@
 .chart-card header { display: flex; align-items: center; justify-content: space-between; }
 .chart-card--table strong { color: var(--accent-ink); font-size: 14px; }
 .legend__swatch--canceled { background: var(--ink-soft); }
+.legend__swatch--opened { background: var(--blue); }
 .chart { display: flex; align-items: flex-end; gap: 14px; height: 240px; padding-top: 16px; }
 .chart__col { display: flex; flex-direction: column; flex: 1; align-items: center; gap: 8px; height: 100%; }
 .chart__bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; flex: 1; width: 100%; }
-.chart__bar { flex: 1; min-height: 2px; max-width: 24px; border-radius: 1px 1px 0 0; }
-.chart__bar--opened { background: var(--accent); }
+.chart { background: linear-gradient(var(--line), var(--line)) 0 16px / 100% 1px no-repeat; }
+.chart__bars { border-bottom: 1px solid var(--ink-soft); }
+.chart__bar { position: relative; flex: 1; min-height: 2px; max-width: 24px; border-radius: min(var(--radius-sm), 4px) min(var(--radius-sm), 4px) 0 0; }
+.chart__bar[data-value]::after { content: attr(data-value); position: absolute; bottom: 100%; left: 50%; padding-bottom: 2px; transform: translateX(-50%); color: var(--ink); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
+.chart__bar--opened { background: var(--blue); }
 .chart__bar--approved, .chart__bar--work { background: var(--teal); }
 .chart__bar--canceled { background: var(--ink-soft); }
 .chart:not(.chart--grouped) .chart__bar { max-width: 44px; }
@@ -21,3 +25,11 @@
 .closed li span:not(.tag), .closed time { color: var(--ink-soft); font-size: 13px; font-weight: 500; }
 .closed time { text-align: right; }
 @media (max-width: 1100px) { .kpis { grid-template-columns: repeat(2, 1fr); } .charts { grid-template-columns: 1fr; } }
+@media (max-width: 700px) {
+  .kpi, .chart-card { padding: 14px 16px; }
+  .kpi strong { font-size: 36px; }
+  .chart-card header { flex-wrap: wrap; gap: 8px; }
+  .chart { gap: 6px; }
+  .closed li { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .closed li a { grid-column: 1 / -1; }
+}

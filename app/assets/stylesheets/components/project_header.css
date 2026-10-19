@@ -10,16 +10,18 @@
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
-.project-header__title { display: flex; align-items: center; gap: 10px; flex: none; }
-.project-header h2 { font-size: 18px; white-space: nowrap; }
+.project-header__title { display: flex; align-items: center; gap: 10px; flex: 0 1 auto; min-width: 0; max-width: 45%; }
+.project-header h2 { min-width: 0; overflow: hidden; font-size: 18px; text-overflow: ellipsis; white-space: nowrap; }
+.project-mark, .sprint-badge { flex: none; }
 
 .project-mark { display: grid; place-items: center; width: 30px; height: 30px; background: var(--hue); border-radius: var(--radius-sm); box-shadow: var(--outline); }
 
 .sprint-badge { display: flex; white-space: nowrap; overflow: hidden; border-radius: var(--radius-sm); box-shadow: 0 0 0 1px var(--ink); font-size: 12px; font-weight: 600; }
-.sprint-badge__name { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: var(--mustard-ink); color: #F3EAD8; }
-.sprint-badge__left { display: flex; align-items: center; padding: 4px 8px; background: var(--mustard-soft); color: #2B211A; }
+.sprint-badge__name { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: var(--mustard-ink); color: var(--surface); }
+.sprint-badge__left { display: flex; align-items: center; padding: 4px 8px; background: var(--mustard-soft); color: var(--ink); }
 
-.tabs { display: flex; flex: 1; min-width: 0; overflow: hidden; align-self: stretch; border-bottom: 1px solid var(--line); }
+.project-header { container-type: inline-size; }
+.tabs { display: flex; flex: 1; min-width: 0; overflow: auto hidden; scrollbar-width: none; align-self: stretch; border-bottom: 1px solid var(--line); }
 
 .tab {
   display: flex;
@@ -35,7 +37,6 @@
 }
 
 /* Every tab but the current one shows its shortcut key cap. */
-.tab .key { flex: none; }
 
 .tab:hover { color: var(--ink); }
 .tab--active { color: var(--ink); border-bottom-color: var(--accent); }
@@ -46,7 +47,19 @@
 .project-header__members .avatar { width: 32px; height: 32px; box-shadow: inset 0 0 0 2px var(--paper); }
 .project-header__more { color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 
+.tab { flex: none; }
+@container (max-width: 1380px) { .tab:not(.tab--active) span { display: none; } }
+@container (max-width: 1100px) { .project-header__members { display: none; } }
 @media (max-width: 900px) { .tab span { display: none; } .project-header__members { display: none; } }
+@media (max-width: 700px) {
+  .project-header { flex-wrap: wrap; gap: 6px 12px; height: auto; padding: 8px 12px; }
+  .project-header__title { flex: 1 1 0; flex-wrap: wrap; max-width: none; }
+  .project-header h2 { flex: 1 1 0; min-width: 6ch; }
+  .sprint-badge { order: 3; }
+  .project-header .inline-form { flex: none; }
+  .tabs { flex: 1 1 100%; order: 3; overflow-x: auto; scrollbar-width: none; }
+  .tab { flex: none; padding: 8px 12px; }
+}
 
 .tab--dragging { opacity: 0.4; }
 .tab[draggable="true"] { cursor: grab; }
