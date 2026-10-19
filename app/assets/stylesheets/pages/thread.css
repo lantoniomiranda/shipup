@@ -86,3 +86,16 @@
   .thread__header h1 { font-size: 22px; line-height: 26px; }
   .messages { padding: 14px 16px; }
 }
+
+/* No hover on touch screens: keep message actions visible and tappable. */
+@media (hover: none) {
+  .message__actions, .message__stamp { opacity: 1; }
+  .message__actions button { width: 28px; height: 28px; }
+}
+.message__actions button:focus-visible, .composer__send:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Draw the composer frame over its children so the reply banner never hides the top edge. */
+.composer { box-shadow: none; overflow: hidden; }
+.composer::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--outline); pointer-events: none; }
+.composer:focus-within { box-shadow: none; }
+.composer:focus-within::after { box-shadow: inset 0 0 0 2px var(--accent); }
