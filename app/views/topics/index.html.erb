@@ -3,7 +3,7 @@
 <div class="panel">
   <header class="panel__header">
     <div class="panel__title-row">
-      <h1>Topics</h1>
+      <h1><%= t("topics.title") %></h1>
       <%= link_to new_project_topic_path(@project), class: "btn btn--primary", data: { **hotkey_data(:new_topic) } do %>
         <%= icon "plus" %><span><%= t("topics.new") %></span><%= key_hint(:new_topic) %>
       <% end %>

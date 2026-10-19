@@ -27,3 +27,13 @@
 .tag--plain { background: var(--surface); }
 .tag--status-open, .tag--status-approved { background: var(--teal-soft); }
 .tag--status-canceled { background: var(--sunken); color: var(--ink-soft); }
+
+.topic-row__title, .topic-row__excerpt { overflow-wrap: anywhere; }
+.topic-row__meta { flex-wrap: wrap; }
+@media (max-width: 700px) {
+  .topic-row { flex-wrap: wrap; gap: 8px 12px; padding: 12px 16px; }
+  .topic-row__text { flex-basis: calc(100% - 58px); }
+  .topic-row__status { flex-basis: 100%; width: auto; justify-content: flex-start; padding-left: 46px; }
+}
+.panel__filter-row { flex-wrap: wrap; }
+@media (max-width: 700px) { .panel__header { padding: 16px 16px 12px; } }

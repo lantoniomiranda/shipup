@@ -1,5 +1,5 @@
 /* Filter chips and the sort switch above lists. */
-.chips { display: flex; gap: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .chip {
   display: inline-flex;
