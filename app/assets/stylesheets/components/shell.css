@@ -61,7 +61,7 @@
 
 .timer-pill { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 36px; white-space: nowrap; font-variant-numeric: tabular-nums; background: var(--side); color: var(--side-text); border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; }
 .timer-pill__dot { width: 8px; height: 8px; background: var(--orange); box-shadow: 0 0 6px var(--orange); }
-.key--dark { background: transparent; color: var(--side-muted); box-shadow: inset 0 0 0 1px #6B5646; }
+.key--dark { background: transparent; color: var(--side-muted); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--side-muted) 45%, transparent); }
 
 .icon-button { position: relative; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; background: var(--surface); border: 0; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px var(--line); }
 .icon-button__dot { position: absolute; top: 7px; left: 22px; width: 9px; height: 9px; background: var(--accent); box-shadow: 0 0 0 1.5px var(--surface); }
@@ -71,6 +71,15 @@
 @media (max-width: 1100px) {
   .clocks { display: none; }
   .hint { display: none; }
+}
+
+@media (max-width: 700px) {
+  .top-bar { padding: 0 12px; gap: 8px; }
+  .top-bar__left { flex: 1 1 auto; }
+  .top-bar__right { flex: none; min-width: 0; gap: 6px; }
+  .brand__word, .top-bar__divider, .crumbs { display: none; }
+  .top-bar__right .icon-button[data-action*="shortcuts#toggle"] { display: none; }
+  .timer-pill { padding: 0 8px; }
 }
 
 /* Project pages: no padding or frame, the panels inside carry their own. */

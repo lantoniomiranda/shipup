@@ -188,6 +188,20 @@ en:
       mist: Mist
       sage: Sage
       night: Night
+      system: "System"
+    density:
+      compact: "Compact"
+      comfortable: "Comfortable"
+      spacious: "Spacious"
+    text_size:
+      small: "Small"
+      default: "Default"
+      large: "Large"
+      larger: "Larger"
+    corners:
+      square: "Square"
+      soft: "Soft"
+      round: "Round"
     accent:
       orange: Orange
       blue: Blue
@@ -310,6 +324,23 @@ en:
     sample_one_meta: Sofia R. · 2 days ago
     sample_two_title: Webhook retries with exponential backoff
     sample_two_meta: Daniel O. · 3 days ago
+    font: "Font"
+    density: "Density"
+    text_size: "Text size"
+    corners: "Corners"
+    custom: "Custom"
+    custom_label: "Custom accent colour"
+    effects: "Effects and accessibility"
+    shadows_title: "Offset shadows"
+    shadows_hint: "The chunky drop shadows under buttons and cards."
+    contrast_title: "High contrast"
+    contrast_hint: "Stronger borders and darker secondary text."
+    motion_title: "Reduce motion"
+    motion_hint: "Turn off animations and transitions."
+    menu: "Project menu"
+    menu_hint: "Inside a project, drag the tabs (Topics, Backlog, Board…) into the order you want. It's remembered for you."
+    menu_reset: "Reset menu order"
+    board_card: "A board card"
     saved: Appearance saved.
     invalid: That palette isn't available.
 

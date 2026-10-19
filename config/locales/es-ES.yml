@@ -188,6 +188,20 @@ es-ES:
       mist: Bruma
       sage: Salvia
       night: Noche
+      system: "Sistema"
+    density:
+      compact: "Compacta"
+      comfortable: "Cómoda"
+      spacious: "Espaciosa"
+    text_size:
+      small: "Pequeño"
+      default: "Predeterminado"
+      large: "Grande"
+      larger: "Más grande"
+    corners:
+      square: "Rectas"
+      soft: "Suaves"
+      round: "Redondeadas"
     accent:
       orange: Naranja
       blue: Azul
@@ -310,6 +324,23 @@ es-ES:
     sample_one_meta: Sofia R. · hace 2 días
     sample_two_title: Reintentos de webhook con espera exponencial
     sample_two_meta: Daniel O. · hace 3 días
+    font: "Fuente"
+    density: "Densidad"
+    text_size: "Tamaño del texto"
+    corners: "Esquinas"
+    custom: "Personalizado"
+    custom_label: "Color de acento personalizado"
+    effects: "Efectos y accesibilidad"
+    shadows_title: "Sombras desplazadas"
+    shadows_hint: "Las sombras marcadas bajo botones y tarjetas."
+    contrast_title: "Contraste alto"
+    contrast_hint: "Bordes más marcados y texto secundario más oscuro."
+    motion_title: "Reducir movimiento"
+    motion_hint: "Desactiva animaciones y transiciones."
+    menu: "Menú del proyecto"
+    menu_hint: "Dentro de un proyecto, arrastra las pestañas (Temas, Backlog, Tablero…) al orden que prefieras. Se recuerda para ti."
+    menu_reset: "Restablecer orden del menú"
+    board_card: "Una tarjeta del tablero"
     saved: Apariencia guardada.
     invalid: Esa paleta no está disponible.
 
@@ -844,7 +875,7 @@ es-ES:
     failed: No hemos podido crear esa reunión. Revisa la hora e inténtalo de nuevo.
 
   integrations:
-    title: Herramienta de reuniones
+    title: "Conectores"
     setup: Configurar ohship
     admin_only: Solo administradores
     company: Empresa

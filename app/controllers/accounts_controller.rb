@@ -20,9 +20,9 @@ class AccountsController < ApplicationController
 
   private
 
-  # "Manager · Apollo gateway, mobile atlas"
+  # "Admin · Apollo Gateway, Mobile Atlas"
   def role_summary(user)
-    managed = user.project_memberships.admin.includes(:project).map { |membership| membership.project.name.downcase }
+    managed = user.project_memberships.admin.includes(:project).map { |membership| membership.project.name }
     role = user.superadmin? ? t("roles.superadmin") : (managed.any? ? t("roles.admin") : t("roles.member"))
     managed.any? ? "#{role} · #{managed.to_sentence(two_words_connector: ", ", last_word_connector: ", ")}" : role
   end

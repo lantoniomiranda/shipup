@@ -22,6 +22,15 @@
 
 @media (max-width: 900px) {
   .settings { flex-direction: column; }
-  .settings__nav { flex-basis: auto; }
+  .settings__nav { flex: none; gap: 10px; padding: 14px 12px 12px; }
+  .settings__nav h2 { font-size: 22px; }
+  .settings__nav nav { flex-direction: row; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .settings__item { flex: none; padding: 8px 12px; }
+  .settings__item small { display: none; }
+  .settings__item--active { box-shadow: inset 0 -3px 0 var(--accent); }
+  .settings__me { display: none; }
+}
+@media (max-width: 700px) {
+  .settings .form { padding: 20px 16px; }
 }
 .settings .quiet-hours { align-self: flex-start; }

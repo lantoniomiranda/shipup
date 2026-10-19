@@ -183,8 +183,8 @@
   --zoom: 1;
   --vh: calc(100vh / var(--zoom)); /* viewport height in zoomed pixels */
   --btn-shadow: 2px 2px 0 var(--ink);
-  --lift-shadow: var(--lift-shadow);
-  --lift-shadow-lg: var(--lift-shadow-lg);
+  --lift-shadow: 4px 4px 0 var(--ink);
+  --lift-shadow-lg: 6px 6px 0 var(--ink);
   --card-lift: 3px 3px 0 var(--ink);
 }
 
