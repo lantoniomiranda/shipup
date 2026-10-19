@@ -38,14 +38,14 @@
           <label class="accent-option accent-option--custom">
             <%= form.radio_button :theme_accent, "custom", class: "accent-option__input", data: { action: "theme-picker#accent", attr: "data-accent", theme_picker_target: "customRadio" } %>
             <span class="accent-option__chip" data-theme-picker-target="customChip" style="background: <%= custom_value %>"><%= icon "check", size: 18 %></span>
-            <span class="accent-option__name">Custom</span>
-            <%= form.color_field :custom_accent, value: custom_value, class: "accent-option__picker", "aria-label": "Custom accent colour", data: { action: "input->theme-picker#custom", theme_picker_target: "customColor" } %>
+            <span class="accent-option__name"><%= t("appearance.custom") %></span>
+            <%= form.color_field :custom_accent, value: custom_value, class: "accent-option__picker", "aria-label": t("appearance.custom_label"), data: { action: "input->theme-picker#custom", theme_picker_target: "customColor" } %>
           </label>
         </div>
       </fieldset>
 
       <fieldset class="field">
-        <legend class="eyebrow">Font</legend>
+        <legend class="eyebrow"><%= t("appearance.font") %></legend>
         <div class="font-grid">
           <% Appearance::FONTS.each do |key, font| %>
             <label class="font-option">
@@ -59,37 +59,37 @@
 
       <div class="field-row field-row--wrap">
         <fieldset class="field">
-          <legend class="eyebrow">Density</legend>
+          <legend class="eyebrow"><%= t("appearance.density") %></legend>
           <div class="choice">
             <% UserPreference::DENSITIES.each do |value| %>
-              <label class="choice__option"><%= form.radio_button :density, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "density" } %><span><%= value.capitalize %></span></label>
+              <label class="choice__option"><%= form.radio_button :density, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "density" } %><span><%= t("enums.density.#{value}") %></span></label>
             <% end %>
           </div>
         </fieldset>
         <fieldset class="field">
-          <legend class="eyebrow">Text size</legend>
+          <legend class="eyebrow"><%= t("appearance.text_size") %></legend>
           <div class="choice">
             <% UserPreference::TEXT_SIZES.each do |value| %>
-              <label class="choice__option"><%= form.radio_button :text_size, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "text" } %><span><%= value.capitalize %></span></label>
+              <label class="choice__option"><%= form.radio_button :text_size, value, class: "choice__input", data: { action: "theme-picker#zoom", theme_picker_target: "text" } %><span><%= t("enums.text_size.#{value}") %></span></label>
             <% end %>
           </div>
         </fieldset>
         <fieldset class="field">
-          <legend class="eyebrow">Corners</legend>
+          <legend class="eyebrow"><%= t("appearance.corners") %></legend>
           <div class="choice">
             <% UserPreference::CORNERS.each do |value| %>
-              <label class="choice__option"><%= form.radio_button :corners, value, class: "choice__input", data: { action: "theme-picker#apply", attr: "data-corners" } %><span><%= value.capitalize %></span></label>
+              <label class="choice__option"><%= form.radio_button :corners, value, class: "choice__input", data: { action: "theme-picker#apply", attr: "data-corners" } %><span><%= t("enums.corners.#{value}") %></span></label>
             <% end %>
           </div>
         </fieldset>
       </div>
 
       <fieldset class="field">
-        <legend class="eyebrow">Effects and accessibility</legend>
+        <legend class="eyebrow"><%= t("appearance.effects") %></legend>
         <ul class="effects">
-          <% [ [ :hard_shadows, "Offset shadows", "The chunky drop shadows under buttons and cards.", "data-shadows", "hard", "flat" ],
-               [ :high_contrast, "High contrast", "Stronger borders and darker secondary text.", "data-contrast", "high", "normal" ],
-               [ :reduce_motion, "Reduce motion", "Turn off animations and transitions.", "data-motion", "reduced", "normal" ] ].each do |field, title, hint, attr, on, off| %>
+          <% [ [ :hard_shadows, t("appearance.shadows_title"), t("appearance.shadows_hint"), "data-shadows", "hard", "flat" ],
+               [ :high_contrast, t("appearance.contrast_title"), t("appearance.contrast_hint"), "data-contrast", "high", "normal" ],
+               [ :reduce_motion, t("appearance.motion_title"), t("appearance.motion_hint"), "data-motion", "reduced", "normal" ] ].each do |field, title, hint, attr, on, off| %>
             <li>
               <div><strong><%= title %></strong><small><%= hint %></small></div>
               <%= form.hidden_field field, value: "0", id: nil %>
@@ -100,9 +100,9 @@
       </fieldset>
 
       <fieldset class="field">
-        <legend class="eyebrow">Project menu</legend>
-        <p class="effects__hint">Inside a project, drag the tabs (Topics, Backlog, Board…) into the order you want. It's remembered for you.</p>
-        <button type="submit" form="reset-tab-order" class="btn btn--small" formnovalidate><%= icon "rotate-ccw", size: 13 %><span>Reset menu order</span></button>
+        <legend class="eyebrow"><%= t("appearance.menu") %></legend>
+        <p class="effects__hint"><%= t("appearance.menu_hint") %></p>
+        <button type="submit" form="reset-tab-order" class="btn btn--small" formnovalidate><%= icon "rotate-ccw", size: 13 %><span><%= t("appearance.menu_reset") %></span></button>
       </fieldset>
     </div>
 
@@ -128,7 +128,7 @@
         <li class="preview__list-item--active"><strong><%= t("appearance.sample_one_title") %></strong><small><%= t("appearance.sample_one_meta") %></small></li>
         <li><strong><%= t("appearance.sample_two_title") %></strong><small><%= t("appearance.sample_two_meta") %></small></li>
       </ul>
-      <h3 class="eyebrow">A board card</h3>
+      <h3 class="eyebrow"><%= t("appearance.board_card") %></h3>
       <div class="preview-board">
         <article class="card card--running"><div class="card__top"><span class="card__key">APO-97</span><span class="card__topic"><%= icon "message-square", size: 12 %>from D-12</span></div>
           <span class="card__title">Per-key rate limiting</span>

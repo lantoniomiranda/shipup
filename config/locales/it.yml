@@ -188,6 +188,20 @@ it:
       mist: Nebbia
       sage: Salvia
       night: Notte
+      system: "Sistema"
+    density:
+      compact: "Compatta"
+      comfortable: "Comoda"
+      spacious: "Spaziosa"
+    text_size:
+      small: "Piccolo"
+      default: "Predefinito"
+      large: "Grande"
+      larger: "Più grande"
+    corners:
+      square: "Netti"
+      soft: "Morbidi"
+      round: "Arrotondati"
     accent:
       orange: Arancione
       blue: Blu
@@ -310,6 +324,23 @@ it:
     sample_one_meta: Sofia R. · 2 giorni fa
     sample_two_title: I webhook riprovano con backoff esponenziale
     sample_two_meta: Daniel O. · 3 giorni fa
+    font: "Carattere"
+    density: "Densità"
+    text_size: "Dimensione del testo"
+    corners: "Angoli"
+    custom: "Personalizzato"
+    custom_label: "Colore di accento personalizzato"
+    effects: "Effetti e accessibilità"
+    shadows_title: "Ombre sfalsate"
+    shadows_hint: "Le ombre marcate sotto pulsanti e schede."
+    contrast_title: "Contrasto elevato"
+    contrast_hint: "Bordi più netti e testo secondario più scuro."
+    motion_title: "Riduci movimento"
+    motion_hint: "Disattiva animazioni e transizioni."
+    menu: "Menu del progetto"
+    menu_hint: "In un progetto, trascina le schede (Argomenti, Backlog, Bacheca…) nell'ordine che preferisci. Viene ricordato per te."
+    menu_reset: "Ripristina ordine del menu"
+    board_card: "Una scheda della bacheca"
     saved: Aspetto salvato.
     invalid: Quella tavolozza non è disponibile.
 
@@ -829,7 +860,7 @@ it:
     failed: Non siamo riusciti a creare quella riunione. Controlla l'orario e riprova.
 
   integrations:
-    title: Strumento per le riunioni
+    title: "Connettori"
     setup: Configura ohship
     admin_only: Solo amministratori
     company: Azienda

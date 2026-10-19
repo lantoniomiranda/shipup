@@ -188,6 +188,20 @@ fr-FR:
       mist: Brume
       sage: Sauge
       night: Nuit
+      system: "Système"
+    density:
+      compact: "Compacte"
+      comfortable: "Confortable"
+      spacious: "Aérée"
+    text_size:
+      small: "Petit"
+      default: "Par défaut"
+      large: "Grand"
+      larger: "Plus grand"
+    corners:
+      square: "Droits"
+      soft: "Doux"
+      round: "Arrondis"
     accent:
       orange: Orange
       blue: Bleu
@@ -310,6 +324,23 @@ fr-FR:
     sample_one_meta: Sofia R. · il y a 2 jours
     sample_two_title: Nouvelles tentatives de webhook avec backoff exponentiel
     sample_two_meta: Daniel O. · il y a 3 jours
+    font: "Police"
+    density: "Densité"
+    text_size: "Taille du texte"
+    corners: "Angles"
+    custom: "Personnalisée"
+    custom_label: "Couleur d'accent personnalisée"
+    effects: "Effets et accessibilité"
+    shadows_title: "Ombres décalées"
+    shadows_hint: "Les ombres marquées sous les boutons et les cartes."
+    contrast_title: "Contraste élevé"
+    contrast_hint: "Bordures plus nettes et texte secondaire plus foncé."
+    motion_title: "Réduire les animations"
+    motion_hint: "Désactive les animations et les transitions."
+    menu: "Menu du projet"
+    menu_hint: "Dans un projet, faites glisser les onglets (Sujets, Backlog, Tableau…) dans l'ordre souhaité. Il est mémorisé pour vous."
+    menu_reset: "Réinitialiser l'ordre du menu"
+    board_card: "Une carte du tableau"
     saved: Apparence enregistrée.
     invalid: Cette palette n’est pas disponible.
 
@@ -829,7 +860,7 @@ fr-FR:
     failed: Nous n’avons pas pu créer cette réunion. Vérifiez l’horaire et réessayez.
 
   integrations:
-    title: Outil de réunion
+    title: "Connecteurs"
     setup: Configurer ohship
     admin_only: Administrateurs uniquement
     company: Entreprise
