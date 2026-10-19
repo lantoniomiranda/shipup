@@ -457,6 +457,7 @@ es-ES:
     what_next: Qué sigue
     canceled_note: Este tema se ha cancelado. Se puede seguir leyendo; reábrelo para seguir hablando o planificar trabajo.
     move_on: Avanzar
+    move_on_as: Avanzar este tema como
     move_as: Avanzar este tema como
     create_task: Crear tarea
     create_task_hint: Una sola pieza de trabajo.

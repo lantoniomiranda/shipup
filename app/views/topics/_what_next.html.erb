@@ -11,18 +11,19 @@
         <%= icon "corner-down-right" %><span><%= t("topics.move_on") %></span><span class="btn__divider"></span><%= icon "chevron-down", size: 14 %>
       </button>
 
-    <div class="menu" data-menu-target="panel" hidden>
-      <p class="eyebrow">Move this topic on as</p>
-      <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { **hotkey_data(:create_task) } do %>
-        <span class="menu__glyph"><%= icon "square-check" %></span>
-        <span class="menu__text"><strong><%= t("topics.create_task") %></strong><span><%= t("topics.create_task_hint") %></span></span>
-        <%= key_hint(:create_task) %>
-      <% end %>
-      <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { **hotkey_data(:create_chain) } do %>
-        <span class="menu__glyph"><%= icon "link" %></span>
-        <span class="menu__text"><strong><%= t("topics.create_chain") %></strong><span><%= t("topics.create_chain_hint") %></span></span>
-        <%= key_hint(:create_chain) %>
-      <% end %>
+      <div class="menu" data-menu-target="panel" hidden>
+        <p class="eyebrow"><%= t("topics.move_on_as") %></p>
+        <%= link_to new_project_topic_task_path(project, topic), class: "menu__item menu__item--primary", data: { **hotkey_data(:create_task) } do %>
+          <span class="menu__glyph"><%= icon "square-check" %></span>
+          <span class="menu__text"><strong><%= t("topics.create_task") %></strong><span><%= t("topics.create_task_hint") %></span></span>
+          <%= key_hint(:create_task) %>
+        <% end %>
+        <%= link_to new_project_topic_chain_path(project, topic), class: "menu__item", data: { **hotkey_data(:create_chain) } do %>
+          <span class="menu__glyph"><%= icon "link" %></span>
+          <span class="menu__text"><strong><%= t("topics.create_chain") %></strong><span><%= t("topics.create_chain_hint") %></span></span>
+          <%= key_hint(:create_chain) %>
+        <% end %>
+      </div>
     </div>
 
     <%= link_to new_project_topic_meeting_path(project, topic), class: "btn btn--block", data: { **hotkey_data(:meet) } do %>

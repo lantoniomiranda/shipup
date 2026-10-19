@@ -457,6 +457,7 @@ fr-FR:
     what_next: Et ensuite
     canceled_note : "Ce sujet a été annulé. Il reste lisible ; rouvrez-le pour continuer la discussion ou planifier le travail."
     move_on: Donner suite
+    move_on_as: Donner suite à ce sujet en tant que
     move_as: Transformer ce sujet en
     create_task: Créer une tâche
     create_task_hint: Un seul livrable.

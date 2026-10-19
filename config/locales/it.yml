@@ -457,6 +457,7 @@ it:
     what_next: E ora?
     canceled_note: Questo argomento è stato annullato. Resta leggibile; riaprilo per continuare a parlarne o pianificare il lavoro.
     move_on: Procedi
+    move_on_as: Procedi con questo argomento come
     move_as: Porta avanti questo argomento come
     create_task: Crea attività
     create_task_hint: Un singolo pezzo di lavoro.

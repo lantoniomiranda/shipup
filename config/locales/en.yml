@@ -457,6 +457,7 @@ en:
     what_next: What next
     canceled_note: This topic was canceled. It stays readable; reopen it to keep talking or plan work.
     move_on: Move on
+    move_on_as: Move this topic on as
     move_as: Move this topic on as
     create_task: Create task
     create_task_hint: A single piece of work.
