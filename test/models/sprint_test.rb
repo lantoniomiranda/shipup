@@ -56,6 +56,14 @@ class SprintLifecycleTest < ActiveSupport::TestCase
     assert_nil @project.reload.active_sprint
   end
 
+  test "a chain follows its unfinished steps when the sprint is completed" do
+    chain = @project.chains.create!(title: "Ship it", sprint: @running)
+    @running.complete!(carry_over_to: @next)
+    assert_equal @next, chain.reload.sprint
+    @next.complete!
+    assert_nil chain.reload.sprint
+  end
+
   test "the database refuses a second active sprint in a project" do
     assert_raises(ActiveRecord::RecordNotUnique) { @next.update!(state: "active") }
   end

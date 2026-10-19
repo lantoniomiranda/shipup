@@ -37,6 +37,8 @@ class Sprint < ApplicationRecord
   def complete!(carry_over_to: nil)
     transaction do
       tasks.where.not(status: "done").update_all(sprint_id: carry_over_to&.id)
+      # Chains remember their sprint for steps added later; keep them with their unfinished steps.
+      project.chains.where(sprint_id: id).update_all(sprint_id: carry_over_to&.id)
       update!(state: "completed", completed_at: Time.current)
     end
   end
