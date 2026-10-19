@@ -580,6 +580,7 @@ pt-PT:
     link_sample: texto
 
   messages:
+    send: Enviar
     today: "Hoje"
     yesterday: "Ontem"
     edited: editada

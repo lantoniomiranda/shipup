@@ -580,6 +580,7 @@ it:
     link_sample: testo
 
   messages:
+    send: Invia
     today: "Oggi"
     yesterday: "Ieri"
     edited: modificato

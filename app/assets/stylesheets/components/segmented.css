@@ -9,4 +9,5 @@
   font-weight: 600;
 }
 
+.segmented__item:hover { color: var(--ink); }
 .segmented__item--active { background: var(--surface); color: var(--ink); box-shadow: var(--outline); }

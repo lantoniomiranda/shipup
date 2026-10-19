@@ -9,6 +9,6 @@
     <%= form.text_area :body, rows: 1, placeholder: placeholder, class: "composer__input", required: true,
                        data: { composer_target: "input", composer_reply_target: "input", action: "keydown->composer#submitOnEnter" } %>
     <%= key_hint(:reply) %>
-    <button type="submit" class="composer__send" aria-label="Send"><%= icon "send", size: 16 %></button>
+    <button type="submit" class="composer__send" aria-label="<%= t("messages.send") %>"><%= icon "send", size: 16 %></button>
   </div>
 <% end %>

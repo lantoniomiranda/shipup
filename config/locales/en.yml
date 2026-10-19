@@ -580,6 +580,7 @@ en:
     link_sample: text
 
   messages:
+    send: Send
     today: "Today"
     yesterday: "Yesterday"
     edited: edited

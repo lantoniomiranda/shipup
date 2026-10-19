@@ -580,6 +580,7 @@ es-ES:
     link_sample: texto
 
   messages:
+    send: Enviar
     today: "Hoy"
     yesterday: "Ayer"
     edited: editado
