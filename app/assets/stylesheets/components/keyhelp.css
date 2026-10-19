@@ -1,14 +1,42 @@
 /* Keyboard shortcut cheat sheet. */
-.keyhelp { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 56px; background: var(--scrim); }
+.keyhelp { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 48px; background: var(--scrim); }
 .keyhelp[hidden] { display: none; }
-.keyhelp__panel { position: relative; width: 760px; max-width: calc(100vw - 32px); max-height: calc(var(--vh) - 112px); overflow: auto; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--lift-shadow-lg); }
+.keyhelp__panel { position: relative; display: flex; flex-direction: column; width: 860px; max-width: calc(100% - 32px); max-height: calc(var(--vh) - 96px); overflow: hidden; background: var(--surface); border-radius: var(--radius-sm); box-shadow: var(--lift-shadow-lg); }
 .keyhelp__panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--outline); pointer-events: none; }
-.keyhelp__panel header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--line); }
+/* Only .keyhelp__scroll scrolls, so the frame and the head stay put. */
+.keyhelp__scroll { flex: 1; min-height: 0; overflow: auto; }
+.keyhelp__head { flex: none; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.keyhelp__head > span { display: flex; align-items: center; gap: 10px; }
 .keyhelp__panel h2 { font-size: 22px; }
-.keyhelp__groups { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 32px; padding: 20px 24px; }
-.keyhelp header > span { display: flex; align-items: center; gap: 10px; }
-.keyhelp__groups h3 { margin-bottom: 10px; }
-.keyhelp__groups dl { margin: 0; }
-.keyhelp__groups dl > div { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 500; }
-.keyhelp__groups dd { margin: 0; white-space: nowrap; }
-.keyhelp__note { padding: 12px 24px 18px; color: var(--ink-soft); font-size: 12px; }
+.keyhelp__intro { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 24px; background: var(--paper); border-bottom: 1px solid var(--line); }
+.keyhelp__intro p { flex: 1; color: var(--ink-soft); font-size: 13px; line-height: 1.9; }
+.keyhelp__intro .keys, .page-header__heading .keys { margin: 0 2px; }
+.keyhelp__groups { display: block; columns: 2 340px; column-gap: 40px; padding: 20px 24px 8px; }
+.keyhelp__group { break-inside: avoid; margin-bottom: 22px; }
+.keyhelp__group[hidden] { display: none; }
+.keyhelp__group h3 { color: var(--accent-ink); }
+.keyhelp__hint { margin: 2px 0 6px; color: var(--ink-soft); font-size: 12px; }
+.keyhelp__group dl { margin: 0; }
+.keyhelp__group dl > div { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 38px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 500; }
+.keyhelp__group dl > div[hidden] { display: none; }
+.keyhelp__group dt { min-width: 0; }
+.keyhelp__group dd { margin: 0; flex: none; }
+.keyhelp__builtin dt { color: var(--ink-soft); }
+.keyhelp__empty { padding: 24px 0; color: var(--ink-soft); text-align: center; column-span: all; }
+.keyhelp__empty[hidden] { display: none; }
+.keyhelp__note { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 24px 18px; color: var(--ink-soft); font-size: 12px; }
+.keyhelp__dot { display: inline-block; width: 10px; height: 10px; background: var(--accent-tint); border-radius: 2px; box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* Filter box shared by the cheat sheet and Settings > Keyboard. */
+.key-filter { display: flex; align-items: center; gap: 8px; flex: 0 1 280px; min-width: 0; padding: 0 10px; background: var(--surface); border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1.5px var(--ink-a33); color: var(--ink-soft); }
+.key-filter:focus-within { box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 0 3px var(--accent-a55); color: var(--ink); }
+.key-filter__input { flex: 1; min-width: 0; padding: 9px 0; background: transparent; border: 0; outline: 0; box-shadow: none; color: var(--ink); font: 500 14px var(--font-body); }
+
+@media (max-width: 640px) {
+  .keyhelp { padding-top: 0; align-items: stretch; }
+  .keyhelp__panel { width: 100%; max-width: none; max-height: 100%; border-radius: 0; }
+  .keyhelp__head, .keyhelp__intro, .keyhelp__groups, .keyhelp__note { padding-left: 16px; padding-right: 16px; }
+  .keyhelp__intro { flex-direction: column; align-items: stretch; gap: 10px; }
+  .key-filter { flex-basis: auto; }
+  .keyhelp__groups { columns: 1; }
+}

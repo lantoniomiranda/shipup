@@ -19,6 +19,30 @@ class KeybindingsRegistryTest < ActiveSupport::TestCase
     assert_empty Keybindings.valid_specs & owned
   end
 
+  test "sections follow the order of the contexts: everywhere, projects, inside a project, then pages" do
+    contexts = Keybindings.sections.map { |section| section[:context] }
+    assert_equal %i[global projects project], contexts.first(3)
+    assert_not_includes contexts, :sign_in
+    assert_equal contexts, Keybindings::CONTEXTS.keys & contexts
+  end
+
+  test "built-in keys sit in a known context and every section has a description and every reference a label" do
+    Keybindings.reference.each do |entry|
+      assert Keybindings::CONTEXTS.key?(entry[:context]), "#{entry[:id]}: unknown context"
+      assert entry[:keys].all? { |spec| spec.match?(/\A[a-z0-9+]+\z/) }, entry[:id]
+      assert I18n.exists?("shortcuts.reference.#{entry[:id]}"), "#{entry[:id]} has no label"
+    end
+    Keybindings.sections.each { |section| assert I18n.exists?("shortcuts.contexts.#{section[:context]}"), "#{section[:context]} has no description" }
+  end
+
+  test "co-active contexts match the conflict rules" do
+    map = Keybindings.coactive_contexts
+    assert_includes map[:board], :global
+    assert_includes map[:board], :project
+    assert_not_includes map[:board], :timeline
+    assert_not_includes map[:projects], :project
+  end
+
   test "labels render as key caps" do
     assert_equal "G B", Keybindings.label(:board, user: nil)
     assert_equal "Ctrl Enter", Keybindings.label(:submit, user: nil)
@@ -169,7 +193,7 @@ class KeybindingsViewsTest < ActionDispatch::IntegrationTest
     assert_select "a.btn--primary[data-hotkey='w']"
     assert_select "[data-hotkey='g b']", count: 0
     assert_select ".keyhelp dt", text: "Board"
-    assert_select ".keyhelp kbd", text: "G X"
+    assert_select ".keyhelp .keys--custom[data-keys='g x'] kbd", 2
   end
 
   test "the board page hands its keys to the board controller" do
@@ -203,7 +227,8 @@ class KeybindingsViewsTest < ActionDispatch::IntegrationTest
     assert_select "a[data-hotkey='g o']"
     assert_select "a[data-hotkey='g u']"
     assert_select "button[data-hotkey='?']"
-    assert_select ".keyhelp dt", Keybindings.all.count { |entry| entry[:context] != :sign_in }
+    assert_select ".keyhelp dt", Keybindings.all.count { |entry| entry[:context] != :sign_in } + Keybindings.reference.size
+    assert_select ".keyhelp input[type=search]"
     assert_select ".keyhelp a", text: "Customize"
   end
 
