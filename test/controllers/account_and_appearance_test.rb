@@ -17,7 +17,7 @@ class AccountAndAppearanceTest < ActionDispatch::IntegrationTest
 
   test "project admins see the projects they manage next to their role" do
     get account_path
-    assert_select ".tag--role", /Superadmin · apollo gateway/
+    assert_select ".tag--role", /Superadmin · Apollo Gateway/
   end
 
   test "notification defaults match the design until changed" do
