@@ -22,19 +22,16 @@
       <% end %>
     </header>
 
-    <% if @project.managed_by?(Current.user) %>
-      <div class="task__manage">
-        <%= button_to archive_project_task_path(@project, @task), method: :patch, class: "btn btn--small btn--danger", form: { class: "inline-form", data: { turbo_confirm: t("tasks.confirm_archive", key: @task.key) } } do %>
-          <%= icon "ban", size: 13 %><span><%= t("tasks.archive") %></span>
-        <% end %>
-      </div>
-    <% end %>
-
     <div class="task__head">
       <div class="task__tags">
         <span class="task__key"><%= @task.key %></span>
         <span class="tag tag--task-status tag--status-<%= @task.status %>"><%= Board.status_label(@task.status) %></span>
         <% if @task.chain %><span class="tag tag--chain"><%= icon "link-2", size: 13 %><%= t("tasks.chain_steps", count: @task.chain_size) %></span><% end %>
+        <% if @project.managed_by?(Current.user) %>
+          <%= button_to archive_project_task_path(@project, @task), method: :patch, class: "btn btn--small btn--danger task__archive", form: { class: "inline-form task__archive-form", data: { turbo_confirm: t("tasks.confirm_archive", key: @task.key) } } do %>
+            <%= icon "ban", size: 13 %><span><%= t("tasks.archive") %></span>
+          <% end %>
+        <% end %>
       </div>
       <div class="task__title-row">
         <h1><%= @task.title %></h1>

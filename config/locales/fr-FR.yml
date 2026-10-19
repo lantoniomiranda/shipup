@@ -614,6 +614,7 @@ fr-FR:
     link_sample: texte
 
   messages:
+    send: Envoyer
     today: "Aujourd'hui"
     yesterday: "Hier"
     edited: modifié

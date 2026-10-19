@@ -103,10 +103,13 @@
   box-shadow: var(--lift-shadow);
   font-size: 14px;
   font-weight: 600;
+  width: max-content;
+  max-width: calc(100vw - 32px);
   transition: opacity 0.4s;
 }
 
-.toast--alert { background: var(--danger); color: #fff; }
-.toast--leaving { opacity: 0; }
+.toast--alert { background: var(--danger); color: var(--paper); }
+.toast--leaving { opacity: 0; pointer-events: none; }
+@media (max-width: 600px) { .toast { bottom: 16px; } }
 .toast .icon { color: var(--teal); }
-.toast--alert .icon { color: #fff; }
+.toast--alert .icon { color: var(--paper); }

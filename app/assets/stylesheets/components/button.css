@@ -16,7 +16,9 @@
   cursor: pointer;
 }
 
-.btn:hover { background: var(--sunken-a55); }
+.btn:hover:not(:disabled) { background: var(--sunken-a55); }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { box-shadow: var(--outline); }
 .btn--lg { padding: 15px 18px; font-size: 16px; }
 .btn--wide { width: 100%; }
 .btn__label { flex: 1; text-align: left; }
@@ -25,7 +27,8 @@
   background: var(--accent);
   box-shadow: var(--outline), var(--btn-shadow);
 }
-.btn--primary:hover { background: var(--accent); filter: brightness(1.05); }
+.btn--primary:hover:not(:disabled) { background: var(--accent); filter: brightness(1.05); }
+.btn--primary:disabled { box-shadow: var(--outline); }
 
 /* Keyboard hint shown inside buttons and menus. */
 .key {

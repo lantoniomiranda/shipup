@@ -20,7 +20,7 @@
         <%= link_to notification_path(notification), class: "notification__link" do %>
           <span class="notification__icon"><%= icon notification_icon(notification), size: 18 %></span>
           <span class="notification__text"><strong><%= notification_summary(notification) %></strong><small><%= notification.created_at.strftime("%b %-d, %H:%M") %></small></span>
-          <% unless notification.read? %><span class="notification__dot" aria-label="Unread"></span><% end %>
+          <% unless notification.read? %><span class="notification__dot" aria-label="<%= t("nav.unread") %>"></span><% end %>
         <% end %>
       </li>
     <% end %>
