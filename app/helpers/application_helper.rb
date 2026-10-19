@@ -93,9 +93,10 @@ module ApplicationHelper
     { hotkey: Keybindings.keys(id) }.merge(extra)
   end
 
-  # The little key cap for a registered shortcut (shows the person's own key).
-  def key_hint(id)
-    render "shared/key", label: Keybindings.label(id)
+  # Shortcuts are not advertised next to buttons and tabs: Settings > Keyboard and the `?` cheat
+  # sheet document them. Kept as a no-op so views can still name the shortcut they bind.
+  def key_hint(_id)
+    nil
   end
 
   # Renders the project header (name, sprint, tabs, members) above the content frame.

@@ -4,7 +4,7 @@
 
 <header class="top-bar">
   <div class="top-bar__left">
-    <%= link_to root_path, class: "brand", title: "#{t("nav.projects")} (#{Keybindings.label(:projects)})", data: hotkey_data(:projects) do %>
+    <%= link_to root_path, class: "brand", title: "#{t("nav.projects")}", data: hotkey_data(:projects) do %>
       <%= render "shared/logo_mark" %>
       <span class="brand__word">oh, ship!</span>
     <% end %>
@@ -27,24 +27,23 @@
 
   <div class="top-bar__right">
     <button type="button" class="hint hint--button" data-action="click->spotlight#openFromTopBar" aria-label="<%= t("nav.search") %>"><%= t("nav.search") %> <%= key_hint(:search) %></button>
-    <button type="button" class="icon-button" data-action="click->shortcuts#toggle" data-hotkey="<%= Keybindings.keys(:help) %>" aria-label="<%= t("nav.keyboard") %>" title="<%= t("nav.keyboard") %> (<%= Keybindings.label(:help) %>)"><%= icon "keyboard", size: 18 %></button>
+    <button type="button" class="icon-button" data-action="click->shortcuts#toggle" data-hotkey="<%= Keybindings.keys(:help) %>" aria-label="<%= t("nav.keyboard") %>" title="<%= t("nav.keyboard") %>"><%= icon "keyboard", size: 18 %></button>
 
     <% if running %>
       <div class="timer-pill">
         <span class="timer-pill__dot"></span>
         <span><%= running.task.key %> · <span data-controller="stopwatch" data-stopwatch-started-value="<%= running.started_at.iso8601 %>"><%= Time.at(running.seconds).utc.strftime("%H:%M:%S") %></span></span>
-        <kbd class="key key--dark">Shift P</kbd>
       </div>
     <% end %>
 
-    <%= link_to time_off_requests_path, class: "icon-button", aria: { label: t("nav.time_off") }, title: "#{t("nav.time_off")} (#{Keybindings.label(:time_off)})", data: hotkey_data(:time_off) do %><%= icon "calendar", size: 18 %><% end %>
+    <%= link_to time_off_requests_path, class: "icon-button", aria: { label: t("nav.time_off") }, title: "#{t("nav.time_off")}", data: hotkey_data(:time_off) do %><%= icon "calendar", size: 18 %><% end %>
 
-    <%= link_to notifications_path, class: "icon-button", aria: { label: "#{t("nav.notifications")}#{" (#{t("nav.unread")})" if unread}" }, title: "#{t("nav.notifications")} (#{Keybindings.label(:notifications)})", data: hotkey_data(:notifications) do %>
+    <%= link_to notifications_path, class: "icon-button", aria: { label: "#{t("nav.notifications")}#{" (#{t("nav.unread")})" if unread}" }, title: "#{t("nav.notifications")}", data: hotkey_data(:notifications) do %>
       <%= icon "bell", size: 18 %>
       <% if unread %><span class="icon-button__dot"></span><% end %>
     <% end %>
 
-    <%= link_to avatar(user, size: :lg, class: "avatar--ringed"), account_path, aria: { label: t("nav.account") }, title: "#{t("nav.account")} (#{Keybindings.label(:account)})", data: hotkey_data(:account) %>
+    <%= link_to avatar(user, size: :lg, class: "avatar--ringed"), account_path, aria: { label: t("nav.account") }, title: "#{t("nav.account")}", data: hotkey_data(:account) %>
   </div>
 </header>
 

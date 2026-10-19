@@ -148,29 +148,25 @@ class KeybindingsViewsTest < ActionDispatch::IntegrationTest
     assert_empty ids - Keybindings::SHORTCUTS.keys.map(&:to_s), "unknown shortcut ids in views"
   end
 
-  test "project tabs show the shortcut of every tab except the current one" do
+  test "shortcuts are bound but not advertised next to buttons and tabs" do
     sign_in_as users(:ines)
     get project_board_path(projects(:apollo))
 
-    assert_select ".tab--active .key", count: 0
-    assert_select ".tab:not(.tab--active) .key", 6
-    assert_select "a.tab[data-hotkey='g t'] .key", "G T"
+    assert_select "a.tab[data-hotkey='g t']"
     assert_select "a.tab--active[data-hotkey='g b']"
+    assert_select ".tab .key", count: 0
+    assert_select ".btn .key", count: 0
+    assert_select "a[data-hotkey='g i'][title*='(']", count: 0
   end
 
-  test "project tab shortcuts are never hidden by the stylesheet" do
-    css = Rails.root.join("app/assets/stylesheets/components/project_header.css").read
-    assert_no_match(/\.tab[^{]*\.key[^{]*\{[^}]*display:\s*none/, css)
-  end
-
-  test "remapped keys show up everywhere they appear" do
+  test "remapped keys are bound and listed in the cheat sheet" do
     users(:ines).preference.update!(keybindings: { "board" => "g x", "notifications" => "g i", "new_topic" => "w" })
     sign_in_as users(:ines)
 
     get project_topics_path(projects(:apollo))
-    assert_select "a.tab[data-hotkey='g x'] .key", "G X"
-    assert_select "a[data-hotkey='g i'][title*='G I']"
-    assert_select "a.btn--primary[data-hotkey='w'] .key", "W"
+    assert_select "a.tab[data-hotkey='g x']"
+    assert_select "a[data-hotkey='g i']"
+    assert_select "a.btn--primary[data-hotkey='w']"
     assert_select "[data-hotkey='g b']", count: 0
     assert_select ".keyhelp dt", text: "Board"
     assert_select ".keyhelp kbd", text: "G X"
