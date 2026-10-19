@@ -50,3 +50,13 @@
 
 .tab--dragging { opacity: 0.4; }
 .tab[draggable="true"] { cursor: grab; }
+
+/* Phones: the title row and the tabs stack, tabs scroll sideways instead of vanishing. */
+@media (max-width: 700px) {
+  .project-header { flex-wrap: wrap; gap: 8px 12px; height: auto; padding: 10px 12px 0; }
+  .project-header__title { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; }
+  .project-header__title h2 { overflow: hidden; text-overflow: ellipsis; }
+  .project-header > .inline-form { margin-left: auto; }
+  .tabs { flex: 1 0 100%; order: 3; overflow-x: auto; scrollbar-width: none; }
+  .tab { flex: none; }
+}
