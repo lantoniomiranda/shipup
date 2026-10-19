@@ -87,3 +87,6 @@
   .toolbar--chips .segmented { max-width: 100%; overflow-x: auto; }
   .toolbar--chips .segmented__item { white-space: nowrap; }
 }
+
+.table--people td:not(:first-child) { white-space: nowrap; }
+.table--people td:first-child { overflow-wrap: anywhere; }

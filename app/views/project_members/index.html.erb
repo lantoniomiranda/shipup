@@ -19,7 +19,7 @@
   <% end %>
 
   <section class="panel panel--table panel--inline">
-    <table class="table">
+    <table class="table table--people">
       <thead><tr><th><%= t("people.person") %></th><th><%= t("people.role") %></th><th><%= t("people.last_sign_in") %></th><th><%= t("people.joined") %></th><th></th></tr></thead>
       <tbody>
         <% @memberships.each do |membership| %>
@@ -52,7 +52,7 @@
   <% if manager && @invitations.any? %>
     <h2 class="section-title"><%= t("people.pending") %></h2>
     <section class="panel panel--table panel--inline">
-      <table class="table">
+      <table class="table table--people">
         <thead><tr><th><%= t("people.email") %></th><th><%= t("people.role") %></th><th><%= t("people.invited_by") %></th><th><%= t("people.sent") %></th><th></th></tr></thead>
         <tbody>
           <% @invitations.each do |invitation| %>
