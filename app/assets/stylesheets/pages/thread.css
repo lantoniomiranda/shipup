@@ -74,3 +74,15 @@
 .chat__count { color: var(--ink-soft); font-size: 12px; }
 .chat__messages { display: flex; flex-direction: column; gap: 14px; max-height: 340px; overflow: auto; }
 .chat .composer { margin: 0; }
+
+/* Long unbroken titles wrap instead of being clipped by the panel. */
+.thread__header h1, .thread__meta { overflow-wrap: anywhere; }
+.thread__tags { flex-wrap: wrap; }
+
+/* Stacked layout: give the chat a real height so the composer stays reachable. */
+@media (max-width: 1100px) {
+  .panel--thread { flex: none; height: calc(var(--vh) * 0.82); min-height: 420px; }
+  .thread__header { padding: 14px 16px 12px; }
+  .thread__header h1 { font-size: 22px; line-height: 26px; }
+  .messages { padding: 14px 16px; }
+}
